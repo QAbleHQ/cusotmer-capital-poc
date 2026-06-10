@@ -1,0 +1,74 @@
+{
+  "hotelPage": {
+    "domestic": "ahmedabad",
+    "international": "qatar",
+    "searcHotelName": "Hyatt Ahmedabad",
+    "searcHotelNameInternational": "Souq Waqif Boutique Hotels by Tivoli",
+    "rooms": 1,
+    "adults": 2,
+    "children": 0,
+    "hotelRoom1": 1,
+    "hotelAdult1": 2,
+    "hotelChildren1": 1,
+    "hotelChildrenAge1": [5],
+    "hotelRoom2": 1,
+    "hotelAdult2": 4,
+    "hotelChildren2": 2,
+    "hotelChildrenAge2": [5, 10]
+  },
+
+  "loginDataFill": {
+    "regularEmail": "user@example.com",
+    "regularPassword": "password123",
+    "mobileNumber": "8448661387",
+    "otp": "2248",
+    "city": "Dubai",
+    "checkInDate": "10",
+    "checkOutDate": "12"
+  },
+
+  "dateSelector": {
+    "fromDate": "8",
+    "fromMonth": "Jul 2026",
+    "toDate": "30",
+    "toMonth": "Jul 2026"
+  },
+
+  "hotelBookingDataFill": {
+    "firstName": "John",
+    "lastName": "Doe",
+    "panNumber": "ABCDE1234F",
+    "contactNumber": "9876543210",
+    "email": "john.doe@example.com"
+  },
+
+  "flightPage": {
+    "enterCityFrom": "ahmeda",
+    "enterCityTo": "Mum",
+    "enterInternationalCityTo": "dub"
+  },
+
+  "travellername": {
+    "firstName": "John",
+    "lastName": "Doe",
+    "editedFirstName": "test",
+    "editedLastName": "demo",
+    "email": "Test@demo.com",
+    "phone": "9999999999",
+    "gst": "MMM999MMM",
+    "passport": "368994478",
+    "country": "I"
+  },
+
+  "redeemPointSection": {
+    "enterRedeemPoint": "10"
+  },
+
+  "paymentDataFill": {
+    "cardNumber": "4111111111111111",
+    "cardExpiry": "12/28",
+    "cardCvv": "123",
+    "cardName": "John Doe",
+    "otp": "123456"
+  }
+}

@@ -1,0 +1,116 @@
+name: Playwright Automation Framework CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: "0 2 * * *"   # Nightly run at 2 AM IST
+  workflow_dispatch:
+    inputs:
+      client:
+        description: "Client name (e.g., BOB, IDFC)"
+        required: true
+        default: "BOB"
+      environment:
+        description: "Environment (QA, UAT, PROD)"
+        required: true
+        default: "QA"
+      feature:
+        description: "Feature tag (e.g., @earn, @burn)"
+        required: false
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        client: [BOB, IDFC]
+        environment: [QA, UAT, PROD]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Cache Node.js dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint and Build Check
+        run: |
+          npm run lint --if-present
+          npm run build --if-present
+
+      - name: Run Playwright tests
+        env:
+          PROJECT: ${{ matrix.client }}-${{ matrix.environment }}
+        run: |
+          echo "Running Playwright tests for client=${{ matrix.client }} environment=${{ matrix.environment }}"
+          npx playwright test \
+            --config=playwright.config.ts \
+            --grep @${{ github.event.inputs.feature || 'sanity' }} \
+            --workers=4 \
+            --retries=2 \
+            --reporter=html
+
+      - name: Upload Test Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: playwright-report-${{ matrix.client }}-${{ matrix.environment }}
+          path: playwright-report
+          retention-days: 30
+
+      - name: Upload Playwright Artifacts (on failure)
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: playwright-artifacts-${{ matrix.client }}-${{ matrix.environment }}
+          path: |
+            test-results/
+            playwright-report/
+
+      - name: Send Email Report
+        if: always()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.office365.com
+          server_port: 587
+          username: ${{ secrets.SMTP_USER }}
+          password: ${{ secrets.SMTP_PASS }}
+          subject: "Playwright Test Report - ${{ matrix.client }} - ${{ matrix.environment }}"
+          to: aneri.patel@qable.io, nikunj.trivedi@qable.io
+          from: automation@example.com
+          body: |
+            Playwright test run completed.
+            Client: ${{ matrix.client }}
+            Environment: ${{ matrix.environment }}
+            Date: ${{ github.run_started_at }}
+            Status: ${{ job.status }}
+            Report: Attached as artifact.
+          attachments: playwright-report/index.html
+
+      - name: Notify MS Teams (Optional)
+        if: always()
+        uses: jdcargile/ms-teams-notification@v1.3
+        with:
+          webhook-uri: ${{ secrets.MS_TEAMS_WEBHOOK }}
+          title: "Playwright CI Run"
+          message: |
+            Client: ${{ matrix.client }}
+            Env: ${{ matrix.environment }}
+            Status: ${{ job.status }}
+            Report: See attached artifact
