@@ -1,11 +1,23 @@
 name: Playwright Automation Framework CI
 
+# Triggers:
+#   1. push      → auto run on every push to main (BOB-QA + IDFC-QA)
+#   2. schedule  → daily at 2:00 AM IST (all clients × QA/UAT/PROD)
+#   3. workflow_dispatch → manual run with client / environment / feature options
+#
+# Email (disabled until client provides SMTP credentials):
+#   Secrets: SMTP_USER, SMTP_PASS, SMTP_FROM
+#   Recipients: aneri.patel@qable.io, nikunj.trivedi@qable.io
+#   Uncomment "Send email report" step below when ready.
+
 on:
   push:
     branches: [main]
+
   schedule:
     # 2:00 AM IST = 20:30 UTC (previous calendar day)
     - cron: "30 20 * * *"
+
   workflow_dispatch:
     inputs:
       client:
@@ -31,17 +43,20 @@ jobs:
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
       feature: ${{ steps.set-matrix.outputs.feature }}
+      trigger: ${{ steps.set-matrix.outputs.trigger }}
     steps:
       - name: Build test matrix
         id: set-matrix
         run: |
           FEATURE="${{ github.event.inputs.feature }}"
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          TRIGGER="${{ github.event_name }}"
+
+          if [ "$TRIGGER" = "workflow_dispatch" ]; then
             MATRIX=$(jq -nc \
               --arg client "${{ github.event.inputs.client }}" \
               --arg environment "${{ github.event.inputs.environment }}" \
               '{include:[{client:$client,environment:$environment}]}')
-          elif [ "${{ github.event_name }}" = "schedule" ]; then
+          elif [ "$TRIGGER" = "schedule" ]; then
             MATRIX='{"include":[
               {"client":"BOB","environment":"QA"},
               {"client":"BOB","environment":"UAT"},
@@ -51,6 +66,7 @@ jobs:
               {"client":"IDFC","environment":"PROD"}
             ]}'
           else
+            # push to main — quick smoke on QA for both clients
             MATRIX='{"include":[
               {"client":"BOB","environment":"QA"},
               {"client":"IDFC","environment":"QA"}
@@ -59,6 +75,7 @@ jobs:
 
           echo "matrix=$MATRIX" >> "$GITHUB_OUTPUT"
           echo "feature=$FEATURE" >> "$GITHUB_OUTPUT"
+          echo "trigger=$TRIGGER" >> "$GITHUB_OUTPUT"
 
   test:
     needs: prepare
@@ -70,6 +87,7 @@ jobs:
       CI: true
       PROJECT: ${{ matrix.client }}-chrome-${{ matrix.environment }}
       FEATURE_TAG: ${{ needs.prepare.outputs.feature }}
+      RUN_TRIGGER: ${{ needs.prepare.outputs.trigger }}
 
     steps:
       - name: Checkout repository
@@ -98,7 +116,7 @@ jobs:
             GREP_ARG="--grep @${{ matrix.client }}"
           fi
 
-          echo "Running Playwright tests for PROJECT=$PROJECT $GREP_ARG"
+          echo "Trigger=$RUN_TRIGGER | PROJECT=$PROJECT $GREP_ARG"
           set +e
           npx playwright test \
             --config=playwright.config.ts \
@@ -154,34 +172,36 @@ jobs:
           aws s3 cp report.zip "s3://${S3_REPORT_BUCKET}/${REPORT_KEY}"
           echo "S3_REPORT_URL=https://${S3_REPORT_BUCKET}.s3.${AWS_REGION}.amazonaws.com/${REPORT_KEY}" >> "$GITHUB_ENV"
 
-      - name: Send email report
-        if: always()
-        continue-on-error: true
-        uses: dawidd6/action-send-mail@v3
-        with:
-          server_address: smtp.office365.com
-          server_port: 587
-          username: ${{ secrets.SMTP_USER }}
-          password: ${{ secrets.SMTP_PASS }}
-          subject: "[${{ job.status }}] Playwright Report - ${{ matrix.client }} - ${{ matrix.environment }}"
-          to: ${{ secrets.REPORT_EMAIL_TO }}
-          from: ${{ secrets.SMTP_FROM }}
-          body: file://reports/email-summary.txt
-          html_body: |
-            <h2>Playwright Test Report</h2>
-            <p><strong>Client:</strong> ${{ matrix.client }}</p>
-            <p><strong>Environment:</strong> ${{ matrix.environment }}</p>
-            <p><strong>Feature Tag:</strong> ${{ env.FEATURE_TAG || format('@{0}', matrix.client) }}</p>
-            <p><strong>Date (UTC):</strong> ${{ github.run_started_at }}</p>
-            <p><strong>Workflow Run:</strong> <a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}">View Run</a></p>
-            <p><strong>Artifact:</strong> playwright-report-${{ matrix.client }}-${{ matrix.environment }}-${{ github.run_id }}</p>
-            <p><strong>Status:</strong> ${{ steps.run-tests.outputs.exit_code == '0' && 'passed' || 'failed' }}</p>
-          attachments: |
-            reports/email-summary.txt
-            playwright-report/index.html
+      # --- Email disabled until client provides SMTP credentials ---
+      # - name: Send email report
+      #   if: always() && secrets.SMTP_USER != '' && secrets.SMTP_PASS != ''
+      #   continue-on-error: true
+      #   uses: dawidd6/action-send-mail@v3
+      #   with:
+      #     server_address: smtp.office365.com
+      #     server_port: 587
+      #     username: ${{ secrets.SMTP_USER }}
+      #     password: ${{ secrets.SMTP_PASS }}
+      #     subject: "[${{ steps.run-tests.outputs.exit_code == '0' && 'PASSED' || 'FAILED' }}] Playwright - ${{ matrix.client }} - ${{ matrix.environment }} (${{ env.RUN_TRIGGER }})"
+      #     to: aneri.patel@qable.io, nikunj.trivedi@qable.io
+      #     from: ${{ secrets.SMTP_FROM }}
+      #     body: file://reports/email-summary.txt
+      #     html_body: |
+      #       <h2>Playwright Test Report</h2>
+      #       <p><strong>Trigger:</strong> ${{ env.RUN_TRIGGER }}</p>
+      #       <p><strong>Client:</strong> ${{ matrix.client }}</p>
+      #       <p><strong>Environment:</strong> ${{ matrix.environment }}</p>
+      #       <p><strong>Feature Tag:</strong> ${{ env.FEATURE_TAG || format('@{0}', matrix.client) }}</p>
+      #       <p><strong>Date (UTC):</strong> ${{ github.run_started_at }}</p>
+      #       <p><strong>Workflow Run:</strong> <a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}">View Run</a></p>
+      #       <p><strong>Artifact:</strong> playwright-report-${{ matrix.client }}-${{ matrix.environment }}-${{ github.run_id }}</p>
+      #       <p><strong>Status:</strong> ${{ steps.run-tests.outputs.exit_code == '0' && 'PASSED' || 'FAILED' }}</p>
+      #     attachments: |
+      #       reports/email-summary.txt
+      #       playwright-report/index.html
 
       - name: Notify MS Teams
-        if: always()
+        if: always() && secrets.MS_TEAMS_WEBHOOK != ''
         continue-on-error: true
         uses: jdcargile/ms-teams-notification@v1.3
         with:
@@ -189,6 +209,7 @@ jobs:
           title: "Playwright CI - ${{ matrix.client }} / ${{ matrix.environment }}"
           summary: "${{ steps.run-tests.outputs.exit_code == '0' && 'PASSED' || 'FAILED' }}"
           text: |
+            Trigger: ${{ env.RUN_TRIGGER }}
             Client: ${{ matrix.client }}
             Environment: ${{ matrix.environment }}
             Feature: ${{ env.FEATURE_TAG || format('@{0}', matrix.client) }}
