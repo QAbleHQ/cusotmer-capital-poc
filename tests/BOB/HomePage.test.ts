@@ -42,7 +42,7 @@ test('Verify Runs Properly', { tag: ['@BOB', '@Test'] }, async () => {
 }); 
 
 
-test.only("Gift Card PLP — product card details and layout", { tag: ['@BOB', '@Giftcard'] }, async ({ }) => {
+test("Gift Card PLP — product card details and layout", { tag: ['@BOB', '@Giftcard'] }, async ({ }) => {
 
   await test.step("Click Gift Card option", async () => {
     await page.waitForLoadState('domcontentloaded')
