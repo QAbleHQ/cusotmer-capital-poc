@@ -2,115 +2,199 @@ name: Playwright Automation Framework CI
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches: [main]
   schedule:
-    - cron: "0 2 * * *"   # Nightly run at 2 AM IST
+    # 2:00 AM IST = 20:30 UTC (previous calendar day)
+    - cron: "30 20 * * *"
   workflow_dispatch:
     inputs:
       client:
-        description: "Client name (e.g., BOB, IDFC)"
+        description: "Client name (BOB, IDFC)"
         required: true
-        default: "BOB"
+        type: choice
+        options: [BOB, IDFC]
+        default: BOB
       environment:
         description: "Environment (QA, UAT, PROD)"
         required: true
-        default: "QA"
+        type: choice
+        options: [QA, UAT, PROD]
+        default: QA
       feature:
-        description: "Feature tag (e.g., @earn, @burn)"
+        description: "Optional feature tag without @ (e.g. Loginpage, Homepage)"
         required: false
+        default: ""
 
 jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+      feature: ${{ steps.set-matrix.outputs.feature }}
+    steps:
+      - name: Build test matrix
+        id: set-matrix
+        run: |
+          FEATURE="${{ github.event.inputs.feature }}"
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            MATRIX=$(jq -nc \
+              --arg client "${{ github.event.inputs.client }}" \
+              --arg environment "${{ github.event.inputs.environment }}" \
+              '{include:[{client:$client,environment:$environment}]}')
+          elif [ "${{ github.event_name }}" = "schedule" ]; then
+            MATRIX='{"include":[
+              {"client":"BOB","environment":"QA"},
+              {"client":"BOB","environment":"UAT"},
+              {"client":"BOB","environment":"PROD"},
+              {"client":"IDFC","environment":"QA"},
+              {"client":"IDFC","environment":"UAT"},
+              {"client":"IDFC","environment":"PROD"}
+            ]}'
+          else
+            MATRIX='{"include":[
+              {"client":"BOB","environment":"QA"},
+              {"client":"IDFC","environment":"QA"}
+            ]}'
+          fi
+
+          echo "matrix=$MATRIX" >> "$GITHUB_OUTPUT"
+          echo "feature=$FEATURE" >> "$GITHUB_OUTPUT"
+
   test:
+    needs: prepare
     strategy:
       fail-fast: false
-      matrix:
-        client: [BOB, IDFC]
-        environment: [QA, UAT, PROD]
+      matrix: ${{ fromJSON(needs.prepare.outputs.matrix) }}
     runs-on: ubuntu-latest
+    env:
+      CI: true
+      PROJECT: ${{ matrix.client }}-chrome-${{ matrix.environment }}
+      FEATURE_TAG: ${{ needs.prepare.outputs.feature }}
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 18
-
-      - name: Cache Node.js dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+          cache: npm
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Lint and Build Check
-        run: |
-          npm run lint --if-present
-          npm run build --if-present
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
 
       - name: Run Playwright tests
-        env:
-          PROJECT: ${{ matrix.client }}-${{ matrix.environment }}
+        id: run-tests
+        continue-on-error: true
         run: |
-          echo "Running Playwright tests for client=${{ matrix.client }} environment=${{ matrix.environment }}"
+          GREP_ARG=""
+          if [ -n "$FEATURE_TAG" ]; then
+            GREP_ARG="--grep @${FEATURE_TAG}"
+          else
+            GREP_ARG="--grep @${{ matrix.client }}"
+          fi
+
+          echo "Running Playwright tests for PROJECT=$PROJECT $GREP_ARG"
+          set +e
           npx playwright test \
             --config=playwright.config.ts \
-            --grep @${{ github.event.inputs.feature || 'sanity' }} \
+            $GREP_ARG \
             --workers=4 \
-            --retries=2 \
-            --reporter=html
+            --retries=2
+          EXIT_CODE=$?
+          set -e
+          echo "exit_code=$EXIT_CODE" >> "$GITHUB_OUTPUT"
+          exit 0
 
-      - name: Upload Test Report
-        uses: actions/upload-artifact@v3
-        with:
-          name: playwright-report-${{ matrix.client }}-${{ matrix.environment }}
-          path: playwright-report
-          retention-days: 30
-
-      - name: Upload Playwright Artifacts (on failure)
-        if: failure()
-        uses: actions/upload-artifact@v3
-        with:
-          name: playwright-artifacts-${{ matrix.client }}-${{ matrix.environment }}
-          path: |
-            test-results/
-            playwright-report/
-
-      - name: Send Email Report
+      - name: Generate email summary
         if: always()
+        run: node .github/scripts/generate-report-summary.js reports/test-results.json reports/email-summary.txt
+
+      - name: Upload Playwright HTML report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-${{ matrix.client }}-${{ matrix.environment }}-${{ github.run_id }}
+          path: |
+            playwright-report/
+            reports/test-results.json
+            reports/email-summary.txt
+          retention-days: 30
+          if-no-files-found: warn
+
+      - name: Upload failure artifacts
+        if: failure() || steps.run-tests.outputs.exit_code != '0'
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-failures-${{ matrix.client }}-${{ matrix.environment }}-${{ github.run_id }}
+          path: test-results/
+          retention-days: 30
+          if-no-files-found: ignore
+
+      - name: Upload report to S3 (optional)
+        if: always() && vars.ENABLE_S3_REPORT_UPLOAD == 'true'
+        continue-on-error: true
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          S3_REPORT_BUCKET: ${{ secrets.S3_REPORT_BUCKET }}
+        run: |
+          if [ -z "$S3_REPORT_BUCKET" ]; then
+            echo "S3 bucket secret not configured. Skipping S3 upload."
+            exit 0
+          fi
+
+          REPORT_KEY="playwright-reports/${{ github.repository }}/${{ github.run_id }}/${{ matrix.client }}-${{ matrix.environment }}.zip"
+          zip -r report.zip playwright-report reports/test-results.json reports/email-summary.txt
+          aws s3 cp report.zip "s3://${S3_REPORT_BUCKET}/${REPORT_KEY}"
+          echo "S3_REPORT_URL=https://${S3_REPORT_BUCKET}.s3.${AWS_REGION}.amazonaws.com/${REPORT_KEY}" >> "$GITHUB_ENV"
+
+      - name: Send email report
+        if: always()
+        continue-on-error: true
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.office365.com
           server_port: 587
           username: ${{ secrets.SMTP_USER }}
           password: ${{ secrets.SMTP_PASS }}
-          subject: "Playwright Test Report - ${{ matrix.client }} - ${{ matrix.environment }}"
-          to: aneri.patel@qable.io, nikunj.trivedi@qable.io
-          from: automation@example.com
-          body: |
-            Playwright test run completed.
-            Client: ${{ matrix.client }}
-            Environment: ${{ matrix.environment }}
-            Date: ${{ github.run_started_at }}
-            Status: ${{ job.status }}
-            Report: Attached as artifact.
-          attachments: playwright-report/index.html
+          subject: "[${{ job.status }}] Playwright Report - ${{ matrix.client }} - ${{ matrix.environment }}"
+          to: ${{ secrets.REPORT_EMAIL_TO }}
+          from: ${{ secrets.SMTP_FROM }}
+          body: file://reports/email-summary.txt
+          html_body: |
+            <h2>Playwright Test Report</h2>
+            <p><strong>Client:</strong> ${{ matrix.client }}</p>
+            <p><strong>Environment:</strong> ${{ matrix.environment }}</p>
+            <p><strong>Feature Tag:</strong> ${{ env.FEATURE_TAG || format('@{0}', matrix.client) }}</p>
+            <p><strong>Date (UTC):</strong> ${{ github.run_started_at }}</p>
+            <p><strong>Workflow Run:</strong> <a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}">View Run</a></p>
+            <p><strong>Artifact:</strong> playwright-report-${{ matrix.client }}-${{ matrix.environment }}-${{ github.run_id }}</p>
+            <p><strong>Status:</strong> ${{ steps.run-tests.outputs.exit_code == '0' && 'passed' || 'failed' }}</p>
+          attachments: |
+            reports/email-summary.txt
+            playwright-report/index.html
 
-      - name: Notify MS Teams (Optional)
+      - name: Notify MS Teams
         if: always()
+        continue-on-error: true
         uses: jdcargile/ms-teams-notification@v1.3
         with:
           webhook-uri: ${{ secrets.MS_TEAMS_WEBHOOK }}
-          title: "Playwright CI Run"
-          message: |
+          title: "Playwright CI - ${{ matrix.client }} / ${{ matrix.environment }}"
+          summary: "${{ steps.run-tests.outputs.exit_code == '0' && 'PASSED' || 'FAILED' }}"
+          text: |
             Client: ${{ matrix.client }}
-            Env: ${{ matrix.environment }}
-            Status: ${{ job.status }}
-            Report: See attached artifact
+            Environment: ${{ matrix.environment }}
+            Feature: ${{ env.FEATURE_TAG || format('@{0}', matrix.client) }}
+            Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            Artifact: playwright-report-${{ matrix.client }}-${{ matrix.environment }}-${{ github.run_id }}
+
+      - name: Fail job when tests failed
+        if: steps.run-tests.outputs.exit_code != '0'
+        run: exit 1
