@@ -174,7 +174,7 @@ jobs:
 
       # --- Email disabled until client provides SMTP credentials ---
       # - name: Send email report
-      #   if: always() && secrets.SMTP_USER != '' && secrets.SMTP_PASS != ''
+      #   if: always()
       #   continue-on-error: true
       #   uses: dawidd6/action-send-mail@v3
       #   with:
@@ -201,7 +201,7 @@ jobs:
       #       playwright-report/index.html
 
       - name: Notify MS Teams
-        if: always() && secrets.MS_TEAMS_WEBHOOK != ''
+        if: always()
         continue-on-error: true
         uses: jdcargile/ms-teams-notification@v1.3
         with:
