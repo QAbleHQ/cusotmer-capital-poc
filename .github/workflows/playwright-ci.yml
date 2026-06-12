@@ -172,49 +172,77 @@ jobs:
           aws s3 cp report.zip "s3://${S3_REPORT_BUCKET}/${REPORT_KEY}"
           echo "S3_REPORT_URL=https://${S3_REPORT_BUCKET}.s3.${AWS_REGION}.amazonaws.com/${REPORT_KEY}" >> "$GITHUB_ENV"
 
-      # --- Email disabled until client provides SMTP credentials ---
-      # - name: Send email report
-      #   if: always()
-      #   continue-on-error: true
-      #   uses: dawidd6/action-send-mail@v3
-      #   with:
-      #     server_address: smtp.office365.com
-      #     server_port: 587
-      #     username: ${{ secrets.SMTP_USER }}
-      #     password: ${{ secrets.SMTP_PASS }}
-      #     subject: "[${{ steps.run-tests.outputs.exit_code == '0' && 'PASSED' || 'FAILED' }}] Playwright - ${{ matrix.client }} - ${{ matrix.environment }} (${{ env.RUN_TRIGGER }})"
-      #     to: aneri.patel@qable.io, nikunj.trivedi@qable.io
-      #     from: ${{ secrets.SMTP_FROM }}
-      #     body: file://reports/email-summary.txt
-      #     html_body: |
-      #       <h2>Playwright Test Report</h2>
-      #       <p><strong>Trigger:</strong> ${{ env.RUN_TRIGGER }}</p>
-      #       <p><strong>Client:</strong> ${{ matrix.client }}</p>
-      #       <p><strong>Environment:</strong> ${{ matrix.environment }}</p>
-      #       <p><strong>Feature Tag:</strong> ${{ env.FEATURE_TAG || format('@{0}', matrix.client) }}</p>
-      #       <p><strong>Date (UTC):</strong> ${{ github.run_started_at }}</p>
-      #       <p><strong>Workflow Run:</strong> <a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}">View Run</a></p>
-      #       <p><strong>Artifact:</strong> playwright-report-${{ matrix.client }}-${{ matrix.environment }}-${{ github.run_id }}</p>
-      #       <p><strong>Status:</strong> ${{ steps.run-tests.outputs.exit_code == '0' && 'PASSED' || 'FAILED' }}</p>
-      #     attachments: |
-      #       reports/email-summary.txt
-      #       playwright-report/index.html
+      - name: Send email report
+        if: always()
+        continue-on-error: true
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.office365.com
+          server_port: 587
+          username: ankitpatel@qable.io
+          password: zjwtgkflbwczqrpb
+          subject: "[${{ steps.run-tests.outputs.exit_code == '0' && 'PASSED' || 'FAILED' }}] Playwright - ${{ matrix.client }} - ${{ matrix.environment }} (${{ env.RUN_TRIGGER }})"
+          to: aneri.patel@qable.io, nikunj.trivedi@qable.io, 1ee687f3.linearloop.io@in.teams.ms
+          from: ankitpatel@qable.io
+          body: file://reports/email-summary.txt
+          html_body: |
+            <h2>Playwright Test Report</h2>
+            <p><strong>Trigger:</strong> ${{ env.RUN_TRIGGER }}</p>
+            <p><strong>Client:</strong> ${{ matrix.client }}</p>
+            <p><strong>Environment:</strong> ${{ matrix.environment }}</p>
+            <p><strong>Feature Tag:</strong> ${{ env.FEATURE_TAG || format('@{0}', matrix.client) }}</p>
+            <p><strong>Date (UTC):</strong> ${{ github.run_started_at }}</p>
+            <p><strong>Workflow Run:</strong> <a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}">View Run</a></p>
+            <p><strong>Artifact:</strong> playwright-report-${{ matrix.client }}-${{ matrix.environment }}-${{ github.run_id }}</p>
+            <p><strong>Status:</strong> ${{ steps.run-tests.outputs.exit_code == '0' && 'PASSED' || 'FAILED' }}</p>
+          attachments: |
+            reports/email-summary.txt
+            playwright-report/index.html
 
       - name: Notify MS Teams
         if: always()
         continue-on-error: true
-        uses: jdcargile/ms-teams-notification@v1.3
-        with:
-          webhook-uri: ${{ secrets.MS_TEAMS_WEBHOOK }}
-          title: "Playwright CI - ${{ matrix.client }} / ${{ matrix.environment }}"
-          summary: "${{ steps.run-tests.outputs.exit_code == '0' && 'PASSED' || 'FAILED' }}"
-          text: |
-            Trigger: ${{ env.RUN_TRIGGER }}
-            Client: ${{ matrix.client }}
-            Environment: ${{ matrix.environment }}
-            Feature: ${{ env.FEATURE_TAG || format('@{0}', matrix.client) }}
-            Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-            Artifact: playwright-report-${{ matrix.client }}-${{ matrix.environment }}-${{ github.run_id }}
+        env:
+          STATUS: ${{ steps.run-tests.outputs.exit_code == '0' && 'PASSED' || 'FAILED' }}
+          EMOJI: ${{ steps.run-tests.outputs.exit_code == '0' && '✅' || '❌' }}
+        run: |
+          curl -s -X POST "${{ secrets.MS_TEAMS_WEBHOOK }}" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"type\": \"message\",
+              \"attachments\": [{
+                \"contentType\": \"application/vnd.microsoft.card.adaptive\",
+                \"content\": {
+                  \"\$schema\": \"http://adaptivecards.io/schemas/adaptive-card.json\",
+                  \"type\": \"AdaptiveCard\",
+                  \"version\": \"1.4\",
+                  \"body\": [
+                    {
+                      \"type\": \"TextBlock\",
+                      \"text\": \"${EMOJI} Playwright CI — ${{ matrix.client }} / ${{ matrix.environment }} — ${STATUS}\",
+                      \"weight\": \"Bolder\",
+                      \"size\": \"Medium\",
+                      \"wrap\": true
+                    },
+                    {
+                      \"type\": \"FactSet\",
+                      \"facts\": [
+                        { \"title\": \"Trigger\",     \"value\": \"${{ env.RUN_TRIGGER }}\" },
+                        { \"title\": \"Client\",      \"value\": \"${{ matrix.client }}\" },
+                        { \"title\": \"Environment\", \"value\": \"${{ matrix.environment }}\" },
+                        { \"title\": \"Feature\",     \"value\": \"${{ env.FEATURE_TAG || format('@{0}', matrix.client) }}\" },
+                        { \"title\": \"Artifact\",    \"value\": \"playwright-report-${{ matrix.client }}-${{ matrix.environment }}-${{ github.run_id }}\" }
+                      ]
+                    }
+                  ],
+                  \"actions\": [{
+                    \"type\": \"Action.OpenUrl\",
+                    \"title\": \"View Run\",
+                    \"url\": \"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"
+                  }]
+                }
+              }]
+            }"
 
       - name: Fail job when tests failed
         if: steps.run-tests.outputs.exit_code != '0'

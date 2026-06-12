@@ -16,6 +16,7 @@ A Playwright-based end-to-end test automation framework for **Travel Loyalty** w
 - [Utilities Reference](#utilities-reference)
 - [Test Data](#test-data)
 - [Reporting](#reporting)
+- [Email Reporting](#email-reporting)
 - [Best Practices](#best-practices)
 
 ---
@@ -179,66 +180,78 @@ The framework uses a dynamic project setup driven by the `PROJECT` environment v
 
 ## Running Tests
 
-### Desktop — Full suite
+### Full suite by product & environment
 
 ```bash
-# IDFC on Chrome, UAT
-set PROJECT=IDFC-chrome-UAT
-npx playwright test
+# BOB
+npm run test:bob:qa        # Chrome, QA
+npm run test:bob:uat       # Chrome, UAT
+npm run test:bob:prod      # Chrome, PROD
 
-# BOB on Chrome, QA
-set PROJECT=BOB-chrome-QA
-npx playwright test
+# IDFC
+npm run test:idfc:qa       # Chrome, QA
+npm run test:idfc:uat      # Chrome, UAT
+npm run test:idfc:prod     # Chrome, PROD
 ```
 
-### Run with visible browser
+### Run with visible browser (headed)
 
 ```bash
-set HEADED=true
-set PROJECT=IDFC-chrome-UAT
-npx playwright test
+npm run test:bob:qa:headed
+npm run test:idfc:qa:headed
 ```
 
 ### Filter by tag
 
-Tags are defined in test titles using `@TAGNAME`. The framework filters tests via the `grep` option in `playwright.config.ts`.
+```bash
+# BOB — QA
+npm run test:bob:qa:tag:loginpage
+npm run test:bob:qa:tag:homepage
+npm run test:bob:qa:tag:checkout
+npm run test:bob:qa:tag:payment
+npm run test:bob:qa:tag:bookingconfirmation
+npm run test:bob:qa:tag:giftcard
+npm run test:bob:qa:tag:myaccount
+
+# IDFC — QA
+npm run test:idfc:qa:tag:loginpage
+npm run test:idfc:qa:tag:homepage
+npm run test:idfc:qa:tag:checkout
+npm run test:idfc:qa:tag:payment
+```
+
+### Run a specific test file
 
 ```bash
-# Run only Flight homepage tests
-set PROJECT=IDFC-chrome-UAT-FLIGHT
-npx playwright test
+npm run test:bob:loginpage           # BOB LoginPage (headless)
+npm run test:bob:loginpage:headed    # BOB LoginPage (visible browser)
 
-# Run only Hotel tests
-set PROJECT=IDFC-chrome-UAT-HOTEL
-npx playwright test
-
-# Run only Login tests
-set PROJECT=IDFC-chrome-UAT-Login
-npx playwright test
+npm run test:idfc:loginpage          # IDFC LoginPage (headless)
+npm run test:idfc:loginpage:headed   # IDFC LoginPage (visible browser)
 ```
 
 ### Mobile execution
 
 ```bash
-set PROJECT=IDFC-chrome-UAT-iPhone13
-npx playwright test
+npm run test:bob:qa:iphone13         # BOB — iPhone 13
+npm run test:bob:qa:galaxys21        # BOB — Galaxy S21
+npm run test:idfc:qa:iphone13        # IDFC — iPhone 13
 ```
 
-Supported devices are listed in `mobileDevices.js` (iPhone 12/13/SE, Galaxy S20/S21, Pixel 4a/5, OnePlus 8/9).
+Supported devices: iPhone 12/13/13 Pro Max/SE, Galaxy S20/S21, Pixel 4a/5, OnePlus 8/9.
 
-### Run a specific test file
+### Run tests + send email report
 
 ```bash
-set PROJECT=IDFC-chrome-UAT
-npx playwright test tests/IDFC/FlightPage.test.ts
+npm run test:bob:loginpage:headed:mail   # BOB LoginPage headed → email
+npm run test:bob:qa:mail                 # Full BOB QA suite → email
+npm run test:idfc:qa:mail                # Full IDFC QA suite → email
 ```
 
 ### View HTML report
 
-After a test run:
-
 ```bash
-npx playwright show-report
+npm run report
 ```
 
 ---
@@ -423,6 +436,69 @@ On failure, screenshots are saved automatically under `test-results/`.
 
 ---
 
+## Email Reporting
+
+After every test run, an HTML email report can be sent automatically to the configured recipients. The email includes total/passed/failed/skipped counts, duration, and top failure details.
+
+### Recipients
+
+| Recipient | Purpose |
+|-----------|---------|
+| `name@domain.com` | QA team |
+| `213123.domain.com@in.teams.ms` | Microsoft Teams channel |
+
+### Sender
+
+Emails are sent via `name@domain.com` using Microsoft Office 365 SMTP (`smtp.office365.com:587`).
+
+### Run tests and send email in one command
+
+```bash
+# BOB — LoginPage — headed browser + email after run
+npm run test:bob:loginpage:headed:mail
+
+# BOB — HomePage — headed browser + email after run
+npm run test:bob:homepage:headed:mail
+
+# IDFC — LoginPage — headed browser + email after run
+npm run test:idfc:loginpage:headed:mail
+
+# Full BOB QA suite + email
+npm run test:bob:qa:mail
+
+# Full IDFC QA suite + email
+npm run test:idfc:qa:mail
+```
+
+### Send email from last run (without re-running tests)
+
+```bash
+npm run mail
+```
+
+### Regenerate summary and send email
+
+```bash
+npm run report:mail
+```
+
+### How it works
+
+```
+npm run test:bob:loginpage:headed:mail
+  ├── 1. Runs tests          → reports/test-results.json
+  ├── 2. report:generate     → reports/email-summary.txt
+  └── 3. mail                → sends HTML email via Office 365 SMTP
+```
+
+The email script is located at `scripts/send-report-email.js`.
+
+### CI / GitHub Actions
+
+Email is also sent automatically after every CI run (push, scheduled, or manual dispatch). The workflow uses the same SMTP credentials and recipient list. See `.github/workflows/playwright-ci.yml` for the full configuration.
+
+---
+
 ## Best Practices
 
 1. **Keep locators separate** — Never hardcode selectors in tests or page objects. Always use locator files.
@@ -483,16 +559,31 @@ npm install
 npx playwright install
 
 # Run IDFC Flight tests on UAT (Chrome, headless)
-set PROJECT=IDFC-chrome-UAT-FLIGHT && npx playwright test
+npm run test:idfc:uat
 
-# Run headed
-set HEADED=true && set PROJECT=IDFC-chrome-UAT && npx playwright test
+# Run BOB QA tests
+npm run test:bob:qa
 
-# Run single file
-set PROJECT=IDFC-chrome-UAT && npx playwright test tests/IDFC/LoginPage.test.ts
+# Run headed (visible browser)
+npm run test:bob:qa:headed
 
-# View report
-npx playwright show-report
+# Run specific file — headed
+npm run test:bob:loginpage:headed
+npm run test:idfc:loginpage:headed
+
+# Run specific file — headed + send email after
+npm run test:bob:loginpage:headed:mail
+npm run test:idfc:loginpage:headed:mail
+
+# Run full suite + send email
+npm run test:bob:qa:mail
+npm run test:idfc:qa:mail
+
+# Send email from last run's results (no re-run)
+npm run mail
+
+# View HTML report
+npm run report
 ```
 
 ---
