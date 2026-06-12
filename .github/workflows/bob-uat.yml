@@ -40,6 +40,82 @@ jobs:
         if: always()
         run: node .github/scripts/generate-report-summary.js reports/test-results.json reports/email-summary.txt
 
+      - name: Publish Playwright report to job summary
+        if: always()
+        run: |
+          node -e "
+          const fs = require('fs');
+          const path = require('path');
+
+          const reportPath = 'reports/test-results.json';
+          if (!fs.existsSync(reportPath)) {
+            console.log('No test-results.json found, skipping summary.');
+            process.exit(0);
+          }
+
+          const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
+
+          let total = 0, passed = 0, failed = 0, skipped = 0, flaky = 0, durationMs = 0;
+          const failures = [];
+
+          function collect(suite) {
+            for (const spec of suite.specs || []) {
+              for (const test of spec.tests || []) {
+                total++;
+                const result = test.results?.[test.results.length - 1];
+                const status = result?.status || 'unknown';
+                durationMs += result?.duration || 0;
+                if (status === 'passed') passed++;
+                else if (status === 'failed' || status === 'timedOut') {
+                  failed++;
+                  const msg = (result?.error?.message || 'No error').split('\n')[0].replace(/\x1B\[[0-9;]*m/g, '');
+                  failures.push({ title: spec.title + ' › ' + test.title, file: spec.file || '', msg });
+                } else if (status === 'skipped') skipped++;
+                else if (status === 'flaky') flaky++;
+              }
+            }
+            for (const child of suite.suites || []) collect(child);
+          }
+
+          for (const suite of report.suites || []) collect(suite);
+
+          const s = Math.round(durationMs / 1000);
+          const duration = s < 60 ? s + 's' : Math.floor(s/60) + 'm ' + (s%60) + 's';
+          const status = failed > 0 ? '❌ FAILED' : '✅ PASSED';
+          const badge = failed > 0 ? '🔴' : '🟢';
+
+          let md = '';
+          md += '## ' + badge + ' Playwright Report — BOB UAT\n\n';
+          md += '| | |\n|---|---|\n';
+          md += '| **Status** | ' + status + ' |\n';
+          md += '| **Total** | ' + total + ' |\n';
+          md += '| **Passed** | ✅ ' + passed + ' |\n';
+          md += '| **Failed** | ' + (failed > 0 ? '❌ ' + failed : '0') + ' |\n';
+          md += '| **Skipped** | ⏭️ ' + skipped + ' |\n';
+          md += '| **Flaky** | ⚠️ ' + flaky + ' |\n';
+          md += '| **Duration** | ⏱️ ' + duration + ' |\n';
+          md += '| **Branch** | \`' + (process.env.GITHUB_REF_NAME || '') + '\` |\n';
+          md += '| **Triggered by** | ' + (process.env.GITHUB_ACTOR || '') + ' |\n';
+          md += '| **Commit** | \`' + (process.env.GITHUB_SHA || '').substring(0, 7) + '\` |\n\n';
+
+          if (failures.length > 0) {
+            md += '### ❌ Failed Tests\n\n';
+            md += '| # | Test | Error |\n|---|---|---|\n';
+            failures.slice(0, 20).forEach((f, i) => {
+              md += '| ' + (i+1) + ' | ' + f.title.replace(/\|/g, '\\|') + ' | ' + f.msg.substring(0, 120).replace(/\|/g, '\\|') + ' |\n';
+            });
+            md += '\n';
+          } else {
+            md += '### ✅ All tests passed\n\n';
+          }
+
+          md += '---\n';
+          md += '> 📦 Full HTML report available as artifact: \`playwright-report-BOB-UAT-' + process.env.GITHUB_RUN_ID + '\`\n';
+
+          fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, md);
+          console.log('Job summary written.');
+          "
+
       - name: Upload Playwright HTML report
         if: always()
         uses: actions/upload-artifact@v4
