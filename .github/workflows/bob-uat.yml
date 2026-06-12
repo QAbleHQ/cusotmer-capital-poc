@@ -1,0 +1,89 @@
+name: BOB UAT Tests
+
+on:
+  push:
+    branches:
+      - email-setup
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run BOB UAT tests
+        id: run-tests
+        continue-on-error: true
+        run: |
+          set +e
+          npm run test:bob:uat
+          EXIT_CODE=$?
+          set -e
+          echo "exit_code=$EXIT_CODE" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Generate email summary
+        if: always()
+        run: node .github/scripts/generate-report-summary.js reports/test-results.json reports/email-summary.txt
+
+      - name: Upload Playwright HTML report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-BOB-UAT-${{ github.run_id }}
+          path: |
+            playwright-report/
+            reports/test-results.json
+            reports/email-summary.txt
+          retention-days: 30
+          if-no-files-found: warn
+
+      - name: Upload failure screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-failures-BOB-UAT-${{ github.run_id }}
+          path: test-results/
+          retention-days: 30
+          if-no-files-found: ignore
+
+      - name: Send email report
+        if: always()
+        continue-on-error: true
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.office365.com
+          server_port: 587
+          username: ankitpatel@qable.io
+          password: zjwtgkflbwczqrpb
+          subject: "[${{ steps.run-tests.outputs.exit_code == '0' && 'PASSED' || 'FAILED' }}] BOB UAT — Playwright Report"
+          to: aneri.patel@qable.io, nikunj.trivedi@qable.io, 1ee687f3.linearloop.io@in.teams.ms
+          from: ankitpatel@qable.io
+          body: file://reports/email-summary.txt
+          html_body: |
+            <h2>Playwright Test Report — BOB UAT</h2>
+            <p><strong>Status:</strong> ${{ steps.run-tests.outputs.exit_code == '0' && 'PASSED ✅' || 'FAILED ❌' }}</p>
+            <p><strong>Branch:</strong> ${{ github.ref_name }}</p>
+            <p><strong>Triggered by:</strong> ${{ github.actor }}</p>
+            <p><strong>Commit:</strong> ${{ github.sha }}</p>
+            <p><strong>Date (UTC):</strong> ${{ github.event.head_commit.timestamp }}</p>
+            <p><strong>Workflow Run:</strong> <a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}">View Full Report</a></p>
+            <p><strong>Artifact:</strong> playwright-report-BOB-UAT-${{ github.run_id }}</p>
+
+      - name: Fail job if tests failed
+        if: steps.run-tests.outputs.exit_code != '0'
+        run: exit 1
