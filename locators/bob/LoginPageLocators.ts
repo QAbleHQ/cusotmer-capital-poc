@@ -14,5 +14,4 @@ export const LoginPageLocators = {
   enterLoginBTN: `//button[@onclick="login()"]`,
   DialogBox: `//dialog[@aria-describedby="tour_step_0-description"]`,
   skipButtonInsideDialogBox: `//button[text()="Skip"]`
-
 };

@@ -1,10 +1,6 @@
 import { test, Page, BrowserContext } from '@playwright/test';
 import { CommonHelper } from '../../utils/commonHelper';
-import { VerificationHelpers } from '../../utils/verificationHelper';
-import { FlightHomePage } from '../../pages/IDFC/FlightHomePage';
-import { FlightBookingPage } from '../../pages/IDFC/FlightBookingPage';
 import { HotelHomePage } from '../../pages/IDFC/HotelHomePage';
-import { HotelBookingPage } from '../../pages/IDFC/HotelBookingPage';
 import { LoginPage } from '../../pages/IDFC/LoginPage';
 import idfcTestData from '../../testdata/idfctestdata.json';
 
@@ -17,7 +13,7 @@ test.beforeEach(async ({ browser }) => {
   await CommonHelper.navigateToHomePage(page);
 });
 
-test('SC_001, SC_002: Verify user can login with valid credentials and Home page with multiple card and without multiple cards selection', { tag: ['@IDFC', '@Loginpage'] }, async () => {
+test('SC_001, SC_002: Verify user can login with valid credentials and Home page with multiple card and without multiple cards selection', { tag: ['@IDFC', '@Loginpage','@Smoke','@Sanity'] }, async () => {
   await test.step('Step 1: Enter valid mobile number', async () => {
     await LoginPage.verifyMobileNumberFieldAcceptsInput(page, idfcTestData.loginDataFill.mobileNumber);
   });
@@ -36,6 +32,7 @@ test('SC_001, SC_002: Verify user can login with valid credentials and Home page
   });
 
   await test.step('Step 5: Verify Hotel Home Page is loaded', async () => {
+    await page.waitForTimeout(5000);
     await HotelHomePage.verifyHotelHomePageLoaded(page);
   });
 });

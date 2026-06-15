@@ -1,34 +1,4 @@
-# Travel Loyalty Test Automation Framework
 
-A Playwright-based end-to-end test automation framework for **Travel Loyalty** web applications. It supports multiple products (IDFC, BOB), environments (QA, UAT, PROD), browsers, and mobile device emulation using a **Page Object Model (POM)** architecture.
-
----
-
-## Table of Contents
-
-- [Tech Stack](#tech-stack)
-- [Project Structure](#project-structure)
-- [Architecture Overview](#architecture-overview)
-- [Prerequisites & Setup](#prerequisites--setup)
-- [Configuration](#configuration)
-- [Running Tests](#running-tests)
-- [Writing New Tests](#writing-new-tests)
-- [Utilities Reference](#utilities-reference)
-- [Test Data](#test-data)
-- [Reporting](#reporting)
-- [Best Practices](#best-practices)
-
----
-
-## Tech Stack
-
-| Tool | Version | Purpose |
-|------|---------|---------|
-| [Playwright Test](https://playwright.dev/) | ^1.60.0 | Browser automation & test runner |
-| TypeScript | ES2022 | Test & page object language |
-| Node.js | — | Runtime |
-
----
 
 ## Project Structure
 
@@ -81,16 +51,6 @@ POC/
 
 The framework follows a layered **Page Object Model**:
 
-```
-Tests  →  Page Objects  →  Helpers  →  Locators
-```
-
-| Layer | Responsibility | Example |
-|-------|----------------|---------|
-| **Tests** | Define scenarios, orchestrate steps using `test.step()` | `FlightPage.test.ts` |
-| **Page Objects** | Business actions for a page/section | `FlightHomePage.clickOnSearchFlightsButton()` |
-| **Helpers** | Generic reusable UI interactions & assertions | `ElementHelper.clickElement()`, `VerificationHelpers.elementIsVisible()` |
-| **Locators** | Centralized element selectors | `FlightPageLocators.fromCity` |
 
 ### Data Flow Example
 
@@ -165,73 +125,49 @@ The framework uses a dynamic project setup driven by the `PROJECT` environment v
 | `HEADED` | Set to `true` to run in headed (visible) browser mode | headless |
 | `CI` | When set, uses 4 parallel workers instead of 2 | — |
 
-### Other Settings
+project: Playwright Test Execution Guide
 
-| Setting | Value |
-|---------|-------|
-| Test timeout | 540 seconds (9 minutes) |
-| Parallel execution | Enabled (`fullyParallel: true`) |
-| Workers | 2 (local) / 4 (CI) |
-| Screenshots | On failure only |
-| Video | Off |
+description: >
+  This file contains commands to execute Playwright tests
+  for multiple environments and configurations using the PROJECT environment variable.
 
----
+prerequisites:
+  - Node.js installed
+  - Playwright installed (`npm install`)
+  - Tests configured in playwright.config.js
 
-## Running Tests
+commands:
 
-### Desktop — Full suite
+  loginpage_tests:
+    - name: IDFC Chrome UAT Login Page
+      run: '$env:PROJECT="IDFC-chrome-uat-Loginpage"; npx playwright test'
 
-```bash
-# IDFC on Chrome, UAT
-set PROJECT=IDFC-chrome-UAT
-npx playwright test
+    - name: BOB Chrome UAT Login Page
+      run: '$env:PROJECT="BOB-chrome-uat-Loginpage"; npx playwright test'
 
-# BOB on Chrome, QA
-set PROJECT=BOB-chrome-QA
-npx playwright test
-```
+    - name: IDFC Webkit UAT Login Page (headed)
+      run: '$env:PROJECT="IDFC-webkit-uat-Loginpage"; npx playwright test --headed'
 
-### Run with visible browser
+    - name: BOB Firefox UAT Login Page (headed)
+      run: '$env:PROJECT="BOB-firefox-uat-Loginpage"; npx playwright test --headed'
 
-```bash
-set HEADED=true
-set PROJECT=IDFC-chrome-UAT
-npx playwright test
-```
+  full_suite_tests:
+    - name: IDFC Chrome UAT
+      run: '$env:PROJECT="IDFC-chrome-uat"; npx playwright test'
 
-### Filter by tag
+    - name: BOB Chrome UAT
+      run: '$env:PROJECT="BOB-chrome-uat"; npx playwright test'
 
-Tags are defined in test titles using `@TAGNAME`. The framework filters tests via the `grep` option in `playwright.config.ts`.
+  mobile_tests:
+    - name: IDFC Mobile iPhone 13
+      run: '$env:PROJECT="IDFC-chrome-uat-mobile-iphone13"; npx playwright test'
 
-```bash
-# Run only Flight homepage tests
-set PROJECT=IDFC-chrome-UAT-FLIGHT
-npx playwright test
+notes:
+  - Use PowerShell to execute the above commands.
+  - Ensure PROJECT names match those defined in your Playwright configuration.
+  - Use "--headed" flag to run tests in UI mode.
+``
 
-# Run only Hotel tests
-set PROJECT=IDFC-chrome-UAT-HOTEL
-npx playwright test
-
-# Run only Login tests
-set PROJECT=IDFC-chrome-UAT-Login
-npx playwright test
-```
-
-### Mobile execution
-
-```bash
-set PROJECT=IDFC-chrome-UAT-iPhone13
-npx playwright test
-```
-
-Supported devices are listed in `mobileDevices.js` (iPhone 12/13/SE, Galaxy S20/S21, Pixel 4a/5, OnePlus 8/9).
-
-### Run a specific test file
-
-```bash
-set PROJECT=IDFC-chrome-UAT
-npx playwright test tests/IDFC/FlightPage.test.ts
-```
 
 ### View HTML report
 
@@ -421,80 +357,4 @@ npx playwright show-report
 
 On failure, screenshots are saved automatically under `test-results/`.
 
----
 
-## Best Practices
-
-1. **Keep locators separate** — Never hardcode selectors in tests or page objects. Always use locator files.
-
-2. **Use Page Objects for actions** — Tests should read like scenarios; implementation details belong in page objects.
-
-3. **Use `test.step()`** — Break tests into named steps for clearer reporting and debugging.
-
-4. **Tag your tests** — Use `@TAG` in test titles (e.g., `@FLIGHT`, `@HOTEL`, `@LOGIN`) so they can be filtered via the `PROJECT` env variable.
-
-5. **Reuse helpers** — Use `ElementHelper` for interactions and `VerificationHelpers` for assertions instead of raw Playwright calls.
-
-6. **Use test data files** — Store credentials and reusable inputs in JSON, not in test code.
-
-7. **Handle login in `beforeEach`** — IDFC tests create a fresh browser context and log in before each test:
-
-   ```typescript
-   test.beforeEach(async ({ browser }) => {
-     context = await browser.newContext();
-     page = await context.newPage();
-     await CommonHelper.navigateToHomePage(page);
-     await LoginPage.loginWithValidCredentials(page);
-   });
-   ```
-
-8. **Add new products consistently** — When adding a new product (e.g., `XYZ`):
-   - Create `config/XYZ.config.ts`
-   - Add `tests/XYZ/` folder
-   - Add `locators/xyz/` and `pages/XYZ/` as needed
-   - Update `playwright.config.ts` to map the new product
-
----
-
-## Current Test Coverage
-
-### IDFC
-
-| Test File | Scenarios |
-|-----------|-----------|
-| `LoginPage.test.ts` | Login with valid credentials |
-| `FlightPage.test.ts` | Search, filters, travellers, booking flow (SC_02 – SC_08) |
-| `HotelPage.test.ts` | Hotel search, filters, guest details, PAN (SC_15 – SC_18) |
-| `CheckoutAndMyAccount.test.ts` | Checkout, payment, booking confirmation (SC_09 – SC_14) |
-
-### BOB
-
-| Test File | Scenarios |
-|-----------|-----------|
-| `homepage.test.ts` | Home page load verification |
-
----
-
-## Quick Reference — Common Commands
-
-```bash
-# Install
-npm install
-npx playwright install
-
-# Run IDFC Flight tests on UAT (Chrome, headless)
-set PROJECT=IDFC-chrome-UAT-FLIGHT && npx playwright test
-
-# Run headed
-set HEADED=true && set PROJECT=IDFC-chrome-UAT && npx playwright test
-
-# Run single file
-set PROJECT=IDFC-chrome-UAT && npx playwright test tests/IDFC/LoginPage.test.ts
-
-# View report
-npx playwright show-report
-```
-
----
-
-*Framework version: 1.0.0 | Playwright ^1.60.0*

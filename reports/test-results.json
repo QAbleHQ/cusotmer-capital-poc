@@ -1,7 +1,7 @@
 {
   "config": {
-    "configFile": "C:\\Users\\Admin\\Downloads\\POC Final Framework 1\\POC Final Framework\\POC\\playwright.config.ts",
-    "rootDir": "C:/Users/Admin/Downloads/POC Final Framework 1/POC Final Framework/POC",
+    "configFile": "C:\\Users\\Admin\\Desktop\\Customer_Capital\\playwright.config.ts",
+    "rootDir": "C:/Users/Admin/Desktop/Customer_Capital",
     "forbidOnly": false,
     "fullyParallel": true,
     "globalSetup": null,
@@ -9,27 +9,27 @@
     "globalTimeout": 0,
     "grep": {},
     "grepInvert": null,
-    "maxFailures": 1,
+    "maxFailures": 0,
     "metadata": {
-      "actualWorkers": 1
+      "actualWorkers": 2
     },
     "preserveOutput": "always",
     "projects": [
       {
-        "outputDir": "C:/Users/Admin/Downloads/POC Final Framework 1/POC Final Framework/POC/test-results",
+        "outputDir": "C:/Users/Admin/Desktop/Customer_Capital/test-results",
         "repeatEach": 1,
-        "retries": 0,
+        "retries": 2,
         "metadata": {
-          "actualWorkers": 1
+          "actualWorkers": 2
         },
-        "id": "BOB-chrome-UAT",
-        "name": "BOB-chrome-UAT",
-        "testDir": "C:/Users/Admin/Downloads/POC Final Framework 1/POC Final Framework/POC/tests/BOB",
+        "id": "IDFC-chrome-UAT",
+        "name": "IDFC-chrome-UAT",
+        "testDir": "C:/Users/Admin/Desktop/Customer_Capital/tests/IDFC",
         "testIgnore": [],
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 0
+        "timeout": 540000
       }
     ],
     "quiet": false,
@@ -61,41 +61,890 @@
     "updateSnapshots": "missing",
     "updateSourceMethod": "patch",
     "version": "1.60.0",
-    "workers": 1,
+    "workers": 2,
     "webServer": null
   },
   "suites": [
     {
-      "title": "tests\\BOB\\HomePage.test.ts",
-      "file": "tests/BOB/HomePage.test.ts",
+      "title": "tests\\IDFC\\BookingConfirmation.test.ts",
+      "file": "tests/IDFC/BookingConfirmation.test.ts",
       "column": 0,
       "line": 0,
       "specs": [
         {
-          "title": "Gift Card PLP — product card details and layout",
-          "ok": true,
+          "title": "SC_012: Booking Confirmation Page (Confirmed/Pending/Failed)",
+          "ok": false,
           "tags": [
-            "BOB",
-            "Giftcard"
+            "IDFC",
+            "Bookingconfirmation",
+            "Regression"
           ],
           "tests": [
             {
-              "timeout": 0,
+              "timeout": 540000,
               "annotations": [],
               "expectedStatus": "passed",
-              "projectId": "BOB-chrome-UAT",
-              "projectName": "BOB-chrome-UAT",
+              "projectId": "IDFC-chrome-UAT",
+              "projectName": "IDFC-chrome-UAT",
               "results": [
                 {
                   "workerIndex": 0,
                   "parallelIndex": 0,
-                  "status": "interrupted",
-                  "duration": 238225,
+                  "status": "failed",
+                  "duration": 172906,
                   "error": {
-                    "message": "Error: page.waitForSelector: Target page, context or browser has been closed\nCall log:\n\u001b[2m  - waiting for locator('//input[@id=\\'txtMobileNo\\']') to be visible\u001b[22m\n",
-                    "stack": "Error: page.waitForSelector: Target page, context or browser has been closed\nCall log:\n\u001b[2m  - waiting for locator('//input[@id=\\'txtMobileNo\\']') to be visible\u001b[22m\n\n    at ElementHelper.clearAndEnterInTextField (C:\\Users\\Admin\\Downloads\\POC Final Framework 1\\POC Final Framework\\POC\\utils\\elementHelper.ts:40:32)\n    at LoginPage.enterMobileNumber (C:\\Users\\Admin\\Downloads\\POC Final Framework 1\\POC Final Framework\\POC\\pages\\BOB\\LoginPage.ts:13:5)\n    at LoginPage.LoginCredEnterBeforeEach (C:\\Users\\Admin\\Downloads\\POC Final Framework 1\\POC Final Framework\\POC\\pages\\BOB\\LoginPage.ts:78:5)\n    at C:\\Users\\Admin\\Downloads\\POC Final Framework 1\\POC Final Framework\\POC\\tests\\BOB\\HomePage.test.ts:16:3",
+                    "message": "Error: Element '//div[@class=\"inputcheckbox\"]//label[@for=\"pax401\"]' was not visible after two attempts (including page refresh).",
+                    "stack": "Error: Element '//div[@class=\"inputcheckbox\"]//label[@for=\"pax401\"]' was not visible after two attempts (including page refresh).\n    at VerificationHelpers.elementIsVisible (C:\\Users\\Admin\\Desktop\\Customer_Capital\\utils\\verificationHelper.ts:193:11)\n    at FlightHomePage.clickOnFirstOptionCheckbox (C:\\Users\\Admin\\Desktop\\Customer_Capital\\pages\\IDFC\\FlightHomePage.ts:583:5)\n    at C:\\Users\\Admin\\Desktop\\Customer_Capital\\tests\\IDFC\\BookingConfirmation.test.ts:87:7\n    at C:\\Users\\Admin\\Desktop\\Customer_Capital\\tests\\IDFC\\BookingConfirmation.test.ts:86:5",
                     "location": {
-                      "file": "C:\\Users\\Admin\\Downloads\\POC Final Framework 1\\POC Final Framework\\POC\\utils\\elementHelper.ts",
+                      "file": "C:\\Users\\Admin\\Desktop\\Customer_Capital\\utils\\verificationHelper.ts",
+                      "column": 11,
+                      "line": 193
+                    },
+                    "snippet": "\u001b[90m   at \u001b[39mutils\\verificationHelper.ts:193\n\n\u001b[0m \u001b[90m 191 |\u001b[39m  \n \u001b[90m 192 |\u001b[39m     \u001b[90m// ❌ Final failure\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 193 |\u001b[39m     \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`Element '${locator}' was not visible after two attempts (including page refresh).`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 194 |\u001b[39m }\n \u001b[90m 195 |\u001b[39m\n \u001b[90m 196 |\u001b[39m     \u001b[36mstatic\u001b[39m \u001b[36masync\u001b[39m elementIsVisibleSoftAssert(page\u001b[33m:\u001b[39m \u001b[33mPage\u001b[39m\u001b[33m,\u001b[39m locator\u001b[33m:\u001b[39m string)\u001b[33m:\u001b[39m \u001b[33mPromise\u001b[39m\u001b[33m<\u001b[39m\u001b[33mboolean\u001b[39m\u001b[33m>\u001b[39m {\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\Admin\\Desktop\\Customer_Capital\\utils\\verificationHelper.ts",
+                        "column": 11,
+                        "line": 193
+                      },
+                      "message": "Error: Element '//div[@class=\"inputcheckbox\"]//label[@for=\"pax401\"]' was not visible after two attempts (including page refresh).\n\n\u001b[90m   at \u001b[39mutils\\verificationHelper.ts:193\n\n\u001b[0m \u001b[90m 191 |\u001b[39m  \n \u001b[90m 192 |\u001b[39m     \u001b[90m// ❌ Final failure\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 193 |\u001b[39m     \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`Element '${locator}' was not visible after two attempts (including page refresh).`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 194 |\u001b[39m }\n \u001b[90m 195 |\u001b[39m\n \u001b[90m 196 |\u001b[39m     \u001b[36mstatic\u001b[39m \u001b[36masync\u001b[39m elementIsVisibleSoftAssert(page\u001b[33m:\u001b[39m \u001b[33mPage\u001b[39m\u001b[33m,\u001b[39m locator\u001b[33m:\u001b[39m string)\u001b[33m:\u001b[39m \u001b[33mPromise\u001b[39m\u001b[33m<\u001b[39m\u001b[33mboolean\u001b[39m\u001b[33m>\u001b[39m {\u001b[0m\n\u001b[2m    at VerificationHelpers.elementIsVisible (C:\\Users\\Admin\\Desktop\\Customer_Capital\\utils\\verificationHelper.ts:193:11)\u001b[22m\n\u001b[2m    at FlightHomePage.clickOnFirstOptionCheckbox (C:\\Users\\Admin\\Desktop\\Customer_Capital\\pages\\IDFC\\FlightHomePage.ts:583:5)\u001b[22m\n\u001b[2m    at C:\\Users\\Admin\\Desktop\\Customer_Capital\\tests\\IDFC\\BookingConfirmation.test.ts:87:7\u001b[22m\n\u001b[2m    at C:\\Users\\Admin\\Desktop\\Customer_Capital\\tests\\IDFC\\BookingConfirmation.test.ts:86:5\u001b[22m"
+                    }
+                  ],
+                  "stdout": [
+                    {
+                      "text": "Running setup for: idfc-chrome-uat\n"
+                    },
+                    {
+                      "text": "Navigating to Home Page of :IDFC-chrome-UAT\n"
+                    },
+                    {
+                      "text": "Executing IDFC setup\n"
+                    },
+                    {
+                      "text": "Clicked on element: //button[@id='btnLogin']\n"
+                    },
+                    {
+                      "text": "Attempt 1: Waiting for element '//div[@class='bodytext ']' to be visible...\n"
+                    },
+                    {
+                      "text": "Element '//div[@class='bodytext ']' is visible on first attempt\n"
+                    },
+                    {
+                      "text": "Clicked on element: //input[@placeholder=\"Select city or airport\" and @name=\"from\"]\n"
+                    },
+                    {
+                      "text": "Clear value from \"//input[@placeholder=\"Select city or airport\" and @name=\"from\"]\" text field and enter text \"Mumb\"\n"
+                    },
+                    {
+                      "text": "Attempt 1: Waiting for element '//ul[@id=\"ui-id-1\"]' to be visible...\n"
+                    },
+                    {
+                      "text": "Element '//ul[@id=\"ui-id-1\"]' is visible on first attempt\n"
+                    },
+                    {
+                      "text": "Attempt 1: Checking visibility for '//ul[@id=\"ui-id-1\"]'\n"
+                    },
+                    {
+                      "text": "Element '//ul[@id=\"ui-id-1\"]' is visible on attempt 1.\n"
+                    },
+                    {
+                      "text": "Clicked on element: (//a[@class=\"ui-menu-item-wrapper\"])[1]\n"
+                    },
+                    {
+                      "text": "Clicked on element: //input[@placeholder=\"Select city or airport\" and @name=\"to\"]\n"
+                    },
+                    {
+                      "text": "Clear value from \"//input[@placeholder=\"Select city or airport\" and @name=\"to\"]\" text field and enter text \"Banga\"\n"
+                    },
+                    {
+                      "text": "Attempt 1: Waiting for element '//ul[@id=\"ui-id-2\"]' to be visible...\n"
+                    },
+                    {
+                      "text": "Element '//ul[@id=\"ui-id-2\"]' is visible on first attempt\n"
+                    },
+                    {
+                      "text": "Attempt 1: Checking visibility for '//ul[@id=\"ui-id-2\"]'\n"
+                    },
+                    {
+                      "text": "Element '//ul[@id=\"ui-id-2\"]' is visible on attempt 1.\n"
+                    },
+                    {
+                      "text": "Clicked on element: (//ul[@id=\"ui-id-2\"]//a[@class=\"ui-menu-item-wrapper\"])[1]\n"
+                    },
+                    {
+                      "text": "Clicked on element: //input[@id=\"flight_datepicker1\"]\n"
+                    },
+                    {
+                      "text": "Clicked on element: //div[@class=\"totlall mainSearchbox newdes\"]\n"
+                    },
+                    {
+                      "text": "Attempt 1: Waiting for element '//div[contains(@class,\"roomcountMob\")] ' to be visible...\n"
+                    },
+                    {
+                      "text": "Element '//div[contains(@class,\"roomcountMob\")] ' is visible on first attempt\n"
+                    },
+                    {
+                      "text": "Attempt 1: Checking visibility for '//div[contains(@class,\"roomcountMob\")] '\n"
+                    },
+                    {
+                      "text": "Element '//div[contains(@class,\"roomcountMob\")] ' is visible on attempt 1.\n"
+                    },
+                    {
+                      "text": "Clicked on element: //div[@class=\"totlall mainSearchbox newdes\"]\n"
+                    },
+                    {
+                      "text": "Scrolled to element with locator: \"//input[@id=\"flight-form-submit\"]\"\n"
+                    },
+                    {
+                      "text": "Clicked on element: //input[@id=\"flight-form-submit\"]\n"
+                    },
+                    {
+                      "text": "Attempt 1: Waiting for element '(//div[@class=\"flightInfoCard\"])[1]' to be visible...\n"
+                    },
+                    {
+                      "text": "Element '(//div[@class=\"flightInfoCard\"])[1]' is visible on first attempt\n"
+                    },
+                    {
+                      "text": "Attempt 1: Checking visibility for '(//div[@class=\"flightInfoCard\"])[1]'\n"
+                    },
+                    {
+                      "text": "Element '(//div[@class=\"flightInfoCard\"])[1]' is visible on attempt 1.\n"
+                    },
+                    {
+                      "text": "Clicked on element: //button[text()=\"Next\"]\n"
+                    },
+                    {
+                      "text": "Clicked on element: //div[@class=\"trip_body trip0  \"]//button[text()=\"Book\"]\n"
+                    },
+                    {
+                      "text": "Clicked on element: //button[@id=\"move_to_pax_details_section\"]\n"
+                    },
+                    {
+                      "text": "Attempt 1: Checking visibility for '//div[@class=\"inputcheckbox\"]//label[@for=\"pax401\"]'\n"
+                    },
+                    {
+                      "text": "Attempt 2: Checking visibility for '//div[@class=\"inputcheckbox\"]//label[@for=\"pax401\"]'\n"
+                    }
+                  ],
+                  "stderr": [
+                    {
+                      "text": "Attempt 1: Element '//div[@class=\"inputcheckbox\"]//label[@for=\"pax401\"]' not visible. ExpectError: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('//div[@class=\"inputcheckbox\"]//label[@for=\"pax401\"]')\nExpected: visible\nReceived: hidden\nTimeout:  30000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 30000ms\u001b[22m\n\u001b[2m  - waiting for locator('//div[@class=\"inputcheckbox\"]//label[@for=\"pax401\"]')\u001b[22m\n\u001b[2m    62 × locator resolved to <label for=\"pax401\"></label>\u001b[22m\n\u001b[2m       - unexpected value \"hidden\"\u001b[22m\n\n    at attemptToCheckVisibility \u001b[90m(C:\\Users\\Admin\\Desktop\\Customer_Capital\\\u001b[39mutils\\verificationHelper.ts:171:35\u001b[90m)\u001b[39m\n    at VerificationHelpers.elementIsVisible \u001b[90m(C:\\Users\\Admin\\Desktop\\Customer_Capital\\\u001b[39mutils\\verificationHelper.ts:181:31\u001b[90m)\u001b[39m\n    at FlightHomePage.clickOnFirstOptionCheckbox \u001b[90m(C:\\Users\\Admin\\Desktop\\Customer_Capital\\\u001b[39mpages\\IDFC\\FlightHomePage.ts:583:5\u001b[90m)\u001b[39m\n    at \u001b[90mC:\\Users\\Admin\\Desktop\\Customer_Capital\\\u001b[39mtests\\IDFC\\BookingConfirmation.test.ts:87:7\n    at \u001b[90mC:\\Users\\Admin\\Desktop\\Customer_Capital\\\u001b[39mtests\\IDFC\\BookingConfirmation.test.ts:86:5 {\n  matcherResult: {\n    message: \u001b[32m'\\x1B[2mexpect(\\x1B[22m\\x1B[31mlocator\\x1B[39m\\x1B[2m).\\x1B[22mtoBeVisible\\x1B[2m(\\x1B[22m\\x1B[2m)\\x1B[22m failed\\n'\u001b[39m +\n      \u001b[32m'\\n'\u001b[39m +\n      \u001b[32m`Locator:  locator('//div[@class=\"inputcheckbox\"]//label[@for=\"pax401\"]')\\n`\u001b[39m +\n      \u001b[32m'Expected: visible\\n'\u001b[39m +\n      \u001b[32m'Received: hidden\\n'\u001b[39m +\n      \u001b[32m'Timeout:  30000ms\\n'\u001b[39m +\n      \u001b[32m'\\n'\u001b[39m +\n      \u001b[32m'Call log:\\n'\u001b[39m +\n      \u001b[32m'\\x1B[2m  - Expect \"toBeVisible\" with timeout 30000ms\\x1B[22m\\n'\u001b[39m +\n      \u001b[32m`\\x1B[2m  - waiting for locator('//div[@class=\"inputcheckbox\"]//label[@for=\"pax401\"]')\\x1B[22m\\n`\u001b[39m +\n      \u001b[32m'\\x1B[2m    62 × locator resolved to <label for=\"pax401\"></label>\\x1B[22m\\n'\u001b[39m +\n      \u001b[32m'\\x1B[2m       - unexpected value \"hidden\"\\x1B[22m\\n'\u001b[39m,\n    pass: \u001b[33mfalse\u001b[39m,\n    actual: \u001b[32m'hidden'\u001b[39m,\n    name: \u001b[32m'toBeVisible'\u001b[39m,\n    expected: \u001b[32m'visible'\u001b[39m,\n    log: [\n      \u001b[32m'  - Expect \"toBeVisible\" with timeout 30000ms'\u001b[39m,\n      \u001b[32m`  - waiting for locator('//div[@class=\"inputcheckbox\"]//label[@for=\"pax401\"]')`\u001b[39m,\n      \u001b[32m'    62 × locator resolved to <label for=\"pax401\"></label>'\u001b[39m,\n      \u001b[32m'       - unexpected value \"hidden\"'\u001b[39m\n    ],\n    timeout: \u001b[33m30000\u001b[39m,\n    ariaSnapshot: \u001b[32m'- banner:\\n'\u001b[39m +\n      \u001b[32m'  - link \"Logo\":\\n'\u001b[39m +\n      \u001b[32m'    - /url: https://uat-sso.ai-loyalty.com/Login/CCLP-2024DE-IDF0110-TR87AASC-UAT2024102024\\n'\u001b[39m +\n      \u001b[32m'    - img \"Logo\"\\n'\u001b[39m +\n      \u001b[32m'  - link:\\n'\u001b[39m +\n      \u001b[32m'    - /url: https://uat-travel-idfc.travel-loyalty.com/\\n'\u001b[39m +\n      \u001b[32m'  - list:\\n'\u001b[39m +\n      \u001b[32m'    - listitem:\\n'\u001b[39m +\n      \u001b[32m'      - link \"Flights\":\\n'\u001b[39m +\n      \u001b[32m'        - /url: https://uat-travel-idfc.travel-loyalty.com/general/index/flights?default_view=VHCID1420613784\\n'\u001b[39m +\n      \u001b[32m'        - img\\n'\u001b[39m +\n      \u001b[32m'        - strong: Flights\\n'\u001b[39m +\n      \u001b[32m'    - listitem:\\n'\u001b[39m +\n      \u001b[32m'      - link \"Hotels\":\\n'\u001b[39m +\n      \u001b[32m'        - /url: https://uat-travel-idfc.travel-loyalty.com/general/index/hotels?default_view=VHCID1420613748\\n'\u001b[39m +\n      \u001b[32m'        - img\\n'\u001b[39m +\n      \u001b[32m'        - strong: Hotels\\n'\u001b[39m +\n      \u001b[32m'  - text: DK\\n'\u001b[39m +\n      \u001b[32m'- heading \"Flight details\" [level=4]\\n'\u001b[39m +\n      \u001b[32m'- text: \"1 3 : 4 4\"\\n'\u001b[39m +\n      \u001b[32m'- img \"img\"\\n'\u001b[39m +\n      \u001b[32m'- heading \"BOM\" [level=4]\\n'\u001b[39m +\n      \u001b[32m'- img\\n'\u001b[39m +\n      \u001b[32m'- heading \"BLR\" [level=4]\\n'\u001b[39m +\n      \u001b[32m\"- paragraph: Wed, 17 Jun'26 1 Traveller Non-stop\\n\"\u001b[39m +\n      \u001b[32m'- heading \"Air India\" [level=5]\\n'\u001b[39m +\n      \u001b[32m'- paragraph: AI-2812 | Economy\\n'\u001b[39m +\n      \u001b[32m'- paragraph: Wed, 17 Jun\\n'\u001b[39m +\n      \u001b[32m'- paragraph: 02:05\\n'\u001b[39m +\n      \u001b[32m'- paragraph: BOM\\n'\u001b[39m +\n      \u001b[32m'- paragraph: Chhatrapati Shivaji International Airport\\n'\u001b[39m +\n      \u001b[32m'- paragraph: \"Terminal: T2\"\\n'\u001b[39m +\n      \u001b[32m'- paragraph: 2h 5m\\n'\u001b[39m +\n      \u001b[32m'- img\\n'\u001b[39m +\n      \u001b[32m'- paragraph: Wed, 17 Jun\\n'\u001b[39m +\n      \u001b[32m'- paragraph: 04:10\\n'\u001b[39m +\n      \u001b[32m'- paragraph: BLR\\n'\u001b[39m +\n      \u001b[32m'- paragraph: Kempegowda International Airport\\n'\u001b[39m +\n      \u001b[32m'- paragraph: \"Terminal: T2\"\\n'\u001b[39m +\n      \u001b[32m`- 'heading \"Fare type: ECO VALUE - SME\" [level=4]'\\n`\u001b[39m +\n      \u001b[32m'- button \"Fare rules\"\\n'\u001b[39m +\n      \u001b[32m'- img \"img\"\\n'\u001b[39m +\n      \u001b[32m'- text: \"Cabin: 7 Kgs (1 Piece(s)) (1 Piece only)\"\\n'\u001b[39m +\n      \u001b[32m'- img \"img\"\\n'\u001b[39m +\n      \u001b[32m'- text: \"Check-in: 15 Kgs (1 Piece only)\"\\n'\u001b[39m +\n      \u001b[32m`- paragraph: \"*The baggage info is indicative. Tripstacc does not guarantee the accuracy of the information. Please check the airline's website for accurate details, as allowances may vary with stopovers, connections, or airline policy changes.\"\\n`\u001b[39m +\n      \u001b[32m'- heading \"Fare summary\" [level=4]\\n'\u001b[39m +\n      \u001b[32m'- heading \"Base Fare\" [level=5]\\n'\u001b[39m +\n      \u001b[32m'- paragraph: Adult (1 x ₹9,163)\\n'\u001b[39m +\n      \u001b[32m'- paragraph: ₹9,163\\n'\u001b[39m +\n      \u001b[32m'- paragraph: ₹9,163\\n'\u001b[39m +\n      \u001b[32m'- heading \"Taxes & Fees\" [level=5]\\n'\u001b[39m +\n      \u001b[32m'- paragraph: ₹1,750\\n'\u001b[39m +\n      \u001b[32m'- heading \"Amount Payable\" [level=5]\\n'\u001b[39m +\n      \u001b[32m'- paragraph: ₹10,913\\n'\u001b[39m +\n      \u001b[32m'- img\\n'\u001b[39m +\n      \u001b[32m'- paragraph:\\n'\u001b[39m +\n      \u001b[32m'  - text: Bonus 1,091\\n'\u001b[39m +\n      \u001b[32m'  - img\\n'\u001b[39m +\n      \u001b[32m'  - text: Worth ₹545\\n'\u001b[39m +\n      \u001b[32m'- img\\n'\u001b[39m +\n      \u001b[32m'- heading \"₹10,913\" [level=4]\\n'\u001b[39m +\n      \u001b[32m'- paragraph:\\n'\u001b[39m +\n      \u001b[32m'  - text: BONUS\\n'\u001b[39m +\n      \u001b[32m'  - strong: 1,091\\n'\u001b[39m +\n      \u001b[32m'  - img\\n'\u001b[39m +\n      \u001b[32m'- button \"Continue\"'\u001b[39m\n  },\n  \u001b[32mSymbol(step)\u001b[39m: {\n    category: \u001b[32m'expect'\u001b[39m,\n    apiName: \u001b[32m'expect.toBeVisible'\u001b[39m,\n    title: \u001b[32m`Expect \"toBeVisible\" locator('//div[@class=\"inputcheckbox\"]//label[@for=\"pax401\"]')`\u001b[39m,\n    shortTitle: \u001b[32m'Expect \"toBeVisible\"'\u001b[39m,\n    params: { expected: \u001b[36m[Object]\u001b[39m },\n    stepId: \u001b[32m'expect@145'\u001b[39m,\n    group: \u001b[90mundefined\u001b[39m,\n    boxedStack: \u001b[90mundefined\u001b[39m,\n    location: {\n      file: \u001b[32m'C:\\\\Users\\\\Admin\\\\Desktop\\\\Customer_Capital\\\\utils\\\\verificationHelper.ts'\u001b[39m,\n      line: \u001b[33m171\u001b[39m,\n      column: \u001b[33m35\u001b[39m,\n      function: \u001b[32m'attemptToCheckVisibility'\u001b[39m\n    },\n    steps: [],\n    attachmentIndices: [],\n    info: TestStepInfoImpl {\n      annotations: [],\n      _testInfo: \u001b[36m[TestInfoImpl]\u001b[39m,\n      _stepId: \u001b[32m'expect@145'\u001b[39m,\n      _title: \u001b[32m`Expect \"toBeVisible\" locator('//div[@class=\"inputcheckbox\"]//label[@for=\"pax401\"]')`\u001b[39m,\n      _parentStep: \u001b[36m[TestStepInfoImpl]\u001b[39m,\n      skip: \u001b[36m[Function (anonymous)]\u001b[39m\n    },\n    complete: \u001b[36m[Function: complete]\u001b[39m,\n    endWallTime: \u001b[33m1781518203626\u001b[39m,\n    error: {\n      message: \u001b[32m'Error: \\x1B[2mexpect(\\x1B[22m\\x1B[31mlocator\\x1B[39m\\x1B[2m).\\x1B[22mtoBeVisible\\x1B[2m(\\x1B[22m\\x1B[2m)\\x1B[22m failed\\n'\u001b[39m +\n        \u001b[32m'\\n'\u001b[39m +\n        \u001b[32m`Locator:  locator('//div[@class=\"inputcheckbox\"]//label[@for=\"pax401\"]')\\n`\u001b[39m +\n        \u001b[32m'Expected: visible\\n'\u001b[39m +\n        \u001b[32m'Received: hidden\\n'\u001b[39m +\n        \u001b[32m'Timeout:  30000ms\\n'\u001b[39m +\n        \u001b[32m'\\n'\u001b[39m +\n        \u001b[32m'Call log:\\n'\u001b[39m +\n        \u001b[32m'\\x1B[2m  - Expect \"toBeVisible\" with timeout 30000ms\\x1B[22m\\n'\u001b[39m +\n        \u001b[32m`\\x1B[2m  - waiting for locator('//div[@class=\"inputcheckbox\"]//label[@for=\"pax401\"]')\\x1B[22m\\n`\u001b[39m +\n        \u001b[32m'\\x1B[2m    62 × locator resolved to <label for=\"pax401\"></label>\\x1B[22m\\n'\u001b[39m +\n        \u001b[32m'\\x1B[2m       - unexpected value \"hidden\"\\x1B[22m\\n'\u001b[39m,\n      stack: \u001b[32m'Error: \\x1B[2mexpect(\\x1B[22m\\x1B[31mlocator\\x1B[39m\\x1B[2m).\\x1B[22mtoBeVisible\\x1B[2m(\\x1B[22m\\x1B[2m)\\x1B[22m failed\\n'\u001b[39m +\n        \u001b[32m'\\n'\u001b[39m +\n        \u001b[32m`Locator:  locator('//div[@class=\"inputcheckbox\"]//label[@for=\"pax401\"]')\\n`\u001b[39m +\n        \u001b[32m'Expected: visible\\n'\u001b[39m +\n        \u001b[32m'Received: hidden\\n'\u001b[39m +\n        \u001b[32m'Timeout:  30000ms\\n'\u001b[39m +\n        \u001b[32m'\\n'\u001b[39m +\n        \u001b[32m'Call log:\\n'\u001b[39m +\n        \u001b[32m'\\x1B[2m  - Expect \"toBeVisible\" with timeout 30000ms\\x1B[22m\\n'\u001b[39m +\n        \u001b[32m`\\x1B[2m  - waiting for locator('//div[@class=\"inputcheckbox\"]//label[@for=\"pax401\"]')\\x1B[22m\\n`\u001b[39m +\n        \u001b[32m'\\x1B[2m    62 × locator resolved to <label for=\"pax401\"></label>\\x1B[22m\\n'\u001b[39m +\n        \u001b[32m'\\x1B[2m       - unexpected value \"hidden\"\\x1B[22m\\n'\u001b[39m +\n        \u001b[32m'\\n'\u001b[39m +\n        \u001b[32m'    at attemptToCheckVisibility (C:\\\\Users\\\\Admin\\\\Desktop\\\\Customer_Capital\\\\utils\\\\verificationHelper.ts:171:35)\\n'\u001b[39m +\n        \u001b[32m'    at VerificationHelpers.elementIsVisible (C:\\\\Users\\\\Admin\\\\Desktop\\\\Customer_Capital\\\\utils\\\\verificationHelper.ts:181:31)\\n'\u001b[39m +\n        \u001b[32m'    at FlightHomePage.clickOnFirstOptionCheckbox (C:\\\\Users\\\\Admin\\\\Desktop\\\\Customer_Capital\\\\pages\\\\IDFC\\\\FlightHomePage.ts:583:5)\\n'\u001b[39m +\n        \u001b[32m'    at C:\\\\Users\\\\Admin\\\\Desktop\\\\Customer_Capital\\\\tests\\\\IDFC\\\\BookingConfirmation.test.ts:87:7\\n'\u001b[39m +\n        \u001b[32m'    at C:\\\\Users\\\\Admin\\\\Desktop\\\\Customer_Capital\\\\tests\\\\IDFC\\\\BookingConfirmation.test.ts:86:5'\u001b[39m,\n      cause: \u001b[90mundefined\u001b[39m,\n      errorContext: \u001b[32m'- banner:\\n'\u001b[39m +\n        \u001b[32m'  - link \"Logo\":\\n'\u001b[39m +\n        \u001b[32m'    - /url: https://uat-sso.ai-loyalty.com/Login/CCLP-2024DE-IDF0110-TR87AASC-UAT2024102024\\n'\u001b[39m +\n        \u001b[32m'    - img \"Logo\"\\n'\u001b[39m +\n        \u001b[32m'  - link:\\n'\u001b[39m +\n        \u001b[32m'    - /url: https://uat-travel-idfc.travel-loyalty.com/\\n'\u001b[39m +\n        \u001b[32m'  - list:\\n'\u001b[39m +\n        \u001b[32m'    - listitem:\\n'\u001b[39m +\n        \u001b[32m'      - link \"Flights\":\\n'\u001b[39m +\n        \u001b[32m'        - /url: https://uat-travel-idfc.travel-loyalty.com/general/index/flights?default_view=VHCID1420613784\\n'\u001b[39m +\n        \u001b[32m'        - img\\n'\u001b[39m +\n        \u001b[32m'        - strong: Flights\\n'\u001b[39m +\n        \u001b[32m'    - listitem:\\n'\u001b[39m +\n        \u001b[32m'      - link \"Hotels\":\\n'\u001b[39m +\n        \u001b[32m'        - /url: https://uat-travel-idfc.travel-loyalty.com/general/index/hotels?default_view=VHCID1420613748\\n'\u001b[39m +\n        \u001b[32m'        - img\\n'\u001b[39m +\n        \u001b[32m'        - strong: Hotels\\n'\u001b[39m +\n        \u001b[32m'  - text: DK\\n'\u001b[39m +\n        \u001b[32m'- heading \"Flight details\" [level=4]\\n'\u001b[39m +\n        \u001b[32m'- text: \"1 3 : 4 4\"\\n'\u001b[39m +\n        \u001b[32m'- img \"img\"\\n'\u001b[39m +\n        \u001b[32m'- heading \"BOM\" [level=4]\\n'\u001b[39m +\n        \u001b[32m'- img\\n'\u001b[39m +\n        \u001b[32m'- heading \"BLR\" [level=4]\\n'\u001b[39m +\n        \u001b[32m\"- paragraph: Wed, 17 Jun'26 1 Traveller Non-stop\\n\"\u001b[39m +\n        \u001b[32m'- heading \"Air India\" [level=5]\\n'\u001b[39m +\n        \u001b[32m'- paragraph: AI-2812 | Economy\\n'\u001b[39m +\n        \u001b[32m'- paragraph: Wed, 17 Jun\\n'\u001b[39m +\n        \u001b[32m'- paragraph: 02:05\\n'\u001b[39m +\n        \u001b[32m'- paragraph: BOM\\n'\u001b[39m +\n        \u001b[32m'- paragraph: Chhatrapati Shivaji International Airport\\n'\u001b[39m +\n        \u001b[32m'- paragraph: \"Terminal: T2\"\\n'\u001b[39m +\n        \u001b[32m'- paragraph: 2h 5m\\n'\u001b[39m +\n        \u001b[32m'- img\\n'\u001b[39m +\n        \u001b[32m'- paragraph: Wed, 17 Jun\\n'\u001b[39m +\n        \u001b[32m'- paragraph: 04:10\\n'\u001b[39m +\n        \u001b[32m'- paragraph: BLR\\n'\u001b[39m +\n        \u001b[32m'- paragraph: Kempegowda International Airport\\n'\u001b[39m +\n        \u001b[32m'- paragraph: \"Terminal: T2\"\\n'\u001b[39m +\n        \u001b[32m`- 'heading \"Fare type: ECO VALUE - SME\" [level=4]'\\n`\u001b[39m +\n        \u001b[32m'- button \"Fare rules\"\\n'\u001b[39m +\n        \u001b[32m'- img \"img\"\\n'\u001b[39m +\n        \u001b[32m'- text: \"Cabin: 7 Kgs (1 Piece(s)) (1 Piece only)\"\\n'\u001b[39m +\n        \u001b[32m'- img \"img\"\\n'\u001b[39m +\n        \u001b[32m'- text: \"Check-in: 15 Kgs (1 Piece only)\"\\n'\u001b[39m +\n        \u001b[32m`- paragraph: \"*The baggage info is indicative. Tripstacc does not guarantee the accuracy of the information. Please check the airline's website for accurate details, as allowances may vary with stopovers, connections, or airline policy changes.\"\\n`\u001b[39m +\n        \u001b[32m'- heading \"Fare summary\" [level=4]\\n'\u001b[39m +\n        \u001b[32m'- heading \"Base Fare\" [level=5]\\n'\u001b[39m +\n        \u001b[32m'- paragraph: Adult (1 x ₹9,163)\\n'\u001b[39m +\n        \u001b[32m'- paragraph: ₹9,163\\n'\u001b[39m +\n        \u001b[32m'- paragraph: ₹9,163\\n'\u001b[39m +\n        \u001b[32m'- heading \"Taxes & Fees\" [level=5]\\n'\u001b[39m +\n        \u001b[32m'- paragraph: ₹1,750\\n'\u001b[39m +\n        \u001b[32m'- heading \"Amount Payable\" [level=5]\\n'\u001b[39m +\n        \u001b[32m'- paragraph: ₹10,913\\n'\u001b[39m +\n        \u001b[32m'- img\\n'\u001b[39m +\n        \u001b[32m'- paragraph:\\n'\u001b[39m +\n        \u001b[32m'  - text: Bonus 1,091\\n'\u001b[39m +\n        \u001b[32m'  - img\\n'\u001b[39m +\n        \u001b[32m'  - text: Worth ₹545\\n'\u001b[39m +\n        \u001b[32m'- img\\n'\u001b[39m +\n        \u001b[32m'- heading \"₹10,913\" [level=4]\\n'\u001b[39m +\n        \u001b[32m'- paragraph:\\n'\u001b[39m +\n        \u001b[32m'  - text: BONUS\\n'\u001b[39m +\n        \u001b[32m'  - strong: 1,091\\n'\u001b[39m +\n        \u001b[32m'  - img\\n'\u001b[39m +\n        \u001b[32m'- button \"Continue\"'\u001b[39m\n    }\n  }\n}\n"
+                    },
+                    {
+                      "text": "Element '//div[@class=\"inputcheckbox\"]//label[@for=\"pax401\"]' not visible on first attempt. Refreshing page and retrying...\n"
+                    },
+                    {
+                      "text": "Attempt 2: Element '//div[@class=\"inputcheckbox\"]//label[@for=\"pax401\"]' not visible. ExpectError: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('//div[@class=\"inputcheckbox\"]//label[@for=\"pax401\"]')\nExpected: visible\nReceived: hidden\nTimeout:  30000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 30000ms\u001b[22m\n\u001b[2m  - waiting for locator('//div[@class=\"inputcheckbox\"]//label[@for=\"pax401\"]')\u001b[22m\n\u001b[2m    61 × locator resolved to <label for=\"pax401\"></label>\u001b[22m\n\u001b[2m       - unexpected value \"hidden\"\u001b[22m\n\n    at attemptToCheckVisibility \u001b[90m(C:\\Users\\Admin\\Desktop\\Customer_Capital\\\u001b[39mutils\\verificationHelper.ts:171:35\u001b[90m)\u001b[39m\n    at VerificationHelpers.elementIsVisible \u001b[90m(C:\\Users\\Admin\\Desktop\\Customer_Capital\\\u001b[39mutils\\verificationHelper.ts:189:32\u001b[90m)\u001b[39m\n    at FlightHomePage.clickOnFirstOptionCheckbox \u001b[90m(C:\\Users\\Admin\\Desktop\\Customer_Capital\\\u001b[39mpages\\IDFC\\FlightHomePage.ts:583:5\u001b[90m)\u001b[39m\n    at \u001b[90mC:\\Users\\Admin\\Desktop\\Customer_Capital\\\u001b[39mtests\\IDFC\\BookingConfirmation.test.ts:87:7\n    at \u001b[90mC:\\Users\\Admin\\Desktop\\Customer_Capital\\\u001b[39mtests\\IDFC\\BookingConfirmation.test.ts:86:5 {\n  matcherResult: {\n    message: \u001b[32m'\\x1B[2mexpect(\\x1B[22m\\x1B[31mlocator\\x1B[39m\\x1B[2m).\\x1B[22mtoBeVisible\\x1B[2m(\\x1B[22m\\x1B[2m)\\x1B[22m failed\\n'\u001b[39m +\n      \u001b[32m'\\n'\u001b[39m +\n      \u001b[32m`Locator:  locator('//div[@class=\"inputcheckbox\"]//label[@for=\"pax401\"]')\\n`\u001b[39m +\n      \u001b[32m'Expected: visible\\n'\u001b[39m +\n      \u001b[32m'Received: hidden\\n'\u001b[39m +\n      \u001b[32m'Timeout:  30000ms\\n'\u001b[39m +\n      \u001b[32m'\\n'\u001b[39m +\n      \u001b[32m'Call log:\\n'\u001b[39m +\n      \u001b[32m'\\x1B[2m  - Expect \"toBeVisible\" with timeout 30000ms\\x1B[22m\\n'\u001b[39m +\n      \u001b[32m`\\x1B[2m  - waiting for locator('//div[@class=\"inputcheckbox\"]//label[@for=\"pax401\"]')\\x1B[22m\\n`\u001b[39m +\n      \u001b[32m'\\x1B[2m    61 × locator resolved to <label for=\"pax401\"></label>\\x1B[22m\\n'\u001b[39m +\n      \u001b[32m'\\x1B[2m       - unexpected value \"hidden\"\\x1B[22m\\n'\u001b[39m,\n    pass: \u001b[33mfalse\u001b[39m,\n    actual: \u001b[32m'hidden'\u001b[39m,\n    name: \u001b[32m'toBeVisible'\u001b[39m,\n    expected: \u001b[32m'visible'\u001b[39m,\n    log: [\n      \u001b[32m'  - Expect \"toBeVisible\" with timeout 30000ms'\u001b[39m,\n      \u001b[32m`  - waiting for locator('//div[@class=\"inputcheckbox\"]//label[@for=\"pax401\"]')`\u001b[39m,\n      \u001b[32m'    61 × locator resolved to <label for=\"pax401\"></label>'\u001b[39m,\n      \u001b[32m'       - unexpected value \"hidden\"'\u001b[39m\n    ],\n    timeout: \u001b[33m30000\u001b[39m,\n    ariaSnapshot: \u001b[32m'- banner:\\n'\u001b[39m +\n      \u001b[32m'  - link \"Logo\":\\n'\u001b[39m +\n      \u001b[32m'    - /url: https://uat-sso.ai-loyalty.com/Login/CCLP-2024DE-IDF0110-TR87AASC-UAT2024102024\\n'\u001b[39m +\n      \u001b[32m'    - img \"Logo\"\\n'\u001b[39m +\n      \u001b[32m'  - link:\\n'\u001b[39m +\n      \u001b[32m'    - /url: https://uat-travel-idfc.travel-loyalty.com/\\n'\u001b[39m +\n      \u001b[32m'  - list:\\n'\u001b[39m +\n      \u001b[32m'    - listitem:\\n'\u001b[39m +\n      \u001b[32m'      - link \"Flights\":\\n'\u001b[39m +\n      \u001b[32m'        - /url: https://uat-travel-idfc.travel-loyalty.com/general/index/flights?default_view=VHCID1420613784\\n'\u001b[39m +\n      \u001b[32m'        - img\\n'\u001b[39m +\n      \u001b[32m'        - strong: Flights\\n'\u001b[39m +\n      \u001b[32m'    - listitem:\\n'\u001b[39m +\n      \u001b[32m'      - link \"Hotels\":\\n'\u001b[39m +\n      \u001b[32m'        - /url: https://uat-travel-idfc.travel-loyalty.com/general/index/hotels?default_view=VHCID1420613748\\n'\u001b[39m +\n      \u001b[32m'        - img\\n'\u001b[39m +\n      \u001b[32m'        - strong: Hotels\\n'\u001b[39m +\n      \u001b[32m'  - text: DK\\n'\u001b[39m +\n      \u001b[32m'- heading \"Flight details\" [level=4]\\n'\u001b[39m +\n      \u001b[32m'- text: \"1 2 : 5 3\"\\n'\u001b[39m +\n      \u001b[32m'- img \"img\"\\n'\u001b[39m +\n      \u001b[32m'- heading \"BOM\" [level=4]\\n'\u001b[39m +\n      \u001b[32m'- img\\n'\u001b[39m +\n      \u001b[32m'- heading \"BLR\" [level=4]\\n'\u001b[39m +\n      \u001b[32m\"- paragraph: Wed, 17 Jun'26 1 Traveller Non-stop\\n\"\u001b[39m +\n      \u001b[32m'- heading \"Air India\" [level=5]\\n'\u001b[39m +\n      \u001b[32m'- paragraph: AI-2812 | Economy\\n'\u001b[39m +\n      \u001b[32m'- paragraph: Wed, 17 Jun\\n'\u001b[39m +\n      \u001b[32m'- paragraph: 02:05\\n'\u001b[39m +\n      \u001b[32m'- paragraph: BOM\\n'\u001b[39m +\n      \u001b[32m'- paragraph: Chhatrapati Shivaji International Airport\\n'\u001b[39m +\n      \u001b[32m'- paragraph: \"Terminal: T2\"\\n'\u001b[39m +\n      \u001b[32m'- paragraph: 2h 5m\\n'\u001b[39m +\n      \u001b[32m'- img\\n'\u001b[39m +\n      \u001b[32m'- paragraph: Wed, 17 Jun\\n'\u001b[39m +\n      \u001b[32m'- paragraph: 04:10\\n'\u001b[39m +\n      \u001b[32m'- paragraph: BLR\\n'\u001b[39m +\n      \u001b[32m'- paragraph: Kempegowda International Airport\\n'\u001b[39m +\n      \u001b[32m'- paragraph: \"Terminal: T2\"\\n'\u001b[39m +\n      \u001b[32m`- 'heading \"Fare type: ECO VALUE - SME\" [level=4]'\\n`\u001b[39m +\n      \u001b[32m'- button \"Fare rules\"\\n'\u001b[39m +\n      \u001b[32m'- img \"img\"\\n'\u001b[39m +\n      \u001b[32m'- text: \"Cabin: 7 Kgs (1 Piece(s)) (1 Piece only)\"\\n'\u001b[39m +\n      \u001b[32m'- img \"img\"\\n'\u001b[39m +\n      \u001b[32m'- text: \"Check-in: 15 Kgs (1 Piece only)\"\\n'\u001b[39m +\n      \u001b[32m`- paragraph: \"*The baggage info is indicative. Tripstacc does not guarantee the accuracy of the information. Please check the airline's website for accurate details, as allowances may vary with stopovers, connections, or airline policy changes.\"\\n`\u001b[39m +\n      \u001b[32m'- heading \"Fare summary\" [level=4]\\n'\u001b[39m +\n      \u001b[32m'- heading \"Base Fare\" [level=5]\\n'\u001b[39m +\n      \u001b[32m'- paragraph: Adult (1 x ₹9,163)\\n'\u001b[39m +\n      \u001b[32m'- paragraph: ₹9,163\\n'\u001b[39m +\n      \u001b[32m'- paragraph: ₹9,163\\n'\u001b[39m +\n      \u001b[32m'- heading \"Taxes & Fees\" [level=5]\\n'\u001b[39m +\n      \u001b[32m'- paragraph: ₹1,750\\n'\u001b[39m +\n      \u001b[32m'- heading \"Amount Payable\" [level=5]\\n'\u001b[39m +\n      \u001b[32m'- paragraph: ₹10,913\\n'\u001b[39m +\n      \u001b[32m'- img\\n'\u001b[39m +\n      \u001b[32m'- paragraph: Only on FIRST Rewards Gallery\\n'\u001b[39m +\n      \u001b[32m'- img\\n'\u001b[39m +\n      \u001b[32m'- heading \"₹10,913\" [level=4]\\n'\u001b[39m +\n      \u001b[32m'- paragraph:\\n'\u001b[39m +\n      \u001b[32m'  - text: BONUS\\n'\u001b[39m +\n      \u001b[32m'  - strong: 1,091\\n'\u001b[39m +\n      \u001b[32m'  - img\\n'\u001b[39m +\n      \u001b[32m'- button \"Continue\"'\u001b[39m\n  },\n  \u001b[32mSymbol(step)\u001b[39m: {\n    category: \u001b[32m'expect'\u001b[39m,\n    apiName: \u001b[32m'expect.toBeVisible'\u001b[39m,\n    title: \u001b[32m`Expect \"toBeVisible\" locator('//div[@class=\"inputcheckbox\"]//label[@for=\"pax401\"]')`\u001b[39m,\n    shortTitle: \u001b[32m'Expect \"toBeVisible\"'\u001b[39m,\n    params: { expected: \u001b[36m[Object]\u001b[39m },\n    stepId: \u001b[32m'expect@149'\u001b[39m,\n    group: \u001b[90mundefined\u001b[39m,\n    boxedStack: \u001b[90mundefined\u001b[39m,\n    location: {\n      file: \u001b[32m'C:\\\\Users\\\\Admin\\\\Desktop\\\\Customer_Capital\\\\utils\\\\verificationHelper.ts'\u001b[39m,\n      line: \u001b[33m171\u001b[39m,\n      column: \u001b[33m35\u001b[39m,\n      function: \u001b[32m'attemptToCheckVisibility'\u001b[39m\n    },\n    steps: [],\n    attachmentIndices: [],\n    info: TestStepInfoImpl {\n      annotations: [],\n      _testInfo: \u001b[36m[TestInfoImpl]\u001b[39m,\n      _stepId: \u001b[32m'expect@149'\u001b[39m,\n      _title: \u001b[32m`Expect \"toBeVisible\" locator('//div[@class=\"inputcheckbox\"]//label[@for=\"pax401\"]')`\u001b[39m,\n      _parentStep: \u001b[36m[TestStepInfoImpl]\u001b[39m,\n      skip: \u001b[36m[Function (anonymous)]\u001b[39m\n    },\n    complete: \u001b[36m[Function: complete]\u001b[39m,\n    endWallTime: \u001b[33m1781518254444\u001b[39m,\n    error: {\n      message: \u001b[32m'Error: \\x1B[2mexpect(\\x1B[22m\\x1B[31mlocator\\x1B[39m\\x1B[2m).\\x1B[22mtoBeVisible\\x1B[2m(\\x1B[22m\\x1B[2m)\\x1B[22m failed\\n'\u001b[39m +\n        \u001b[32m'\\n'\u001b[39m +\n        \u001b[32m`Locator:  locator('//div[@class=\"inputcheckbox\"]//label[@for=\"pax401\"]')\\n`\u001b[39m +\n        \u001b[32m'Expected: visible\\n'\u001b[39m +\n        \u001b[32m'Received: hidden\\n'\u001b[39m +\n        \u001b[32m'Timeout:  30000ms\\n'\u001b[39m +\n        \u001b[32m'\\n'\u001b[39m +\n        \u001b[32m'Call log:\\n'\u001b[39m +\n        \u001b[32m'\\x1B[2m  - Expect \"toBeVisible\" with timeout 30000ms\\x1B[22m\\n'\u001b[39m +\n        \u001b[32m`\\x1B[2m  - waiting for locator('//div[@class=\"inputcheckbox\"]//label[@for=\"pax401\"]')\\x1B[22m\\n`\u001b[39m +\n        \u001b[32m'\\x1B[2m    61 × locator resolved to <label for=\"pax401\"></label>\\x1B[22m\\n'\u001b[39m +\n        \u001b[32m'\\x1B[2m       - unexpected value \"hidden\"\\x1B[22m\\n'\u001b[39m,\n      stack: \u001b[32m'Error: \\x1B[2mexpect(\\x1B[22m\\x1B[31mlocator\\x1B[39m\\x1B[2m).\\x1B[22mtoBeVisible\\x1B[2m(\\x1B[22m\\x1B[2m)\\x1B[22m failed\\n'\u001b[39m +\n        \u001b[32m'\\n'\u001b[39m +\n        \u001b[32m`Locator:  locator('//div[@class=\"inputcheckbox\"]//label[@for=\"pax401\"]')\\n`\u001b[39m +\n        \u001b[32m'Expected: visible\\n'\u001b[39m +\n        \u001b[32m'Received: hidden\\n'\u001b[39m +\n        \u001b[32m'Timeout:  30000ms\\n'\u001b[39m +\n        \u001b[32m'\\n'\u001b[39m +\n        \u001b[32m'Call log:\\n'\u001b[39m +\n        \u001b[32m'\\x1B[2m  - Expect \"toBeVisible\" with timeout 30000ms\\x1B[22m\\n'\u001b[39m +\n        \u001b[32m`\\x1B[2m  - waiting for locator('//div[@class=\"inputcheckbox\"]//label[@for=\"pax401\"]')\\x1B[22m\\n`\u001b[39m +\n        \u001b[32m'\\x1B[2m    61 × locator resolved to <label for=\"pax401\"></label>\\x1B[22m\\n'\u001b[39m +\n        \u001b[32m'\\x1B[2m       - unexpected value \"hidden\"\\x1B[22m\\n'\u001b[39m +\n        \u001b[32m'\\n'\u001b[39m +\n        \u001b[32m'    at attemptToCheckVisibility (C:\\\\Users\\\\Admin\\\\Desktop\\\\Customer_Capital\\\\utils\\\\verificationHelper.ts:171:35)\\n'\u001b[39m +\n        \u001b[32m'    at VerificationHelpers.elementIsVisible (C:\\\\Users\\\\Admin\\\\Desktop\\\\Customer_Capital\\\\utils\\\\verificationHelper.ts:189:32)\\n'\u001b[39m +\n        \u001b[32m'    at FlightHomePage.clickOnFirstOptionCheckbox (C:\\\\Users\\\\Admin\\\\Desktop\\\\Customer_Capital\\\\pages\\\\IDFC\\\\FlightHomePage.ts:583:5)\\n'\u001b[39m +\n        \u001b[32m'    at C:\\\\Users\\\\Admin\\\\Desktop\\\\Customer_Capital\\\\tests\\\\IDFC\\\\BookingConfirmation.test.ts:87:7\\n'\u001b[39m +\n        \u001b[32m'    at C:\\\\Users\\\\Admin\\\\Desktop\\\\Customer_Capital\\\\tests\\\\IDFC\\\\BookingConfirmation.test.ts:86:5'\u001b[39m,\n      cause: \u001b[90mundefined\u001b[39m,\n      errorContext: \u001b[32m'- banner:\\n'\u001b[39m +\n        \u001b[32m'  - link \"Logo\":\\n'\u001b[39m +\n        \u001b[32m'    - /url: https://uat-sso.ai-loyalty.com/Login/CCLP-2024DE-IDF0110-TR87AASC-UAT2024102024\\n'\u001b[39m +\n        \u001b[32m'    - img \"Logo\"\\n'\u001b[39m +\n        \u001b[32m'  - link:\\n'\u001b[39m +\n        \u001b[32m'    - /url: https://uat-travel-idfc.travel-loyalty.com/\\n'\u001b[39m +\n        \u001b[32m'  - list:\\n'\u001b[39m +\n        \u001b[32m'    - listitem:\\n'\u001b[39m +\n        \u001b[32m'      - link \"Flights\":\\n'\u001b[39m +\n        \u001b[32m'        - /url: https://uat-travel-idfc.travel-loyalty.com/general/index/flights?default_view=VHCID1420613784\\n'\u001b[39m +\n        \u001b[32m'        - img\\n'\u001b[39m +\n        \u001b[32m'        - strong: Flights\\n'\u001b[39m +\n        \u001b[32m'    - listitem:\\n'\u001b[39m +\n        \u001b[32m'      - link \"Hotels\":\\n'\u001b[39m +\n        \u001b[32m'        - /url: https://uat-travel-idfc.travel-loyalty.com/general/index/hotels?default_view=VHCID1420613748\\n'\u001b[39m +\n        \u001b[32m'        - img\\n'\u001b[39m +\n        \u001b[32m'        - strong: Hotels\\n'\u001b[39m +\n        \u001b[32m'  - text: DK\\n'\u001b[39m +\n        \u001b[32m'- heading \"Flight details\" [level=4]\\n'\u001b[39m +\n        \u001b[32m'- text: \"1 2 : 5 3\"\\n'\u001b[39m +\n        \u001b[32m'- img \"img\"\\n'\u001b[39m +\n        \u001b[32m'- heading \"BOM\" [level=4]\\n'\u001b[39m +\n        \u001b[32m'- img\\n'\u001b[39m +\n        \u001b[32m'- heading \"BLR\" [level=4]\\n'\u001b[39m +\n        \u001b[32m\"- paragraph: Wed, 17 Jun'26 1 Traveller Non-stop\\n\"\u001b[39m +\n        \u001b[32m'- heading \"Air India\" [level=5]\\n'\u001b[39m +\n        \u001b[32m'- paragraph: AI-2812 | Economy\\n'\u001b[39m +\n        \u001b[32m'- paragraph: Wed, 17 Jun\\n'\u001b[39m +\n        \u001b[32m'- paragraph: 02:05\\n'\u001b[39m +\n        \u001b[32m'- paragraph: BOM\\n'\u001b[39m +\n        \u001b[32m'- paragraph: Chhatrapati Shivaji International Airport\\n'\u001b[39m +\n        \u001b[32m'- paragraph: \"Terminal: T2\"\\n'\u001b[39m +\n        \u001b[32m'- paragraph: 2h 5m\\n'\u001b[39m +\n        \u001b[32m'- img\\n'\u001b[39m +\n        \u001b[32m'- paragraph: Wed, 17 Jun\\n'\u001b[39m +\n        \u001b[32m'- paragraph: 04:10\\n'\u001b[39m +\n        \u001b[32m'- paragraph: BLR\\n'\u001b[39m +\n        \u001b[32m'- paragraph: Kempegowda International Airport\\n'\u001b[39m +\n        \u001b[32m'- paragraph: \"Terminal: T2\"\\n'\u001b[39m +\n        \u001b[32m`- 'heading \"Fare type: ECO VALUE - SME\" [level=4]'\\n`\u001b[39m +\n        \u001b[32m'- button \"Fare rules\"\\n'\u001b[39m +\n        \u001b[32m'- img \"img\"\\n'\u001b[39m +\n        \u001b[32m'- text: \"Cabin: 7 Kgs (1 Piece(s)) (1 Piece only)\"\\n'\u001b[39m +\n        \u001b[32m'- img \"img\"\\n'\u001b[39m +\n        \u001b[32m'- text: \"Check-in: 15 Kgs (1 Piece only)\"\\n'\u001b[39m +\n        \u001b[32m`- paragraph: \"*The baggage info is indicative. Tripstacc does not guarantee the accuracy of the information. Please check the airline's website for accurate details, as allowances may vary with stopovers, connections, or airline policy changes.\"\\n`\u001b[39m +\n        \u001b[32m'- heading \"Fare summary\" [level=4]\\n'\u001b[39m +\n        \u001b[32m'- heading \"Base Fare\" [level=5]\\n'\u001b[39m +\n        \u001b[32m'- paragraph: Adult (1 x ₹9,163)\\n'\u001b[39m +\n        \u001b[32m'- paragraph: ₹9,163\\n'\u001b[39m +\n        \u001b[32m'- paragraph: ₹9,163\\n'\u001b[39m +\n        \u001b[32m'- heading \"Taxes & Fees\" [level=5]\\n'\u001b[39m +\n        \u001b[32m'- paragraph: ₹1,750\\n'\u001b[39m +\n        \u001b[32m'- heading \"Amount Payable\" [level=5]\\n'\u001b[39m +\n        \u001b[32m'- paragraph: ₹10,913\\n'\u001b[39m +\n        \u001b[32m'- img\\n'\u001b[39m +\n        \u001b[32m'- paragraph: Only on FIRST Rewards Gallery\\n'\u001b[39m +\n        \u001b[32m'- img\\n'\u001b[39m +\n        \u001b[32m'- heading \"₹10,913\" [level=4]\\n'\u001b[39m +\n        \u001b[32m'- paragraph:\\n'\u001b[39m +\n        \u001b[32m'  - text: BONUS\\n'\u001b[39m +\n        \u001b[32m'  - strong: 1,091\\n'\u001b[39m +\n        \u001b[32m'  - img\\n'\u001b[39m +\n        \u001b[32m'- button \"Continue\"'\u001b[39m\n    }\n  }\n}\n"
+                    }
+                  ],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "Step 1: Enter City From Airport",
+                      "duration": 32186
+                    },
+                    {
+                      "title": "Step 2: Verify From Airport Dropdown Visible",
+                      "duration": 1185
+                    },
+                    {
+                      "title": "Step 3: Enter City To Airport",
+                      "duration": 1112
+                    },
+                    {
+                      "title": "Step 4: Verify To Airport Dropdown Visible",
+                      "duration": 1323
+                    },
+                    {
+                      "title": "Step 5: Enter date of departure",
+                      "duration": 1170
+                    },
+                    {
+                      "title": "Step 6: Click and verify travellers and cabin class dropdown",
+                      "duration": 3133
+                    },
+                    {
+                      "title": "Step 7: Click search flights button",
+                      "duration": 22407
+                    },
+                    {
+                      "title": "Step 8: Verify first flight card visible",
+                      "duration": 1314
+                    },
+                    {
+                      "title": "Step 9: Click on Next Button On Flight Details Page",
+                      "duration": 4093
+                    },
+                    {
+                      "title": "Step 10: Click on Book Button On Flight Details Page",
+                      "duration": 12176
+                    },
+                    {
+                      "title": "Step 11: Click on Continue Button On Flight Details Page",
+                      "duration": 8699
+                    },
+                    {
+                      "title": "Step 12: Click on First Traveller Edit Button On Traveller Details Page",
+                      "duration": 80850,
+                      "error": {
+                        "message": "Error: Element '//div[@class=\"inputcheckbox\"]//label[@for=\"pax401\"]' was not visible after two attempts (including page refresh).",
+                        "stack": "Error: Element '//div[@class=\"inputcheckbox\"]//label[@for=\"pax401\"]' was not visible after two attempts (including page refresh).\n    at VerificationHelpers.elementIsVisible (C:\\Users\\Admin\\Desktop\\Customer_Capital\\utils\\verificationHelper.ts:193:11)\n    at FlightHomePage.clickOnFirstOptionCheckbox (C:\\Users\\Admin\\Desktop\\Customer_Capital\\pages\\IDFC\\FlightHomePage.ts:583:5)\n    at C:\\Users\\Admin\\Desktop\\Customer_Capital\\tests\\IDFC\\BookingConfirmation.test.ts:87:7\n    at C:\\Users\\Admin\\Desktop\\Customer_Capital\\tests\\IDFC\\BookingConfirmation.test.ts:86:5",
+                        "location": {
+                          "file": "C:\\Users\\Admin\\Desktop\\Customer_Capital\\utils\\verificationHelper.ts",
+                          "column": 11,
+                          "line": 193
+                        },
+                        "snippet": "\u001b[90m   at \u001b[39mutils\\verificationHelper.ts:193\n\n\u001b[0m \u001b[90m 191 |\u001b[39m  \n \u001b[90m 192 |\u001b[39m     \u001b[90m// ❌ Final failure\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 193 |\u001b[39m     \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`Element '${locator}' was not visible after two attempts (including page refresh).`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 194 |\u001b[39m }\n \u001b[90m 195 |\u001b[39m\n \u001b[90m 196 |\u001b[39m     \u001b[36mstatic\u001b[39m \u001b[36masync\u001b[39m elementIsVisibleSoftAssert(page\u001b[33m:\u001b[39m \u001b[33mPage\u001b[39m\u001b[33m,\u001b[39m locator\u001b[33m:\u001b[39m string)\u001b[33m:\u001b[39m \u001b[33mPromise\u001b[39m\u001b[33m<\u001b[39m\u001b[33mboolean\u001b[39m\u001b[33m>\u001b[39m {\u001b[0m"
+                      }
+                    }
+                  ],
+                  "startTime": "2026-06-15T10:08:01.459Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\Admin\\Desktop\\Customer_Capital\\test-results\\BookingConfirmation-SC-012-32b0f-e-Confirmed-Pending-Failed--IDFC-chrome-UAT\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\Admin\\Desktop\\Customer_Capital\\test-results\\BookingConfirmation-SC-012-32b0f-e-Confirmed-Pending-Failed--IDFC-chrome-UAT\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\Admin\\Desktop\\Customer_Capital\\utils\\verificationHelper.ts",
+                    "column": 11,
+                    "line": 193
+                  }
+                },
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 167155,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('//input[@id=\"password\"]')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('//input[@id=\"password\"]')\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('//input[@id=\"password\"]')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('//input[@id=\"password\"]')\u001b[22m\n\n    at PaymentPage.verifyOtpPageVisibleandFillValue (C:\\Users\\Admin\\Desktop\\Customer_Capital\\pages\\IDFC\\PaymentPage.ts:133:67)\n    at C:\\Users\\Admin\\Desktop\\Customer_Capital\\tests\\IDFC\\BookingConfirmation.test.ts:140:25\n    at C:\\Users\\Admin\\Desktop\\Customer_Capital\\tests\\IDFC\\BookingConfirmation.test.ts:135:5",
+                    "location": {
+                      "file": "C:\\Users\\Admin\\Desktop\\Customer_Capital\\pages\\IDFC\\PaymentPage.ts",
+                      "column": 67,
+                      "line": 133
+                    },
+                    "snippet": "\u001b[90m   at \u001b[39mpages\\IDFC\\PaymentPage.ts:133\n\n\u001b[0m \u001b[90m 131 |\u001b[39m\n \u001b[90m 132 |\u001b[39m   \u001b[36mstatic\u001b[39m \u001b[36masync\u001b[39m verifyOtpPageVisibleandFillValue(page\u001b[33m:\u001b[39m \u001b[33mPage\u001b[39m) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 133 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[33mPaymentPageLocators\u001b[39m\u001b[33m.\u001b[39motpInputField))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                                                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 134 |\u001b[39m     console\u001b[33m.\u001b[39mlog(\u001b[32m'OTP page is visible.'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 135 |\u001b[39m     \u001b[36mawait\u001b[39m \u001b[33mElementHelper\u001b[39m\u001b[33m.\u001b[39mclearAndEnterInTextField(page\u001b[33m,\u001b[39m \u001b[33mPaymentPageLocators\u001b[39m\u001b[33m.\u001b[39motpInputField\u001b[33m,\u001b[39m idfcTestData\u001b[33m.\u001b[39mpaymentDataFill\u001b[33m.\u001b[39motp)\n \u001b[90m 136 |\u001b[39m   }\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\Admin\\Desktop\\Customer_Capital\\pages\\IDFC\\PaymentPage.ts",
+                        "column": 67,
+                        "line": 133
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('//input[@id=\"password\"]')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('//input[@id=\"password\"]')\u001b[22m\n\n\n\u001b[90m   at \u001b[39mpages\\IDFC\\PaymentPage.ts:133\n\n\u001b[0m \u001b[90m 131 |\u001b[39m\n \u001b[90m 132 |\u001b[39m   \u001b[36mstatic\u001b[39m \u001b[36masync\u001b[39m verifyOtpPageVisibleandFillValue(page\u001b[33m:\u001b[39m \u001b[33mPage\u001b[39m) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 133 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[33mPaymentPageLocators\u001b[39m\u001b[33m.\u001b[39motpInputField))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                                                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 134 |\u001b[39m     console\u001b[33m.\u001b[39mlog(\u001b[32m'OTP page is visible.'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 135 |\u001b[39m     \u001b[36mawait\u001b[39m \u001b[33mElementHelper\u001b[39m\u001b[33m.\u001b[39mclearAndEnterInTextField(page\u001b[33m,\u001b[39m \u001b[33mPaymentPageLocators\u001b[39m\u001b[33m.\u001b[39motpInputField\u001b[33m,\u001b[39m idfcTestData\u001b[33m.\u001b[39mpaymentDataFill\u001b[33m.\u001b[39motp)\n \u001b[90m 136 |\u001b[39m   }\u001b[0m\n\u001b[2m    at PaymentPage.verifyOtpPageVisibleandFillValue (C:\\Users\\Admin\\Desktop\\Customer_Capital\\pages\\IDFC\\PaymentPage.ts:133:67)\u001b[22m\n\u001b[2m    at C:\\Users\\Admin\\Desktop\\Customer_Capital\\tests\\IDFC\\BookingConfirmation.test.ts:140:25\u001b[22m\n\u001b[2m    at C:\\Users\\Admin\\Desktop\\Customer_Capital\\tests\\IDFC\\BookingConfirmation.test.ts:135:5\u001b[22m"
+                    }
+                  ],
+                  "stdout": [
+                    {
+                      "text": "Running setup for: idfc-chrome-uat\n"
+                    },
+                    {
+                      "text": "Navigating to Home Page of :IDFC-chrome-UAT\n"
+                    },
+                    {
+                      "text": "Executing IDFC setup\n"
+                    },
+                    {
+                      "text": "Clicked on element: //button[@id='btnLogin']\n"
+                    },
+                    {
+                      "text": "Attempt 1: Waiting for element '//div[@class='bodytext ']' to be visible...\n"
+                    },
+                    {
+                      "text": "Element '//div[@class='bodytext ']' is visible on first attempt\n"
+                    },
+                    {
+                      "text": "Clicked on element: //input[@placeholder=\"Select city or airport\" and @name=\"from\"]\n"
+                    },
+                    {
+                      "text": "Clear value from \"//input[@placeholder=\"Select city or airport\" and @name=\"from\"]\" text field and enter text \"Mumb\"\n"
+                    },
+                    {
+                      "text": "Attempt 1: Waiting for element '//ul[@id=\"ui-id-1\"]' to be visible...\n"
+                    },
+                    {
+                      "text": "Element '//ul[@id=\"ui-id-1\"]' is visible on first attempt\n"
+                    },
+                    {
+                      "text": "Attempt 1: Checking visibility for '//ul[@id=\"ui-id-1\"]'\n"
+                    },
+                    {
+                      "text": "Element '//ul[@id=\"ui-id-1\"]' is visible on attempt 1.\n"
+                    },
+                    {
+                      "text": "Clicked on element: (//a[@class=\"ui-menu-item-wrapper\"])[1]\n"
+                    },
+                    {
+                      "text": "Clicked on element: //input[@placeholder=\"Select city or airport\" and @name=\"to\"]\n"
+                    },
+                    {
+                      "text": "Clear value from \"//input[@placeholder=\"Select city or airport\" and @name=\"to\"]\" text field and enter text \"Banga\"\n"
+                    },
+                    {
+                      "text": "Attempt 1: Waiting for element '//ul[@id=\"ui-id-2\"]' to be visible...\n"
+                    },
+                    {
+                      "text": "Element '//ul[@id=\"ui-id-2\"]' is visible on first attempt\n"
+                    },
+                    {
+                      "text": "Attempt 1: Checking visibility for '//ul[@id=\"ui-id-2\"]'\n"
+                    },
+                    {
+                      "text": "Element '//ul[@id=\"ui-id-2\"]' is visible on attempt 1.\n"
+                    },
+                    {
+                      "text": "Clicked on element: (//ul[@id=\"ui-id-2\"]//a[@class=\"ui-menu-item-wrapper\"])[1]\n"
+                    },
+                    {
+                      "text": "Clicked on element: //input[@id=\"flight_datepicker1\"]\n"
+                    },
+                    {
+                      "text": "Clicked on element: //div[@class=\"totlall mainSearchbox newdes\"]\n"
+                    },
+                    {
+                      "text": "Attempt 1: Waiting for element '//div[contains(@class,\"roomcountMob\")] ' to be visible...\n"
+                    },
+                    {
+                      "text": "Element '//div[contains(@class,\"roomcountMob\")] ' is visible on first attempt\n"
+                    },
+                    {
+                      "text": "Attempt 1: Checking visibility for '//div[contains(@class,\"roomcountMob\")] '\n"
+                    },
+                    {
+                      "text": "Element '//div[contains(@class,\"roomcountMob\")] ' is visible on attempt 1.\n"
+                    },
+                    {
+                      "text": "Clicked on element: //div[@class=\"totlall mainSearchbox newdes\"]\n"
+                    },
+                    {
+                      "text": "Scrolled to element with locator: \"//input[@id=\"flight-form-submit\"]\"\n"
+                    },
+                    {
+                      "text": "Clicked on element: //input[@id=\"flight-form-submit\"]\n"
+                    },
+                    {
+                      "text": "Attempt 1: Waiting for element '(//div[@class=\"flightInfoCard\"])[1]' to be visible...\n"
+                    },
+                    {
+                      "text": "Element '(//div[@class=\"flightInfoCard\"])[1]' is visible on first attempt\n"
+                    },
+                    {
+                      "text": "Attempt 1: Checking visibility for '(//div[@class=\"flightInfoCard\"])[1]'\n"
+                    },
+                    {
+                      "text": "Element '(//div[@class=\"flightInfoCard\"])[1]' is visible on attempt 1.\n"
+                    },
+                    {
+                      "text": "Clicked on element: //button[text()=\"Next\"]\n"
+                    },
+                    {
+                      "text": "Clicked on element: //div[@class=\"trip_body trip0  \"]//button[text()=\"Book\"]\n"
+                    },
+                    {
+                      "text": "Clicked on element: //button[@id=\"move_to_pax_details_section\"]\n"
+                    },
+                    {
+                      "text": "Attempt 1: Checking visibility for '//div[@class=\"inputcheckbox\"]//label[@for=\"pax401\"]'\n"
+                    },
+                    {
+                      "text": "Element '//div[@class=\"inputcheckbox\"]//label[@for=\"pax401\"]' is visible on attempt 1.\n"
+                    },
+                    {
+                      "text": "Clicked on element: //div[@class=\"inputcheckbox\"]//label[@for=\"pax401\"]\n"
+                    },
+                    {
+                      "text": "Clicked on element: //button[@class=\"flbookbtn traveller_details_continue\"]\n"
+                    },
+                    {
+                      "text": "Clicked on element: //a[@class=\"skipbtn skipToCheckout\"]\n"
+                    },
+                    {
+                      "text": "Clicked on element: //button[@id=\"rzp-payment-button\"]\n"
+                    },
+                    {
+                      "text": "Pay button after discount clicked\n"
+                    },
+                    {
+                      "text": "Available card options: [ \u001b[32m'Cards (Credit/Debit)'\u001b[39m, \u001b[32m'EMINo Cost EMI'\u001b[39m ]\n"
+                    },
+                    {
+                      "text": "Clicked on element: //div[@class='boxedPaymentOptions']//ul//li\n"
+                    },
+                    {
+                      "text": "Card fields are visible.\n"
+                    },
+                    {
+                      "text": "Clear value from \"//input[@id='cardNumber']\" text field and enter text \"4405235026842471\"\n"
+                    },
+                    {
+                      "text": "Clear value from \"//input[@id='cardExpiry']\" text field and enter text \"05/30\"\n"
+                    },
+                    {
+                      "text": "Clear value from \"//input[@id='cardCvv']\" text field and enter text \"123\"\n"
+                    },
+                    {
+                      "text": "Clear value from \"//input[@id='cardOwnerName']\" text field and enter text \"John Doe\"\n"
+                    },
+                    {
+                      "text": "Clicked on element: //button[@class=\"common-btn\" and normalize-space()=\"PROCEED\"]\n"
+                    },
+                    {
+                      "text": "Clicked on element: //button[@data-testid=\"closeWithoutSave\"]\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 1,
+                  "steps": [
+                    {
+                      "title": "Step 1: Enter City From Airport",
+                      "duration": 32176
+                    },
+                    {
+                      "title": "Step 2: Verify From Airport Dropdown Visible",
+                      "duration": 1214
+                    },
+                    {
+                      "title": "Step 3: Enter City To Airport",
+                      "duration": 1075
+                    },
+                    {
+                      "title": "Step 4: Verify To Airport Dropdown Visible",
+                      "duration": 1093
+                    },
+                    {
+                      "title": "Step 5: Enter date of departure",
+                      "duration": 1126
+                    },
+                    {
+                      "title": "Step 6: Click and verify travellers and cabin class dropdown",
+                      "duration": 3124
+                    },
+                    {
+                      "title": "Step 7: Click search flights button",
+                      "duration": 22349
+                    },
+                    {
+                      "title": "Step 8: Verify first flight card visible",
+                      "duration": 1092
+                    },
+                    {
+                      "title": "Step 9: Click on Next Button On Flight Details Page",
+                      "duration": 4144
+                    },
+                    {
+                      "title": "Step 10: Click on Book Button On Flight Details Page",
+                      "duration": 12166
+                    },
+                    {
+                      "title": "Step 11: Click on Continue Button On Flight Details Page",
+                      "duration": 5926
+                    },
+                    {
+                      "title": "Step 12: Click on First Traveller Edit Button On Traveller Details Page",
+                      "duration": 1122
+                    },
+                    {
+                      "title": "Step 13: Click on continue button On Traveller Details Page",
+                      "duration": 9095
+                    },
+                    {
+                      "title": "Step 14: Click on Skip Option",
+                      "duration": 9099
+                    },
+                    {
+                      "title": "Step 15: Click on Travellers and Addons Continue Button",
+                      "duration": 9051
+                    },
+                    {
+                      "title": "Step 16: Click Verify Checkout Pay Button displays correct amount",
+                      "duration": 8135
+                    },
+                    {
+                      "title": "Step 17: Card Options visible and click selector",
+                      "duration": 26586
+                    },
+                    {
+                      "title": "Step 18: Fill Card Details",
+                      "duration": 4248
+                    },
+                    {
+                      "title": "Step 19: Proceed and handle Save Card Popup",
+                      "duration": 7147,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('//input[@id=\"password\"]')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('//input[@id=\"password\"]')\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('//input[@id=\"password\"]')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('//input[@id=\"password\"]')\u001b[22m\n\n    at PaymentPage.verifyOtpPageVisibleandFillValue (C:\\Users\\Admin\\Desktop\\Customer_Capital\\pages\\IDFC\\PaymentPage.ts:133:67)\n    at C:\\Users\\Admin\\Desktop\\Customer_Capital\\tests\\IDFC\\BookingConfirmation.test.ts:140:25\n    at C:\\Users\\Admin\\Desktop\\Customer_Capital\\tests\\IDFC\\BookingConfirmation.test.ts:135:5",
+                        "location": {
+                          "file": "C:\\Users\\Admin\\Desktop\\Customer_Capital\\pages\\IDFC\\PaymentPage.ts",
+                          "column": 67,
+                          "line": 133
+                        },
+                        "snippet": "\u001b[90m   at \u001b[39mpages\\IDFC\\PaymentPage.ts:133\n\n\u001b[0m \u001b[90m 131 |\u001b[39m\n \u001b[90m 132 |\u001b[39m   \u001b[36mstatic\u001b[39m \u001b[36masync\u001b[39m verifyOtpPageVisibleandFillValue(page\u001b[33m:\u001b[39m \u001b[33mPage\u001b[39m) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 133 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[33mPaymentPageLocators\u001b[39m\u001b[33m.\u001b[39motpInputField))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                                                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 134 |\u001b[39m     console\u001b[33m.\u001b[39mlog(\u001b[32m'OTP page is visible.'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 135 |\u001b[39m     \u001b[36mawait\u001b[39m \u001b[33mElementHelper\u001b[39m\u001b[33m.\u001b[39mclearAndEnterInTextField(page\u001b[33m,\u001b[39m \u001b[33mPaymentPageLocators\u001b[39m\u001b[33m.\u001b[39motpInputField\u001b[33m,\u001b[39m idfcTestData\u001b[33m.\u001b[39mpaymentDataFill\u001b[33m.\u001b[39motp)\n \u001b[90m 136 |\u001b[39m   }\u001b[0m"
+                      }
+                    }
+                  ],
+                  "startTime": "2026-06-15T10:10:55.621Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\Admin\\Desktop\\Customer_Capital\\test-results\\BookingConfirmation-SC-012-32b0f-e-Confirmed-Pending-Failed--IDFC-chrome-UAT-retry1\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\Admin\\Desktop\\Customer_Capital\\pages\\IDFC\\PaymentPage.ts",
+                    "column": 67,
+                    "line": 133
+                  }
+                },
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 197684,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('//input[@id=\"password\"]')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('//input[@id=\"password\"]')\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('//input[@id=\"password\"]')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('//input[@id=\"password\"]')\u001b[22m\n\n    at PaymentPage.verifyOtpPageVisibleandFillValue (C:\\Users\\Admin\\Desktop\\Customer_Capital\\pages\\IDFC\\PaymentPage.ts:133:67)\n    at C:\\Users\\Admin\\Desktop\\Customer_Capital\\tests\\IDFC\\BookingConfirmation.test.ts:140:25\n    at C:\\Users\\Admin\\Desktop\\Customer_Capital\\tests\\IDFC\\BookingConfirmation.test.ts:135:5",
+                    "location": {
+                      "file": "C:\\Users\\Admin\\Desktop\\Customer_Capital\\pages\\IDFC\\PaymentPage.ts",
+                      "column": 67,
+                      "line": 133
+                    },
+                    "snippet": "\u001b[90m   at \u001b[39mpages\\IDFC\\PaymentPage.ts:133\n\n\u001b[0m \u001b[90m 131 |\u001b[39m\n \u001b[90m 132 |\u001b[39m   \u001b[36mstatic\u001b[39m \u001b[36masync\u001b[39m verifyOtpPageVisibleandFillValue(page\u001b[33m:\u001b[39m \u001b[33mPage\u001b[39m) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 133 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[33mPaymentPageLocators\u001b[39m\u001b[33m.\u001b[39motpInputField))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                                                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 134 |\u001b[39m     console\u001b[33m.\u001b[39mlog(\u001b[32m'OTP page is visible.'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 135 |\u001b[39m     \u001b[36mawait\u001b[39m \u001b[33mElementHelper\u001b[39m\u001b[33m.\u001b[39mclearAndEnterInTextField(page\u001b[33m,\u001b[39m \u001b[33mPaymentPageLocators\u001b[39m\u001b[33m.\u001b[39motpInputField\u001b[33m,\u001b[39m idfcTestData\u001b[33m.\u001b[39mpaymentDataFill\u001b[33m.\u001b[39motp)\n \u001b[90m 136 |\u001b[39m   }\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\Admin\\Desktop\\Customer_Capital\\pages\\IDFC\\PaymentPage.ts",
+                        "column": 67,
+                        "line": 133
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('//input[@id=\"password\"]')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('//input[@id=\"password\"]')\u001b[22m\n\n\n\u001b[90m   at \u001b[39mpages\\IDFC\\PaymentPage.ts:133\n\n\u001b[0m \u001b[90m 131 |\u001b[39m\n \u001b[90m 132 |\u001b[39m   \u001b[36mstatic\u001b[39m \u001b[36masync\u001b[39m verifyOtpPageVisibleandFillValue(page\u001b[33m:\u001b[39m \u001b[33mPage\u001b[39m) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 133 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[33mPaymentPageLocators\u001b[39m\u001b[33m.\u001b[39motpInputField))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                                                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 134 |\u001b[39m     console\u001b[33m.\u001b[39mlog(\u001b[32m'OTP page is visible.'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 135 |\u001b[39m     \u001b[36mawait\u001b[39m \u001b[33mElementHelper\u001b[39m\u001b[33m.\u001b[39mclearAndEnterInTextField(page\u001b[33m,\u001b[39m \u001b[33mPaymentPageLocators\u001b[39m\u001b[33m.\u001b[39motpInputField\u001b[33m,\u001b[39m idfcTestData\u001b[33m.\u001b[39mpaymentDataFill\u001b[33m.\u001b[39motp)\n \u001b[90m 136 |\u001b[39m   }\u001b[0m\n\u001b[2m    at PaymentPage.verifyOtpPageVisibleandFillValue (C:\\Users\\Admin\\Desktop\\Customer_Capital\\pages\\IDFC\\PaymentPage.ts:133:67)\u001b[22m\n\u001b[2m    at C:\\Users\\Admin\\Desktop\\Customer_Capital\\tests\\IDFC\\BookingConfirmation.test.ts:140:25\u001b[22m\n\u001b[2m    at C:\\Users\\Admin\\Desktop\\Customer_Capital\\tests\\IDFC\\BookingConfirmation.test.ts:135:5\u001b[22m"
+                    }
+                  ],
+                  "stdout": [
+                    {
+                      "text": "Running setup for: idfc-chrome-uat\n"
+                    },
+                    {
+                      "text": "Navigating to Home Page of :IDFC-chrome-UAT\n"
+                    },
+                    {
+                      "text": "Executing IDFC setup\n"
+                    },
+                    {
+                      "text": "Clicked on element: //button[@id='btnLogin']\n"
+                    },
+                    {
+                      "text": "Attempt 1: Waiting for element '//div[@class='bodytext ']' to be visible...\n"
+                    },
+                    {
+                      "text": "Element '//div[@class='bodytext ']' is visible on first attempt\n"
+                    },
+                    {
+                      "text": "Clicked on element: //input[@placeholder=\"Select city or airport\" and @name=\"from\"]\n"
+                    },
+                    {
+                      "text": "Clear value from \"//input[@placeholder=\"Select city or airport\" and @name=\"from\"]\" text field and enter text \"Mumb\"\n"
+                    },
+                    {
+                      "text": "Attempt 1: Waiting for element '//ul[@id=\"ui-id-1\"]' to be visible...\n"
+                    },
+                    {
+                      "text": "Element '//ul[@id=\"ui-id-1\"]' is visible on first attempt\n"
+                    },
+                    {
+                      "text": "Attempt 1: Checking visibility for '//ul[@id=\"ui-id-1\"]'\n"
+                    },
+                    {
+                      "text": "Element '//ul[@id=\"ui-id-1\"]' is visible on attempt 1.\n"
+                    },
+                    {
+                      "text": "Clicked on element: (//a[@class=\"ui-menu-item-wrapper\"])[1]\n"
+                    },
+                    {
+                      "text": "Clicked on element: //input[@placeholder=\"Select city or airport\" and @name=\"to\"]\n"
+                    },
+                    {
+                      "text": "Clear value from \"//input[@placeholder=\"Select city or airport\" and @name=\"to\"]\" text field and enter text \"Banga\"\n"
+                    },
+                    {
+                      "text": "Attempt 1: Waiting for element '//ul[@id=\"ui-id-2\"]' to be visible...\n"
+                    },
+                    {
+                      "text": "Element '//ul[@id=\"ui-id-2\"]' is visible on first attempt\n"
+                    },
+                    {
+                      "text": "Attempt 1: Checking visibility for '//ul[@id=\"ui-id-2\"]'\n"
+                    },
+                    {
+                      "text": "Element '//ul[@id=\"ui-id-2\"]' is visible on attempt 1.\n"
+                    },
+                    {
+                      "text": "Clicked on element: (//ul[@id=\"ui-id-2\"]//a[@class=\"ui-menu-item-wrapper\"])[1]\n"
+                    },
+                    {
+                      "text": "Clicked on element: //input[@id=\"flight_datepicker1\"]\n"
+                    },
+                    {
+                      "text": "Clicked on element: //div[@class=\"totlall mainSearchbox newdes\"]\n"
+                    },
+                    {
+                      "text": "Attempt 1: Waiting for element '//div[contains(@class,\"roomcountMob\")] ' to be visible...\n"
+                    },
+                    {
+                      "text": "Element '//div[contains(@class,\"roomcountMob\")] ' is visible on first attempt\n"
+                    },
+                    {
+                      "text": "Attempt 1: Checking visibility for '//div[contains(@class,\"roomcountMob\")] '\n"
+                    },
+                    {
+                      "text": "Element '//div[contains(@class,\"roomcountMob\")] ' is visible on attempt 1.\n"
+                    },
+                    {
+                      "text": "Clicked on element: //div[@class=\"totlall mainSearchbox newdes\"]\n"
+                    },
+                    {
+                      "text": "Scrolled to element with locator: \"//input[@id=\"flight-form-submit\"]\"\n"
+                    },
+                    {
+                      "text": "Clicked on element: //input[@id=\"flight-form-submit\"]\n"
+                    },
+                    {
+                      "text": "Attempt 1: Waiting for element '(//div[@class=\"flightInfoCard\"])[1]' to be visible...\n"
+                    },
+                    {
+                      "text": "Element '(//div[@class=\"flightInfoCard\"])[1]' is visible on first attempt\n"
+                    },
+                    {
+                      "text": "Attempt 1: Checking visibility for '(//div[@class=\"flightInfoCard\"])[1]'\n"
+                    },
+                    {
+                      "text": "Element '(//div[@class=\"flightInfoCard\"])[1]' is visible on attempt 1.\n"
+                    },
+                    {
+                      "text": "Clicked on element: //button[text()=\"Next\"]\n"
+                    },
+                    {
+                      "text": "Clicked on element: //div[@class=\"trip_body trip0  \"]//button[text()=\"Book\"]\n"
+                    },
+                    {
+                      "text": "Clicked on element: //button[@id=\"move_to_pax_details_section\"]\n"
+                    },
+                    {
+                      "text": "Attempt 1: Checking visibility for '//div[@class=\"inputcheckbox\"]//label[@for=\"pax401\"]'\n"
+                    },
+                    {
+                      "text": "Element '//div[@class=\"inputcheckbox\"]//label[@for=\"pax401\"]' is visible on attempt 1.\n"
+                    },
+                    {
+                      "text": "Clicked on element: //div[@class=\"inputcheckbox\"]//label[@for=\"pax401\"]\n"
+                    },
+                    {
+                      "text": "Clicked on element: //button[@class=\"flbookbtn traveller_details_continue\"]\n"
+                    },
+                    {
+                      "text": "Clicked on element: //a[@class=\"skipbtn skipToCheckout\"]\n"
+                    },
+                    {
+                      "text": "Clicked on element: //button[@id=\"rzp-payment-button\"]\n"
+                    },
+                    {
+                      "text": "Pay button after discount clicked\n"
+                    },
+                    {
+                      "text": "Available card options: [ \u001b[32m'Cards (Credit/Debit)'\u001b[39m, \u001b[32m'EMINo Cost EMI'\u001b[39m ]\n"
+                    },
+                    {
+                      "text": "Clicked on element: //div[@class='boxedPaymentOptions']//ul//li\n"
+                    },
+                    {
+                      "text": "Card fields are visible.\n"
+                    },
+                    {
+                      "text": "Clear value from \"//input[@id='cardNumber']\" text field and enter text \"4405235026842471\"\n"
+                    },
+                    {
+                      "text": "Clear value from \"//input[@id='cardExpiry']\" text field and enter text \"05/30\"\n"
+                    },
+                    {
+                      "text": "Clear value from \"//input[@id='cardCvv']\" text field and enter text \"123\"\n"
+                    },
+                    {
+                      "text": "Clear value from \"//input[@id='cardOwnerName']\" text field and enter text \"John Doe\"\n"
+                    },
+                    {
+                      "text": "Clicked on element: //button[@class=\"common-btn\" and normalize-space()=\"PROCEED\"]\n"
+                    },
+                    {
+                      "text": "Clicked on element: //button[@data-testid=\"closeWithoutSave\"]\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 2,
+                  "steps": [
+                    {
+                      "title": "Step 1: Enter City From Airport",
+                      "duration": 32217
+                    },
+                    {
+                      "title": "Step 2: Verify From Airport Dropdown Visible",
+                      "duration": 1189
+                    },
+                    {
+                      "title": "Step 3: Enter City To Airport",
+                      "duration": 1110
+                    },
+                    {
+                      "title": "Step 4: Verify To Airport Dropdown Visible",
+                      "duration": 1095
+                    },
+                    {
+                      "title": "Step 5: Enter date of departure",
+                      "duration": 1154
+                    },
+                    {
+                      "title": "Step 6: Click and verify travellers and cabin class dropdown",
+                      "duration": 3195
+                    },
+                    {
+                      "title": "Step 7: Click search flights button",
+                      "duration": 22344
+                    },
+                    {
+                      "title": "Step 8: Verify first flight card visible",
+                      "duration": 13805
+                    },
+                    {
+                      "title": "Step 9: Click on Next Button On Flight Details Page",
+                      "duration": 4081
+                    },
+                    {
+                      "title": "Step 10: Click on Book Button On Flight Details Page",
+                      "duration": 12132
+                    },
+                    {
+                      "title": "Step 11: Click on Continue Button On Flight Details Page",
+                      "duration": 21626
+                    },
+                    {
+                      "title": "Step 12: Click on First Traveller Edit Button On Traveller Details Page",
+                      "duration": 1114
+                    },
+                    {
+                      "title": "Step 13: Click on continue button On Traveller Details Page",
+                      "duration": 9086
+                    },
+                    {
+                      "title": "Step 14: Click on Skip Option",
+                      "duration": 9103
+                    },
+                    {
+                      "title": "Step 15: Click on Travellers and Addons Continue Button",
+                      "duration": 9025
+                    },
+                    {
+                      "title": "Step 16: Click Verify Checkout Pay Button displays correct amount",
+                      "duration": 8097
+                    },
+                    {
+                      "title": "Step 17: Card Options visible and click selector",
+                      "duration": 31437
+                    },
+                    {
+                      "title": "Step 18: Fill Card Details",
+                      "duration": 4210
+                    },
+                    {
+                      "title": "Step 19: Proceed and handle Save Card Popup",
+                      "duration": 7116,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('//input[@id=\"password\"]')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('//input[@id=\"password\"]')\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('//input[@id=\"password\"]')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('//input[@id=\"password\"]')\u001b[22m\n\n    at PaymentPage.verifyOtpPageVisibleandFillValue (C:\\Users\\Admin\\Desktop\\Customer_Capital\\pages\\IDFC\\PaymentPage.ts:133:67)\n    at C:\\Users\\Admin\\Desktop\\Customer_Capital\\tests\\IDFC\\BookingConfirmation.test.ts:140:25\n    at C:\\Users\\Admin\\Desktop\\Customer_Capital\\tests\\IDFC\\BookingConfirmation.test.ts:135:5",
+                        "location": {
+                          "file": "C:\\Users\\Admin\\Desktop\\Customer_Capital\\pages\\IDFC\\PaymentPage.ts",
+                          "column": 67,
+                          "line": 133
+                        },
+                        "snippet": "\u001b[90m   at \u001b[39mpages\\IDFC\\PaymentPage.ts:133\n\n\u001b[0m \u001b[90m 131 |\u001b[39m\n \u001b[90m 132 |\u001b[39m   \u001b[36mstatic\u001b[39m \u001b[36masync\u001b[39m verifyOtpPageVisibleandFillValue(page\u001b[33m:\u001b[39m \u001b[33mPage\u001b[39m) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 133 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[33mPaymentPageLocators\u001b[39m\u001b[33m.\u001b[39motpInputField))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                                                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 134 |\u001b[39m     console\u001b[33m.\u001b[39mlog(\u001b[32m'OTP page is visible.'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 135 |\u001b[39m     \u001b[36mawait\u001b[39m \u001b[33mElementHelper\u001b[39m\u001b[33m.\u001b[39mclearAndEnterInTextField(page\u001b[33m,\u001b[39m \u001b[33mPaymentPageLocators\u001b[39m\u001b[33m.\u001b[39motpInputField\u001b[33m,\u001b[39m idfcTestData\u001b[33m.\u001b[39mpaymentDataFill\u001b[33m.\u001b[39motp)\n \u001b[90m 136 |\u001b[39m   }\u001b[0m"
+                      }
+                    }
+                  ],
+                  "startTime": "2026-06-15T10:13:44.166Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\Admin\\Desktop\\Customer_Capital\\test-results\\BookingConfirmation-SC-012-32b0f-e-Confirmed-Pending-Failed--IDFC-chrome-UAT-retry2\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\Admin\\Desktop\\Customer_Capital\\test-results\\BookingConfirmation-SC-012-32b0f-e-Confirmed-Pending-Failed--IDFC-chrome-UAT-retry2\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\Admin\\Desktop\\Customer_Capital\\pages\\IDFC\\PaymentPage.ts",
+                    "column": 67,
+                    "line": 133
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "5872afc71566c4831ecc-214d727825fa0cdb5ae2",
+          "file": "tests/IDFC/BookingConfirmation.test.ts",
+          "line": 18,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "tests\\IDFC\\CheckoutPage.test.ts",
+      "file": "tests/IDFC/CheckoutPage.test.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "SC_009: Checkout with and without Redeem Points (without redeem it should be an earning)",
+          "ok": false,
+          "tags": [
+            "IDFC",
+            "Checkout",
+            "Smoke",
+            "Regression"
+          ],
+          "tests": [
+            {
+              "timeout": 540000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "IDFC-chrome-UAT",
+              "projectName": "IDFC-chrome-UAT",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "failed",
+                  "duration": 143270,
+                  "error": {
+                    "message": "Error: page.waitForSelector: Target page, context or browser has been closed\nCall log:\n\u001b[2m  - waiting for locator('//input[@class=\"form-control border rounded-end ps-4 ps-md-5\"]') to be visible\u001b[22m\n",
+                    "stack": "Error: page.waitForSelector: Target page, context or browser has been closed\nCall log:\n\u001b[2m  - waiting for locator('//input[@class=\"form-control border rounded-end ps-4 ps-md-5\"]') to be visible\u001b[22m\n\n    at ElementHelper.clearAndEnterInTextField (C:\\Users\\Admin\\Desktop\\Customer_Capital\\utils\\elementHelper.ts:40:32)\n    at HotelBookingPage.searchHotelNameInTestBox (C:\\Users\\Admin\\Desktop\\Customer_Capital\\pages\\IDFC\\HotelBookingPage.ts:256:5)\n    at C:\\Users\\Admin\\Desktop\\Customer_Capital\\tests\\IDFC\\CheckoutPage.test.ts:49:5\n    at C:\\Users\\Admin\\Desktop\\Customer_Capital\\tests\\IDFC\\CheckoutPage.test.ts:48:3",
+                    "location": {
+                      "file": "C:\\Users\\Admin\\Desktop\\Customer_Capital\\utils\\elementHelper.ts",
                       "column": 32,
                       "line": 40
                     },
@@ -104,34 +953,556 @@
                   "errors": [
                     {
                       "location": {
-                        "file": "C:\\Users\\Admin\\Downloads\\POC Final Framework 1\\POC Final Framework\\POC\\utils\\elementHelper.ts",
+                        "file": "C:\\Users\\Admin\\Desktop\\Customer_Capital\\utils\\elementHelper.ts",
                         "column": 32,
                         "line": 40
                       },
-                      "message": "Error: page.waitForSelector: Target page, context or browser has been closed\nCall log:\n\u001b[2m  - waiting for locator('//input[@id=\\'txtMobileNo\\']') to be visible\u001b[22m\n\n\n\u001b[90m   at \u001b[39mutils\\elementHelper.ts:40\n\n\u001b[0m \u001b[90m 38 |\u001b[39m     console\u001b[33m.\u001b[39mlog(\u001b[32m`Clear value from \"${locatorValue}\" text field and enter text \"${textToEnter}\"`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 39 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForLoadState(\u001b[32m'domcontentloaded'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 40 |\u001b[39m     \u001b[36mconst\u001b[39m element \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForSelector(locatorValue)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 41 |\u001b[39m     \u001b[36mawait\u001b[39m element\u001b[33m.\u001b[39mfill(\u001b[32m''\u001b[39m)\u001b[33m;\u001b[39m \u001b[90m// Clears the text field.\u001b[39m\n \u001b[90m 42 |\u001b[39m     \u001b[36mawait\u001b[39m element\u001b[33m.\u001b[39mfill(textToEnter)\u001b[33m;\u001b[39m \u001b[90m// Enters the specified text.\u001b[39m\n \u001b[90m 43 |\u001b[39m   }\u001b[0m\n\u001b[2m    at ElementHelper.clearAndEnterInTextField (C:\\Users\\Admin\\Downloads\\POC Final Framework 1\\POC Final Framework\\POC\\utils\\elementHelper.ts:40:32)\u001b[22m\n\u001b[2m    at LoginPage.enterMobileNumber (C:\\Users\\Admin\\Downloads\\POC Final Framework 1\\POC Final Framework\\POC\\pages\\BOB\\LoginPage.ts:13:5)\u001b[22m\n\u001b[2m    at LoginPage.LoginCredEnterBeforeEach (C:\\Users\\Admin\\Downloads\\POC Final Framework 1\\POC Final Framework\\POC\\pages\\BOB\\LoginPage.ts:78:5)\u001b[22m\n\u001b[2m    at C:\\Users\\Admin\\Downloads\\POC Final Framework 1\\POC Final Framework\\POC\\tests\\BOB\\HomePage.test.ts:16:3\u001b[22m"
+                      "message": "Error: page.waitForSelector: Target page, context or browser has been closed\nCall log:\n\u001b[2m  - waiting for locator('//input[@class=\"form-control border rounded-end ps-4 ps-md-5\"]') to be visible\u001b[22m\n\n\n\u001b[90m   at \u001b[39mutils\\elementHelper.ts:40\n\n\u001b[0m \u001b[90m 38 |\u001b[39m     console\u001b[33m.\u001b[39mlog(\u001b[32m`Clear value from \"${locatorValue}\" text field and enter text \"${textToEnter}\"`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 39 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForLoadState(\u001b[32m'domcontentloaded'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 40 |\u001b[39m     \u001b[36mconst\u001b[39m element \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForSelector(locatorValue)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 41 |\u001b[39m     \u001b[36mawait\u001b[39m element\u001b[33m.\u001b[39mfill(\u001b[32m''\u001b[39m)\u001b[33m;\u001b[39m \u001b[90m// Clears the text field.\u001b[39m\n \u001b[90m 42 |\u001b[39m     \u001b[36mawait\u001b[39m element\u001b[33m.\u001b[39mfill(textToEnter)\u001b[33m;\u001b[39m \u001b[90m// Enters the specified text.\u001b[39m\n \u001b[90m 43 |\u001b[39m   }\u001b[0m\n\u001b[2m    at ElementHelper.clearAndEnterInTextField (C:\\Users\\Admin\\Desktop\\Customer_Capital\\utils\\elementHelper.ts:40:32)\u001b[22m\n\u001b[2m    at HotelBookingPage.searchHotelNameInTestBox (C:\\Users\\Admin\\Desktop\\Customer_Capital\\pages\\IDFC\\HotelBookingPage.ts:256:5)\u001b[22m\n\u001b[2m    at C:\\Users\\Admin\\Desktop\\Customer_Capital\\tests\\IDFC\\CheckoutPage.test.ts:49:5\u001b[22m\n\u001b[2m    at C:\\Users\\Admin\\Desktop\\Customer_Capital\\tests\\IDFC\\CheckoutPage.test.ts:48:3\u001b[22m"
                     }
                   ],
                   "stdout": [
                     {
-                      "text": "Navigating to Home Page of :BOB-chrome-UAT\n"
+                      "text": "Running setup for: idfc-chrome-uat\n"
                     },
                     {
-                      "text": "Clear value from \"//input[@id='txtMobileNo']\" text field and enter text \"8448661387\"\n"
+                      "text": "Navigating to Home Page of :IDFC-chrome-UAT\n"
+                    },
+                    {
+                      "text": "Executing IDFC setup\n"
+                    },
+                    {
+                      "text": "Clicked on element: //button[@id='btnLogin']\n"
+                    },
+                    {
+                      "text": "Attempt 1: Waiting for element '//div[@class='bodytext ']' to be visible...\n"
+                    },
+                    {
+                      "text": "Element '//div[@class='bodytext ']' is visible on first attempt\n"
+                    },
+                    {
+                      "text": "Clicked on element: //ul[@class=\"nav nav-tabs tabstab position_relative\"]//li[@class=\" t-hotel\"]//a\n"
+                    },
+                    {
+                      "text": "Attempt 1: Checking visibility for '//input[@id=\"location\"]'\n"
+                    },
+                    {
+                      "text": "Element '//input[@id=\"location\"]' is visible on attempt 1.\n"
+                    },
+                    {
+                      "text": "Clear value from \"//input[@id=\"location\"]\" text field and enter text \"ahmedabad\"\n"
+                    },
+                    {
+                      "text": "Attempt 1: Checking visibility for '(//li[@class=\"custom-auto-complete ui-menu-item\"])[1]'\n"
+                    },
+                    {
+                      "text": "Element '(//li[@class=\"custom-auto-complete ui-menu-item\"])[1]' is visible on attempt 1.\n"
+                    },
+                    {
+                      "text": "Clicked on element: (//li[@class=\"custom-auto-complete ui-menu-item\"])[1]\n"
+                    },
+                    {
+                      "text": "Clicked on element: //input[@id=\"hotel_daterange\"]\n"
+                    },
+                    {
+                      "text": " Date button clicked\n"
+                    },
+                    {
+                      "text": "Clicked on element: //th[contains(normalize-space(),'Jul 2026')]/ancestor::table//td[contains(@class,'available') and not(contains(@class,'off')) and normalize-space()='8']\n"
+                    },
+                    {
+                      "text": " Date selected in calendar\n"
+                    },
+                    {
+                      "text": "Clicked on element: //th[contains(normalize-space(),'Jul 2026')]/ancestor::table//td[contains(@class,'available') and not(contains(@class,'off')) and normalize-space()='30']\n"
+                    },
+                    {
+                      "text": " Date selected in calendar\n"
+                    },
+                    {
+                      "text": "Clicked on element: //input[@value=\"Search Hotels\"]\n"
+                    },
+                    {
+                      "text": " Search Hotel button clicked\n"
+                    },
+                    {
+                      "text": "Clear value from \"//input[@class=\"form-control border rounded-end ps-4 ps-md-5\"]\" text field and enter text \"Taj Skyline Ahmedabad\"\n"
                     }
                   ],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-06-10T13:23:08.676Z",
+                  "steps": [
+                    {
+                      "title": "Step 1: Open Hotels Section",
+                      "duration": 20302
+                    },
+                    {
+                      "title": "Step 2: Enter Domestic Hotel Location",
+                      "duration": 7720
+                    },
+                    {
+                      "title": "Step 3: Choose First Domestic Hotel Option",
+                      "duration": 7614
+                    },
+                    {
+                      "title": "Step 4: Set Check-in and Check-out Dates",
+                      "duration": 15466
+                    },
+                    {
+                      "title": "Step 5: Search for Hotels (Single Room Default)",
+                      "duration": 10103
+                    },
+                    {
+                      "title": "Step 6: Search Hotel Name in Search Box",
+                      "duration": 79085,
+                      "error": {
+                        "message": "Error: page.waitForSelector: Target page, context or browser has been closed\nCall log:\n\u001b[2m  - waiting for locator('//input[@class=\"form-control border rounded-end ps-4 ps-md-5\"]') to be visible\u001b[22m\n",
+                        "stack": "Error: page.waitForSelector: Target page, context or browser has been closed\nCall log:\n\u001b[2m  - waiting for locator('//input[@class=\"form-control border rounded-end ps-4 ps-md-5\"]') to be visible\u001b[22m\n\n    at ElementHelper.clearAndEnterInTextField (C:\\Users\\Admin\\Desktop\\Customer_Capital\\utils\\elementHelper.ts:40:32)\n    at HotelBookingPage.searchHotelNameInTestBox (C:\\Users\\Admin\\Desktop\\Customer_Capital\\pages\\IDFC\\HotelBookingPage.ts:256:5)\n    at C:\\Users\\Admin\\Desktop\\Customer_Capital\\tests\\IDFC\\CheckoutPage.test.ts:49:5\n    at C:\\Users\\Admin\\Desktop\\Customer_Capital\\tests\\IDFC\\CheckoutPage.test.ts:48:3",
+                        "location": {
+                          "file": "C:\\Users\\Admin\\Desktop\\Customer_Capital\\utils\\elementHelper.ts",
+                          "column": 32,
+                          "line": 40
+                        },
+                        "snippet": "\u001b[90m   at \u001b[39mutils\\elementHelper.ts:40\n\n\u001b[0m \u001b[90m 38 |\u001b[39m     console\u001b[33m.\u001b[39mlog(\u001b[32m`Clear value from \"${locatorValue}\" text field and enter text \"${textToEnter}\"`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 39 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForLoadState(\u001b[32m'domcontentloaded'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 40 |\u001b[39m     \u001b[36mconst\u001b[39m element \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForSelector(locatorValue)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 41 |\u001b[39m     \u001b[36mawait\u001b[39m element\u001b[33m.\u001b[39mfill(\u001b[32m''\u001b[39m)\u001b[33m;\u001b[39m \u001b[90m// Clears the text field.\u001b[39m\n \u001b[90m 42 |\u001b[39m     \u001b[36mawait\u001b[39m element\u001b[33m.\u001b[39mfill(textToEnter)\u001b[33m;\u001b[39m \u001b[90m// Enters the specified text.\u001b[39m\n \u001b[90m 43 |\u001b[39m   }\u001b[0m"
+                      }
+                    }
+                  ],
+                  "startTime": "2026-06-15T10:08:01.457Z",
                   "annotations": [],
                   "attachments": [
                     {
                       "name": "error-context",
                       "contentType": "text/markdown",
-                      "path": "C:\\Users\\Admin\\Downloads\\POC Final Framework 1\\POC Final Framework\\POC\\test-results\\HomePage-Gift-Card-PLP-—-product-card-details-and-layout-BOB-chrome-UAT\\error-context.md"
+                      "path": "C:\\Users\\Admin\\Desktop\\Customer_Capital\\test-results\\CheckoutPage-SC-009-Checko-ece10-em-it-should-be-an-earning--IDFC-chrome-UAT\\error-context.md"
                     }
                   ],
                   "errorLocation": {
-                    "file": "C:\\Users\\Admin\\Downloads\\POC Final Framework 1\\POC Final Framework\\POC\\utils\\elementHelper.ts",
+                    "file": "C:\\Users\\Admin\\Desktop\\Customer_Capital\\utils\\elementHelper.ts",
+                    "column": 32,
+                    "line": 40
+                  }
+                },
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 1,
+                  "status": "timedOut",
+                  "duration": 540077,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 540000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 540000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 540000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "C:\\Users\\Admin\\Desktop\\Customer_Capital\\pages\\IDFC\\HotelBookingPage.ts",
+                        "column": 56,
+                        "line": 62
+                      },
+                      "message": "Error: locator.click: Test ended.\nCall log:\n\u001b[2m  - waiting for locator('//a[@class=\\'addroombox\\']')\u001b[22m\n\n\n\u001b[90m   at \u001b[39mpages\\IDFC\\HotelBookingPage.ts:62\n\n\u001b[0m \u001b[90m 60 |\u001b[39m   }\n \u001b[90m 61 |\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 62 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[33mHotelPageLocators\u001b[39m\u001b[33m.\u001b[39maddGuestButton)\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 63 |\u001b[39m   console\u001b[33m.\u001b[39mlog(\u001b[32m'Add Guest button clicked'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 64 |\u001b[39m\n \u001b[90m 65 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForTimeout(\u001b[35m5000\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at HotelBookingPage.clickAddGuestButton (C:\\Users\\Admin\\Desktop\\Customer_Capital\\pages\\IDFC\\HotelBookingPage.ts:62:56)\u001b[22m\n\u001b[2m    at C:\\Users\\Admin\\Desktop\\Customer_Capital\\tests\\IDFC\\CheckoutPage.test.ts:69:28\u001b[22m\n\u001b[2m    at C:\\Users\\Admin\\Desktop\\Customer_Capital\\tests\\IDFC\\CheckoutPage.test.ts:68:3\u001b[22m"
+                    }
+                  ],
+                  "stdout": [
+                    {
+                      "text": "Running setup for: idfc-chrome-uat\n"
+                    },
+                    {
+                      "text": "Navigating to Home Page of :IDFC-chrome-UAT\n"
+                    },
+                    {
+                      "text": "Executing IDFC setup\n"
+                    },
+                    {
+                      "text": "Clicked on element: //button[@id='btnLogin']\n"
+                    },
+                    {
+                      "text": "Attempt 1: Waiting for element '//div[@class='bodytext ']' to be visible...\n"
+                    },
+                    {
+                      "text": "Element '//div[@class='bodytext ']' is visible on first attempt\n"
+                    },
+                    {
+                      "text": "Clicked on element: //ul[@class=\"nav nav-tabs tabstab position_relative\"]//li[@class=\" t-hotel\"]//a\n"
+                    },
+                    {
+                      "text": "Attempt 1: Checking visibility for '//input[@id=\"location\"]'\n"
+                    },
+                    {
+                      "text": "Element '//input[@id=\"location\"]' is visible on attempt 1.\n"
+                    },
+                    {
+                      "text": "Clear value from \"//input[@id=\"location\"]\" text field and enter text \"ahmedabad\"\n"
+                    },
+                    {
+                      "text": "Attempt 1: Checking visibility for '(//li[@class=\"custom-auto-complete ui-menu-item\"])[1]'\n"
+                    },
+                    {
+                      "text": "Element '(//li[@class=\"custom-auto-complete ui-menu-item\"])[1]' is visible on attempt 1.\n"
+                    },
+                    {
+                      "text": "Clicked on element: (//li[@class=\"custom-auto-complete ui-menu-item\"])[1]\n"
+                    },
+                    {
+                      "text": "Clicked on element: //input[@id=\"hotel_daterange\"]\n"
+                    },
+                    {
+                      "text": " Date button clicked\n"
+                    },
+                    {
+                      "text": "Clicked on element: //th[contains(normalize-space(),'Jul 2026')]/ancestor::table//td[contains(@class,'available') and not(contains(@class,'off')) and normalize-space()='8']\n"
+                    },
+                    {
+                      "text": " Date selected in calendar\n"
+                    },
+                    {
+                      "text": "Clicked on element: //th[contains(normalize-space(),'Jul 2026')]/ancestor::table//td[contains(@class,'available') and not(contains(@class,'off')) and normalize-space()='30']\n"
+                    },
+                    {
+                      "text": " Date selected in calendar\n"
+                    },
+                    {
+                      "text": "Clicked on element: //input[@value=\"Search Hotels\"]\n"
+                    },
+                    {
+                      "text": " Search Hotel button clicked\n"
+                    },
+                    {
+                      "text": "Clear value from \"//input[@class=\"form-control border rounded-end ps-4 ps-md-5\"]\" text field and enter text \"Taj Skyline Ahmedabad\"\n"
+                    },
+                    {
+                      "text": "Hotel name entered in search box\n"
+                    },
+                    {
+                      "text": "Clicked on element: (//p[@class=\"card-text mb-2\"])[1]\n"
+                    },
+                    {
+                      "text": " First result clicked\n"
+                    },
+                    {
+                      "text": "First room selection button clicked\n"
+                    },
+                    {
+                      "text": "Clicked on element: //button[@class=\"btn btn-default rounded-25\"]\n"
+                    },
+                    {
+                      "text": "Next button in first tab clicked\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 1,
+                  "steps": [
+                    {
+                      "title": "Step 1: Open Hotels Section",
+                      "duration": 20297
+                    },
+                    {
+                      "title": "Step 2: Enter Domestic Hotel Location",
+                      "duration": 7662
+                    },
+                    {
+                      "title": "Step 3: Choose First Domestic Hotel Option",
+                      "duration": 7632
+                    },
+                    {
+                      "title": "Step 4: Set Check-in and Check-out Dates",
+                      "duration": 15179
+                    },
+                    {
+                      "title": "Step 5: Search for Hotels (Single Room Default)",
+                      "duration": 10286
+                    },
+                    {
+                      "title": "Step 6: Search Hotel Name in Search Box",
+                      "duration": 5077
+                    },
+                    {
+                      "title": "Step 7: Click the first hotel result",
+                      "duration": 6049
+                    },
+                    {
+                      "title": "Step 8: Click the First Room Selection Button",
+                      "duration": 5113
+                    },
+                    {
+                      "title": "Step 9: Click Next button on first tab",
+                      "duration": 5080
+                    },
+                    {
+                      "title": "Step 10: Click Add Guest button on Primary Guest Details section",
+                      "duration": 455210,
+                      "error": {
+                        "message": "Error: locator.click: Test ended.\nCall log:\n\u001b[2m  - waiting for locator('//a[@class=\\'addroombox\\']')\u001b[22m\n",
+                        "stack": "Error: locator.click: Test ended.\nCall log:\n\u001b[2m  - waiting for locator('//a[@class=\\'addroombox\\']')\u001b[22m\n\n    at HotelBookingPage.clickAddGuestButton (C:\\Users\\Admin\\Desktop\\Customer_Capital\\pages\\IDFC\\HotelBookingPage.ts:62:56)\n    at C:\\Users\\Admin\\Desktop\\Customer_Capital\\tests\\IDFC\\CheckoutPage.test.ts:69:28\n    at C:\\Users\\Admin\\Desktop\\Customer_Capital\\tests\\IDFC\\CheckoutPage.test.ts:68:3",
+                        "location": {
+                          "file": "C:\\Users\\Admin\\Desktop\\Customer_Capital\\pages\\IDFC\\HotelBookingPage.ts",
+                          "column": 56,
+                          "line": 62
+                        },
+                        "snippet": "\u001b[90m   at \u001b[39mpages\\IDFC\\HotelBookingPage.ts:62\n\n\u001b[0m \u001b[90m 60 |\u001b[39m   }\n \u001b[90m 61 |\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 62 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[33mHotelPageLocators\u001b[39m\u001b[33m.\u001b[39maddGuestButton)\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 63 |\u001b[39m   console\u001b[33m.\u001b[39mlog(\u001b[32m'Add Guest button clicked'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 64 |\u001b[39m\n \u001b[90m 65 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForTimeout(\u001b[35m5000\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m"
+                      }
+                    }
+                  ],
+                  "startTime": "2026-06-15T10:10:26.035Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\Admin\\Desktop\\Customer_Capital\\test-results\\CheckoutPage-SC-009-Checko-ece10-em-it-should-be-an-earning--IDFC-chrome-UAT-retry1\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\Admin\\Desktop\\Customer_Capital\\test-results\\CheckoutPage-SC-009-Checko-ece10-em-it-should-be-an-earning--IDFC-chrome-UAT-retry1\\error-context.md"
+                    }
+                  ]
+                },
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 1,
+                  "status": "interrupted",
+                  "duration": 8299,
+                  "error": {
+                    "message": "Error: page.waitForTimeout: Test ended.",
+                    "stack": "Error: page.waitForTimeout: Test ended.\n    at HotelHomePage.clickHotelTabBTN (C:\\Users\\Admin\\Desktop\\Customer_Capital\\pages\\IDFC\\HotelHomePage.ts:19:16)\n    at C:\\Users\\Admin\\Desktop\\Customer_Capital\\tests\\IDFC\\CheckoutPage.test.ts:20:25\n    at C:\\Users\\Admin\\Desktop\\Customer_Capital\\tests\\IDFC\\CheckoutPage.test.ts:18:3",
+                    "location": {
+                      "file": "C:\\Users\\Admin\\Desktop\\Customer_Capital\\pages\\IDFC\\HotelHomePage.ts",
+                      "column": 16,
+                      "line": 19
+                    },
+                    "snippet": "\u001b[90m   at \u001b[39mpages\\IDFC\\HotelHomePage.ts:19\n\n\u001b[0m \u001b[90m 17 |\u001b[39m\n \u001b[90m 18 |\u001b[39m   \u001b[36mstatic\u001b[39m \u001b[36masync\u001b[39m clickHotelTabBTN(page\u001b[33m:\u001b[39m \u001b[33mPage\u001b[39m) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 19 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForTimeout(\u001b[35m10000\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 20 |\u001b[39m     \u001b[36mif\u001b[39m(\u001b[33mDeviceHelper\u001b[39m\u001b[33m.\u001b[39misMobile()) {\n \u001b[90m 21 |\u001b[39m       \u001b[36mconst\u001b[39m hotelTabBTN \u001b[33m=\u001b[39m \u001b[33mHotelPageLocators\u001b[39m\u001b[33m.\u001b[39mhotelTabMobile\u001b[33m;\u001b[39m\n \u001b[90m 22 |\u001b[39m       \u001b[36mawait\u001b[39m \u001b[33mElementHelper\u001b[39m\u001b[33m.\u001b[39mclickElement(page\u001b[33m,\u001b[39m hotelTabBTN)\u001b[33m;\u001b[39m\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\Admin\\Desktop\\Customer_Capital\\pages\\IDFC\\HotelHomePage.ts",
+                        "column": 16,
+                        "line": 19
+                      },
+                      "message": "Error: page.waitForTimeout: Test ended.\n\n\u001b[90m   at \u001b[39mpages\\IDFC\\HotelHomePage.ts:19\n\n\u001b[0m \u001b[90m 17 |\u001b[39m\n \u001b[90m 18 |\u001b[39m   \u001b[36mstatic\u001b[39m \u001b[36masync\u001b[39m clickHotelTabBTN(page\u001b[33m:\u001b[39m \u001b[33mPage\u001b[39m) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 19 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForTimeout(\u001b[35m10000\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 20 |\u001b[39m     \u001b[36mif\u001b[39m(\u001b[33mDeviceHelper\u001b[39m\u001b[33m.\u001b[39misMobile()) {\n \u001b[90m 21 |\u001b[39m       \u001b[36mconst\u001b[39m hotelTabBTN \u001b[33m=\u001b[39m \u001b[33mHotelPageLocators\u001b[39m\u001b[33m.\u001b[39mhotelTabMobile\u001b[33m;\u001b[39m\n \u001b[90m 22 |\u001b[39m       \u001b[36mawait\u001b[39m \u001b[33mElementHelper\u001b[39m\u001b[33m.\u001b[39mclickElement(page\u001b[33m,\u001b[39m hotelTabBTN)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at HotelHomePage.clickHotelTabBTN (C:\\Users\\Admin\\Desktop\\Customer_Capital\\pages\\IDFC\\HotelHomePage.ts:19:16)\u001b[22m\n\u001b[2m    at C:\\Users\\Admin\\Desktop\\Customer_Capital\\tests\\IDFC\\CheckoutPage.test.ts:20:25\u001b[22m\n\u001b[2m    at C:\\Users\\Admin\\Desktop\\Customer_Capital\\tests\\IDFC\\CheckoutPage.test.ts:18:3\u001b[22m"
+                    }
+                  ],
+                  "stdout": [
+                    {
+                      "text": "Running setup for: idfc-chrome-uat\n"
+                    },
+                    {
+                      "text": "Navigating to Home Page of :IDFC-chrome-UAT\n"
+                    },
+                    {
+                      "text": "Executing IDFC setup\n"
+                    },
+                    {
+                      "text": "Clicked on element: //button[@id='btnLogin']\n"
+                    },
+                    {
+                      "text": "Attempt 1: Waiting for element '//div[@class='bodytext ']' to be visible...\n"
+                    },
+                    {
+                      "text": "Element '//div[@class='bodytext ']' is visible on first attempt\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 2,
+                  "steps": [
+                    {
+                      "title": "Step 1: Open Hotels Section",
+                      "duration": 5542,
+                      "error": {
+                        "message": "Error: page.waitForTimeout: Test ended.",
+                        "stack": "Error: page.waitForTimeout: Test ended.\n    at HotelHomePage.clickHotelTabBTN (C:\\Users\\Admin\\Desktop\\Customer_Capital\\pages\\IDFC\\HotelHomePage.ts:19:16)\n    at C:\\Users\\Admin\\Desktop\\Customer_Capital\\tests\\IDFC\\CheckoutPage.test.ts:20:25\n    at C:\\Users\\Admin\\Desktop\\Customer_Capital\\tests\\IDFC\\CheckoutPage.test.ts:18:3",
+                        "location": {
+                          "file": "C:\\Users\\Admin\\Desktop\\Customer_Capital\\pages\\IDFC\\HotelHomePage.ts",
+                          "column": 16,
+                          "line": 19
+                        },
+                        "snippet": "\u001b[90m   at \u001b[39mpages\\IDFC\\HotelHomePage.ts:19\n\n\u001b[0m \u001b[90m 17 |\u001b[39m\n \u001b[90m 18 |\u001b[39m   \u001b[36mstatic\u001b[39m \u001b[36masync\u001b[39m clickHotelTabBTN(page\u001b[33m:\u001b[39m \u001b[33mPage\u001b[39m) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 19 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForTimeout(\u001b[35m10000\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 20 |\u001b[39m     \u001b[36mif\u001b[39m(\u001b[33mDeviceHelper\u001b[39m\u001b[33m.\u001b[39misMobile()) {\n \u001b[90m 21 |\u001b[39m       \u001b[36mconst\u001b[39m hotelTabBTN \u001b[33m=\u001b[39m \u001b[33mHotelPageLocators\u001b[39m\u001b[33m.\u001b[39mhotelTabMobile\u001b[33m;\u001b[39m\n \u001b[90m 22 |\u001b[39m       \u001b[36mawait\u001b[39m \u001b[33mElementHelper\u001b[39m\u001b[33m.\u001b[39mclickElement(page\u001b[33m,\u001b[39m hotelTabBTN)\u001b[33m;\u001b[39m\u001b[0m"
+                      }
+                    }
+                  ],
+                  "startTime": "2026-06-15T10:19:27.383Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\Admin\\Desktop\\Customer_Capital\\test-results\\CheckoutPage-SC-009-Checko-ece10-em-it-should-be-an-earning--IDFC-chrome-UAT-retry2\\test-failed-1.png"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\Admin\\Desktop\\Customer_Capital\\pages\\IDFC\\HotelHomePage.ts",
+                    "column": 16,
+                    "line": 19
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "7840bacca94b37911192-18313edee1c5563cc185",
+          "file": "tests/IDFC/CheckoutPage.test.ts",
+          "line": 17,
+          "column": 5
+        },
+        {
+          "title": "SC_011: Proceed with payment",
+          "ok": true,
+          "tags": [
+            "IDFC",
+            "Payment",
+            "Regression"
+          ],
+          "tests": [
+            {
+              "timeout": 540000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "IDFC-chrome-UAT",
+              "projectName": "IDFC-chrome-UAT",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "interrupted",
+                  "duration": 152568,
+                  "error": {
+                    "message": "Error: page.waitForSelector: Test ended.\nCall log:\n\u001b[2m  - waiting for locator('//input[@class=\"form-control border rounded-end ps-4 ps-md-5\"]') to be visible\u001b[22m\n",
+                    "stack": "Error: page.waitForSelector: Test ended.\nCall log:\n\u001b[2m  - waiting for locator('//input[@class=\"form-control border rounded-end ps-4 ps-md-5\"]') to be visible\u001b[22m\n\n    at ElementHelper.clearAndEnterInTextField (C:\\Users\\Admin\\Desktop\\Customer_Capital\\utils\\elementHelper.ts:40:32)\n    at HotelBookingPage.searchHotelNameInTestBox (C:\\Users\\Admin\\Desktop\\Customer_Capital\\pages\\IDFC\\HotelBookingPage.ts:256:5)\n    at C:\\Users\\Admin\\Desktop\\Customer_Capital\\tests\\IDFC\\CheckoutPage.test.ts:159:5\n    at C:\\Users\\Admin\\Desktop\\Customer_Capital\\tests\\IDFC\\CheckoutPage.test.ts:158:3",
+                    "location": {
+                      "file": "C:\\Users\\Admin\\Desktop\\Customer_Capital\\utils\\elementHelper.ts",
+                      "column": 32,
+                      "line": 40
+                    },
+                    "snippet": "\u001b[90m   at \u001b[39mutils\\elementHelper.ts:40\n\n\u001b[0m \u001b[90m 38 |\u001b[39m     console\u001b[33m.\u001b[39mlog(\u001b[32m`Clear value from \"${locatorValue}\" text field and enter text \"${textToEnter}\"`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 39 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForLoadState(\u001b[32m'domcontentloaded'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 40 |\u001b[39m     \u001b[36mconst\u001b[39m element \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForSelector(locatorValue)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 41 |\u001b[39m     \u001b[36mawait\u001b[39m element\u001b[33m.\u001b[39mfill(\u001b[32m''\u001b[39m)\u001b[33m;\u001b[39m \u001b[90m// Clears the text field.\u001b[39m\n \u001b[90m 42 |\u001b[39m     \u001b[36mawait\u001b[39m element\u001b[33m.\u001b[39mfill(textToEnter)\u001b[33m;\u001b[39m \u001b[90m// Enters the specified text.\u001b[39m\n \u001b[90m 43 |\u001b[39m   }\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\Admin\\Desktop\\Customer_Capital\\utils\\elementHelper.ts",
+                        "column": 32,
+                        "line": 40
+                      },
+                      "message": "Error: page.waitForSelector: Test ended.\nCall log:\n\u001b[2m  - waiting for locator('//input[@class=\"form-control border rounded-end ps-4 ps-md-5\"]') to be visible\u001b[22m\n\n\n\u001b[90m   at \u001b[39mutils\\elementHelper.ts:40\n\n\u001b[0m \u001b[90m 38 |\u001b[39m     console\u001b[33m.\u001b[39mlog(\u001b[32m`Clear value from \"${locatorValue}\" text field and enter text \"${textToEnter}\"`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 39 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForLoadState(\u001b[32m'domcontentloaded'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 40 |\u001b[39m     \u001b[36mconst\u001b[39m element \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForSelector(locatorValue)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 41 |\u001b[39m     \u001b[36mawait\u001b[39m element\u001b[33m.\u001b[39mfill(\u001b[32m''\u001b[39m)\u001b[33m;\u001b[39m \u001b[90m// Clears the text field.\u001b[39m\n \u001b[90m 42 |\u001b[39m     \u001b[36mawait\u001b[39m element\u001b[33m.\u001b[39mfill(textToEnter)\u001b[33m;\u001b[39m \u001b[90m// Enters the specified text.\u001b[39m\n \u001b[90m 43 |\u001b[39m   }\u001b[0m\n\u001b[2m    at ElementHelper.clearAndEnterInTextField (C:\\Users\\Admin\\Desktop\\Customer_Capital\\utils\\elementHelper.ts:40:32)\u001b[22m\n\u001b[2m    at HotelBookingPage.searchHotelNameInTestBox (C:\\Users\\Admin\\Desktop\\Customer_Capital\\pages\\IDFC\\HotelBookingPage.ts:256:5)\u001b[22m\n\u001b[2m    at C:\\Users\\Admin\\Desktop\\Customer_Capital\\tests\\IDFC\\CheckoutPage.test.ts:159:5\u001b[22m\n\u001b[2m    at C:\\Users\\Admin\\Desktop\\Customer_Capital\\tests\\IDFC\\CheckoutPage.test.ts:158:3\u001b[22m"
+                    }
+                  ],
+                  "stdout": [
+                    {
+                      "text": "Running setup for: idfc-chrome-uat\n"
+                    },
+                    {
+                      "text": "Navigating to Home Page of :IDFC-chrome-UAT\n"
+                    },
+                    {
+                      "text": "Executing IDFC setup\n"
+                    },
+                    {
+                      "text": "Clicked on element: //button[@id='btnLogin']\n"
+                    },
+                    {
+                      "text": "Attempt 1: Waiting for element '//div[@class='bodytext ']' to be visible...\n"
+                    },
+                    {
+                      "text": "Element '//div[@class='bodytext ']' is visible on first attempt\n"
+                    },
+                    {
+                      "text": "Clicked on element: //ul[@class=\"nav nav-tabs tabstab position_relative\"]//li[@class=\" t-hotel\"]//a\n"
+                    },
+                    {
+                      "text": "Attempt 1: Checking visibility for '//input[@id=\"location\"]'\n"
+                    },
+                    {
+                      "text": "Element '//input[@id=\"location\"]' is visible on attempt 1.\n"
+                    },
+                    {
+                      "text": "Clear value from \"//input[@id=\"location\"]\" text field and enter text \"ahmedabad\"\n"
+                    },
+                    {
+                      "text": "Attempt 1: Checking visibility for '(//li[@class=\"custom-auto-complete ui-menu-item\"])[1]'\n"
+                    },
+                    {
+                      "text": "Element '(//li[@class=\"custom-auto-complete ui-menu-item\"])[1]' is visible on attempt 1.\n"
+                    },
+                    {
+                      "text": "Clicked on element: (//li[@class=\"custom-auto-complete ui-menu-item\"])[1]\n"
+                    },
+                    {
+                      "text": "Clicked on element: //input[@id=\"hotel_daterange\"]\n"
+                    },
+                    {
+                      "text": " Date button clicked\n"
+                    },
+                    {
+                      "text": "Clicked on element: //th[contains(normalize-space(),'Jul 2026')]/ancestor::table//td[contains(@class,'available') and not(contains(@class,'off')) and normalize-space()='8']\n"
+                    },
+                    {
+                      "text": " Date selected in calendar\n"
+                    },
+                    {
+                      "text": "Clicked on element: //th[contains(normalize-space(),'Jul 2026')]/ancestor::table//td[contains(@class,'available') and not(contains(@class,'off')) and normalize-space()='30']\n"
+                    },
+                    {
+                      "text": " Date selected in calendar\n"
+                    },
+                    {
+                      "text": "Clicked on element: //input[@value=\"Search Hotels\"]\n"
+                    },
+                    {
+                      "text": " Search Hotel button clicked\n"
+                    },
+                    {
+                      "text": "Clear value from \"//input[@class=\"form-control border rounded-end ps-4 ps-md-5\"]\" text field and enter text \"Taj Skyline Ahmedabad\"\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "Step 1: Open Hotels Section",
+                      "duration": 20268
+                    },
+                    {
+                      "title": "Step 2: Enter Domestic Hotel Location",
+                      "duration": 7679
+                    },
+                    {
+                      "title": "Step 3: Choose First Domestic Hotel Option",
+                      "duration": 7599
+                    },
+                    {
+                      "title": "Step 4: Set Check-in and Check-out Dates",
+                      "duration": 15257
+                    },
+                    {
+                      "title": "Step 5: Search for Hotels (Single Room Default)",
+                      "duration": 10065
+                    },
+                    {
+                      "title": "Step 6: Search Hotel Name in Search Box",
+                      "duration": 88881,
+                      "error": {
+                        "message": "Error: page.waitForSelector: Test ended.\nCall log:\n\u001b[2m  - waiting for locator('//input[@class=\"form-control border rounded-end ps-4 ps-md-5\"]') to be visible\u001b[22m\n",
+                        "stack": "Error: page.waitForSelector: Test ended.\nCall log:\n\u001b[2m  - waiting for locator('//input[@class=\"form-control border rounded-end ps-4 ps-md-5\"]') to be visible\u001b[22m\n\n    at ElementHelper.clearAndEnterInTextField (C:\\Users\\Admin\\Desktop\\Customer_Capital\\utils\\elementHelper.ts:40:32)\n    at HotelBookingPage.searchHotelNameInTestBox (C:\\Users\\Admin\\Desktop\\Customer_Capital\\pages\\IDFC\\HotelBookingPage.ts:256:5)\n    at C:\\Users\\Admin\\Desktop\\Customer_Capital\\tests\\IDFC\\CheckoutPage.test.ts:159:5\n    at C:\\Users\\Admin\\Desktop\\Customer_Capital\\tests\\IDFC\\CheckoutPage.test.ts:158:3",
+                        "location": {
+                          "file": "C:\\Users\\Admin\\Desktop\\Customer_Capital\\utils\\elementHelper.ts",
+                          "column": 32,
+                          "line": 40
+                        },
+                        "snippet": "\u001b[90m   at \u001b[39mutils\\elementHelper.ts:40\n\n\u001b[0m \u001b[90m 38 |\u001b[39m     console\u001b[33m.\u001b[39mlog(\u001b[32m`Clear value from \"${locatorValue}\" text field and enter text \"${textToEnter}\"`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 39 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForLoadState(\u001b[32m'domcontentloaded'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 40 |\u001b[39m     \u001b[36mconst\u001b[39m element \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForSelector(locatorValue)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 41 |\u001b[39m     \u001b[36mawait\u001b[39m element\u001b[33m.\u001b[39mfill(\u001b[32m''\u001b[39m)\u001b[33m;\u001b[39m \u001b[90m// Clears the text field.\u001b[39m\n \u001b[90m 42 |\u001b[39m     \u001b[36mawait\u001b[39m element\u001b[33m.\u001b[39mfill(textToEnter)\u001b[33m;\u001b[39m \u001b[90m// Enters the specified text.\u001b[39m\n \u001b[90m 43 |\u001b[39m   }\u001b[0m"
+                      }
+                    }
+                  ],
+                  "startTime": "2026-06-15T10:17:03.113Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\Admin\\Desktop\\Customer_Capital\\test-results\\CheckoutPage-SC-011-Proceed-with-payment-IDFC-chrome-UAT\\test-failed-1.png"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\Admin\\Desktop\\Customer_Capital\\utils\\elementHelper.ts",
                     "column": 32,
                     "line": 40
                   }
@@ -140,21 +1511,562 @@
               "status": "skipped"
             }
           ],
-          "id": "8fbb467b738d414434e8-4e9bbccd48234418691e",
-          "file": "tests/BOB/HomePage.test.ts",
-          "line": 45,
-          "column": 6
+          "id": "7840bacca94b37911192-b1c6c5bb5d20295efd3f",
+          "file": "tests/IDFC/CheckoutPage.test.ts",
+          "line": 127,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "tests\\IDFC\\FlightPage.test.ts",
+      "file": "tests/IDFC/FlightPage.test.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "SC_003: Search ",
+          "ok": true,
+          "tags": [
+            "IDFC",
+            "Homepageflight",
+            "Smoke",
+            "Sanity",
+            "Regression"
+          ],
+          "tests": [
+            {
+              "timeout": 540000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "IDFC-chrome-UAT",
+              "projectName": "IDFC-chrome-UAT",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "8c25faeb4850d0706988-8bae466bf3a333e05f62",
+          "file": "tests/IDFC/FlightPage.test.ts",
+          "line": 16,
+          "column": 5
+        },
+        {
+          "title": "SC_003.01: Search (1 Passenger and Multiple Passengers) ",
+          "ok": true,
+          "tags": [
+            "IDFC",
+            "Homepageflight",
+            "Regression"
+          ],
+          "tests": [
+            {
+              "timeout": 540000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "IDFC-chrome-UAT",
+              "projectName": "IDFC-chrome-UAT",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "8c25faeb4850d0706988-d12bd0fdd74c4a5745aa",
+          "file": "tests/IDFC/FlightPage.test.ts",
+          "line": 69,
+          "column": 5
+        },
+        {
+          "title": "SC_003.02: Search (One Way and Round Trip) ",
+          "ok": true,
+          "tags": [
+            "IDFC",
+            "Homepageflight",
+            "Regression"
+          ],
+          "tests": [
+            {
+              "timeout": 540000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "IDFC-chrome-UAT",
+              "projectName": "IDFC-chrome-UAT",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "8c25faeb4850d0706988-420767c251dfd8f826a9",
+          "file": "tests/IDFC/FlightPage.test.ts",
+          "line": 140,
+          "column": 5
+        },
+        {
+          "title": "SC_003.03: Search (with multiple classes) - Economy, Premium Economy, Business, First ",
+          "ok": true,
+          "tags": [
+            "IDFC",
+            "Homepageflight",
+            "Regression"
+          ],
+          "tests": [
+            {
+              "timeout": 540000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "IDFC-chrome-UAT",
+              "projectName": "IDFC-chrome-UAT",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "8c25faeb4850d0706988-010e4589cd1f6588c246",
+          "file": "tests/IDFC/FlightPage.test.ts",
+          "line": 257,
+          "column": 5
+        },
+        {
+          "title": "SC_003.04: Search (With International and Domestic) ",
+          "ok": true,
+          "tags": [
+            "IDFC",
+            "Homepageflight",
+            "Regression"
+          ],
+          "tests": [
+            {
+              "timeout": 540000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "IDFC-chrome-UAT",
+              "projectName": "IDFC-chrome-UAT",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "8c25faeb4850d0706988-a637013c9ccfa56ccec1",
+          "file": "tests/IDFC/FlightPage.test.ts",
+          "line": 405,
+          "column": 5
+        },
+        {
+          "title": "SC_004: Filter/Sorting and Flight Selection with Fare Type ",
+          "ok": true,
+          "tags": [
+            "IDFC",
+            "Homepageflight",
+            "Regression"
+          ],
+          "tests": [
+            {
+              "timeout": 540000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "IDFC-chrome-UAT",
+              "projectName": "IDFC-chrome-UAT",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "8c25faeb4850d0706988-55e4fa674963f479c343",
+          "file": "tests/IDFC/FlightPage.test.ts",
+          "line": 504,
+          "column": 5
+        },
+        {
+          "title": "SC_004.01: Update Search ",
+          "ok": true,
+          "tags": [
+            "IDFC",
+            "Homepageflight",
+            "Regression"
+          ],
+          "tests": [
+            {
+              "timeout": 540000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "IDFC-chrome-UAT",
+              "projectName": "IDFC-chrome-UAT",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "8c25faeb4850d0706988-5a90e5489297054f1b37",
+          "file": "tests/IDFC/FlightPage.test.ts",
+          "line": 733,
+          "column": 5
+        },
+        {
+          "title": "SC_005: Add Traveller Details and Update Traveller Details ",
+          "ok": true,
+          "tags": [
+            "IDFC",
+            "Homepageflight",
+            "Regression"
+          ],
+          "tests": [
+            {
+              "timeout": 540000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "IDFC-chrome-UAT",
+              "projectName": "IDFC-chrome-UAT",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "8c25faeb4850d0706988-0422188f61d75e3dbc04",
+          "file": "tests/IDFC/FlightPage.test.ts",
+          "line": 779,
+          "column": 5
+        },
+        {
+          "title": "SC_006: Check and update user information (Mobile number/Email Address) and GST information ",
+          "ok": true,
+          "tags": [
+            "IDFC",
+            "Homepageflight",
+            "Sanity"
+          ],
+          "tests": [
+            {
+              "timeout": 540000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "IDFC-chrome-UAT",
+              "projectName": "IDFC-chrome-UAT",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "8c25faeb4850d0706988-a083aa7ba45f4096525d",
+          "file": "tests/IDFC/FlightPage.test.ts",
+          "line": 900,
+          "column": 5
+        },
+        {
+          "title": "SC_007: With Passport and without Passport Details (for international) ",
+          "ok": true,
+          "tags": [
+            "IDFC",
+            "Homepageflight",
+            "Passport",
+            "Regression"
+          ],
+          "tests": [
+            {
+              "timeout": 540000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "IDFC-chrome-UAT",
+              "projectName": "IDFC-chrome-UAT",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "8c25faeb4850d0706988-46d487e409f31a830c39",
+          "file": "tests/IDFC/FlightPage.test.ts",
+          "line": 1001,
+          "column": 5
+        },
+        {
+          "title": "SC_008: With and without Add-Ons Selection (Seat/Baggage/Meal) ",
+          "ok": true,
+          "tags": [
+            "IDFC",
+            "Homepageflight",
+            "Addon",
+            "Regression"
+          ],
+          "tests": [
+            {
+              "timeout": 540000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "IDFC-chrome-UAT",
+              "projectName": "IDFC-chrome-UAT",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "8c25faeb4850d0706988-c55796eb711523f237c6",
+          "file": "tests/IDFC/FlightPage.test.ts",
+          "line": 1092,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "tests\\IDFC\\HotelPage.test.ts",
+      "file": "tests/IDFC/HotelPage.test.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "SC_015: Hotel Search",
+          "ok": true,
+          "tags": [
+            "IDFC",
+            "Homepagehotel",
+            "Smoke",
+            "Sanity"
+          ],
+          "tests": [
+            {
+              "timeout": 540000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "IDFC-chrome-UAT",
+              "projectName": "IDFC-chrome-UAT",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "6a24c6eed82bb0a605c0-7c7e3b8910e5eca57b0f",
+          "file": "tests/IDFC/HotelPage.test.ts",
+          "line": 15,
+          "column": 5
+        },
+        {
+          "title": "SC_015.01: Hotel Search - Domestic vs International Options",
+          "ok": true,
+          "tags": [
+            "IDFC",
+            "Homepagehotel",
+            "Regression"
+          ],
+          "tests": [
+            {
+              "timeout": 540000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "IDFC-chrome-UAT",
+              "projectName": "IDFC-chrome-UAT",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "6a24c6eed82bb0a605c0-33cb562f1f1f95ef644d",
+          "file": "tests/IDFC/HotelPage.test.ts",
+          "line": 74,
+          "column": 5
+        },
+        {
+          "title": "SC_015.02: Verify Room Pricing - Single vs Multiple Rooms",
+          "ok": true,
+          "tags": [
+            "IDFC",
+            "Homepagehotel",
+            "Regression"
+          ],
+          "tests": [
+            {
+              "timeout": 540000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "IDFC-chrome-UAT",
+              "projectName": "IDFC-chrome-UAT",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "6a24c6eed82bb0a605c0-3258595a3fc57551eb00",
+          "file": "tests/IDFC/HotelPage.test.ts",
+          "line": 139,
+          "column": 5
+        },
+        {
+          "title": "SC_015.03: Search with custom Adult & Child combinations",
+          "ok": true,
+          "tags": [
+            "IDFC",
+            "Homepagehotel",
+            "Regression"
+          ],
+          "tests": [
+            {
+              "timeout": 540000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "IDFC-chrome-UAT",
+              "projectName": "IDFC-chrome-UAT",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "6a24c6eed82bb0a605c0-002432edc3eefdabc2c3",
+          "file": "tests/IDFC/HotelPage.test.ts",
+          "line": 210,
+          "column": 5
+        },
+        {
+          "title": "SC_016: Filter/Sorting and Room Selection",
+          "ok": true,
+          "tags": [
+            "IDFC",
+            "Homepagehotel",
+            "Regression"
+          ],
+          "tests": [
+            {
+              "timeout": 540000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "IDFC-chrome-UAT",
+              "projectName": "IDFC-chrome-UAT",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "6a24c6eed82bb0a605c0-9be51b0a83747be357f2",
+          "file": "tests/IDFC/HotelPage.test.ts",
+          "line": 309,
+          "column": 5
+        },
+        {
+          "title": "SC_016.01: Update Search",
+          "ok": true,
+          "tags": [
+            "IDFC",
+            "Homepagehotel",
+            "Regression"
+          ],
+          "tests": [
+            {
+              "timeout": 540000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "IDFC-chrome-UAT",
+              "projectName": "IDFC-chrome-UAT",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "6a24c6eed82bb0a605c0-65f8d4bffa1e2c60c644",
+          "file": "tests/IDFC/HotelPage.test.ts",
+          "line": 454,
+          "column": 5
+        },
+        {
+          "title": "SC_017: Add Guest Details and Update Guest Details",
+          "ok": true,
+          "tags": [
+            "IDFC",
+            "Homepagehotel"
+          ],
+          "tests": [
+            {
+              "timeout": 540000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "IDFC-chrome-UAT",
+              "projectName": "IDFC-chrome-UAT",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "6a24c6eed82bb0a605c0-318c74051a303b994c9b",
+          "file": "tests/IDFC/HotelPage.test.ts",
+          "line": 527,
+          "column": 5
+        },
+        {
+          "title": "SC_018: Domestic booking without PAN and international booking with PAN",
+          "ok": true,
+          "tags": [
+            "IDFC",
+            "Homepagehotel"
+          ],
+          "tests": [
+            {
+              "timeout": 540000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "IDFC-chrome-UAT",
+              "projectName": "IDFC-chrome-UAT",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "6a24c6eed82bb0a605c0-437a5b7b46c9cce0ae31",
+          "file": "tests/IDFC/HotelPage.test.ts",
+          "line": 655,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "tests\\IDFC\\LoginPage.test.ts",
+      "file": "tests/IDFC/LoginPage.test.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "SC_001, SC_002: Verify user can login with valid credentials and Home page with multiple card and without multiple cards selection",
+          "ok": true,
+          "tags": [
+            "IDFC",
+            "Loginpage",
+            "Smoke",
+            "Sanity"
+          ],
+          "tests": [
+            {
+              "timeout": 540000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "IDFC-chrome-UAT",
+              "projectName": "IDFC-chrome-UAT",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "08b307a8506bb112efeb-0724dace2a315f344470",
+          "file": "tests/IDFC/LoginPage.test.ts",
+          "line": 16,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "tests\\IDFC\\MyAccountPage.test.ts",
+      "file": "tests/IDFC/MyAccountPage.test.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "SC:013: Booking Status on My Account Section",
+          "ok": true,
+          "tags": [
+            "IDFC",
+            "Myaccount",
+            "Sanity",
+            "Regression"
+          ],
+          "tests": [
+            {
+              "timeout": 540000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "IDFC-chrome-UAT",
+              "projectName": "IDFC-chrome-UAT",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "782b0aad91ed0986006f-a9b94c50d5afde151337",
+          "file": "tests/IDFC/MyAccountPage.test.ts",
+          "line": 15,
+          "column": 5
         }
       ]
     }
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-06-10T13:23:08.020Z",
-    "duration": 239158.207,
+    "startTime": "2026-06-15T10:08:00.819Z",
+    "duration": 695464.25,
     "expected": 0,
-    "skipped": 1,
-    "unexpected": 0,
+    "skipped": 22,
+    "unexpected": 2,
     "flaky": 0
   }
 }

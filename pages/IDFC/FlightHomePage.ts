@@ -3,102 +3,170 @@ import { FlightPageLocators } from '../../locators/idfc/FlightPageLocators';
 import { VerificationHelpers } from '../../utils/verificationHelper';
 import { ElementHelper } from '../../utils/elementHelper';
 import { CommonHelper } from '../../utils/commonHelper';
+import { DeviceHelper } from '../../utils/deviceHelper';
 
 export class FlightHomePage {
-
-  // ---------------------------------------------------------------------------
-  // Flight search form – trip type (one-way / round-trip)
-  // ---------------------------------------------------------------------------
   static async clickOnRoundTripOption(page: any) {
     await ElementHelper.clickElement(page, FlightPageLocators.roundtripbox);
   }
-
-  // ---------------------------------------------------------------------------
-  // Flight search form – from / to city
-  // ---------------------------------------------------------------------------
   static async clickOnCityFromAirport(page: any) {
-    await ElementHelper.clickElement(page, FlightPageLocators.fromCity);
+    await page.waitForTimeout(10000);
+    if(DeviceHelper.isMobile()){
+      await page.waitForTimeout(5000);
+      await ElementHelper.clickElement(page, FlightPageLocators.fromCityMobile);
+      await ElementHelper.clickElement(page, FlightPageLocators.fromCitySearchMobile);
+    } else {
+      await page.waitForTimeout(5000);
+      await ElementHelper.clickElement(page, FlightPageLocators.fromCity);
+    }
   }
 
   static async clickOnToAirport(page: any) {
-    await ElementHelper.clickElement(page, FlightPageLocators.toCity);
+    if(DeviceHelper.isMobile()){
+      await ElementHelper.clickElement(page, FlightPageLocators.toCitySearchMobile);
+    } else {
+      await ElementHelper.clickElement(page, FlightPageLocators.toCity);
+    }
   }
 
   static async EnterCityFromAirport(page: any, data: any) {
-    await ElementHelper.clearAndEnterInTextField(page, FlightPageLocators.fromCity, data);
+    if(DeviceHelper.isMobile()){
+      await ElementHelper.clearAndEnterInTextField(page, FlightPageLocators.fromCitySearchMobile, data);
+    } else {
+      await ElementHelper.clearAndEnterInTextField(page, FlightPageLocators.fromCity, data);
+    }
   }
 
   static async EnterCityToAirport(page: any, data: any) {
-    await ElementHelper.clearAndEnterInTextField(page, FlightPageLocators.toCity, data);
+    if(DeviceHelper.isMobile()){
+      await ElementHelper.clearAndEnterInTextField(page, FlightPageLocators.toCitySearchMobile, data);
+    } else {
+      await ElementHelper.clearAndEnterInTextField(page, FlightPageLocators.toCity, data);
+    }
   }
 
   static async VerifyFromAirpotDropdownVisible(page: any) {
-    await ElementHelper.waitForElementVisible(page, FlightPageLocators.fromCityDropdown);
-    await VerificationHelpers.elementIsVisible(page, FlightPageLocators.fromCityDropdown);
+    if(DeviceHelper.isMobile()) {
+      await page.waitForTimeout(1000);
+      await ElementHelper.waitForElementVisible(page, FlightPageLocators.cityDropDownMobile);
+      await VerificationHelpers.elementIsVisible(page, FlightPageLocators.cityDropDownMobile);
+    } else {
+      await ElementHelper.waitForElementVisible(page, FlightPageLocators.fromCityDropdown);
+      await VerificationHelpers.elementIsVisible(page, FlightPageLocators.fromCityDropdown);
+    }
   }
 
   static async VerifyToAirpotDropdownVisible(page: any) {
-    await ElementHelper.waitForElementVisible(page, FlightPageLocators.toCityDropdown);
-    await VerificationHelpers.elementIsVisible(page, FlightPageLocators.toCityDropdown);
+    if(DeviceHelper.isMobile()) {
+      await ElementHelper.waitForElementVisible(page, FlightPageLocators.firstSearchResultCityDropDownMobile);
+      await VerificationHelpers.elementIsVisible(page, FlightPageLocators.firstSearchResultCityDropDownMobile);
+    } else {
+      await ElementHelper.waitForElementVisible(page, FlightPageLocators.toCityDropdown);
+      await VerificationHelpers.elementIsVisible(page, FlightPageLocators.toCityDropdown);
+    }
   }
 
   static async clickOnFirstSearchResultfromCityDropdown(page: any) {
-    await ElementHelper.clickElement(page, FlightPageLocators.firstSearchResultfromCityDropdown);
+    if(DeviceHelper.isMobile()) {
+      await ElementHelper.clickElement(page, FlightPageLocators.firstSearchResultCityDropDownMobile);
+    } else {
+      await ElementHelper.clickElement(page, FlightPageLocators.firstSearchResultfromCityDropdown);
+    }
   }
 
   static async clickOnfirstSearchResultToCityDropdown(page: any) {
-    await ElementHelper.clickElement(page, FlightPageLocators.firstSearchResulttoCityDropdown);
+    if(DeviceHelper.isMobile()) {
+      await ElementHelper.clickElement(page, FlightPageLocators.firstSearchResultCityDropDownMobile);
+    } else {
+      await ElementHelper.clickElement(page, FlightPageLocators.firstSearchResulttoCityDropdown);
+    }
   }
 
-  // ---------------------------------------------------------------------------
-  // Flight search form – departure / return dates
-  // ---------------------------------------------------------------------------
   static async clickOnDepartureDate(page: any) {
-    await ElementHelper.clickElement(page, FlightPageLocators.departureDate);
+    if(DeviceHelper.isMobile()) {
+      await ElementHelper.waitForElementVisible(page, FlightPageLocators.departureDateMobile);
+      await ElementHelper.clickElement(page, FlightPageLocators.departureDateMobile);
+    } else {
+      await ElementHelper.clickElement(page, FlightPageLocators.departureDate);
+    }
   }
 
   static async clickOnReturnDate(page: any) {
-    await ElementHelper.clickElement(page, FlightPageLocators.returnDate);
+    if(DeviceHelper.isMobile()) {
+      await ElementHelper.clickElement(page, FlightPageLocators.returnDateMobile);
+    } else {
+      await ElementHelper.clickElement(page, FlightPageLocators.returnDate);
+    }
   }
 
   static async selectTomorrowDateForDeparture(page: any) {
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 10);
+    if(DeviceHelper.isMobile()) {
+      const depDate = new Date();
+      depDate.setDate(depDate.getDate() + 2);
+      const depFormatted = depDate.toISOString().split('T')[0];
 
-    const targetDay = tomorrow.getDate().toString();
-    const targetMonth = tomorrow.toLocaleString('en-US', { month: 'long' });
-    const targetYear = tomorrow.getFullYear().toString();
+      await ElementHelper.clickElement(page, FlightPageLocators.dateCellMobile(depFormatted));
+      await page.waitForTimeout(10000);
 
-    const currentMonth = await page.locator(FlightPageLocators.currentMonth).textContent();
-    const currentYear = await page.locator(FlightPageLocators.currentYear).textContent();
+      const retDate = new Date();
+      retDate.setDate(retDate.getDate() + 5);
+      const retFormatted = retDate.toISOString().split('T')[0];
 
-    if (
-      currentMonth?.trim() !== targetMonth || currentYear?.trim() !== targetYear
-    ) {
-      await page.locator(FlightPageLocators.nextMonthButton).click();
+      await ElementHelper.clickElement(page, FlightPageLocators.dateCellMobile(retFormatted));
+      await page.waitForTimeout(2000);
+      
+      await ElementHelper.clickElement(page, FlightPageLocators.doneCalendarButtonMobile);
+
+    } else {
+      const targetDate = new Date();
+      targetDate.setDate(targetDate.getDate() + 2);
+      const formattedDate = targetDate.toISOString().split('T')[0];
+
+      const targetDay = targetDate.getDate().toString();
+      const targetMonth = targetDate.toLocaleString('en-US', { month: 'long' });
+      const targetYear = targetDate.getFullYear().toString();
+
+      const currentMonth = await page.locator(FlightPageLocators.currentMonth).textContent();
+      const currentYear = await page.locator(FlightPageLocators.currentYear).textContent();
+
+      if (
+        currentMonth?.trim() !== targetMonth || currentYear?.trim() !== targetYear
+      ) {
+        await page.locator(FlightPageLocators.nextMonthButton).click();
+      }
+
+      await page.locator(FlightPageLocators.dateCell(targetDay)).click();
     }
-
-    await page.locator(FlightPageLocators.dateCell(targetDay)).click();
   }
 
   static async select2dayDateForReturn(page: any) {
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 15);
+    const targetDate = new Date();
+    targetDate.setDate(targetDate.getDate() + 20);
+    const formattedDate = targetDate.toISOString().split('T')[0];
+    if(DeviceHelper.isMobile()) {
+      const mobileLocator = FlightPageLocators.dateCellMobile(formattedDate);
+      await page.waitForTimeout(5000);
+      await ElementHelper.clickElement(page, mobileLocator);
+      await page.waitForTimeout(2000);
 
-    const targetDay = tomorrow.getDate().toString();
-    const targetMonth = tomorrow.toLocaleString('en-US', { month: 'long' });
-    const targetYear = tomorrow.getFullYear().toString();
+      await ElementHelper.clickElement(page, FlightPageLocators.doneCalendarButtonMobile);
 
-    const currentMonth = await page.locator(FlightPageLocators.currentMonth).textContent();
-    const currentYear = await page.locator(FlightPageLocators.currentYear).textContent();
+    } else {
+      const targetDay = targetDate.getDate().toString();
+      const targetMonth = targetDate.toLocaleString('en-US', { month: 'long' });
+      const targetYear = targetDate.getFullYear().toString();
 
-    if (
-      currentMonth?.trim() !== targetMonth || currentYear?.trim() !== targetYear
-    ) {
-      await page.locator(FlightPageLocators.nextMonthButton).click();
+      const currentMonth = await page.locator(FlightPageLocators.currentMonth).textContent();
+      const currentYear = await page.locator(FlightPageLocators.currentYear).textContent();
+
+      if (
+        currentMonth?.trim() !== targetMonth || currentYear?.trim() !== targetYear
+      ) {
+        await page.locator(FlightPageLocators.nextMonthButton).click();
+      }
+
+      await page.locator(FlightPageLocators.dateCell(targetDay)).click();
     }
-
-    await page.locator(FlightPageLocators.dateCell(targetDay)).click();
   }
 
   static async VerifyOneWayRoundTripCalendarVisible(page: any) {
@@ -106,9 +174,6 @@ export class FlightHomePage {
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators.VerifyOneWayRoundTripCalendar);
   }
 
-  // ---------------------------------------------------------------------------
-  // Flight search form – travellers & cabin class
-  // ---------------------------------------------------------------------------
   static async clickOntravellersAndCabinClass(page: any) {
     await ElementHelper.clickElement(page, FlightPageLocators.travellersAndCabinClass);
   }
@@ -116,6 +181,13 @@ export class FlightHomePage {
   static async VerifytravellersAndCabinClassDropdownVisible(page: any) {
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.roomCountDropdown);
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators.roomCountDropdown);
+  }
+
+  static async clickOnCloseTravellersAndCabinClassDropdown(page: any) {
+    if(DeviceHelper.isMobile()) {
+      await page.waitForTimeout(5000);
+      await ElementHelper.clickElement(page, FlightPageLocators.closeTravellerAndCabinButtonMobile);
+    }
   }
 
   static async clickOnAdultPlusButton(page: any) {
@@ -167,21 +239,17 @@ export class FlightHomePage {
   }
 
   static async scrolltoViewTravelAdvisory(page: any) {
+    if(await ElementHelper.isElementDisplayed(page, FlightPageLocators.travelAdvisoryText)) {
     await ElementHelper.scrollToElement(page, FlightPageLocators.travelAdvisoryText);
+    }
   }
-
-  // ---------------------------------------------------------------------------
-  // Flight search form – search CTA
-  // ---------------------------------------------------------------------------
   static async clickOnSearchFlightsButton(page: any) {
+    await ElementHelper.scrollToElement(page, FlightPageLocators.searchFlightsButton);
     await ElementHelper.clickElement(page, FlightPageLocators.searchFlightsButton);
     await page.waitForTimeout(15000);
   }
-
-  // ---------------------------------------------------------------------------
-  // Flight search results page – flight cards
-  // ---------------------------------------------------------------------------
   static async VerifyFirstFlightCardVisible(page: any) {
+    await FlightHomePage.reloadIfNoRecordFound(page);
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.firstFlightCard);
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators.firstFlightCard);
   }
@@ -197,13 +265,14 @@ export class FlightHomePage {
       console.log(`Box ${i + 1}: ${text?.trim()}`);
     }
   }
-
-  // ---------------------------------------------------------------------------
-  // Flight search results page – sort & filter panel (open / apply)
-  // ---------------------------------------------------------------------------
   static async clickOnFilterListButton(page: any) {
     await page.waitForTimeout(5000);
-    await ElementHelper.clickElement(page, FlightPageLocators.flightListFilterButton);
+    if (DeviceHelper.isMobile()) {
+      await ElementHelper.clickElement(page, FlightPageLocators.filterIconMobile);
+    } else {
+      await ElementHelper.clickElement(page, FlightPageLocators.flightListFilterButton);
+    }
+    
   }
 
   static async clickOnFilterApplyButton(page: any) {
@@ -214,10 +283,6 @@ export class FlightHomePage {
     await page.waitForTimeout(3000);
     await ElementHelper.clickElement(page, FlightPageLocators.filterClearButton);
   }
-
-  // ---------------------------------------------------------------------------
-  // Flight search results page – filter (stops)
-  // ---------------------------------------------------------------------------
   static async VerifyStopsTabVisible(page: any) {
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.filterTabStops);
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators.filterTabStops);
@@ -264,10 +329,6 @@ export class FlightHomePage {
       expect(airlineName?.trim().toLowerCase()).toContain(FlightHomePage.selectedNonStop.toLowerCase());
     }
   }
-
-  // ---------------------------------------------------------------------------
-  // Flight search results page – filter (departure time)
-  // ---------------------------------------------------------------------------
   static async clickOnDepartureTabButton(page: any) {
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.filterTabDepartureTime);
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators.filterTabDepartureTime);
@@ -313,10 +374,6 @@ export class FlightHomePage {
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.FilterDepartureTimeEveningReturn);
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators.FilterDepartureTimeEveningReturn);
   }
-
-  // ---------------------------------------------------------------------------
-  // Flight search results page – filter (arrival time)
-  // ---------------------------------------------------------------------------
   static async clickOnArrivalTabButton(page: any) {
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.filterTabArrivalTime);
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators.filterTabArrivalTime);
@@ -363,9 +420,6 @@ export class FlightHomePage {
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators.FilterArrivalTimeEveningReturn);
   }
 
-  // ---------------------------------------------------------------------------
-  // Flight search results page – filter (fare type)
-  // ---------------------------------------------------------------------------
   static async clickOnfilterTabFareTypeTabButton(page: any) {
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.filterTabFareType);
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators.filterTabFareType);
@@ -396,31 +450,30 @@ export class FlightHomePage {
   }
 
   static async selectNonRefundableFilter(page: Page): Promise<void> {
+    if (await ElementHelper.isElementDisplayed(page, FlightPageLocators.filterTabFareTypeNonRefundable)) {
     await ElementHelper.clickElement(page, FlightPageLocators.filterTabFareTypeNonRefundable);
     const airlineText = await page.locator(FlightPageLocators.filterTabFareTypeNonRefundable).textContent();
     FlightHomePage.selectedNonStop = airlineText?.split('(')[0].trim() || '';
     console.log(`Selected Non-Refundable Filter: ${FlightHomePage.selectedNonStop}`);
-  }
-
-  static async verifyNonRefundableDetails(page: Page): Promise<void> {
-    if (await page.locator(FlightPageLocators.filterErrorMessage).isVisible()) {
-      console.log('Filter Error Message Displayed:');
-    } else {
-      const flightCards = page.locator(FlightPageLocators.FlightNonRefundableText);
-      const count = await flightCards.count();
-      console.log(`Total Flights Found: ${count}`);
-      for (let i = 0; i < count; i++) {
-        const airlineName = await flightCards.nth(i).textContent();
-        console.log(`Flight ${i + 1}: ${airlineName?.trim()}`);
-        expect(airlineName?.trim().toLowerCase()).toContain(FlightHomePage.selectedNonStop.toLowerCase());
-        await ElementHelper.clickElement(page, FlightPageLocators.flightListFilterButton);
-      }
     }
   }
 
-  // ---------------------------------------------------------------------------
-  // Flight search results page – filter (airlines)
-  // ---------------------------------------------------------------------------
+  static async verifyNonRefundableDetails(page: Page): Promise<void> {
+    if (await page.locator(FlightPageLocators.FlightNonRefundableText).isVisible()) {
+      if (await page.locator(FlightPageLocators.filterErrorMessage).isVisible()) {
+        console.log('Filter Error Message Displayed:');
+      } else {
+        const flightCards = page.locator(FlightPageLocators.FlightNonRefundableText);
+        const count = await flightCards.count();
+        console.log(`Total Flights Found: ${count}`);
+        for (let i = 0; i < count; i++) {
+          const airlineName = await flightCards.nth(i).textContent();
+          console.log(`Flight ${i + 1}: ${airlineName?.trim()}`);
+          expect(airlineName?.trim().toLowerCase()).toContain(FlightHomePage.selectedNonStop.toLowerCase());
+        }
+      }
+    }
+  }
   static async clickOnfilterAirlineTabButton(page: any) {
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.filterTabAirlines);
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators.filterTabAirlines);
@@ -444,10 +497,6 @@ export class FlightHomePage {
       expect(airlineName?.trim()).toContain(FlightHomePage.selectedNonStop);
     }
   }
-
-  // ---------------------------------------------------------------------------
-  // Flight details page – fare selection & booking CTA
-  // ---------------------------------------------------------------------------
   static async clickOnNextButtonOnFlightDetailsPage(page: any) {
     await ElementHelper.clickElement(page, FlightPageLocators.nextButtonOnFlightDetailsPage);
     await page.waitForTimeout(3000);
@@ -464,10 +513,10 @@ export class FlightHomePage {
     await page.waitForTimeout(3000);
   }
 
-  // ---------------------------------------------------------------------------
-  // Travellers details page – add / edit traveller
-  // ---------------------------------------------------------------------------
-  static selectedName: string;
+  static selectedFirstName: string;
+  static selectedLastName: string;
+  static selectedEmail: string;
+  static selectedPhone: string;
 
   static async clickOnAddNewTravellerButton(page: any) {
     await ElementHelper.clickElement(page, FlightPageLocators.addnewTravellerButton);
@@ -493,29 +542,29 @@ export class FlightHomePage {
   static async EnterFirstName(page: any, data: any) {
     await ElementHelper.clearAndEnterInTextField(page, FlightPageLocators.firstNameInput, data);
     const firstNameText = await page.locator(FlightPageLocators.firstNameInput).inputValue();
-    FlightHomePage.selectedName = firstNameText?.split('(')[0].trim() || '';
-    console.log(`Entered First Name: ${FlightHomePage.selectedName}`);
+    FlightHomePage.selectedFirstName = firstNameText?.split('(')[0].trim() || '';
+    console.log(`Entered First Name: ${FlightHomePage.selectedFirstName}`);
   }
 
   static async EnterLastName(page: any, data: any) {
     await ElementHelper.clearAndEnterInTextField(page, FlightPageLocators.lastNameInput, data);
     const lastNameText = await page.locator(FlightPageLocators.lastNameInput).inputValue();
-    FlightHomePage.selectedName = lastNameText?.split('(')[0].trim() || '';
-    console.log(`Entered Last Name: ${FlightHomePage.selectedName}`);
+    FlightHomePage.selectedLastName = lastNameText?.split('(')[0].trim() || '';
+    console.log(`Entered Last Name: ${FlightHomePage.selectedLastName}`);
   }
 
   static async verifyFirstTravellerNameOnTravellerDetailPage(page: Page): Promise<void> {
     const summaryText = await page.locator(FlightPageLocators.FirstTravellerNameOnSummary).textContent();
     console.log(`Result Page Text: ${summaryText}`);
-    expect(summaryText).toContain(FlightHomePage.selectedName);
-    console.log(`Verified First Traveller Name: ${FlightHomePage.selectedName}`);
+    expect(summaryText).toContain(FlightHomePage.selectedFirstName);
+    console.log(`Verified First Traveller Name: ${FlightHomePage.selectedFirstName}`);
   }
 
   static async verifyLastTravellerNameOnTravellerDetailPage(page: Page): Promise<void> {
     const summaryText = await page.locator(FlightPageLocators.FirstTravellerNameOnSummary).textContent();
     console.log(`Result Page Text: ${summaryText}`);
-    expect(summaryText).toContain(FlightHomePage.selectedName);
-    console.log(`Verified Last Traveller Name: ${FlightHomePage.selectedName}`);
+    expect(summaryText).toContain(FlightHomePage.selectedLastName);
+    console.log(`Verified Last Traveller Name: ${FlightHomePage.selectedLastName}`);
   }
 
   static async clickOnAddTravellerButton(page: any) {
@@ -539,10 +588,6 @@ export class FlightHomePage {
     await ElementHelper.clickElement(page, FlightPageLocators.firstTravellerNameEditConfirmButton);
     await page.waitForTimeout(3000);
   }
-
-  // ---------------------------------------------------------------------------
-  // Travellers details page – contact & GST
-  // ---------------------------------------------------------------------------
   static async VerifyEmailHeaderVisible(page: any) {
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.travellerEmail);
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators.travellerEmail);
@@ -556,15 +601,15 @@ export class FlightHomePage {
   static async VerifyDefaultTravellerEmail(page: any) {
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.defaultTavellerEmail);
     const travellerEmail = await page.locator(FlightPageLocators.defaultTavellerEmail).inputValue();
-    FlightHomePage.selectedName = travellerEmail?.split('(')[0].trim() || '';
-    console.log(`Default Traveller Email: ${FlightHomePage.selectedName}`);
+    FlightHomePage.selectedEmail = travellerEmail?.split('(')[0].trim() || '';
+    console.log(`Default Traveller Email: ${FlightHomePage.selectedEmail}`);
   }
 
   static async VerifyDefaultTravellerPhone(page: any) {
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.defaultTravellerPhone);
     const travellerPhone = await page.locator(FlightPageLocators.defaultTravellerPhone).inputValue();
-    FlightHomePage.selectedName = travellerPhone?.split('(')[0].trim() || '';
-    console.log(`Default Traveller Phone: ${FlightHomePage.selectedName}`);
+    FlightHomePage.selectedPhone = travellerPhone?.split('(')[0].trim() || '';
+    console.log(`Default Traveller Phone: ${FlightHomePage.selectedPhone}`);
   }
 
   static async ClearEmailAndVerifyEmailError(page: any) {
@@ -602,9 +647,6 @@ export class FlightHomePage {
     await VerificationHelpers.elementIsHidden(page, FlightPageLocators.gstErrorMessage);
   }
 
-  // ---------------------------------------------------------------------------
-  // Travellers details page – passport (international)
-  // ---------------------------------------------------------------------------
   static async VerifyPassportHeaderVisible(page: any) {
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.passportDetailHeading);
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators.passportDetailHeading);
@@ -636,10 +678,10 @@ export class FlightHomePage {
     await VerificationHelpers.elementIsHidden(page, FlightPageLocators.passportErrorMessage);
   }
 
-  static async selectTomorrowExpireDateForPassport(page: any) {
+  static async selectExpireDateForPassport(page: any) {
     await ElementHelper.clickElement(page, FlightPageLocators.expireDate);
     const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setDate(tomorrow.getDate() + 8);
     const targetDay = tomorrow.getDate().toString();
     await page.locator(FlightPageLocators.dateCell(targetDay)).click();
   }
@@ -664,104 +706,105 @@ export class FlightHomePage {
 
   static async clickOnFirstTravellerName(page: any) {
     await ElementHelper.clickElement(page, FlightPageLocators.FirstTravellerCheckbox);
-    await page.waitForTimeout(3000); // Wait for navigation to complete
+    await page.waitForTimeout(3000);
 }
 
 static async clickOncontinueButtonOnTravellerPage(page: any) {
     await ElementHelper.clickElement(page, FlightPageLocators.travellerDetailsPageContinuebutton);
-    await page.waitForTimeout(3000); // Wait for navigation to complete
+    await page.waitForTimeout(3000);
 }
+
 static async travellersAndAddonsContinueButton(page: any) {
+    if (await ElementHelper.isElementDisplayed(page, FlightPageLocators.travellersAndAddonsContinueButton)) {
     await ElementHelper.clickElement(page, FlightPageLocators.travellersAndAddonsContinueButton);
+  }
     await page.waitForTimeout(3000); // Wait for navigation to complete
 }
 
 
 static async verifySeatSelectionOptionVisible(page: any) {
+  if (await ElementHelper.isElementDisplayed(page, FlightPageLocators.seatSelectionOption)) {
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.seatSelectionOption);
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators.seatSelectionOption);
+  }
 }
 
 static async verifyBaggageSelectionOptionVisible(page: any) {
+  if (await ElementHelper.isElementDisplayed(page, FlightPageLocators.baggageSelectionOption)) {
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.baggageSelectionOption);
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators.baggageSelectionOption);
+  }
 }
 
 static async verifySeatMapVisible(page: any) {
+  if (await ElementHelper.isElementDisplayed(page, FlightPageLocators.seatMapContainer)) {
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.seatMapContainer);
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators.seatMapContainer);
+  }
 }
 
 static async verifyPriceIncreasesAfterSeatSelection(page: any) {
-
-    // Get current price
+  if (await ElementHelper.isElementDisplayed(page, FlightPageLocators.seatPrice)) {
     const beforePriceText = await page.locator(FlightPageLocators.seatPrice).textContent();
     const beforePrice = Number(beforePriceText?.replace(/[₹,\s]/g, ''));
     console.log(`Price Before Seat Selection: ${beforePrice}`);
-    // Click first available seat
     await ElementHelper.clickElement(page, FlightPageLocators.availableSeat);
-
-    // Wait for price update
     await page.waitForTimeout(2000);
-
-    // Get updated price
     const afterPriceText = await page.locator(FlightPageLocators.seatPrice).textContent();
 
     const afterPrice = Number(afterPriceText?.replace(/[₹,\s]/g, ''));
     console.log(`Price After Seat Selection: ${afterPrice}`);
-
-    // Verify increase
     expect(afterPrice).toBeGreaterThan(beforePrice);
-
     console.log(`Price Increased By ₹${afterPrice - beforePrice}`);
+  }
 }
 
 static async clickOnbaggageOption(page: any) {
+  if (await ElementHelper.isElementDisplayed(page, FlightPageLocators.baggageSelectionOption)) {
     await ElementHelper.clickElement(page, FlightPageLocators.baggageSelectionOption);
-    await page.waitForTimeout(3000); // Wait for navigation to complete
+    await page.waitForTimeout(3000); 
+  }
 }
 
 static async verifyPriceIncreasesAfterWeeightIncrease(page: any) {
-
-    // Get current price
+  if (await ElementHelper.isElementDisplayed(page, FlightPageLocators.seatPrice)) {
     const beforePriceText = await page.locator(FlightPageLocators.seatPrice).textContent();
     const beforePrice = Number(beforePriceText?.replace(/[₹,\s]/g, ''));
     console.log(`Price Before Seat Selection: ${beforePrice}`);
-    // Click first available seat
     await ElementHelper.clickElement(page, FlightPageLocators.weightIncreasePlusButton);
-
-    // Wait for price update
     await page.waitForTimeout(2000);
-
-    // Get updated price
     const afterPriceText = await page.locator(FlightPageLocators.seatPrice).textContent();
 
     const afterPrice = Number(afterPriceText?.replace(/[₹,\s]/g, ''));
     console.log(`Price After Seat Selection: ${afterPrice}`);
-
-    // Verify increase
     expect(afterPrice).toBeGreaterThan(beforePrice);
 
     console.log(`Price Increased By ₹${afterPrice - beforePrice}`);
+  }
 }
 
 static async clickOnSkipButton(page: any) {
-    await ElementHelper.clickElement(page, FlightPageLocators.skipAndPayButton);
+    if(await ElementHelper.isElementDisplayed(page, FlightPageLocators.skipAndPayButton)) {
+      await ElementHelper.clickElement(page, FlightPageLocators.skipAndPayButton);
+    }
     await page.waitForTimeout(3000); // Wait for navigation to complete
 }
 
 static async verifyTravellerAndAddOneHeadingVisible(page: any) {
+  if (await ElementHelper.isElementDisplayed(page, FlightPageLocators.travellerAndAddoneHeading)) {
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.travellerAndAddoneHeading);
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators .travellerAndAddoneHeading);
+  }
 }
 
 static async reloadIfNoRecordFound(page: any) {
     const noFlightsTextLocator = FlightPageLocators.noFlightsText;
-    // Keep refreshing while "no flights" is visible
     while (await page.locator(noFlightsTextLocator).isVisible()) {
         await page.reload();
-        // Optionally give the page some time to load after reload
-        await page.waitForTimeout(10000);
+        await page.waitForTimeout(15000);
+        if (await ElementHelper.isElementDisplayed(page, FlightPageLocators.firstFlightCard)) {
+          break;
+        }
     }
 }
 

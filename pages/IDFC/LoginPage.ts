@@ -5,9 +5,6 @@ import idfcTestData from '../../testdata/idfctestdata.json';
 
 export class LoginPage {
 
-  // ---------------------------------------------------------------------------
-  // Login page – sign-in form (verify elements & enter mobile)
-  // ---------------------------------------------------------------------------
   static async enterMobileNumber(page: Page, mobileNumber: string): Promise<void> {
     await page.locator(LoginPageLocators.mobileNumberField).fill(mobileNumber);
   }
@@ -20,12 +17,8 @@ export class LoginPage {
     const mobileField = page.locator(LoginPageLocators.mobileNumberField);
     await mobileField.fill(mobileNumber);
     await expect(mobileField).toHaveValue(mobileNumber);
-    console.log(`✅ Mobile number field accepted input: ${mobileNumber}`);
+    console.log(` Mobile number field accepted input: ${mobileNumber}`);
   }
-
-  // ---------------------------------------------------------------------------
-  // OTP verification page
-  // ---------------------------------------------------------------------------
   static async verifyOtpPageVisible(page: Page): Promise<void> {
     await ElementHelper.waitForElementVisible(page, LoginPageLocators.otpText);
   }
@@ -45,12 +38,9 @@ export class LoginPage {
       await otpInputs.nth(i).fill(otp[i]);
       await expect(otpInputs.nth(i)).toHaveValue(otp[i]);
     }
-    console.log(`✅ OTP fields accepted input: ${otp}`);
+    console.log(` OTP fields accepted input: ${otp}`);
   }
 
-  // ---------------------------------------------------------------------------
-  // Login page – submit & full login flow
-  // ---------------------------------------------------------------------------
   static async clickLoginButton(page: Page): Promise<void> {
     await page.locator(LoginPageLocators.validateAndLoginButton).click();
   }
@@ -59,7 +49,7 @@ export class LoginPage {
     const loginButton = page.locator(LoginPageLocators.validateAndLoginButton);
     await expect(loginButton).toBeVisible();
     await loginButton.click();
-    console.log("✅ Login button clicked and credentials submitted");
+    console.log(" Login button clicked and credentials submitted");
   }
 
   static async loginWithValidCredentials(page: Page): Promise<void> {
@@ -70,9 +60,6 @@ export class LoginPage {
     await this.clickLoginButton(page);
   }
 
-  // ---------------------------------------------------------------------------
-  // NOT USED METHODS
-  // ---------------------------------------------------------------------------
   static async verifyAllLoginPageElements(page: Page): Promise<void> {
     await ElementHelper.waitForElementVisible(page, LoginPageLocators.welcomeText);
     await ElementHelper.waitForElementVisible(page, LoginPageLocators.emailInputField);

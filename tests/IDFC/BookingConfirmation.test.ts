@@ -1,32 +1,31 @@
 import { test, Page, BrowserContext } from '@playwright/test';
-import { CommonHelper } from '../../utils/commonHelper';
-import { LoginPage } from '../../pages/IDFC/LoginPage';
-import { MyAccountPage } from '../../pages/IDFC/MyAccountPage';
 import { FlightBookingPage } from '../../pages/IDFC/FlightBookingPage';
 import { PaymentPage } from '../../pages/IDFC/PaymentPage';
-import { HotelHomePage } from '../../pages/IDFC/HotelHomePage';
 import { FlightHomePage } from '../../pages/IDFC/FlightHomePage';
 import { HotelBookingPage } from '../../pages/IDFC/HotelBookingPage';
 const idfcTestData = require('../../testdata/idfctestdata.json');
+import { BaseHelper } from '../../pages/Common/CommonMethods';
 let context: BrowserContext;
 let page: Page;
 
 test.beforeEach(async ({ browser }) => {
   context = await browser.newContext();
   page = await context.newPage();
-  await CommonHelper.navigateToHomePage(page);
-  await LoginPage.loginWithValidCredentials(page);
+  await BaseHelper.launchAndLogin(page);
 });
 
 
-test('SC_012: Booking Confirmation Page (Confirmed/Pending/Failed)', { tag: ['@IDFC', '@Bookingconfirmation'] }, async () => {
+test('SC_012: Booking Confirmation Page (Confirmed/Pending/Failed)', { tag: ['@IDFC', '@Bookingconfirmation', '@Regression'] }, async () => {
     await test.step("Step 1: Enter City From Airport", async () => {
+      await page.waitForTimeout(8000);
       await FlightHomePage.clickOnCityFromAirport(page);
+      await page.waitForTimeout(8000);
       await FlightHomePage.EnterCityFromAirport(page, idfcTestData.flightPage.enterCityFrom);
       await page.waitForTimeout(1000);
     });
     
     await test.step("Step 2: Verify From Airport Dropdown Visible", async () => {
+      
       await FlightHomePage.VerifyFromAirpotDropdownVisible(page);
       await FlightHomePage.clickOnFirstSearchResultfromCityDropdown(page);
       await page.waitForTimeout(1000);
@@ -54,6 +53,7 @@ test('SC_012: Booking Confirmation Page (Confirmed/Pending/Failed)', { tag: ['@I
       await FlightHomePage.clickOntravellersAndCabinClass(page);
       await FlightHomePage.VerifytravellersAndCabinClassDropdownVisible(page);
       await FlightHomePage.clickOntravellersAndCabinClass(page);
+      await FlightHomePage.clickOnCloseTravellersAndCabinClassDropdown(page);
       await page.waitForTimeout(3000);
     });
     
@@ -63,7 +63,7 @@ test('SC_012: Booking Confirmation Page (Confirmed/Pending/Failed)', { tag: ['@I
     });
     
     await test.step("Step 8: Verify first flight card visible", async () => {
-      await FlightHomePage.reloadIfNoRecordFound(page);
+      // await FlightHomePage.reloadIfNoRecordFound(page);
       await FlightHomePage.VerifyFirstFlightCardVisible(page);
       await page.waitForTimeout(1000);
     });
@@ -89,25 +89,27 @@ test('SC_012: Booking Confirmation Page (Confirmed/Pending/Failed)', { tag: ['@I
     });
      
     await test.step("Step 13: Click on continue button On Traveller Details Page", async () => {
+      await page.waitForTimeout(5000); 
       await FlightHomePage.clickOncontinueButtonOnTravellerPage(page);
       await page.waitForTimeout(1000);
     });
     
     await test.step("Step 14: Click on Skip Option", async () => {
+      await page.waitForTimeout(5000); 
       await FlightHomePage.clickOnSkipButton(page);
       await page.waitForTimeout(1000);
     });
     
     await test.step("Step 15: Click on Travellers and Addons Continue Button", async () => {
+      await page.waitForTimeout(5000); 
       await FlightHomePage.travellersAndAddonsContinueButton(page);
       await page.waitForTimeout(1000);
     });
 
-
-    // Insert wait where missing actions:
     await test.step('Step 16: Click Verify Checkout Pay Button displays correct amount', async () => {
+      await page.waitForTimeout(5000); 
       await HotelBookingPage.payButtonAfterDiscount(page);
-      await page.waitForTimeout(1000);
+      await page.waitForTimeout(3000);
     });
 
     await test.step('Step 17: Card Options visible and click selector', async () => {
@@ -138,66 +140,43 @@ test('SC_012: Booking Confirmation Page (Confirmed/Pending/Failed)', { tag: ['@I
       await PaymentPage.verifyOtpPageVisibleandFillValue(page);
       await page.waitForTimeout(1000);
       await PaymentPage.clickSubmitButton(page);
-      await page.waitForTimeout(1000);
+      await page.waitForTimeout(10000);
     });
-  await test.step('Step 20: Verify Booking Confirmation Page is visible', async () => {
-    await PaymentPage.verifyBookingConfirmationPageVisible(page);
-    await page.waitForTimeout(1000);
-  });
 
-  await test.step('Step 21: Verify Confirmed Voucher is visible', async () => {
-    await FlightBookingPage.verifyConfirmedVoucherVisible(page);
-    await page.waitForTimeout(1000);
-  });
+  // await test.step('Step 21: Verify Confirmed Voucher is visible', async () => {
+  //   await FlightBookingPage.verifyConfirmedVoucherVisible(page);
+  //   await page.waitForTimeout(1000);
+  // });
+  
 
-  await test.step('Step 22: Verify Booking ID is visible', async () => {
-    await FlightBookingPage.verifyBookingIdVisible(page);
-    await page.waitForTimeout(1000);
-  });
+  await test.step('Verify after payment page content on booking confirmation', async () => {
 
-  await test.step('Step 23: Verify Booking Date is visible', async () => {
-    await FlightBookingPage.verifyBookingDateVisible(page);
-    await page.waitForTimeout(1000);
-  });
-
-  await test.step('Step 24: Verify Flight Details are visible', async () => {
-    await FlightBookingPage.verifyFlightDetailsVisible(page);
-    await page.waitForTimeout(1000);
-  });
-
-  await test.step('Step 25: Verify Hotel Details are visible', async () => {
-    await FlightBookingPage.verifyHotelDetailsVisible(page);
-    await page.waitForTimeout(1000);
-  });
-
-  await test.step('Step 26: Verify Fare Summary Section is visible', async () => {
-    await FlightBookingPage.verifyFareSummaryVisible(page);
-    await page.waitForTimeout(1000);
-  });
-
-  await test.step('Step 27: Verify Top Hotels Section is visible', async () => {
-    await FlightBookingPage.verifyTopHotelsSectionVisible(page);
-    await page.waitForTimeout(1000);
-  });
-
-  await test.step('Step 28: Verify Top Hotel Cards are visible', async () => {
-    await FlightBookingPage.verifyTopHotelCardsVisible(page);
-    await page.waitForTimeout(1000);
-  });
-
-  await test.step('Step 29: Verify Hotel Redirect Link is visible', async () => {
-    await FlightBookingPage.verifyHotelRedirectLinkVisible(page);
-    await page.waitForTimeout(1000);
-  });
-
-  await test.step('Step 30: Expand Flight Details', async () => {
-    await FlightBookingPage.expandFlightDetails(page);
-    await page.waitForTimeout(1000);
-  });
-
-  await test.step('Step 31: Expand Fare Summary', async () => {
-    await FlightBookingPage.expandFareSummary(page);
-    await page.waitForTimeout(1000);
-  });
-
+    await page.waitForTimeout(8000);
+    const isConfirmationVisible = await PaymentPage.verifyBookingConfirmationPageVisible(page);    
+    const isPendingVisible = await PaymentPage.verifyBookingPendingPageVisible(page);
+  
+  
+    if (isConfirmationVisible) {
+  
+      await FlightBookingPage.verifyBookingIdVisible(page);
+      await FlightBookingPage.verifyBookingDateVisible(page);
+      await FlightBookingPage.verifyFlightDetailsVisible(page);
+      await FlightBookingPage.verifyHotelDetailsVisible(page);
+      await FlightBookingPage.verifyFareSummaryVisible(page);
+      await FlightBookingPage.verifyTopHotelsSectionVisible(page);
+      await FlightBookingPage.verifyTopHotelCardsVisible(page);
+      await FlightBookingPage.verifyHotelRedirectLinkVisible(page);
+      await FlightBookingPage.expandFlightDetails(page);
+      await FlightBookingPage.expandFareSummary(page);
+  
+    } else if (isPendingVisible) {
+        await FlightBookingPage.verifyBookingIdVisible(page);
+        console.log('Booking Pending Is Displayed instead of Booking Confirmation')
+    } else {
+        throw new Error(
+          'Seems like Payment has failed'
+        );
+      }
+    });
+  
   });

@@ -2,12 +2,10 @@ import { expect, Page } from '@playwright/test';
 import { PaymentPageLocators } from '../../locators/idfc/PaymentPageLocators';
 import { ElementHelper } from '../../utils/elementHelper';
 const idfcTestData = require('../../testdata/idfctestdata.json');
+import { DeviceHelper } from '../../utils/deviceHelper';
 
 export class PaymentPage {
 
-  // ---------------------------------------------------------------------------
-  // Payment page – checkout summary & pay CTA
-  // ---------------------------------------------------------------------------
   static async clickCheckoutPayButton(page: Page) {
     await ElementHelper.clickElement(page, PaymentPageLocators.checkoutPayButton);
   }
@@ -28,16 +26,17 @@ export class PaymentPage {
   }
 
   static async clickBackIconButton(page: Page) {
-    await ElementHelper.clickElement(page, PaymentPageLocators.backIconButton);
+    if(DeviceHelper.isMobile()) {
+      await ElementHelper.clickElement(page, PaymentPageLocators.backIconButtonMobile);
+    } else {
+      await ElementHelper.clickElement(page, PaymentPageLocators.backIconButton);
+    }
   }
 
   static async clickConfirmBackButton(page: Page) {
     await ElementHelper.clickElement(page, PaymentPageLocators.confirmBackButton);
   }
 
-  // ---------------------------------------------------------------------------
-  // Payment page – payment method selection
-  // ---------------------------------------------------------------------------
   static async verifyCardOptions(page: Page) {
     await page.waitForSelector(PaymentPageLocators.cardOptionSelector, { state: 'visible' });
     const options = await page.$$eval(PaymentPageLocators.cardOptionSelector, els => els.map(el => el.textContent?.trim()));
@@ -52,9 +51,6 @@ export class PaymentPage {
     await ElementHelper.clickElement(page, PaymentPageLocators.debitcreditcardOption);
   }
 
-  // ---------------------------------------------------------------------------
-  // Payment page – card details form
-  // ---------------------------------------------------------------------------
   static async enterCardNumber(page: Page, cardNumber: string) {
     await ElementHelper.clearAndEnterInTextField(page, PaymentPageLocators.cardNumberField, cardNumber);
   }
@@ -100,9 +96,6 @@ export class PaymentPage {
     console.log('Card fields are visible.');
   }
 
-  // ---------------------------------------------------------------------------
-  // Payment page – save card consent popup
-  // ---------------------------------------------------------------------------
   static async acceptSaveCardConsent(page: Page) {
     await ElementHelper.clickElement(page, PaymentPageLocators.saveCardPopup);
   }
@@ -128,9 +121,6 @@ export class PaymentPage {
   static async clickCloseWithoutSaveButton(page: Page) {
     await ElementHelper.clickElement(page, PaymentPageLocators.closeWithoutSaveButton);
   }
-  // ---------------------------------------------------------------------------
-  // Payment page – cancel payment dialog
-  // ---------------------------------------------------------------------------
   static async clickCancelPaymentSubmit(page: Page) {
     await ElementHelper.clickElement(page, PaymentPageLocators.cancelButton);
   }
@@ -139,9 +129,6 @@ export class PaymentPage {
     await ElementHelper.clickElement(page, PaymentPageLocators.nocancelbutton);
   }
 
-  // ---------------------------------------------------------------------------
-  // Payment page – OTP verification
-  // ---------------------------------------------------------------------------
   static async verifyOtpPageVisibleandFillValue(page: Page) {
     await expect(page.locator(PaymentPageLocators.otpInputField)).toBeVisible();
     console.log('OTP page is visible.');
@@ -156,13 +143,19 @@ export class PaymentPage {
     console.log('OTP error message is visible for expired/invalid OTP.');
   }
 
-  // ---------------------------------------------------------------------------
-  // Payment page – booking confirmation
-  // ---------------------------------------------------------------------------
-  static async verifyBookingConfirmationPageVisible(page: Page) {
-    await expect(page.locator(PaymentPageLocators.bookingConfirmationPage)).toBeVisible();
-    console.log('Booking confirmation page is visible.');
+  static async verifyBookingConfirmationPageVisible(page: Page): Promise<boolean> {
+    const isVisible = await ElementHelper.isElementDisplayed(page, PaymentPageLocators.bookingConfirmationPage);
+    if (isVisible) console.log('Booking confirmation page is visible.');
+    return isVisible;
   }
+
+  static async verifyBookingPendingPageVisible(page: Page): Promise<boolean> {
+    const isVisible = await ElementHelper.isElementDisplayed(page, PaymentPageLocators.bookingPendingPage);
+    if (isVisible) console.log('Booking pending page is visible.');
+    return isVisible;
+  }
+
+
 
   static async verifyBookingNotCreated(page: Page) {
     const bookingExists = await page.isVisible(PaymentPageLocators.bookingConfirmationPage);

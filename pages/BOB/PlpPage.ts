@@ -34,14 +34,14 @@ export class PLPPage {
 
     static async clickQuantityIncreaseButton(page: Page) {
         const quantitySelector = PLPPageLocators.quantityIncreaseButton;
-        await ElementHelper.waitForElementVisible(page, quantitySelector);
         await page.locator(quantitySelector).click();
-        console.log("✅ Clicked on quantity increase button.");
+        await page.waitForTimeout(2000);
+         await page.locator(quantitySelector).click();
+        console.log("Clicked on quantity increase button.");
     }
 
     static async clickBuyNowButton(page: Page) {
         const buyNowButton = PLPPageLocators.buyNowButton;
-        await ElementHelper.waitForElementVisible(page, buyNowButton);
         await page.locator(buyNowButton).click();
         console.log("Clicked on Buy Now button.");
     }

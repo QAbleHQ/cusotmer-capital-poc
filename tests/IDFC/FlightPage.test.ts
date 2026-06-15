@@ -1,26 +1,19 @@
 import { test, Page, BrowserContext } from '@playwright/test';
-import { CommonHelper } from '../../utils/commonHelper';
-import { VerificationHelpers } from '../../utils/verificationHelper';
 import { FlightHomePage } from '../../pages/IDFC/FlightHomePage';
-import { FlightBookingPage } from '../../pages/IDFC/FlightBookingPage';
-import { HotelHomePage } from '../../pages/IDFC/HotelHomePage';
-import { HotelBookingPage } from '../../pages/IDFC/HotelBookingPage';
-import { LoginPage } from '../../pages/IDFC/LoginPage';
 const idfcTestData = require('../../testdata/idfctestdata.json');
-
+import { BaseHelper } from '../../pages/Common/CommonMethods';
 let context: BrowserContext;
 let page: Page;
 
 test.beforeEach(async ({ browser }) => {
   context = await browser.newContext();
   page = await context.newPage();
-  await CommonHelper.navigateToHomePage(page);
-  await LoginPage.loginWithValidCredentials(page);
+  await BaseHelper.launchAndLogin(page);
 });
 
 
-test('SC_003: Search ', { tag: ['@IDFC', '@Homepageflight'] }, async () => {
-  console.log('Testing home page load of IDFC...');
+
+test('SC_003: Search ', { tag: ['@IDFC', '@Homepageflight', '@Smoke', '@Sanity', '@Regression'] }, async () => {
 await test.step("Step 1: Enter City From Airport", async () => {
   await FlightHomePage.clickOnCityFromAirport(page);
   await FlightHomePage.EnterCityFromAirport(page, idfcTestData.flightPage.enterCityFrom);
@@ -42,19 +35,26 @@ await test.step("Step 4: Verify To Airport Dropdown Visible", async () => {
 })
 
 await test.step("Step 5: Enter date of departure", async () => {
+  await page.waitForTimeout(5000);
   await FlightHomePage.clickOnDepartureDate(page);
+  await page.waitForTimeout(5000);
   await FlightHomePage.selectTomorrowDateForDeparture(page);
 })
 
 await test.step("Step 6: Enter date of return", async () => {
+  await page.waitForTimeout(5000);
   await FlightHomePage.clickOnReturnDate(page);
+  await page.waitForTimeout(5000);
   await FlightHomePage.select2dayDateForReturn(page); 
 });
 
 await test.step("Step 7: Click and verify travellers and cabin class dropdown", async () => {
+  await page.waitForTimeout(5000);
   await FlightHomePage.clickOntravellersAndCabinClass(page);
   await FlightHomePage.VerifytravellersAndCabinClassDropdownVisible(page);
   await FlightHomePage.clickOntravellersAndCabinClass(page);
+  await FlightHomePage.clickOnCloseTravellersAndCabinClassDropdown(page);
+  await page.waitForTimeout(3000);
 });
 
 await test.step("Step 8: Click search flights button", async () => {
@@ -66,22 +66,24 @@ await test.step("Step 9: Verify first flight card visible", async () => {
 });
 });
 
-test('SC_003.01: Search (1 Passenger and Multiple Passengers) ', { tag: ['@IDFC', '@Homepageflight'] }, async () => {
+test('SC_003.01: Search (1 Passenger and Multiple Passengers) ', { tag: ['@IDFC', '@Homepageflight','@Regression'] }, async () => {
   let expectedTravellerCount: string;
-console.log('Testing home page load of IDFC...');
 await test.step("Step 1: Enter City From Airport", async () => {
+  await page.waitForTimeout(5000);
   await FlightHomePage.clickOnCityFromAirport(page);
-  await FlightHomePage.EnterCityFromAirport(page, "ahmeda");
+  await FlightHomePage.EnterCityFromAirport(page, idfcTestData.flightPage.enterCityFrom);
 })
 
 await test.step("Step 2: Verify From Airport Dropdown Visible", async () => {
+  await page.waitForTimeout(5000);
   await FlightHomePage.VerifyFromAirpotDropdownVisible(page);
   await FlightHomePage.clickOnFirstSearchResultfromCityDropdown(page);
 })
 
 await test.step("Step 3: Enter City To Airport", async () => {
+  await page.waitForTimeout(5000);
   await FlightHomePage.clickOnToAirport(page);
-  await FlightHomePage.EnterCityToAirport(page, "Deh");
+  await FlightHomePage.EnterCityToAirport(page, idfcTestData.flightPage.enterCityTo);
 })  
 
 await test.step("Step 4: Verify To Airport Dropdown Visible", async () => {
@@ -90,37 +92,43 @@ await test.step("Step 4: Verify To Airport Dropdown Visible", async () => {
 })
 
 await test.step("Step 5: Enter date of departure", async () => {
+  await page.waitForTimeout(5000);
   await FlightHomePage.clickOnDepartureDate(page);
   await FlightHomePage.selectTomorrowDateForDeparture(page);
 })
 
 await test.step("Step 6: Click and verify travellers and cabin class dropdown", async () => {
+  await page.waitForTimeout(5000);
   await FlightHomePage.clickOntravellersAndCabinClass(page);
   await FlightHomePage.VerifytravellersAndCabinClassDropdownVisible(page);
 });
 
 await test.step("Step 7: Click plus button for adults", async () => {
+  await page.waitForTimeout(5000);
   await FlightHomePage.clickOnAdultPlusButton(page);
 });
 
 await test.step("Step 8: Click plus button for children", async () => {
+  await page.waitForTimeout(5000);
   await FlightHomePage.clickOnChildPlusButton(page);
 });
 
 await test.step("Step 9: Click plus button for infants", async () => {
+  await page.waitForTimeout(5000);
   await FlightHomePage.clickOnInfantPlusButton(page);
 });
 
 await test.step("Step 10: Click on apply Button", async () => {
+  await page.waitForTimeout(5000);
   await FlightHomePage.clickOnApplyButton(page);
 });
 
 await test.step("Step 11: get Traveller Count", async () => {
   expectedTravellerCount = await FlightHomePage.getTravellerCount(page);
-  console.log("Expected Traveller Count:", expectedTravellerCount);
 });
 
 await test.step("Step 12: Click search flights button", async () => {
+  await page.waitForTimeout(5000);
   await FlightHomePage.clickOnSearchFlightsButton(page);
 });
 
@@ -129,43 +137,53 @@ await test.step("Step 13: Verify expected Traveller Count visible", async () => 
 });
 });
 
-test('SC_003.02: Search (One Way and Round Trip) ', { tag: ['@IDFC', '@Homepageflight'] }, async () => {
+test('SC_003.02: Search (One Way and Round Trip) ', { tag: ['@IDFC', '@Homepageflight','@Regression'] }, async () => {
   await test.step('Step 1: Enter City From Airport', async () => {
+    await page.waitForTimeout(5000);
     await FlightHomePage.clickOnCityFromAirport(page);
-    await FlightHomePage.EnterCityFromAirport(page, 'ahmeda');
+    await FlightHomePage.EnterCityFromAirport(page, idfcTestData.flightPage.enterCityFrom);
   });
 
   await test.step('Step 2: Verify From Airport Dropdown Visible', async () => {
+    await page.waitForTimeout(5000);
     await FlightHomePage.VerifyFromAirpotDropdownVisible(page);
     await FlightHomePage.clickOnFirstSearchResultfromCityDropdown(page);
   });
 
   await test.step('Step 3: Enter City To Airport', async () => {
+    await page.waitForTimeout(5000);
     await FlightHomePage.clickOnToAirport(page);
-    await FlightHomePage.EnterCityToAirport(page, 'Mum');
+    await FlightHomePage.EnterCityToAirport(page, idfcTestData.flightPage.enterCityTo);
   });
 
   await test.step('Step 4: Verify To Airport Dropdown Visible', async () => {
+    await page.waitForTimeout(5000);
     await FlightHomePage.VerifyToAirpotDropdownVisible(page);
     await FlightHomePage.clickOnfirstSearchResultToCityDropdown(page);
   });
 
   await test.step('Step 5: Enter date of departure', async () => {
+    await page.waitForTimeout(5000);
     await FlightHomePage.clickOnDepartureDate(page);
     await FlightHomePage.selectTomorrowDateForDeparture(page);
   });
 
   await test.step('Step 6: Click and verify travellers and cabin class dropdown', async () => {
+    await page.waitForTimeout(5000);
     await FlightHomePage.clickOntravellersAndCabinClass(page);
     await FlightHomePage.VerifytravellersAndCabinClassDropdownVisible(page);
     await FlightHomePage.clickOntravellersAndCabinClass(page);
+    await FlightHomePage.clickOnCloseTravellersAndCabinClassDropdown(page);
+    await page.waitForTimeout(3000);
   });
 
   await test.step('Step 7: Click search flights button', async () => {
+    await page.waitForTimeout(5000);
     await FlightHomePage.clickOnSearchFlightsButton(page);
   });
 
   await test.step('Step 8: Verify first flight card visible', async () => {
+    await page.waitForTimeout(5000);
     await FlightHomePage.VerifyFirstFlightCardVisible(page);
   });
 
@@ -180,8 +198,9 @@ test('SC_003.02: Search (One Way and Round Trip) ', { tag: ['@IDFC', '@Homepagef
   });
 
   await test.step('Step 11: Enter City From Airport', async () => {
+    await page.waitForTimeout(5000);
     await FlightHomePage.clickOnCityFromAirport(page);
-    await FlightHomePage.EnterCityFromAirport(page, 'Go');
+    await FlightHomePage.EnterCityFromAirport(page, idfcTestData.flightPage.enterCityFrom);
   });
 
   await test.step('Step 12: Verify From Airport Dropdown Visible', async () => {
@@ -190,8 +209,9 @@ test('SC_003.02: Search (One Way and Round Trip) ', { tag: ['@IDFC', '@Homepagef
   });
 
   await test.step('Step 13: Enter City To Airport', async () => {
+    await page.waitForTimeout(5000);
     await FlightHomePage.clickOnToAirport(page);
-    await FlightHomePage.EnterCityToAirport(page, 'Mum');
+    await FlightHomePage.EnterCityToAirport(page, idfcTestData.flightPage.enterCityTo);
   });
 
   await test.step('Step 14: Verify To Airport Dropdown Visible', async () => {
@@ -200,22 +220,28 @@ test('SC_003.02: Search (One Way and Round Trip) ', { tag: ['@IDFC', '@Homepagef
   });
 
   await test.step('Step 15: Enter date of departure', async () => {
+    await page.waitForTimeout(5000);
     await FlightHomePage.clickOnDepartureDate(page);
     await FlightHomePage.selectTomorrowDateForDeparture(page);
   });
 
   await test.step('Step 16: Enter date of return', async () => {
+    await page.waitForTimeout(5000);
     await FlightHomePage.clickOnReturnDate(page);
     await FlightHomePage.select2dayDateForReturn(page);
   });
 
   await test.step('Step 17: Click and verify travellers and cabin class dropdown', async () => {
+    await page.waitForTimeout(5000);
     await FlightHomePage.clickOntravellersAndCabinClass(page);
     await FlightHomePage.VerifytravellersAndCabinClassDropdownVisible(page);
     await FlightHomePage.clickOntravellersAndCabinClass(page);
+    await FlightHomePage.clickOnCloseTravellersAndCabinClassDropdown(page);
+    await page.waitForTimeout(3000);
   });
 
   await test.step('Step 18: Click search flights button', async () => {
+    await page.waitForTimeout(5000);
     await FlightHomePage.clickOnSearchFlightsButton(page);
   });
 
@@ -228,12 +254,13 @@ test('SC_003.02: Search (One Way and Round Trip) ', { tag: ['@IDFC', '@Homepagef
   });
 });
 
-test('SC_003.03: Search (with multiple classes) - Economy, Premium Economy, Business, First ', { tag: ['@IDFC', '@Homepageflight'] }, async () => {
+test('SC_003.03: Search (with multiple classes) - Economy, Premium Economy, Business, First ', { tag: ['@IDFC', '@Homepageflight','@Regression'] }, async () => {
   
 
   await test.step('Step 1: Enter City From Airport', async () => {
+    await page.waitForTimeout(5000);
     await FlightHomePage.clickOnCityFromAirport(page);
-    await FlightHomePage.EnterCityFromAirport(page, 'ahmeda');
+    await FlightHomePage.EnterCityFromAirport(page, idfcTestData.flightPage.enterCityFrom);
   });
 
   await test.step('Step 2: Verify From Airport Dropdown Visible', async () => {
@@ -243,7 +270,7 @@ test('SC_003.03: Search (with multiple classes) - Economy, Premium Economy, Busi
 
   await test.step('Step 3: Enter City To Airport', async () => {
     await FlightHomePage.clickOnToAirport(page);
-    await FlightHomePage.EnterCityToAirport(page, 'Deh');
+    await FlightHomePage.EnterCityToAirport(page, idfcTestData.flightPage.enterCityTo);
   });
 
   await test.step('Step 4: Verify To Airport Dropdown Visible', async () => {
@@ -252,24 +279,29 @@ test('SC_003.03: Search (with multiple classes) - Economy, Premium Economy, Busi
   });
 
   await test.step('Step 5: Enter date of departure', async () => {
+    await page.waitForTimeout(5000);
     await FlightHomePage.clickOnDepartureDate(page);
     await FlightHomePage.selectTomorrowDateForDeparture(page);
   });
 
   await test.step('Step 6: Click and verify travellers and cabin class dropdown', async () => {
+    await page.waitForTimeout(5000);
     await FlightHomePage.clickOntravellersAndCabinClass(page);
     await FlightHomePage.VerifytravellersAndCabinClassDropdownVisible(page);
   });
 
   await test.step('Step 7: Click plus button for adults', async () => {
+    await page.waitForTimeout(5000);
     await FlightHomePage.clickOnAdultPlusButton(page);
   });
 
   await test.step('Step 8: Click plus button for children', async () => {
+    await page.waitForTimeout(2000);
     await FlightHomePage.clickOnChildPlusButton(page);
   });
 
   await test.step('Step 9: Click plus button for infants', async () => {
+    await page.waitForTimeout(2000);
     await FlightHomePage.clickOnInfantPlusButton(page);
   });
 
@@ -278,6 +310,7 @@ test('SC_003.03: Search (with multiple classes) - Economy, Premium Economy, Busi
   });
 
   await test.step('Step 11: Scroll to Travel Advisory', async () => {
+    await page.waitForTimeout(2000);
     await FlightHomePage.scrolltoViewTravelAdvisory(page);
   });
 
@@ -299,8 +332,9 @@ test('SC_003.03: Search (with multiple classes) - Economy, Premium Economy, Busi
   });
 
   await test.step('Step 16: Enter City From Airport', async () => {
+    await page.waitForTimeout(5000);
     await FlightHomePage.clickOnCityFromAirport(page);
-    await FlightHomePage.EnterCityFromAirport(page, 'ahmeda');
+    await FlightHomePage.EnterCityFromAirport(page, 'Del');
   });
 
   await test.step('Step 17: Verify From Airport Dropdown Visible', async () => {
@@ -310,7 +344,7 @@ test('SC_003.03: Search (with multiple classes) - Economy, Premium Economy, Busi
 
   await test.step('Step 18: Enter City To Airport', async () => {
     await FlightHomePage.clickOnToAirport(page);
-    await FlightHomePage.EnterCityToAirport(page, 'Deh');
+    await FlightHomePage.EnterCityToAirport(page, 'Mum');
   });
 
   await test.step('Step 19: Verify To Airport Dropdown Visible', async () => {
@@ -319,8 +353,10 @@ test('SC_003.03: Search (with multiple classes) - Economy, Premium Economy, Busi
   });
 
   await test.step('Step 20: Enter date of departure', async () => {
+    await page.waitForTimeout(5000);
     await FlightHomePage.clickOnDepartureDate(page);
     await FlightHomePage.selectTomorrowDateForDeparture(page);
+    await page.waitForTimeout(2000);
   });
 
   await test.step('Step 21: Click and verify travellers and cabin class dropdown', async () => {
@@ -366,11 +402,11 @@ test('SC_003.03: Search (with multiple classes) - Economy, Premium Economy, Busi
   });
 });
 
-test('SC_003.04: Search (With International and Domestic) ', { tag: ['@IDFC', '@Homepageflight'] }, async () => {
-  console.log('Testing home page load of IDFC...');
+test('SC_003.04: Search (With International and Domestic) ', { tag: ['@IDFC', '@Homepageflight','@Regression'] }, async () => {
 await test.step("Step 1: Enter City From Airport", async () => {
+  await page.waitForTimeout(5000);
  await FlightHomePage.clickOnCityFromAirport(page);
- await FlightHomePage.EnterCityFromAirport(page, "ahmeda");
+ await FlightHomePage.EnterCityFromAirport(page, idfcTestData.flightPage.enterCityFrom);
 })
 
 await test.step("Step 2: Verify From Airport Dropdown Visible", async () => {
@@ -380,7 +416,7 @@ await test.step("Step 2: Verify From Airport Dropdown Visible", async () => {
 
 await test.step("Step 3: Enter City To Airport", async () => {
  await FlightHomePage.clickOnToAirport(page);
- await FlightHomePage.EnterCityToAirport(page, "Mum");
+ await FlightHomePage.EnterCityToAirport(page, idfcTestData.flightPage.enterCityTo);
 })  
 
 await test.step("Step 4: Verify To Airport Dropdown Visible", async () => {
@@ -389,14 +425,18 @@ await test.step("Step 4: Verify To Airport Dropdown Visible", async () => {
 })
 
 await test.step("Step 5: Enter date of departure", async () => {
+  await page.waitForTimeout(5000);
  await FlightHomePage.clickOnDepartureDate(page);
  await FlightHomePage.selectTomorrowDateForDeparture(page);
 })
 
 await test.step("Step 6: Click and verify travellers and cabin class dropdown", async () => {
+  await page.waitForTimeout(5000);
  await FlightHomePage.clickOntravellersAndCabinClass(page);
  await FlightHomePage.VerifytravellersAndCabinClassDropdownVisible(page);
  await FlightHomePage.clickOntravellersAndCabinClass(page);
+ await FlightHomePage.clickOnCloseTravellersAndCabinClassDropdown(page);
+ await page.waitForTimeout(3000);
 });
 
 await test.step("Step 7: Click search flights button", async () => {
@@ -413,6 +453,7 @@ await test.step("Step 8: Verify Shot Form Of flight Name visible", async () => {
 await page.goBack()
 await page.waitForTimeout(10000)
 await test.step("Step 9: Enter City From Airport", async () => {
+  await page.waitForTimeout(5000);
  await FlightHomePage.clickOnCityFromAirport(page);
  await FlightHomePage.EnterCityFromAirport(page, idfcTestData.flightPage.enterCityFrom);
 })
@@ -433,14 +474,18 @@ await test.step("Step 12: Verify To Airport Dropdown Visible", async () => {
 })
 
 await test.step("Step 13: Enter date of departure", async () => {
+  await page.waitForTimeout(5000);
  await FlightHomePage.clickOnDepartureDate(page);
  await FlightHomePage.selectTomorrowDateForDeparture(page);
 })
 
 await test.step("Step 14: Click and verify travellers and cabin class dropdown", async () => {
+  await page.waitForTimeout(5000);
  await FlightHomePage.clickOntravellersAndCabinClass(page);
  await FlightHomePage.VerifytravellersAndCabinClassDropdownVisible(page);
  await FlightHomePage.clickOntravellersAndCabinClass(page);
+ await FlightHomePage.clickOnCloseTravellersAndCabinClassDropdown(page);
+ await page.waitForTimeout(3000);
 });
 
 await test.step("Step 15: Click search flights button", async () => {
@@ -456,11 +501,11 @@ await test.step("Step 17: Verify Shot Form Of international flight Name visible"
 });
 });
 
-test('SC_004: Filter/Sorting and Flight Selection with Fare Type ', { tag: ['@IDFC', '@Homepageflight'] }, async () => {
-  console.log('Testing home page load of IDFC...');
+test('SC_004: Filter/Sorting and Flight Selection with Fare Type ', { tag: ['@IDFC', '@Homepageflight','@Regression'] }, async () => {
   await test.step("Step 1: Enter City From Airport", async () => {  
+    await page.waitForTimeout(5000);
     await FlightHomePage.clickOnCityFromAirport(page);
-    await FlightHomePage.EnterCityFromAirport(page, "mum");
+    await FlightHomePage.EnterCityFromAirport(page, idfcTestData.flightPage.enterCityFrom);
   })
 
   await test.step("Step 2: Verify From Airport Dropdown Visible", async () => {
@@ -470,7 +515,7 @@ test('SC_004: Filter/Sorting and Flight Selection with Fare Type ', { tag: ['@ID
 
   await test.step("Step 3: Enter City To Airport", async () => {
     await FlightHomePage.clickOnToAirport(page);
-    await FlightHomePage.EnterCityToAirport(page, "lon");
+    await FlightHomePage.EnterCityToAirport(page, idfcTestData.flightPage.enterInternationalCityTo);
   })  
 
   await test.step("Step 4: Verify To Airport Dropdown Visible", async () => {
@@ -479,19 +524,24 @@ test('SC_004: Filter/Sorting and Flight Selection with Fare Type ', { tag: ['@ID
   })
 
   await test.step("Step 5: Enter date of departure", async () => {
+    await page.waitForTimeout(5000);
     await FlightHomePage.clickOnDepartureDate(page);
     await FlightHomePage.selectTomorrowDateForDeparture(page);
   })
 
   await test.step("Step 6: Enter date of return", async () => {
+    await page.waitForTimeout(5000);
     await FlightHomePage.clickOnReturnDate(page);
     await FlightHomePage.select2dayDateForReturn(page); 
   });
 
   await test.step("Step 7: Click and verify travellers and cabin class dropdown", async () => {
+    await page.waitForTimeout(5000);
     await FlightHomePage.clickOntravellersAndCabinClass(page);
     await FlightHomePage.VerifytravellersAndCabinClassDropdownVisible(page);
     await FlightHomePage.clickOntravellersAndCabinClass(page);
+    await FlightHomePage.clickOnCloseTravellersAndCabinClassDropdown(page);
+    await page.waitForTimeout(3000);
   });
 
   await test.step("Step 8: Click search flights button", async () => {
@@ -655,6 +705,8 @@ test('SC_004: Filter/Sorting and Flight Selection with Fare Type ', { tag: ['@ID
 
   await test.step("Step 48: Verify Non-Refundable details", async () => { 
     await FlightHomePage.verifyNonRefundableDetails(page);
+    await page.waitForTimeout(3000);
+    await FlightHomePage.clickOnFilterListButton(page);
   });
   await test.step("Step 49: Click on Clear All Button", async () => { 
     await FlightHomePage.clickOnClearAllButton(page);
@@ -678,12 +730,55 @@ test('SC_004: Filter/Sorting and Flight Selection with Fare Type ', { tag: ['@ID
   
 });
 
-test('SC_004.01: Update Search ', { tag: ['@IDFC', '@Homepageflight'] }, async () => {
-  // TODO: Implement test steps for updating the search (changing source, destination, date, etc.).
-});
-
-test('SC_005: Add Traveller Details and Update Traveller Details ', { tag: ['@IDFC', '@Homepageflight'] }, async () => {
+test('SC_004.01: Update Search ', { tag: ['@IDFC', '@Homepageflight', '@Regression'] }, async () => {
   await test.step("Step 1: Enter City From Airport", async () => {
+  await page.waitForTimeout(5000);
+  await FlightHomePage.clickOnCityFromAirport(page);
+  await FlightHomePage.EnterCityFromAirport(page, "del");
+ })
+  
+ await test.step("Step 2: Verify From Airport Dropdown Visible", async () => {
+  await FlightHomePage.VerifyFromAirpotDropdownVisible(page);
+  await FlightHomePage.clickOnFirstSearchResultfromCityDropdown(page);
+ })
+  
+ await test.step("Step 3: Enter City To Airport", async () => {
+  await FlightHomePage.clickOnToAirport(page);
+  await FlightHomePage.EnterCityToAirport(page, "Mum");
+ })  
+  
+ await test.step("Step 4: Verify To Airport Dropdown Visible", async () => {
+  await FlightHomePage.VerifyToAirpotDropdownVisible(page);
+  await FlightHomePage.clickOnfirstSearchResultToCityDropdown(page);
+ })
+  
+ await test.step("Step 5: Enter date of departure", async () => {
+   await page.waitForTimeout(5000);
+  await FlightHomePage.clickOnDepartureDate(page);
+  await FlightHomePage.selectTomorrowDateForDeparture(page);
+ })
+  
+ await test.step("Step 7: Click search flights button", async () => {
+  await FlightHomePage.clickOnSearchFlightsButton(page);
+ });
+  
+  
+ await test.step('Go back and reload page', async () => {
+     await page.goBack();
+     await page.reload();
+     await page.waitForTimeout(3000);
+   });
+  
+   await test.step('Click on City From Airport field', async () => {
+     await FlightHomePage.clickOnCityFromAirport(page);
+     await FlightHomePage.EnterCityToAirport(page, "Mum");
+   });
+  
+ })
+
+test('SC_005: Add Traveller Details and Update Traveller Details ', { tag: ['@IDFC', '@Homepageflight', '@Regression'] }, async () => {
+  await test.step("Step 1: Enter City From Airport", async () => {
+    await page.waitForTimeout(5000);
   await FlightHomePage.clickOnCityFromAirport(page);
   await FlightHomePage.EnterCityFromAirport(page, idfcTestData.flightPage.enterCityFrom);
 })
@@ -694,6 +789,7 @@ await test.step("Step 2: Verify From Airport Dropdown Visible", async () => {
 })
 
 await test.step("Step 3: Enter City To Airport", async () => {
+  await page.waitForTimeout(5000);
   await FlightHomePage.clickOnToAirport(page);
   await FlightHomePage.EnterCityToAirport(page, idfcTestData.flightPage.enterCityTo);
 })  
@@ -704,14 +800,18 @@ await test.step("Step 4: Verify To Airport Dropdown Visible", async () => {
 })
 
 await test.step("Step 5: Enter date of departure", async () => {
+  await page.waitForTimeout(5000);
   await FlightHomePage.clickOnDepartureDate(page);
   await FlightHomePage.selectTomorrowDateForDeparture(page);
 })
 
 await test.step("Step 6: Click and verify travellers and cabin class dropdown", async () => {
+  await page.waitForTimeout(5000);
   await FlightHomePage.clickOntravellersAndCabinClass(page);
   await FlightHomePage.VerifytravellersAndCabinClassDropdownVisible(page);
   await FlightHomePage.clickOntravellersAndCabinClass(page);
+  await FlightHomePage.clickOnCloseTravellersAndCabinClassDropdown(page);
+  await page.waitForTimeout(3000);
 });
 
 await test.step("Step 7: Click search flights button", async () => {
@@ -786,17 +886,20 @@ await test.step("Step 24: Click on Confirm Button On Traveller Details Page", as
 });
 
 await test.step("Step 25: Verify First Traveller Name Visible on the traveller details page", async () => {
+  await page.waitForTimeout(2000);
   await FlightHomePage.verifyFirstTravellerNameOnTravellerDetailPage(page);
 });
 
 await test.step("Step 26: Verify Last Traveller Name Visible on the traveller details page", async () => {
+  await page.waitForTimeout(2000);
   await FlightHomePage.verifyLastTravellerNameOnTravellerDetailPage(page);
 });
 
 });
 
-test('SC_006: Check and update user information (Mobile number/Email Address) and GST information ', { tag: ['@IDFC', '@Homepageflight'] }, async () => {
+test('SC_006: Check and update user information (Mobile number/Email Address) and GST information ', { tag: ['@IDFC', '@Homepageflight', '@Sanity'] }, async () => {
   await test.step("Step 1: Enter City From Airport", async () => {
+    await page.waitForTimeout(5000);
   await FlightHomePage.clickOnCityFromAirport(page);
   await FlightHomePage.EnterCityFromAirport(page, idfcTestData.flightPage.enterCityFrom);
 })
@@ -817,14 +920,18 @@ await test.step("Step 4: Verify To Airport Dropdown Visible", async () => {
 })
 
 await test.step("Step 5: Enter date of departure", async () => {
+  await page.waitForTimeout(5000);
   await FlightHomePage.clickOnDepartureDate(page);
   await FlightHomePage.selectTomorrowDateForDeparture(page);
 })
 
 await test.step("Step 6: Click and verify travellers and cabin class dropdown", async () => {
+  await page.waitForTimeout(5000);
   await FlightHomePage.clickOntravellersAndCabinClass(page);
   await FlightHomePage.VerifytravellersAndCabinClassDropdownVisible(page);
   await FlightHomePage.clickOntravellersAndCabinClass(page);
+  await FlightHomePage.clickOnCloseTravellersAndCabinClassDropdown(page);
+  await page.waitForTimeout(3000);
 });
 
 await test.step("Step 7: Click search flights button", async () => {
@@ -891,8 +998,9 @@ await test.step("Step 23: Verify New GST enter and Error Message is not be Visib
 });
 });
 
-test('SC_007: With Passport and without Passport Details (for international) ', { tag: ['@IDFC', '@Homepageflight'] }, async () => {
+test('SC_007: With Passport and without Passport Details (for international) ', { tag: ['@IDFC', '@Homepageflight', '@Passport', '@Regression'] }, async () => {
   await test.step("Step 1: Enter City From Airport", async () => {
+    await page.waitForTimeout(5000);
     await FlightHomePage.clickOnCityFromAirport(page);
     await FlightHomePage.EnterCityFromAirport(page, idfcTestData.flightPage.enterCityFrom);
   })
@@ -913,14 +1021,18 @@ test('SC_007: With Passport and without Passport Details (for international) ', 
   })
   
   await test.step("Step 5: Enter date of departure", async () => {
+    await page.waitForTimeout(5000);
     await FlightHomePage.clickOnDepartureDate(page);
     await FlightHomePage.selectTomorrowDateForDeparture(page);
   })
   
   await test.step("Step 6: Click and verify travellers and cabin class dropdown", async () => {
+    await page.waitForTimeout(5000);
     await FlightHomePage.clickOntravellersAndCabinClass(page);
     await FlightHomePage.VerifytravellersAndCabinClassDropdownVisible(page);
     await FlightHomePage.clickOntravellersAndCabinClass(page);
+    await FlightHomePage.clickOnCloseTravellersAndCabinClassDropdown(page);
+    await page.waitForTimeout(3000);
   });
   
   await test.step("Step 7: Click search flights button", async () => {
@@ -973,12 +1085,13 @@ test('SC_007: With Passport and without Passport Details (for international) ', 
     await FlightHomePage.EnterNewTravellerPassportCounty(page, idfcTestData.travellername.country);
   });
   await test.step("Step 20: Select Expire Date", async () => {
-    await FlightHomePage.selectTomorrowExpireDateForPassport(page);
+    await FlightHomePage.selectExpireDateForPassport(page);
   });
 });
 
-test('SC_008: With and without Add-Ons Selection (Seat/Baggage/Meal) ', { tag: ['@IDFC', '@Homepageflight'] }, async () => {
+test('SC_008: With and without Add-Ons Selection (Seat/Baggage/Meal) ', { tag: ['@IDFC', '@Homepageflight', '@Addon', '@Regression'] }, async () => {
   await test.step("Step 1: Enter City From Airport", async () => {
+    await page.waitForTimeout(5000);
     await FlightHomePage.clickOnCityFromAirport(page);
     await FlightHomePage.EnterCityFromAirport(page, idfcTestData.flightPage.enterCityFrom);
   })
@@ -989,6 +1102,7 @@ test('SC_008: With and without Add-Ons Selection (Seat/Baggage/Meal) ', { tag: [
   })
   
   await test.step("Step 3: Enter City To Airport", async () => {
+    await page.waitForTimeout(5000);
     await FlightHomePage.clickOnToAirport(page);
     await FlightHomePage.EnterCityToAirport(page, idfcTestData.flightPage.enterInternationalCityTo);
   })  
@@ -999,14 +1113,18 @@ test('SC_008: With and without Add-Ons Selection (Seat/Baggage/Meal) ', { tag: [
   })
   
   await test.step("Step 5: Enter date of departure", async () => {
+    await page.waitForTimeout(5000);
     await FlightHomePage.clickOnDepartureDate(page);
     await FlightHomePage.selectTomorrowDateForDeparture(page);
   })
   
   await test.step("Step 6: Click and verify travellers and cabin class dropdown", async () => {
+    await page.waitForTimeout(5000);
     await FlightHomePage.clickOntravellersAndCabinClass(page);
     await FlightHomePage.VerifytravellersAndCabinClassDropdownVisible(page);
     await FlightHomePage.clickOntravellersAndCabinClass(page);
+    await FlightHomePage.clickOnCloseTravellersAndCabinClassDropdown(page);
+    await page.waitForTimeout(3000);
   });
   
   await test.step("Step 7: Click search flights button", async () => {
@@ -1058,7 +1176,7 @@ test('SC_008: With and without Add-Ons Selection (Seat/Baggage/Meal) ', { tag: [
     await FlightHomePage.EnterNewTravellerPassportCounty(page, idfcTestData.travellername.country);
   });
   await test.step("Step 20: Select Expire Date", async () => {
-    await FlightHomePage.selectTomorrowExpireDateForPassport(page);
+    await FlightHomePage.selectExpireDateForPassport(page);
   });
   await test.step("Step 21: Click on Confirm Button On Traveller Details Page", async () => {
     await FlightHomePage.clickOnEditConfirmButtonPage(page);
