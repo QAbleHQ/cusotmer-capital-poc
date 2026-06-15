@@ -42,6 +42,53 @@ jobs:
         if: always()
         run: node .github/scripts/generate-report-summary.js reports/test-results.json reports/email-summary.txt
 
+      - name: Calculate test stats
+        if: always()
+        id: stats
+        run: |
+          node -e "
+          const fs = require('fs');
+          const reportPath = 'reports/test-results.json';
+          let total = 0, passed = 0, failed = 0, skipped = 0, flaky = 0, durationMs = 0;
+          const failures = [];
+
+          if (fs.existsSync(reportPath)) {
+            const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
+            function collect(suite) {
+              for (const spec of suite.specs || []) {
+                for (const test of spec.tests || []) {
+                  total++;
+                  const result = test.results?.[test.results.length - 1];
+                  const status = result?.status || 'unknown';
+                  durationMs += result?.duration || 0;
+                  if (status === 'passed') passed++;
+                  else if (status === 'failed' || status === 'timedOut') {
+                    failed++;
+                    const msg = (result?.error?.message || 'No error').split('\n')[0].replace(/\x1B\[[0-9;]*m/g, '');
+                    failures.push(spec.title + ' > ' + test.title + ': ' + msg.substring(0, 100));
+                  } else if (status === 'skipped') skipped++;
+                  else if (status === 'flaky') flaky++;
+                }
+              }
+              for (const child of suite.suites || []) collect(child);
+            }
+            for (const suite of report.suites || []) collect(suite);
+          }
+
+          const s = Math.round(durationMs / 1000);
+          const duration = s < 60 ? s + 's' : Math.floor(s/60) + 'm ' + (s%60) + 's';
+          const out = process.env.GITHUB_OUTPUT;
+          fs.appendFileSync(out, 'total=' + total + '\n');
+          fs.appendFileSync(out, 'passed=' + passed + '\n');
+          fs.appendFileSync(out, 'failed=' + failed + '\n');
+          fs.appendFileSync(out, 'skipped=' + skipped + '\n');
+          fs.appendFileSync(out, 'flaky=' + flaky + '\n');
+          fs.appendFileSync(out, 'duration=' + duration + '\n');
+          fs.appendFileSync(out, 'status=' + (failed > 0 ? 'FAILED' : 'PASSED') + '\n');
+          fs.appendFileSync(out, 'failures_text=' + failures.slice(0,10).join(' | ') + '\n');
+          console.log('Stats written:', { total, passed, failed, skipped, flaky, duration });
+          "
+
       - name: Publish Playwright report to job summary
         if: always()
         run: |
@@ -177,19 +224,89 @@ jobs:
           server_port: 587
           username: ankitpatel@qable.io
           password: zjwtgkflbwczqrpb
-          subject: "[${{ steps.run-tests.outputs.exit_code == '0' && 'PASSED' || 'FAILED' }}] BOB UAT — Playwright Report"
+          subject: "[${{ steps.stats.outputs.status }}] BOB UAT — Playwright Report"
           to: aneri.patel@qable.io, nikunj.trivedi@qable.io, 1ee687f3.linearloop.io@in.teams.ms
           from: ankitpatel@qable.io
-          body: file://reports/email-summary.txt
           html_body: |
-            <h2>Playwright Test Report — BOB UAT</h2>
-            <p><strong>Status:</strong> ${{ steps.run-tests.outputs.exit_code == '0' && 'PASSED ✅' || 'FAILED ❌' }}</p>
-            <p><strong>Branch:</strong> ${{ github.ref_name }}</p>
-            <p><strong>Triggered by:</strong> ${{ github.actor }}</p>
-            <p><strong>Commit:</strong> ${{ github.sha }}</p>
-            <p><strong>Date (UTC):</strong> ${{ github.event.head_commit.timestamp }}</p>
-            <p><strong>Workflow Run:</strong> <a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}">View Run</a></p>
-            <p><strong>Playwright Report:</strong> <a href="${{ steps.report-url.outputs.url }}">👉 Open Report</a></p>
+            <div style="font-family:Arial,sans-serif;max-width:600px;margin:auto">
+              <h2 style="background:${{ steps.stats.outputs.status == 'FAILED' && '#cc0000' || '#00b300' }};color:#fff;padding:12px 16px;border-radius:4px;margin:0 0 0 0">
+                ${{ steps.stats.outputs.status == 'FAILED' && '🔴' || '🟢' }} Playwright Report — BOB UAT
+              </h2>
+              <table width="100%" cellpadding="8" cellspacing="0" style="border-collapse:collapse;margin-top:0;border:1px solid #ddd">
+                <tr><td style="background:#f5f5f5;font-weight:bold;width:140px">Status</td><td>${{ steps.stats.outputs.status == 'FAILED' && '❌ FAILED' || '✅ PASSED' }}</td></tr>
+                <tr><td style="font-weight:bold">Total</td><td>${{ steps.stats.outputs.total }}</td></tr>
+                <tr style="background:#f5f5f5"><td style="font-weight:bold">Passed</td><td>✅ ${{ steps.stats.outputs.passed }}</td></tr>
+                <tr><td style="font-weight:bold">Failed</td><td>❌ ${{ steps.stats.outputs.failed }}</td></tr>
+                <tr style="background:#f5f5f5"><td style="font-weight:bold">Skipped</td><td>⏭️ ${{ steps.stats.outputs.skipped }}</td></tr>
+                <tr><td style="font-weight:bold">Flaky</td><td>⚠️ ${{ steps.stats.outputs.flaky }}</td></tr>
+                <tr style="background:#f5f5f5"><td style="font-weight:bold">Duration</td><td>⏱️ ${{ steps.stats.outputs.duration }}</td></tr>
+                <tr><td style="font-weight:bold">Branch</td><td>${{ github.ref_name }}</td></tr>
+                <tr style="background:#f5f5f5"><td style="font-weight:bold">Triggered by</td><td>${{ github.actor }}</td></tr>
+                <tr><td style="font-weight:bold">Commit</td><td>${{ github.sha }}</td></tr>
+              </table>
+              <p style="margin-top:16px">
+                <a href="${{ steps.report-url.outputs.url }}" style="background:#0066cc;color:#fff;padding:10px 18px;border-radius:4px;text-decoration:none;font-weight:bold">📊 View Playwright Report</a>
+                &nbsp;
+                <a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" style="background:#555;color:#fff;padding:10px 18px;border-radius:4px;text-decoration:none;font-weight:bold">🔗 View Run</a>
+              </p>
+            </div>
+
+      - name: Notify MS Teams
+        if: always()
+        continue-on-error: true
+        run: |
+          STATUS="${{ steps.stats.outputs.status }}"
+          COLOR="${{ steps.stats.outputs.status == 'FAILED' && 'cc0000' || '00b300' }}"
+          EMOJI="${{ steps.stats.outputs.status == 'FAILED' && '🔴' || '🟢' }}"
+          curl -s -X POST "${{ secrets.MS_TEAMS_WEBHOOK }}" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"type\": \"message\",
+              \"attachments\": [{
+                \"contentType\": \"application/vnd.microsoft.card.adaptive\",
+                \"content\": {
+                  \"\$schema\": \"http://adaptivecards.io/schemas/adaptive-card.json\",
+                  \"type\": \"AdaptiveCard\",
+                  \"version\": \"1.4\",
+                  \"body\": [
+                    {
+                      \"type\": \"TextBlock\",
+                      \"text\": \"${EMOJI} Playwright Report — BOB UAT — ${STATUS}\",
+                      \"weight\": \"Bolder\",
+                      \"size\": \"Medium\",
+                      \"wrap\": true
+                    },
+                    {
+                      \"type\": \"FactSet\",
+                      \"facts\": [
+                        { \"title\": \"Status\",       \"value\": \"${STATUS}\" },
+                        { \"title\": \"Total\",        \"value\": \"${{ steps.stats.outputs.total }}\" },
+                        { \"title\": \"Passed\",       \"value\": \"✅ ${{ steps.stats.outputs.passed }}\" },
+                        { \"title\": \"Failed\",       \"value\": \"❌ ${{ steps.stats.outputs.failed }}\" },
+                        { \"title\": \"Skipped\",      \"value\": \"⏭️ ${{ steps.stats.outputs.skipped }}\" },
+                        { \"title\": \"Flaky\",        \"value\": \"⚠️ ${{ steps.stats.outputs.flaky }}\" },
+                        { \"title\": \"Duration\",     \"value\": \"⏱️ ${{ steps.stats.outputs.duration }}\" },
+                        { \"title\": \"Branch\",       \"value\": \"${{ github.ref_name }}\" },
+                        { \"title\": \"Triggered by\", \"value\": \"${{ github.actor }}\" },
+                        { \"title\": \"Commit\",       \"value\": \"${{ github.sha }}\" }
+                      ]
+                    }
+                  ],
+                  \"actions\": [
+                    {
+                      \"type\": \"Action.OpenUrl\",
+                      \"title\": \"📊 View Playwright Report\",
+                      \"url\": \"${{ steps.report-url.outputs.url }}\"
+                    },
+                    {
+                      \"type\": \"Action.OpenUrl\",
+                      \"title\": \"🔗 View Run\",
+                      \"url\": \"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"
+                    }
+                  ]
+                }
+              }]
+            }"
 
       - name: Fail job if tests failed
         if: steps.run-tests.outputs.exit_code != '0'
