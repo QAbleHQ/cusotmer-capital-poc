@@ -12,7 +12,7 @@ name: Playwright Automation Framework CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, stage]
 
   schedule:
     # 2:00 AM IST = 20:30 UTC (previous calendar day)
