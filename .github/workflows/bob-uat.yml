@@ -137,6 +137,26 @@ jobs:
           retention-days: 30
           if-no-files-found: ignore
 
+      - name: Deploy report to GitHub Pages
+        if: always()
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./playwright-report
+          destination_dir: reports/${{ github.run_id }}
+          keep_files: true
+
+      - name: Set report URL
+        if: always()
+        id: report-url
+        run: |
+          REPO="${{ github.repository }}"
+          ORG=$(echo "$REPO" | cut -d'/' -f1)
+          REPO_NAME=$(echo "$REPO" | cut -d'/' -f2)
+          URL="https://${ORG}.github.io/${REPO_NAME}/reports/${{ github.run_id }}/index.html"
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
+          echo "### 📊 [View Playwright Report]($URL)" >> "$GITHUB_STEP_SUMMARY"
+
       - name: Send email report
         if: always()
         continue-on-error: true
@@ -157,8 +177,8 @@ jobs:
             <p><strong>Triggered by:</strong> ${{ github.actor }}</p>
             <p><strong>Commit:</strong> ${{ github.sha }}</p>
             <p><strong>Date (UTC):</strong> ${{ github.event.head_commit.timestamp }}</p>
-            <p><strong>Workflow Run:</strong> <a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}">View Full Report</a></p>
-            <p><strong>Artifact:</strong> playwright-report-BOB-UAT-${{ github.run_id }}</p>
+            <p><strong>Workflow Run:</strong> <a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}">View Run</a></p>
+            <p><strong>Playwright Report:</strong> <a href="${{ steps.report-url.outputs.url }}">👉 Open Report</a></p>
 
       - name: Fail job if tests failed
         if: steps.run-tests.outputs.exit_code != '0'
