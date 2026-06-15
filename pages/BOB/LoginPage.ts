@@ -37,12 +37,12 @@ export class LoginPage {
   static async waitUntilDialogBoxDisplayed(page: Page) {
     const dashboardLocator = LoginPageLocators.DialogBox;
     await ElementHelper.waitForElementVisibleWithoutReload(page, dashboardLocator);
-    console.log('✅ Dilog Box page is displayed');
+    console.log('Dilog Box page is displayed');
   }
   static async clickSkipButtonInsideDialogBox(page: Page) {
     const skipButton = LoginPageLocators.skipButtonInsideDialogBox;
     await ElementHelper.clickElement(page, skipButton);
-    console.log('✅ Skip button inside dialog box clicked');
+    console.log('Skip button inside dialog box clicked');
   }
   static async verifyUserIdDisplayed(page: Page) {
     const userID = LoginPageLocators.enterUserID;
@@ -72,7 +72,7 @@ export class LoginPage {
   static async clickEnterLoginButton(page: Page) {
     const enterLoginButton = LoginPageLocators.enterLoginBTN;
     await ElementHelper.clickElement(page, enterLoginButton);
-    console.log('✅ Enter Login button clicked');
+    console.log('Enter Login button clicked');
   }
   static async LoginCredEnterBeforeEach(page: Page) {
     await LoginPage.enterMobileNumber(page, bobTestData.loginDataFill.mobileNumber);

@@ -2,7 +2,7 @@
   "hotelPage": {
     "domestic": "ahmedabad",
     "international": "qatar",
-    "searcHotelName": "Hyatt Ahmedabad",
+    "searcHotelName": "Taj Skyline Ahmedabad",
     "searcHotelNameInternational": "Souq Waqif Boutique Hotels by Tivoli",
     "rooms": 1,
     "adults": 2,
@@ -43,16 +43,16 @@
   },
 
   "flightPage": {
-    "enterCityFrom": "ahmeda",
-    "enterCityTo": "Mum",
+    "enterCityFrom": "Mumb",
+    "enterCityTo": "Banga",
     "enterInternationalCityTo": "dub"
   },
 
   "travellername": {
     "firstName": "John",
     "lastName": "Doe",
-    "editedFirstName": "test",
-    "editedLastName": "demo",
+    "editedFirstName": "Test",
+    "editedLastName": "Demo",
     "email": "Test@demo.com",
     "phone": "9999999999",
     "gst": "MMM999MMM",
@@ -65,8 +65,8 @@
   },
 
   "paymentDataFill": {
-    "cardNumber": "4111111111111111",
-    "cardExpiry": "12/28",
+    "cardNumber": "4405235026842471",
+    "cardExpiry": "05/30",
     "cardCvv": "123",
     "cardName": "John Doe",
     "otp": "123456"

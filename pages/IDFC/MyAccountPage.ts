@@ -1,12 +1,9 @@
 import { expect, Page } from '@playwright/test';
 import { ElementHelper } from '../../utils/elementHelper';
 import { MyAccountPageLocators } from '../../locators/idfc/MyAccountPageLocators';
+import { DeviceHelper } from '../../utils/deviceHelper';
 
 export class MyAccountPage {
-
-  // ---------------------------------------------------------------------------
-  // Home page – my account navigation
-  // ---------------------------------------------------------------------------
   static async clickMyAccount(page: Page): Promise<void> {
     await ElementHelper.clickElement(page, MyAccountPageLocators.myAccountProfile);
   }
@@ -23,26 +20,31 @@ export class MyAccountPage {
     await ElementHelper.clickElement(page, MyAccountPageLocators.myBookingSection);
     await page.waitForTimeout(6000);
   }
-
-  // ---------------------------------------------------------------------------
-  // My bookings page – flight booking tabs
-  // ---------------------------------------------------------------------------
   static async clickFlightsUpcomingTab(page: Page): Promise<void> {
     await page.waitForTimeout(6000);
-    await ElementHelper.clickElement(page, MyAccountPageLocators.flightsUpcomingTab);
+    if (DeviceHelper.isMobile()) {
+      await ElementHelper.clickElement(page, MyAccountPageLocators.flightsUpcomingTabMobile);
+    } else {
+      await ElementHelper.clickElement(page, MyAccountPageLocators.flightsUpcomingTab);
+    }    
   }
 
   static async clickFlightsCancelledTab(page: Page): Promise<void> {
-    await ElementHelper.clickElement(page, MyAccountPageLocators.flightsCancelledTab);
+    if(DeviceHelper.isMobile()) {
+      await ElementHelper.clickElement(page, MyAccountPageLocators.flightsCancelledTabMobile);
+    } else {
+      await ElementHelper.clickElement(page, MyAccountPageLocators.flightsCancelledTab);
+    }
   }
 
   static async verifyFlightsCompletedTabVisible(page: Page): Promise<void> {
-    await expect(page.locator(MyAccountPageLocators.flightsCompletedTab)).toBeVisible();
+    if(DeviceHelper.isMobile()) {
+      await expect(page.locator(MyAccountPageLocators.flightsCompletedTabMobile)).toBeVisible();
+    } else {
+      await expect(page.locator(MyAccountPageLocators.flightsCompletedTab)).toBeVisible();
+    }
   }
 
-  // ---------------------------------------------------------------------------
-  // My bookings page – booking card details (read & print)
-  // ---------------------------------------------------------------------------
   static async printFromToText(page: Page): Promise<void> {
     console.log('From/To:', await page.textContent(MyAccountPageLocators.fromToText));
   }
@@ -71,24 +73,21 @@ export class MyAccountPage {
     console.log('Amount:', await page.textContent(MyAccountPageLocators.amountText));
   }
 
-  // ---------------------------------------------------------------------------
-  // My bookings page – booking card actions (by status)
-  // ---------------------------------------------------------------------------
   static async verifyButtonsBasedOnStatus(page: Page): Promise<void> {
     const status = (await page.textContent(MyAccountPageLocators.statusText))?.trim() ?? '';
-    console.log(`📌 Booking Status: ${status}`);
+    console.log(`Booking Status: ${status}`);
 
     if (status.includes('Confirmed')) {
-      console.log('✅ Status is Confirmed - Verifying View, Cancel, and Modify buttons');
+      console.log(' Status is Confirmed - Verifying View, Cancel, and Modify buttons');
 
       await expect(page.locator(MyAccountPageLocators.viewButton)).toBeVisible();
-      console.log('✔️ View button is visible');
+      console.log('View button is visible');
 
       await expect(page.locator(MyAccountPageLocators.cancelButton)).toBeVisible();
-      console.log('✔️ Cancel button is visible');
+      console.log('Cancel button is visible');
 
       await expect(page.locator(MyAccountPageLocators.modifyButton)).toBeVisible();
-      console.log('✔️ Modify button is visible');
+      console.log('Modify button is visible');
     } else {
       console.log(`⏳ Status is '${status}' - Verifying Pending Booking View button`);
 
@@ -96,17 +95,18 @@ export class MyAccountPage {
         page.locator(MyAccountPageLocators.bookingpendingviewButton).first()
       ).toBeVisible();
 
-      console.log('✔️ Pending Booking View button is visible');
+      console.log('Pending Booking View button is visible');
     }
 
-    console.log('🎉 Button verification completed successfully');
+    console.log('Button verification completed successfully');
   }
 
-  // ---------------------------------------------------------------------------
-  // NOT USED METHODS
-  // ---------------------------------------------------------------------------
   static async clickFlightsCompletedTab(page: Page): Promise<void> {
-    await ElementHelper.clickElement(page, MyAccountPageLocators.flightsCompletedTab);
+    if(DeviceHelper.isMobile()) {
+      await ElementHelper.clickElement(page, MyAccountPageLocators.flightsCompletedTabMobile);
+    } else {
+      await ElementHelper.clickElement(page, MyAccountPageLocators.flightsCompletedTab);
+    }
   }
 
   static async clickHotelTab(page: Page): Promise<void> {

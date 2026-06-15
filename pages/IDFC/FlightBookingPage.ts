@@ -11,28 +11,35 @@ export class FlightBookingPage {
     const bookingStatus = FlightPageLocators.bookingStatus;
   
     await ElementHelper.waitForElementVisible(page, bookingStatus);
-    console.log("✅ Booking confirmation page is visible.");
+    console.log("Booking confirmation page is visible.");
+  }
+
+  static async verifyBookingPendingPageVisible(page: Page) {
+    const bookingStatus = FlightPageLocators.bookingStatus;
+  
+    await ElementHelper.waitForElementVisible(page, bookingStatus);
+    console.log("Booking confirmation page is visible.");
   }
   
   static async verifyConfirmedVoucherVisible(page: Page) {
     const confirmedVoucher = FlightPageLocators.confirmedVoucher;
   
     await ElementHelper.waitForElementVisible(page, confirmedVoucher);
-    console.log("✅ Confirmed voucher is visible.");
+    console.log("Confirmed voucher is visible.");
   }
   
   static async verifyBookingIdVisible(page: Page) {
     const bookingId = FlightPageLocators.bookingId;
   
     await ElementHelper.waitForElementVisible(page, bookingId);
-    console.log("✅ Booking ID is visible.");
+    console.log("Booking ID is visible.");
   }
   
   static async verifyBookingDateVisible(page: Page) {
     const bookingDate = FlightPageLocators.bookingDate;
   
     await ElementHelper.waitForElementVisible(page, bookingDate);
-    console.log("✅ Booking date is visible.");
+    console.log("Booking date is visible.");
   }
   
   static async verifyFlightDetailsVisible(page: Page) {
@@ -51,7 +58,7 @@ export class FlightBookingPage {
     await ElementHelper.waitForElementVisible(page, departureTime);
     await ElementHelper.waitForElementVisible(page, arrivalTime);
   
-    console.log("✅ Flight details are visible.");
+    console.log("Flight details are visible.");
   }
   
   static async verifyHotelDetailsVisible(page: Page) {
@@ -61,7 +68,7 @@ export class FlightBookingPage {
     await ElementHelper.waitForElementVisible(page, hotelName);
     await ElementHelper.waitForElementVisible(page, hotelAddress);
   
-    console.log("✅ Hotel details are visible.");
+    console.log("Hotel details are visible.");
   }
   
   static async verifyFareSummaryVisible(page: Page) {
@@ -71,42 +78,42 @@ export class FlightBookingPage {
     await ElementHelper.clickElement(page, fareSummaryDropdown);
     await ElementHelper.waitForElementVisible(page, fareSummarySection);
   
-    console.log("✅ Fare summary section is visible.");
+    console.log("Fare summary section is visible.");
   }
   
   static async verifyTopHotelsSectionVisible(page: Page) {
     const topHotelsSection = FlightPageLocators.topHotelsSection;
   
     await ElementHelper.waitForElementVisible(page, topHotelsSection);
-    console.log("✅ Top Hotels section is visible.");
+    console.log("Top Hotels section is visible.");
   }
   
   static async verifyTopHotelCardsVisible(page: Page) {
     const topHotelCards = FlightPageLocators.topHotelCards;
   
     await ElementHelper.waitForElementVisible(page, topHotelCards);
-    console.log("✅ Top Hotel cards are visible.");
+    console.log("Top Hotel cards are visible.");
   }
   
   static async verifyHotelRedirectLinkVisible(page: Page) {
     const hotelRedirectLink = FlightPageLocators.hotelRedirectLink;
   
     await ElementHelper.waitForElementVisible(page, hotelRedirectLink);
-    console.log("✅ Hotel redirection link is visible.");
+    console.log("Hotel redirection link is visible.");
   }
   
   static async expandFlightDetails(page: Page) {
     const flightDropdown = FlightPageLocators.flightDropdown;
   
     await ElementHelper.clickElement(page, flightDropdown);
-    console.log("✅ Flight details dropdown expanded.");
+    console.log("Flight details dropdown expanded.");
   }
   
   static async expandFareSummary(page: Page) {
     const fareSummaryDropdown = FlightPageLocators.fareSummaryDropdown;
   
     await ElementHelper.clickElement(page, fareSummaryDropdown);
-    console.log("✅ Fare summary dropdown expanded.");
+    console.log("Fare summary dropdown expanded.");
   
   }
 }

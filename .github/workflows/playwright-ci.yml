@@ -1,152 +1,91 @@
 name: Playwright Automation Framework CI
 
-# Triggers:
-#   1. push      → auto run on every push to main (BOB-QA + IDFC-QA)
-#   2. schedule  → daily at 2:00 AM IST (all clients × QA/UAT/PROD)
-#   3. workflow_dispatch → manual run with client / environment / feature options
-#
-# Email (disabled until client provides SMTP credentials):
-#   Secrets: SMTP_USER, SMTP_PASS, SMTP_FROM
-#   Recipients: aneri.patel@qable.io, nikunj.trivedi@qable.io
-#   Uncomment "Send email report" step below when ready.
-
 on:
   push:
-    branches: [main]
-
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
   schedule:
-    # 2:00 AM IST = 20:30 UTC (previous calendar day)
-    - cron: "30 20 * * *"
-
+    - cron: "0 2 * * *"   # Nightly run at 2 AM IST
   workflow_dispatch:
     inputs:
       client:
-        description: "Client name (BOB, IDFC)"
+        description: "Client name (e.g., BOB, IDFC)"
         required: true
-        type: choice
-        options: [BOB, IDFC]
-        default: BOB
+        default: "BOB"
       environment:
         description: "Environment (QA, UAT, PROD)"
         required: true
-        type: choice
-        options: [QA, UAT, PROD]
-        default: QA
+        default: "QA"
       feature:
-        description: "Optional feature tag without @ (e.g. Loginpage, Homepage)"
+        description: "Feature tag (e.g., @earn, @burn)"
         required: false
-        default: ""
 
 jobs:
-  prepare:
-    runs-on: ubuntu-latest
-    outputs:
-      matrix: ${{ steps.set-matrix.outputs.matrix }}
-      feature: ${{ steps.set-matrix.outputs.feature }}
-      trigger: ${{ steps.set-matrix.outputs.trigger }}
-    steps:
-      - name: Build test matrix
-        id: set-matrix
-        run: |
-          FEATURE="${{ github.event.inputs.feature }}"
-          TRIGGER="${{ github.event_name }}"
-
-          if [ "$TRIGGER" = "workflow_dispatch" ]; then
-            MATRIX=$(jq -nc \
-              --arg client "${{ github.event.inputs.client }}" \
-              --arg environment "${{ github.event.inputs.environment }}" \
-              '{include:[{client:$client,environment:$environment}]}')
-          elif [ "$TRIGGER" = "schedule" ]; then
-            MATRIX='{"include":[
-              {"client":"BOB","environment":"QA"},
-              {"client":"BOB","environment":"UAT"},
-              {"client":"BOB","environment":"PROD"},
-              {"client":"IDFC","environment":"QA"},
-              {"client":"IDFC","environment":"UAT"},
-              {"client":"IDFC","environment":"PROD"}
-            ]}'
-          else
-            # push to main — quick smoke on QA for both clients
-            MATRIX='{"include":[
-              {"client":"BOB","environment":"QA"},
-              {"client":"IDFC","environment":"QA"}
-            ]}'
-          fi
-
-          echo "matrix=$MATRIX" >> "$GITHUB_OUTPUT"
-          echo "feature=$FEATURE" >> "$GITHUB_OUTPUT"
-          echo "trigger=$TRIGGER" >> "$GITHUB_OUTPUT"
-
   test:
-    needs: prepare
     strategy:
       fail-fast: false
-      matrix: ${{ fromJSON(needs.prepare.outputs.matrix) }}
+      matrix:
+        client: [BOB, IDFC]
+        environment: [QA, UAT, PROD]
     runs-on: ubuntu-latest
-    env:
-      CI: true
-      PROJECT: ${{ matrix.client }}-chrome-${{ matrix.environment }}
-      FEATURE_TAG: ${{ needs.prepare.outputs.feature }}
-      RUN_TRIGGER: ${{ needs.prepare.outputs.trigger }}
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: npm
+
+      - name: Cache Node.js dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
+      - name: Lint and Build Check
+        run: |
+          npm run lint --if-present
+          npm run build --if-present
 
       - name: Run Playwright tests
-        id: run-tests
-        continue-on-error: true
+        env:
+          PROJECT: ${{ matrix.client }}-${{ matrix.environment }}
         run: |
-          GREP_ARG=""
-          if [ -n "$FEATURE_TAG" ]; then
-            GREP_ARG="--grep @${FEATURE_TAG}"
-          else
-            GREP_ARG="--grep @${{ matrix.client }}"
-          fi
-
-          echo "Trigger=$RUN_TRIGGER | PROJECT=$PROJECT $GREP_ARG"
-          set +e
+          echo "Running Playwright tests for client=${{ matrix.client }} environment=${{ matrix.environment }}"
           npx playwright test \
             --config=playwright.config.ts \
-            $GREP_ARG \
-            --workers=4 \
-            --retries=2
-          EXIT_CODE=$?
-          set -e
-          echo "exit_code=$EXIT_CODE" >> "$GITHUB_OUTPUT"
-          exit 0
+            --grep @${{ github.event.inputs.feature || 'sanity' }} \
+            --workers=1 \
+            --retries=2 \
+            --reporter=html
 
-      - name: Generate email summary
-        if: always()
-        run: node .github/scripts/generate-report-summary.js reports/test-results.json reports/email-summary.txt
-
-      - name: Upload Playwright HTML report
-        if: always()
-        uses: actions/upload-artifact@v4
+      - name: Upload Test Report
+        uses: actions/upload-artifact@v3
         with:
-          name: playwright-report-${{ matrix.client }}-${{ matrix.environment }}-${{ github.run_id }}
-          path: |
-            playwright-report/
-            reports/test-results.json
-            reports/email-summary.txt
+          name: playwright-report-${{ matrix.client }}-${{ matrix.environment }}
+          path: playwright-report
           retention-days: 30
-          if-no-files-found: warn
 
-      - name: Upload failure artifacts
-        if: failure() || steps.run-tests.outputs.exit_code != '0'
-        uses: actions/upload-artifact@v4
+      - name: Upload Playwright Artifacts (on failure)
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: playwright-artifacts-${{ matrix.client }}-${{ matrix.environment }}
+          path: |
+            test-results/
+            playwright-report/
+
+      - name: Send Email Report
+        if: always()
+        uses: dawidd6/action-send-mail@v3
         with:
           name: playwright-failures-${{ matrix.client }}-${{ matrix.environment }}-${{ github.run_id }}
           path: test-results/
@@ -199,7 +138,7 @@ jobs:
             reports/email-summary.txt
             playwright-report/index.html
 
-      - name: Notify MS Teams
+      - name: Notify MS Teams (Optional)
         if: always()
         continue-on-error: true
         env:

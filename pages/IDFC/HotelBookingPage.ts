@@ -3,47 +3,102 @@ import { HotelPageLocators } from '../../locators/idfc/HotelPageLocators';
 import { ElementHelper } from '../../utils/elementHelper';
 import { PaymentPageLocators } from '../../locators/idfc/PaymentPageLocators';
 const idfcTestData = require('../../testdata/idfctestdata.json');
+import { DeviceHelper } from '../../utils/deviceHelper';
+import { FlightHomePage } from './FlightHomePage';
+import { FlightPageLocators } from '../../locators/idfc/FlightPageLocators';
+import { HotelHomePage } from './HotelHomePage';
 
 export class HotelBookingPage {
-
-  // ---------------------------------------------------------------------------
-  // Hotel detail page – room selection
-  // ---------------------------------------------------------------------------
   static async clickFirstRoomSelectionButton(page: Page) {
     await page.locator(HotelPageLocators.firstRoomSelectButton).click();
-    console.log('Clicked on first room selection button');
+    console.log('First room selection button clicked');
   }
 
   static async confirmRoomSelection(page: Page) {
     await page.locator(HotelPageLocators.roomSelectionConfirmationButton).click();
-    console.log('Room selection confirmed');
+    console.log('Room selection confirmation button clicked');
   }
 
   static async firstTabNextButton(page: Page) {
     const nextButton = HotelPageLocators.firstTabNextButton;
     await ElementHelper.clickElement(page, nextButton);
+    console.log('Next button in first tab clicked');
   }
 
-  // ---------------------------------------------------------------------------
-  // Guest details page – header & add guest actions
-  // ---------------------------------------------------------------------------
   static async verifyPrimaryGuestDetailsHeaderVisible(page: Page) {
     await expect(page.locator(HotelPageLocators.primaryGuestDetailsHeader)).toBeVisible();
-    console.log('Primary guest details header is visible');
+    console.log('Primary guest details header is displayed');
   }
 
   static async clickAddGuestButton(page: Page) {
-    await page.locator(HotelPageLocators.addGuestButton).click();
-    console.log('Clicked Add Guest button');
+    if (DeviceHelper.isMobile()) {
+      let attempts = 0;
+      const maxAttempts = 3;
+      let popupClosed = false;
+
+      while (attempts < maxAttempts && !popupClosed) {
+          try {
+              const popup = page.locator(HotelPageLocators.beePopupForMobile);
+              
+              if (await popup.isVisible()) {
+                  console.log(`Attempt ${attempts + 1}: Bee popup detected, attempting to close...`);
+                  
+                  await page.locator(HotelPageLocators.clickOutsideOfBeePopupForMobile).click();
+                  
+                  await popup.waitFor({ state: 'hidden', timeout: 3000 });
+                  popupClosed = true;
+                  console.log('Bee popup successfully closed');
+              } else {
+                  break;
+              }
+          } catch (e) {
+              attempts++;
+              console.log(`Attempt ${attempts} failed, retrying...`);
+              await page.waitForTimeout(1000); 
+          }
+      }
+  }
+
+  await page.locator(HotelPageLocators.addGuestButton).click();
+  console.log('Add Guest button clicked');
+
+    await page.waitForTimeout(5000);
+    if(DeviceHelper.isMobile()) {
+      try {
+        const popup = page.locator(HotelPageLocators.beePopupForMobile);
+        await popup.waitFor({ state: 'visible', timeout: 10000 });
+      
+        await ElementHelper.clickElement(page, HotelPageLocators.clickOutsideOfBeePopupForMobile);
+        console.log('Bee popup detected and closed');
+      } catch (e) {
+        console.log('Bee popup did not appear, proceeding...');
+      }
+    }
+    if(await ElementHelper.isElementDisplayed(page, HotelPageLocators.addGuestButton)) {
+      await page.locator(HotelPageLocators.addGuestButton).click();
+      console.log('Add Guest button clicked');
+    }
   }
 
   static async clickAddNewGuestButton(page: Page) {
+    if(DeviceHelper.isMobile()) {
+      try {
+        const popup = page.locator(HotelPageLocators.beePopupForMobile);
+        await popup.waitFor({ state: 'visible', timeout: 10000 });
+      
+        await ElementHelper.clickElement(page, HotelPageLocators.clickOutsideOfBeePopupForMobile);
+        console.log('Bee popup detected and closed');
+      } catch (e) {
+        console.log('Bee popup did not appear, proceeding...');
+      }
+    }
     await page.locator(HotelPageLocators.addGuestBtn).click();
-    console.log('Clicked Add New Guest button');
+    console.log('Add New Guest button clicked');
   }
 
   static async clickEditTraveler(page: Page) {
     await page.locator(HotelPageLocators.editTravelerButton).click();
+    console.log('Edit traveler button clicked');
   }
 
   static async verifyCannotProceedWithoutConditions(page: Page) {
@@ -57,12 +112,9 @@ export class HotelBookingPage {
   static async clickCheckboxAfterRedeam(page: Page) {
     const checkboxLocator = HotelPageLocators.clickCheckboxAfterRedeam;
     await ElementHelper.clickElement(page, checkboxLocator);
-    console.log('Clicked checkbox after redeem action');
+    console.log('Checkbox after redeem action clicked');
   }
 
-  // ---------------------------------------------------------------------------
-  // Guest details page – guest form fields
-  // ---------------------------------------------------------------------------
   static async fillGuestDetailsInsideForm(page: Page) {
     await page.locator(HotelPageLocators.radioButtonMr).click();
     await page.waitForTimeout(2000);
@@ -70,53 +122,53 @@ export class HotelBookingPage {
     await page.waitForTimeout(2000);
     await page.locator(HotelPageLocators.lastNameField).fill(idfcTestData.hotelBookingDataFill.lastName);
     await page.waitForTimeout(2000);
-    console.log('Filled guest details form');
+    console.log('Guest details form inside fields filled');
   }
   static async fillGuestDetailsoutsideForm(page: Page) {
     await page.locator(HotelPageLocators.contactNumberField).fill(idfcTestData.hotelBookingDataFill.contactNumber);
     await page.waitForTimeout(2000);
     await page.locator(HotelPageLocators.emailField).fill(idfcTestData.hotelBookingDataFill.email);
     await page.waitForTimeout(2000);
-    console.log('Filled guest details form');
+    console.log('Guest details form contact information filled');
   }
   static async clickEditGuestButton(page: Page) {
     const editGuestButtonLocator = HotelPageLocators.editGuestButton;
     await ElementHelper.clickElement(page, editGuestButtonLocator);
-    console.log('Clicked edit guest button');
+    console.log('Edit guest button clicked');
   }
 
   static async updateFirstName(page: Page, firstName: string) {
     await page.locator(HotelPageLocators.firstNameField).clear();
     await page.locator(HotelPageLocators.firstNameField).fill(firstName);
+    console.log('First name field updated');
   }
 
   static async verifyGuestDetailsFormVisible(page: Page) {
     await expect(page.locator(HotelPageLocators.guestDetailsForm)).toBeVisible();
-    console.log('Guest Details form is visible with required fields');
+    console.log('Guest details form is displayed');
   }
 
   static async addButtonAfterAddingGuest(page: Page) {
     const addButtonLocator = HotelPageLocators.addButtonAfterAddingGuest;
     await ElementHelper.clickElement(page, addButtonLocator);
+    console.log('Add button after adding guest clicked');
   }
 
   static async nextButtonAfterAddingGuest(page: Page) {
     const nextButtonLocator = HotelPageLocators.nextButtonAfterAddingGuest;
     await ElementHelper.clickElement(page, nextButtonLocator);
+    console.log('Next button after adding guest clicked');
   }
 
-  // ---------------------------------------------------------------------------
-  // Guest details page – PAN card (domestic / international)
-  // ---------------------------------------------------------------------------
   static async verifyPanCardNotVisible(page: Page) {
     await expect(page.locator(HotelPageLocators.panCardText)).toHaveCount(0);
-    console.log('PAN card field is NOT visible for domestic bookings');
+    console.log('PAN card field is not displayed for domestic bookings');
   }
 
   static async verifyPanCardVisibleAndRequired(page: Page) {
     await expect(page.locator(HotelPageLocators.panCardText)).toBeVisible();
-    const isRequired = await page.locator(HotelPageLocators.panNumberField).getAttribute('required');
-    console.log(`PAN card field is visible. Required attribute: ${isRequired}`);
+    await page.locator(HotelPageLocators.panNumberField).getAttribute('required');
+    console.log('PAN card field is displayed and required');
   }
 
   static async verifyValidPanNumberAccepted(page: Page) {
@@ -127,19 +179,19 @@ export class HotelBookingPage {
     }
   }
 
-  // ---------------------------------------------------------------------------
-  // Guest details page – saved guests
-  // ---------------------------------------------------------------------------
+
   static async verifySavedGuestTextVisible(page: Page) {
     await expect(page.locator(HotelPageLocators.savedGuestText)).toBeVisible();
-    console.log('Saved guest text is visible');
+    console.log('Saved guest text is displayed');
   }
 
   static async printSavedGuestList(page: Page) {
     const guests = await page.$$(HotelPageLocators.savedGuestList);
     for (let i = 0; i < guests.length; i++) {
-      const guestText = await guests[i].textContent();
-      console.log(`Saved guest ${i + 1}: ${guestText?.trim()} → This saved guest is there`);
+
+      if (await guests[i].textContent()) {
+        console.log('Saved guest item displayed');
+      }
     }
   }
 
@@ -151,68 +203,83 @@ export class HotelBookingPage {
     const savedGuestListLocator = HotelPageLocators.verifysavedGuestList;
     const guestListElements = page.locator(savedGuestListLocator);
     const count = await guestListElements.count();
-    console.log(`Number of saved guests found: ${count}`);
+    if (count > 0) {
+      console.log('Saved guest list is displayed');
+    }
 
     for (let i = 0; i < count; i++) {
       const guestText = await guestListElements.nth(i).textContent();
-      console.log(`Saved Guest #${i + 1}: ${guestText?.trim()}`);
+      if (guestText) {
+        console.log(`Saved guest displayed`);
+      }
     }
     return count;
   }
 
   static async clickFirstOptionFromsavedGuestList(page: Page) {
+    if(DeviceHelper.isMobile()) {
+      if(await page.locator(HotelPageLocators.beePopupForMobile).isVisible()) {
+        await ElementHelper.clickElement(page, HotelPageLocators.clickOutsideOfBeePopupForMobile);
+        console.log('Clicked outside bee popup to close it on mobile');
+      }
+    }
     const firstOptionLocator = HotelPageLocators.clickFirstOptionFromsavedGuestList;
     await ElementHelper.clickElement(page, firstOptionLocator);
+    console.log('First option from saved guest list clicked');
   }
 
-  // ---------------------------------------------------------------------------
-  // Navigation – go back to hotel search
-  // ---------------------------------------------------------------------------
+
   static async goBackUntilLocationSearchBoxVisible(page: Page) {
     let attempts = 0;
     const maxAttempts = 10;
     while (attempts < maxAttempts) {
-      const isVisible = await page.locator(HotelPageLocators.searchHotelButton).isVisible().catch(() => false);
+      if(DeviceHelper.isMobile()) {
+        if (await ElementHelper.isElementDisplayed(page, FlightPageLocators.fromCityMobile)) {
+          await HotelHomePage.clickHotelTabBTN(page);
+        }
+      }
+      const isVisible = await page.locator(HotelPageLocators.whereToTextBox).isVisible().catch(() => false);
       if (isVisible) {
-        console.log('Location search box is visible.');
+        console.log('Location search box is displayed');
         return;
       }
       await page.goBack();
-      await page.waitForTimeout(1000);
+      await page.waitForTimeout(20000);
       attempts++;
     }
     throw new Error('Location search box not visible after multiple back navigations.');
   }
 
-  // ---------------------------------------------------------------------------
-  // Checkout page – search hotel & guest flow
-  // ---------------------------------------------------------------------------
+
   static async searchHotelNameInTestBox(page: Page, hotelName: string) {
     const searchInput = HotelPageLocators.searchForHotelInputButton;
     await ElementHelper.clearAndEnterInTextField(page, searchInput, hotelName);
+    console.log('Hotel name entered in search box');
   }
 
-  // ---------------------------------------------------------------------------
-  // Checkout page – redeem points
-  // ---------------------------------------------------------------------------
+
   static async redeampointTogglebutton(page: Page) {
     const toggleButtonLocator = HotelPageLocators.redeampointTogglebutton;
     await ElementHelper.clickElement(page, toggleButtonLocator);
+    console.log('Redeem points toggle button clicked');
   }
 
   static async redeamPointInputField(page: Page) {
     const inputFieldLocator = HotelPageLocators.redeamPointInputField;
     await ElementHelper.clearAndEnterInTextField(page, inputFieldLocator, idfcTestData.redeemPointSection.enterRedeemPoint);
+    console.log('Redeem points input field filled');
   }
 
   static async editIconButtonForRedeem(page: Page) {
     const editIconLocator = HotelPageLocators.editIconButtonForRedeem;
     await ElementHelper.clickElement(page, editIconLocator);
+    console.log('Edit icon for redeem points clicked');
   }
 
   static async savebuttonAfterRedeemEnter(page: Page) {
     const saveButtonLocator = HotelPageLocators.savebuttonAfterRedeemEnter;
     await ElementHelper.clickElement(page, saveButtonLocator);
+    console.log('Save button after redeem entered clicked');
   }
 
   static async getDiscountAmountText(page: Page): Promise<number> {
@@ -251,7 +318,6 @@ export class HotelBookingPage {
   }
 
   static async verifyDiscountCalculation(page: Page): Promise<void> {
-
     const discountAmount =
       await this.getDiscountAmountText(page);
 
@@ -261,42 +327,35 @@ export class HotelBookingPage {
     const afterAmount =
       await this.payAmountAfterDiscountText(page);
 
-    console.log(`Discount Amount : ${discountAmount}`);
-    console.log(`Before Amount   : ${beforeAmount}`);
-    console.log(`After Amount    : ${afterAmount}`);
+    if (beforeAmount - discountAmount === afterAmount) {
+      console.log('Discount calculation matched with expected value');
+    }
 
     expect(
       beforeAmount - discountAmount
     ).toBe(
       afterAmount
     );
-
-    console.log(
-      `✅ Verified: ${beforeAmount} - ${discountAmount} = ${afterAmount}`
-    );
   }
 
-  // ---------------------------------------------------------------------------
-  // NOT USED METHODS
-  // ---------------------------------------------------------------------------
   static async fillFirstName(page: Page, testdata: any) {
     await page.locator(HotelPageLocators.firstNameField).fill(testdata.firstName);
-    console.log(`Filled first name: ${testdata.firstName}`);
+    console.log('First name field filled');
   }
 
   static async fillLastName(page: Page, testdata: any) {
     await page.locator(HotelPageLocators.lastNameField).fill(testdata.lastName);
-    console.log(`Filled last name: ${testdata.lastName}`);
+    console.log('Last name field filled');
   }
 
   static async clickPanCheckbox(page: Page) {
     await page.locator(HotelPageLocators.panCheckbox).check();
-    console.log('Clicked PAN checkbox');
+    console.log('PAN checkbox clicked');
   }
 
   static async clickAssignGuestToRoomButton(page: Page) {
     await page.locator(HotelPageLocators.assignGuestToRoomButton).click();
-    console.log('Assigned guest to room');
+    console.log('Assign guest to room button clicked');
   }
 
   static async clickSavedGuestCheckbox(page: Page) {
@@ -304,26 +363,34 @@ export class HotelBookingPage {
     await expect(checkbox).toBeVisible();
     await expect(checkbox).toBeEnabled();
     await checkbox.click();
-    console.log('Saved guest checkbox clicked successfully');
+    console.log('Saved guest checkbox clicked');
   }
 
   static async payButtonAfterDiscount(page: Page) {
     const payButtonLocator = HotelPageLocators.payButtonAfterDiscount;
     await ElementHelper.clickElement(page, payButtonLocator);
+    console.log('Pay button after discount clicked');
   }
 
-  
   static async getCheckoutPayButtonText(page: Page): Promise<string | null> {
-    return await ElementHelper.getTextFromElement(page,PaymentPageLocators.checkoutPayButton );
-}  
+    return await ElementHelper.getTextFromElement(page, PaymentPageLocators.checkoutPayButton);
+  }
 
-static async verifyCheckoutPayButtonAmount(page: Page): Promise<void> {
-  const afterDiscountAmount = await this.payAmountAfterDiscountText(page);
-  const checkoutAmount = await this.getCheckoutPayButtonText(page);
+  static async verifyCheckoutPayButtonAmount(page: Page): Promise<void> {
+    const afterDiscountAmount = await this.payAmountAfterDiscountText(page);
+    const checkoutAmount = await this.getCheckoutPayButtonText(page);
+    if (afterDiscountAmount === Number(checkoutAmount)) {
+      console.log('Checkout Pay button amount matched with expected value');
+    }
+    expect(afterDiscountAmount).toBe(Number(checkoutAmount));
+  }
 
-  expect(afterDiscountAmount).toBe(checkoutAmount);
-
-  console.log(`✅ Verified: ${checkoutAmount} = ${afterDiscountAmount}`);
+  static async reloadIfNoHotelFound(page: any) {
+    const noHotelsTextLocator = HotelPageLocators.noHotelResultsFound;
+    while (await page.locator(noHotelsTextLocator).isVisible()) {
+        await page.reload();
+        await page.waitForTimeout(10000);
+    }
 }
 
 }

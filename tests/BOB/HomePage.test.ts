@@ -1,22 +1,17 @@
 import { test, Page, BrowserContext } from '@playwright/test';
-import { CommonHelper } from '../../utils/commonHelper';
-import { VerificationHelpers } from '../../utils/verificationHelper';
-import { LoginPage } from '../../pages/BOB/LoginPage';
 import { HomePage } from '../../pages/BOB/HomePage';
-import { homedir } from 'node:os';
-const bobTestData = require('../../testdata/bobtestdata.json');
-
+import { BaseHelper } from '../../pages/Common/CommonMethods';
 let context: BrowserContext;
 let page: Page;
 
 test.beforeEach(async ({ browser }) => {
   context = await browser.newContext();
   page = await context.newPage();
-  await CommonHelper.navigateToHomePage(page);
-  await LoginPage.LoginCredEnterBeforeEach(page);
-  await LoginPage.RestrictionPageBeforeEach(page);
+  await BaseHelper.launchAndLogin(page);
 });
-test('SC_002, Home page — Trending Categories section visible and clickable', { tag: ['@BOB', '@Homepage'] }, async () => {
+
+
+test('SC_002, Home page — Trending Categories section visible and clickable', { tag: ['@BOB', '@Homepage', '@Smoke', '@Sanity'] }, async () => {
   
   await test.step('Verify All homepage sections is visible: banner, categories, trending section Displayed', async () => {
     await HomePage.verifyBannerSectionDisplayed(page);
@@ -27,22 +22,12 @@ test('SC_002, Home page — Trending Categories section visible and clickable', 
 
   await test.step(' Category cards is clearly displayed with images and labels and Clicking a category is navigate to the respective PLP', async () => {
       await HomePage.verifyCategoryImagesAndTextsDisplayed(page);
-      // await HomePage.verifyCategoryNavigationToProductPage(page);
-  });
-
-  
-}); 
-
-test('Verify Runs Properly', { tag: ['@BOB', '@Test'] }, async () => {
-
-  await test.step(' Category cards is clearly displayed with images and labels and Clicking a category is navigate to the respective PLP', async () => {
       await HomePage.verifyCategoryNavigationToProductPage(page);
   });
   
 }); 
 
-
-test("Gift Card PLP — product card details and layout", { tag: ['@BOB', '@Giftcard'] }, async ({ }) => {
+test("SC_004, Gift Card PLP — product card details and layout", { tag: ['@BOB', '@Homepage','@Giftcard', '@Regression'] }, async ({ }) => {
 
   await test.step("Click Gift Card option", async () => {
     await page.waitForLoadState('domcontentloaded')
@@ -82,6 +67,28 @@ test("Gift Card PLP — product card details and layout", { tag: ['@BOB', '@Gift
 
   await test.step("Click on second Gift Card", async () => {
     await HomePage.clickGiftCard(page);
+  });
+
+});
+
+test("SC_003 - Earn More Deals → PDP Verification", { tag: ['@BOB', '@Homepage', '@Regression','@Smoke'] }, async ({ }) => {
+  let productData: any;
+
+  await test.step("Step 2: Scroll to section", async () => {
+    await HomePage.scrollToEarnMoreSection(page);
+  });
+
+  await test.step("Step 3: Verify products", async () => {
+    await HomePage.verifyProductsVisible(page);
+    productData = await HomePage.getProductDetails(page);
+  });
+
+  await test.step("Step 4: Click product", async () => {
+    await HomePage.clickProduct(page);
+  });
+
+  await test.step("Step 5: Verify PDP", async () => {
+    await HomePage.verifyPDP(page, productData);
   });
 
 });

@@ -1,4 +1,3 @@
-# Travel Loyalty Test Automation Framework
 
 A Playwright-based end-to-end test automation framework for **Travel Loyalty** web applications. It supports multiple products (IDFC, BOB), environments (QA, UAT, PROD), browsers, and mobile device emulation using a **Page Object Model (POM)** architecture.
 
@@ -82,16 +81,6 @@ POC/
 
 The framework follows a layered **Page Object Model**:
 
-```
-Tests  →  Page Objects  →  Helpers  →  Locators
-```
-
-| Layer | Responsibility | Example |
-|-------|----------------|---------|
-| **Tests** | Define scenarios, orchestrate steps using `test.step()` | `FlightPage.test.ts` |
-| **Page Objects** | Business actions for a page/section | `FlightHomePage.clickOnSearchFlightsButton()` |
-| **Helpers** | Generic reusable UI interactions & assertions | `ElementHelper.clickElement()`, `VerificationHelpers.elementIsVisible()` |
-| **Locators** | Centralized element selectors | `FlightPageLocators.fromCity` |
 
 ### Data Flow Example
 
@@ -166,19 +155,18 @@ The framework uses a dynamic project setup driven by the `PROJECT` environment v
 | `HEADED` | Set to `true` to run in headed (visible) browser mode | headless |
 | `CI` | When set, uses 4 parallel workers instead of 2 | — |
 
-### Other Settings
+project: Playwright Test Execution Guide
 
-| Setting | Value |
-|---------|-------|
-| Test timeout | 540 seconds (9 minutes) |
-| Parallel execution | Enabled (`fullyParallel: true`) |
-| Workers | 2 (local) / 4 (CI) |
-| Screenshots | On failure only |
-| Video | Off |
+description: >
+  This file contains commands to execute Playwright tests
+  for multiple environments and configurations using the PROJECT environment variable.
 
----
+prerequisites:
+  - Node.js installed
+  - Playwright installed (`npm install`)
+  - Tests configured in playwright.config.js
 
-## Running Tests
+commands:
 
 ### Full suite by product & environment
 
@@ -588,4 +576,3 @@ npm run report
 
 ---
 
-*Framework version: 1.0.0 | Playwright ^1.60.0*

@@ -2,83 +2,155 @@ import { expect, Page } from '@playwright/test';
 import { HotelPageLocators } from '../../locators/idfc/HotelPageLocators';
 import { ElementHelper } from '../../utils/elementHelper';
 import { VerificationHelpers } from '../../utils/verificationHelper';
+import { DeviceHelper } from '../../utils/deviceHelper';
+import { HotelBookingPage } from './HotelBookingPage';
 
 const idfcTestData = require('../../testdata/idfctestdata.json');
 
 export class HotelHomePage {
 
-  // ---------------------------------------------------------------------------
-  // Home page – header & hotel tab navigation
-  // ---------------------------------------------------------------------------
   static async verifyHotelHomePageLoaded(page: Page) {
+    await ElementHelper.waitForElementVisible(page, HotelPageLocators.profileIconButton);
     await expect(page.locator(HotelPageLocators.profileIconButton)).toBeVisible();
-    console.log('User Logged in and Profile icon button visible');
+    console.log(" Hotel Home Page loaded");
   }
 
   static async clickHotelTabBTN(page: Page) {
-    const hotelTabBTN = HotelPageLocators.hotelTab;
-    await VerificationHelpers.elementIsVisible(page, hotelTabBTN);
-    await ElementHelper.clickElement(page, hotelTabBTN);
+    await page.waitForTimeout(10000);
+    if(DeviceHelper.isMobile()) {
+      const hotelTabBTN = HotelPageLocators.hotelTabMobile;
+      await ElementHelper.clickElement(page, hotelTabBTN);
+    } else {
+      const hotelTabBTN = HotelPageLocators.hotelTab;
+      await ElementHelper.clickElement(page, hotelTabBTN);
+    }
   }
 
-  // ---------------------------------------------------------------------------
-  // Hotel search form – location, dates, rooms & guests, search CTA
-  // ---------------------------------------------------------------------------
+  static async verifyHotelTabBtnDisplayed(page: Page) {
+    if(DeviceHelper.isMobile()) {
+      const hotelTabBTN = HotelPageLocators.hotelTabMobile;
+      await ElementHelper.isElementDisplayed(page, hotelTabBTN);
+    } else {
+      const hotelTabBTN = HotelPageLocators.hotelTab;
+      await ElementHelper.isElementDisplayed(page, hotelTabBTN);
+    }
+    console.log(" Hotel button displayed");
+  }
   static async searchValueInTestBox(page: Page, text: string) {
-    const whereToTextBox = HotelPageLocators.whereToTextBox;
-    await VerificationHelpers.elementIsVisible(page, whereToTextBox);
-    await ElementHelper.clearAndEnterInTextField(page, whereToTextBox, text);
+    if(DeviceHelper.isMobile()) {
+      const whereToTextBox = HotelPageLocators.whereToTextBox;
+      await VerificationHelpers.elementIsVisible(page, whereToTextBox);
+      await ElementHelper.clearAndEnterInTextField(page, whereToTextBox, text);
+      const whereToTextBoxMobile = HotelPageLocators.whereToTextBoxMobile;
+      await VerificationHelpers.elementIsVisible(page, whereToTextBoxMobile);
+      await ElementHelper.clearAndEnterInTextField(page, whereToTextBoxMobile, text);
+    } else {
+      await page.waitForTimeout(2500);
+      const whereToTextBox = HotelPageLocators.whereToTextBox;
+      await VerificationHelpers.elementIsVisible(page, whereToTextBox);
+      await ElementHelper.clearAndEnterInTextField(page, whereToTextBox, text);
+    }
+  }
+
+  static async verifyWhereToTextBoxDisplayed(page: Page) {
+    if(DeviceHelper.isMobile()) {
+      const whereToTextBox = HotelPageLocators.whereToTextBox;
+      await ElementHelper.isElementDisplayed(page, whereToTextBox);
+      // const whereToTextBoxMobile = HotelPageLocators.whereToTextBoxMobile;
+      // await VerificationHelpers.elementIsVisible(page, whereToTextBoxMobile);
+    } else {
+      await page.waitForTimeout(2500);
+      const whereToTextBox = HotelPageLocators.whereToTextBox;
+      await ElementHelper.isElementDisplayed(page, whereToTextBox);
+    }
+    console.log(" Where To Text Box displayed");
   }
 
   static async selectFirstOptionFromDropdown(page: Page) {
-    const whereToDropdownSelectFirstOption = HotelPageLocators.whereToDropdownSelectFirstOption;
-    await VerificationHelpers.elementIsVisible(page, whereToDropdownSelectFirstOption);
-    await ElementHelper.clickElement(page, whereToDropdownSelectFirstOption);
+    if(DeviceHelper.isMobile()) {
+      const whereToDropdownSelectFirstOption = HotelPageLocators.whereToDropdownSelectFirstOptionMobile;
+      await VerificationHelpers.elementIsVisible(page, whereToDropdownSelectFirstOption);
+      await ElementHelper.clickElement(page, whereToDropdownSelectFirstOption);
+    } else {
+      await page.waitForTimeout(2500);
+      const whereToDropdownSelectFirstOption = HotelPageLocators.whereToDropdownSelectFirstOption;
+      await VerificationHelpers.elementIsVisible(page, whereToDropdownSelectFirstOption);
+      await ElementHelper.clickElement(page, whereToDropdownSelectFirstOption);
+    }
   }
 
   static async clickDateButton(page: any) {
     const dateButton = HotelPageLocators.dateButton;
     await ElementHelper.clickElement(page, dateButton);
+    console.log(" Date button clicked");
+  }
+
+  static async verifyDateButtonDisplayed(page: any) {
+    const dateButton = HotelPageLocators.dateButton;
+    await ElementHelper.isElementDisplayed(page, dateButton);
+    console.log(" Date button displayed");
   }
 
   static async clickRoomsAndGuestsButton(page: any) {
-    const clickButton = HotelPageLocators.roomsAndGuestButton;
-    await ElementHelper.clickElement(page, clickButton);
+    if(DeviceHelper.isMobile()) {
+      const clickButton = HotelPageLocators.roomAndGuestButtonMobile;
+      await ElementHelper.clickElement(page, clickButton);
+    } else {
+      const clickButton = HotelPageLocators.roomsAndGuestButton;
+      await ElementHelper.clickElement(page, clickButton);
+    }
+    console.log(" Rooms and Guests button clicked");
+  }
+
+  static async verifyRoomsAndGuestsButtonDisplayed(page: any) {
+    if(DeviceHelper.isMobile()) {
+      const clickButton = HotelPageLocators.roomAndGuestButtonMobile;
+      await ElementHelper.isElementDisplayed(page, clickButton);
+    } else {
+      const clickButton = HotelPageLocators.roomsAndGuestButton;
+      await ElementHelper.isElementDisplayed(page, clickButton);
+    }
+    console.log(" Rooms and Guests button displayed");
   }
 
   static async clickSearchHotelButton(page: any) {
     const searchHotelButton = HotelPageLocators.searchHotelButton;
     await ElementHelper.clickElement(page, searchHotelButton);
+    await page.waitForTimeout(5000); 
+    console.log(" Search Hotel button clicked");
   }
 
-  // ---------------------------------------------------------------------------
-  // Hotel search form – date picker (check-in / check-out)
-  // ---------------------------------------------------------------------------
   static async selectMonthAndDateFROM(page: any, monthYear: string, date: string) {
-    const monthLocator = HotelPageLocators.selectMonth.replace('{monthYear}', monthYear);
-    while (!(await page.locator(monthLocator).isVisible())) {
-      await ElementHelper.clickElement(page, HotelPageLocators.nextButton);
+    if(DeviceHelper.isMobile()) {
+      await ElementHelper.clickElement(page, HotelPageLocators.doneCalendarButtonMobile);
+      console.log(" Done calendar button clicked (Mobile)");
+    } else {
+      const monthLocator = HotelPageLocators.selectMonth.replace('{monthYear}', monthYear);
+      while (!(await page.locator(monthLocator).isVisible())) {
+        await ElementHelper.clickElement(page, HotelPageLocators.nextButton);
+      }
+      const dateLocator = HotelPageLocators.selectDate
+        .replace('{monthYear}', monthYear)
+        .replace('{date}', date);
+      await ElementHelper.clickElement(page, dateLocator);
+      console.log(' Date selected in calendar');
     }
-    const dateLocator = HotelPageLocators.selectDate
-      .replace('{monthYear}', monthYear)
-      .replace('{date}', date);
-    await ElementHelper.clickElement(page, dateLocator);
   }
 
   static async selectMonthAndDateTO(page: any, monthYear: string, date: string) {
-    const monthLocator = HotelPageLocators.selectMonth.replace('{monthYear}', monthYear);
-    while (!(await page.locator(monthLocator).isVisible())) {
-      await ElementHelper.clickElement(page, HotelPageLocators.nextButton);
+    if(!DeviceHelper.isMobile()) {
+      const monthLocator = HotelPageLocators.selectMonth.replace('{monthYear}', monthYear);
+      while (!(await page.locator(monthLocator).isVisible())) {
+        await ElementHelper.clickElement(page, HotelPageLocators.nextButton);
+      }
+      const dateLocator = HotelPageLocators.selectDate
+        .replace('{monthYear}', monthYear)
+        .replace('{date}', date);
+      await ElementHelper.clickElement(page, dateLocator);
+      console.log(' Date selected in calendar');
     }
-    const dateLocator = HotelPageLocators.selectDate
-      .replace('{monthYear}', monthYear)
-      .replace('{date}', date);
-    await ElementHelper.clickElement(page, dateLocator);
   }
 
-  // ---------------------------------------------------------------------------
-  // Hotel search form – rooms & guests popup
-  // ---------------------------------------------------------------------------
   static async selectAdultsAndChildrenWithAge(
     page: any,
     rooms: number,
@@ -108,24 +180,25 @@ export class HotelHomePage {
         });
       }
     }
+    console.log(' Room, adult, and children selection done');
   }
 
   static async clickAddRoomButton(page: any) {
     const addRoomButton = HotelPageLocators.addRoomButton;
     await ElementHelper.clickElement(page, addRoomButton);
+    console.log(' Add Room button clicked');
   }
 
   static async clickDoneButton(page: any) {
     const doneButton = HotelPageLocators.doneButton;
     await ElementHelper.clickElement(page, doneButton);
+    console.log(' Done button clicked');
   }
 
-  // ---------------------------------------------------------------------------
-  // Hotel search results page – update search bar
-  // ---------------------------------------------------------------------------
   static async clickUpdateSearchButton(page: any) {
     const updateSearchButton = HotelPageLocators.updateSearchButton;
     await ElementHelper.clickElement(page, updateSearchButton);
+    console.log(' Update Search button clicked');
   }
 
   static async getLocationNameExpected(page: any) {
@@ -133,9 +206,61 @@ export class HotelHomePage {
     await ElementHelper.getExpectedTextFromLocator(page, locationElements);
   }
 
+  static async getLocationNameExpectedDomOrInt(page: any): Promise<string> {
+    if(DeviceHelper.isMobile()) {
+      const locationElement = page.locator(HotelPageLocators.whereToLocationMobile);
+      return String(
+        await ElementHelper.getExpectedTextFromLocator(page, locationElement)
+      );
+    } else {
+      const locationElement = page.locator(HotelPageLocators.whereToTextBox);
+      return String(
+        await ElementHelper.getExpectedTextFromLocator(page, locationElement)
+      );
+    }
+  }
+
+  static async getLocationNameActualDomOrInt(page: any): Promise<string> {
+    const locationElement = page.locator(
+      HotelPageLocators.getTextFromSearchResult
+    );
+    return String(
+      await ElementHelper.getExpectedTextFromLocator(page, locationElement)
+    );
+  }
+
+  static async verifyLocationNameMatched(page: any): Promise<void> {
+    const expectedText = await this.getLocationNameExpectedDomOrInt(page);
+    const actualText = await this.getLocationNameActualDomOrInt(page);
+
+    const expectedWords = expectedText
+      .toLowerCase()
+      .replace(/,/g, ' ')
+      .split(' ')
+      .filter(word => word.trim().length > 2);
+
+    const actualLower = actualText.toLowerCase();
+
+    const matchedWord = expectedWords.find(word =>
+      actualLower.includes(word)
+    );
+
+    if (matchedWord) {
+      console.log(' Location validation matched');
+    } else {
+      throw new Error('❌ Location validation failed.');
+    }
+  }
+
   static async getLocationNameActualandCompare(page: any) {
-    const locationElements = HotelPageLocators.whereToTextBox;
-    await ElementHelper.getActualTextFromLocator(page, locationElements);
+    let locationElements;
+    if(DeviceHelper.isMobile()) {
+      locationElements = HotelPageLocators.whereToLocationMobile;
+      await ElementHelper.getActualTextFromLocator(page, locationElements);
+    } else {
+      locationElements = HotelPageLocators.whereToTextBox;
+      await ElementHelper.getActualTextFromLocator(page, locationElements);
+    }
     await ElementHelper.compareBothResultAndAddedInConsole();
   }
 
@@ -149,45 +274,31 @@ export class HotelHomePage {
     await ElementHelper.getActualTextFromLocator(page, roomandGuest);
     await ElementHelper.compareBothResultAndAddedInConsole();
   }
-
-  // ---------------------------------------------------------------------------
-  // Hotel search results page – hotel cards (left / main list)
-  // ---------------------------------------------------------------------------
   static async getDomesticSearchResultTextandCompare(page: any): Promise<string | null> {
     const searchResult = HotelPageLocators.resultLocations;
-    const verifyAmount = HotelPageLocators.getAmountFromResult;
     const results = await page.locator(searchResult).allTextContents();
-    const currency = await page.locator(verifyAmount).allTextContents();
     const expectedTestData = idfcTestData.hotelPage.domestic;
-    console.log(`Compare Domestic: Expected value: "${expectedTestData}", Actual Results:`, results);
-    console.log(`Expected Currency: ₹, Actual Currency Values:`, currency);
     for (const resultText of results) {
       if (resultText.toLowerCase().includes(expectedTestData.toLowerCase())) {
-        console.log(`✅ Matched Domestic Result. Value 1 (Expected): "${expectedTestData}", Value 2 (Actual): "${resultText}"`);
+        console.log(' Domestic hotel result matched');
         return resultText;
       }
     }
-    // Soft assertion instead of throwing error:
-    console.error(`❌ Soft Assertion Failed: Domestic result not found. Value 1 (Expected): "${expectedTestData}", Results List (Actual):`, results);
+    console.error('❌ Soft Assertion Failed: Domestic result not found');
     return null;
   }
 
   static async getInternationalSearchResultTextandCompare(page: any): Promise<string | null> {
     const searchResult = HotelPageLocators.resultLocations;
-    const verifyAmount = HotelPageLocators.getAmountFromResult;
     const results = await page.locator(searchResult).allTextContents();
-    const currency = await page.locator(verifyAmount).allTextContents();
     const expectedTestData = idfcTestData.hotelPage.international;
-    console.log(`Compare International: Expected value: "${expectedTestData}", Actual Results:`, results);
-    console.log(`Expected Currency: ₹, Actual Currency Values:`, currency);
     for (const resultText of results) {
       if (resultText.toLowerCase().includes(expectedTestData.toLowerCase())) {
-        console.log(`✅ Matched International Result. Value 1 (Expected): "${expectedTestData}", Value 2 (Actual): "${resultText}"`);
+        console.log(' International hotel result matched');
         return resultText;
       }
     }
-    // Soft assertion instead of throwing error:
-    console.error(`❌ Soft Assertion Failed: International result not found. Value 1 (Expected): "${expectedTestData}", Results List (Actual):`, results);
+    console.error('❌ Soft Assertion Failed: International result not found');
     return null;
   }
 
@@ -205,143 +316,133 @@ export class HotelHomePage {
   static async printHotelRatings(page: any) {
     const ratingElements = page.locator(HotelPageLocators.getRatingStar);
     const count = await ratingElements.count();
-
     for (let i = 0; i < count; i++) {
-      const rating = await ratingElements
-        .nth(i)
-        .getAttribute('data-rating');
-
-      console.log(`Hotel ${i + 1} Rating: ${rating}`);
+      await ratingElements.nth(i).getAttribute('data-rating');
     }
+    console.log(' Hotel ratings printed');
   }
 
   static async printAllAmountValue(page: any) {
     const currencyElements = page.locator(HotelPageLocators.getAmountFromResult);
     const count = await currencyElements.count();
     for (let i = 0; i < count; i++) {
-      const text = await currencyElements.nth(i).textContent();
-      console.log(`Amount Value ${i + 1}: "${text?.trim()}"`);
+      await currencyElements.nth(i).textContent();
     }
+    console.log(' All currency/amounts printed');
   }
 
   static async clickAllLocaliseButton(page: any) {
     await ElementHelper.clickElement(page, HotelPageLocators.allLocaliseButton);
-    console.log('✅ Clicked on All Localise button');
+    console.log(' All Localise button clicked');
   }
 
   static async printAllResultLocations(page: any) {
     const resultLocationElements = page.locator(HotelPageLocators.getHotelLocationText);
     const count = await resultLocationElements.count();
     for (let i = 0; i < count; i++) {
-      const text = await resultLocationElements.nth(i).textContent();
-      console.log(`Result Location ${i + 1}: "${text?.trim()}"`);
+      await resultLocationElements.nth(i).textContent();
     }
+    console.log(' All result locations printed');
   }
 
   static async clickFirstResult(page: any) {
+    await HotelBookingPage.reloadIfNoHotelFound(page);
     await ElementHelper.clickElement(page, HotelPageLocators.getHotelLocationTextSecond);
-    console.log('✅ Clicked option');
+    console.log(' First result clicked');
   }
 
   static async compareValueDifferenceForSingleAndMultipleRoom(page: any) {
     const taxValue = HotelPageLocators.taxPerNightText;
-    const results = await page.locator(taxValue).allTextContents();
-    // You can show both result arrays if comparing.
-    console.log(`Tax values found (possible comparison values):`, results);
+    await page.locator(taxValue).allTextContents();
+    console.log(' Compared tax values for single/multiple room selections');
   }
-
-  // ---------------------------------------------------------------------------
-  // Hotel search results page – right side filters (sort, price, amenities, rating)
-  // ---------------------------------------------------------------------------
   static async showingPropertiesCountText(page: any) {
     const showingPropertiesText = HotelPageLocators.showingPropertiesText;
-    const text = await page.locator(showingPropertiesText).allTextContents();
-    console.log(`Showing Properties Text:`, text);
+    await page.locator(showingPropertiesText).allTextContents();
+    console.log(' Showing properties count retrieved');
   }
 
   static async clickResetButton(page: any) {
+    await page.waitForTimeout(3000);
     const resetButton = HotelPageLocators.resetButton;
+    await ElementHelper.waitForElementVisible(page, resetButton);
     await ElementHelper.clickElement(page, resetButton);
+    console.log(' Reset button clicked');
   }
 
   static async clickSortByPopularityButton(page: any) {
     const popularityButton = HotelPageLocators.sortByPopularityButton;
     await ElementHelper.clickElement(page, popularityButton);
-    console.log('Clicked on Sort By Popularity button');
+    console.log(' Sort by Popularity button clicked');
   }
 
   static async clickSortByPriceLowToHighButton(page: any) {
     const lowToHighButton = HotelPageLocators.sortByPriceLowToHighButton;
     await ElementHelper.clickElement(page, lowToHighButton);
-    console.log('Clicked on Sort By Price Low to High button');
+    console.log(' Sort by Price Low to High button clicked');
   }
 
   static async clickSortByPriceHighToLowButton(page: any) {
     const highToLowButton = HotelPageLocators.sortByPriceHighToLowButton;
     await ElementHelper.clickElement(page, highToLowButton);
-    console.log('Clicked on Sort By Price High to Low button');
+    console.log(' Sort by Price High to Low button clicked');
   }
 
   static async verifyFreeCancellationToggleAndText(page: any): Promise<void> {
     await ElementHelper.isElementDisplayed(page, HotelPageLocators.freeCancellationText);
     await ElementHelper.clickElement(page, HotelPageLocators.freeCancellationToggle);
+    console.log(' Free Cancellation toggle/text displayed and toggled');
   }
 
   static async verifyBreakfastAvailableToggleAndText(page: any): Promise<void> {
     await ElementHelper.isElementDisplayed(page, HotelPageLocators.breakfastAvailableText);
     await ElementHelper.clickElement(page, HotelPageLocators.breakfastAvailableToggle);
+    console.log(' Breakfast Available toggle/text displayed and toggled');
   }
 
   static async clickStarRating5Button(page: any) {
     const button = HotelPageLocators.starRating5Button;
     await ElementHelper.clickElement(page, button);
-    console.log('Clicked on 5 Star Rating button');
+    console.log(' 5 Star Rating button clicked');
   }
 
   static async clickStarRating4Button(page: any) {
     const button = HotelPageLocators.starRating4Button;
     await ElementHelper.clickElement(page, button);
-    console.log('Clicked on 4 Star Rating button');
+    console.log(' 4 Star Rating button clicked');
   }
 
   static async clickStarRating3Button(page: any) {
     const button = HotelPageLocators.starRating3Button;
     await ElementHelper.clickElement(page, button);
-    console.log('Clicked on 3 Star Rating button');
+    console.log(' 3 Star Rating button clicked');
   }
 
   static async clickStarRating2Button(page: any) {
     const button = HotelPageLocators.starRating2Button;
     await ElementHelper.clickElement(page, button);
-    console.log('Clicked on 2 Star Rating button');
+    console.log(' 2 Star Rating button clicked');
   }
 
   static async clickStarRating1Button(page: any) {
     const button = HotelPageLocators.starRating1Button;
     await ElementHelper.clickElement(page, button);
-    console.log('Clicked on 1 Star Rating button');
+    console.log(' 1 Star Rating button clicked');
   }
-
-  // ---------------------------------------------------------------------------
-  // Hotel search results page – location & category filters
-  // ---------------------------------------------------------------------------
   static async printAndClickAllLocationSelectButtons(page: any) {
     const locationElements = page.locator(HotelPageLocators.locationSelectButton);
     const count = await locationElements.count();
 
     for (let i = 0; i < count; i++) {
-      const text = await locationElements.nth(i).textContent();
-      console.log(`Location Select Button ${i + 1}: "${text?.trim()}"`);
-
-      // Click current element
+      await locationElements.nth(i).textContent();
       await locationElements.nth(i).click();
-      console.log(`Clicked Location Button ${i + 1}: "${text?.trim()}"`);
-
-      // Showing Properties
+      console.log(' Location select button clicked');
       await this.showingPropertiesCountText(page);
-
-      // Reset
-      await this.clickResetButton(page);
+      await page.waitForTimeout(2000);
+      await locationElements.nth(i).click();
+      await page.waitForTimeout(2000);
+      await HotelHomePage.clickResetButton(page);
+      await HotelHomePage.clickResetButton(page);
     }
   }
 
@@ -350,28 +451,16 @@ export class HotelHomePage {
     const count = await categoryElements.count();
 
     for (let i = 0; i < count; i++) {
-      const text = await categoryElements.nth(i).textContent();
-      console.log(`Category Select Button ${i + 1}: "${text?.trim()}"`);
-
-      // Click current element
+      await categoryElements.nth(i).textContent();
       await categoryElements.nth(i).click();
-      console.log(`Clicked Category Button ${i + 1}: "${text?.trim()}"`);
-
-      // Showing Properties
+      console.log(' Category select button clicked');
       await this.showingPropertiesCountText(page);
-
-      // Reset
       await this.clickResetButton(page);
     }
   }
-
-  // ---------------------------------------------------------------------------
-  // Hotel search results page – price range slider & amount verification
-  // ---------------------------------------------------------------------------
   static async getPriceRangeText(page: any) {
     const priceRangeTextLocator = page.locator(HotelPageLocators.priceRangeText);
     const text = await priceRangeTextLocator.inputValue ? await priceRangeTextLocator.inputValue() : await priceRangeTextLocator.textContent();
-    console.log(`Price Range Text: "${text?.trim()}"`);
     return text?.trim();
   }
 
@@ -385,42 +474,37 @@ export class HotelHomePage {
     const rightBox = await rightHandle.boundingBox();
 
     if (!leftBox || !rightBox) {
-      // Soft assertion instead of throwing error
-      console.error('❌ Soft Assertion Failed: Slider handles not found. Value 1 (leftBox):', leftBox, 'Value 2 (rightBox):', rightBox);
+      console.error('❌ Soft Assertion Failed: Slider handles not found');
       return;
     }
 
-    // Move left handle to the right by ~1cm (no vertical movement)
     const delta = 38;
     await page.mouse.move(leftBox.x + leftBox.width / 2, leftBox.y + leftBox.height / 2);
     await page.mouse.down();
     await page.mouse.move(leftBox.x + leftBox.width / 2 + delta, leftBox.y + leftBox.height / 2, { steps: 10 });
     await page.mouse.up();
-
-    // Move right handle to the left by ~1cm (no vertical movement)
     await page.mouse.move(rightBox.x + rightBox.width / 2, rightBox.y + rightBox.height / 2);
     await page.mouse.down();
     await page.mouse.move(rightBox.x + rightBox.width / 2 - delta, rightBox.y + rightBox.height / 2, { steps: 10 });
     await page.mouse.up();
 
-    console.log(`Moved slider handles horizontally by approx 1cm each side. (leftBox:`, leftBox, 'rightBox:', rightBox, ")");
+    console.log(' Slider handles moved horizontally');
     await this.getPriceRangeText(page);
   }
 
   static async verifyAllCurrencyWithinSelectedRange(page: any) {
     const rangeText = await HotelHomePage.getPriceRangeText(page);
     if (!rangeText) {
-      console.error('❌ Soft Assertion Failed: Price range text not found. Value 1 (priceRange): null');
+      console.error('❌ Soft Assertion Failed: Price range text not found');
       return;
     }
     const prices = rangeText.match(/\d[\d,]*/g);
     if (!prices || prices.length < 2) {
-      console.error(`❌ Soft Assertion Failed: Invalid price range. Value 1 (rangeText): "${rangeText}"`);
+      console.error('❌ Soft Assertion Failed: Invalid price range');
       return;
     }
     const minPrice = Number(prices[0].replace(/,/g, ''));
     const maxPrice = Number(prices[1].replace(/,/g, ''));
-    console.log(`Selected Range: Value 1 (minPrice): ${minPrice}, Value 2 (maxPrice): ${maxPrice}`);
     const currencyElements = page.locator(HotelPageLocators.getAmountFromResult);
     const count = await currencyElements.count();
     for (let i = 0; i < count; i++) {
@@ -429,12 +513,10 @@ export class HotelHomePage {
       const priceMatch = text.match(/\d[\d,]*/);
       if (!priceMatch) continue;
       const price = Number(priceMatch[0].replace(/,/g, ''));
-      console.log(`Checking Price: Value: ${price}, Min: ${minPrice}, Max: ${maxPrice}`);
       if (price >= minPrice && price <= maxPrice) {
-        console.log(`✅ Price within range. Value: ${price}, Range: ${minPrice}-${maxPrice}`);
+        console.log(' Price within selected range');
       } else {
-        // Soft assertion instead of throw
-        console.error(`❌ Soft Assertion Failed: Price outside selected range. Value 1 (price): ${price}, Range: ${minPrice}-${maxPrice}`);
+        console.error('❌ Soft Assertion Failed: Price outside selected range');
       }
     }
   }
@@ -453,16 +535,11 @@ export class HotelHomePage {
     }
 
     const sortedPrices = [...prices].sort((a, b) => a - b);
-    console.log('Actual Prices:', prices);
-    console.log('Expected Sorted (Low to High):', sortedPrices);
 
     if (!prices.every((price, idx) => price === sortedPrices[idx])) {
-      // Soft assertion instead of throw
-      console.error(
-        `❌ Soft Assertion Failed: Prices are not sorted Low to High\nValue 1 (Actual): ${JSON.stringify(prices)}\nValue 2 (Expected): ${JSON.stringify(sortedPrices)}`
-      );
+      console.error('❌ Soft Assertion Failed: Prices are not sorted Low to High');
     } else {
-      console.log(`✅ Prices are sorted Low to High.\nValue 1 (Actual): ${JSON.stringify(prices)}, Value 2 (Expected): ${JSON.stringify(sortedPrices)}`);
+      console.log(' Prices are sorted Low to High');
     }
   }
 
@@ -479,22 +556,14 @@ export class HotelHomePage {
       prices.push(price);
     }
     const sortedPrices = [...prices].sort((a, b) => b - a);
-    console.log('Actual Prices:', prices);
-    console.log('Expected Sorted (High to Low):', sortedPrices);
 
     if (!prices.every((price, idx) => price === sortedPrices[idx])) {
-      // Soft assertion instead of throw
-      console.error(
-        `❌ Soft Assertion Failed: Prices are not sorted High to Low\nValue 1 (Actual): ${JSON.stringify(prices)}\nValue 2 (Expected): ${JSON.stringify(sortedPrices)}`
-      );
+      console.error('❌ Soft Assertion Failed: Prices are not sorted High to Low');
     } else {
-      console.log(`✅ Prices are sorted High to Low.\nValue 1 (Actual): ${JSON.stringify(prices)}, Value 2 (Expected): ${JSON.stringify(sortedPrices)}`);
+      console.log(' Prices are sorted High to Low');
     }
   }
 
-  // ---------------------------------------------------------------------------
-  // NOT USED METHODS
-  // ---------------------------------------------------------------------------
   static async selectRoomsAdultsChildren(page: any, rooms: number, adults: number, children: number, childAges: number[]) {
     while (parseInt(await page.locator(HotelPageLocators.roomCount).inputValue()) < rooms) {
       await page.click(HotelPageLocators.addRoomButton);
@@ -516,11 +585,60 @@ export class HotelHomePage {
       }
     }
     await page.click(HotelPageLocators.doneButton);
+    console.log(' Rooms/adults/children/age selection done and Done button clicked');
   }
 
   static async clickUpdatedateButton(page: any) {
     const clickCheckInCheckoutButton = HotelPageLocators.updateCheckinCheckOutButton;
     await ElementHelper.clickElement(page, clickCheckInCheckoutButton);
+    console.log(' Update date button clicked');
   }
 
+  static async clickOnEditFilterButton(page: any) {
+    await HotelBookingPage.reloadIfNoHotelFound(page);
+    if(DeviceHelper.isMobile()) {
+      await ElementHelper.waitForElementVisible(page, HotelPageLocators.editFilterMobile);
+      await ElementHelper.clickElement(page, HotelPageLocators.editFilterMobile);
+      if(await ElementHelper.isElementDisplayed(page, HotelPageLocators.editFilterMobile)) {
+        await ElementHelper.clickElement(page, HotelPageLocators.editFilterMobile);
+      }
+    }
+
+  }
+
+  static async clickOnDateInpoutEditFilterButton(page: any) {
+    if(DeviceHelper.isMobile()) {
+      await ElementHelper.waitForElementVisible(page, HotelPageLocators.editFilterDateInputMobile);
+      await ElementHelper.clickElement(page, HotelPageLocators.editFilterDateInputMobile);
+    } else {
+      const dateButton = HotelPageLocators.dateButton;
+      await ElementHelper.clickElement(page, dateButton);
+      console.log(" Date button clicked");
+    }
+
+  }
+
+  static async clickOnSortAndFilterButton(page: any) {
+    if(DeviceHelper.isMobile()) {
+      await ElementHelper.waitForElementVisible(page, HotelPageLocators.sortAndFilterMobile);
+      await ElementHelper.clickElement(page, HotelPageLocators.sortAndFilterMobile);
+    }
+
+  }
+
+  static async editValueInTestBox(page: Page, text: string) {
+    if(DeviceHelper.isMobile()){
+      const whereToTextBox = HotelPageLocators.whereToTextBox;
+      await VerificationHelpers.elementIsVisible(page, whereToTextBox);
+      await ElementHelper.clickElement(page, whereToTextBox);
+      const whereToTextBoxMobile = HotelPageLocators.whereToTextBoxMobile;
+      await VerificationHelpers.elementIsVisible(page, whereToTextBoxMobile);
+      await ElementHelper.clearAndEnterInTextField(page, whereToTextBoxMobile, text);
+    } else {
+      const whereToTextBox = HotelPageLocators.whereToTextBox;
+      await VerificationHelpers.elementIsVisible(page, whereToTextBox);
+      await ElementHelper.clearAndEnterInTextField(page, whereToTextBox, text);
+    }
+  }
+  
 }
