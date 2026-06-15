@@ -58,14 +58,10 @@ jobs:
               '{include:[{client:$client,environment:$environment}]}')
           elif [ "$TRIGGER" = "schedule" ]; then
             # 2:00 AM IST — BOB UAT only
-            MATRIX='{"include":[
-              {"client":"BOB","environment":"UAT"}
-            ]}'
+            MATRIX='{"include":[{"client":"BOB","environment":"UAT"}]}'
           else
-            # push to main — BOB UAT only
-            MATRIX='{"include":[
-              {"client":"BOB","environment":"UAT"}
-            ]}'
+            # push to main/stage — BOB UAT only
+            MATRIX='{"include":[{"client":"BOB","environment":"UAT"}]}'
           fi
 
           echo "matrix=$MATRIX" >> "$GITHUB_OUTPUT"
