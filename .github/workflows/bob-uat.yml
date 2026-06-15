@@ -1,13 +1,13 @@
 name: BOB UAT Tests
 
 # Triggers:
-#   1. push     → auto run on every push to main / stage (BOB UAT)
+#   1. push     → auto run on every push to main (BOB UAT)
 #   2. schedule → daily at 2:00 AM IST (BOB UAT)
 #   3. workflow_dispatch → manual run with client / environment / feature options
 
 on:
   push:
-    branches: [main, stage, email-setup]
+    branches: [main]
 
   schedule:
     # 2:00 AM IST = 20:30 UTC (previous calendar day)
@@ -54,7 +54,7 @@ jobs:
           elif [ "$TRIGGER" = "schedule" ]; then
             MATRIX='{"include":[{"client":"BOB","environment":"UAT"}]}'
           else
-            # push to main/stage — BOB UAT only
+            # push to main — BOB UAT only
             MATRIX='{"include":[{"client":"BOB","environment":"UAT"}]}'
           fi
 
