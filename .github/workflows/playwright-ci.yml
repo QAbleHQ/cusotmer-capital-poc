@@ -57,19 +57,14 @@ jobs:
               --arg environment "${{ github.event.inputs.environment }}" \
               '{include:[{client:$client,environment:$environment}]}')
           elif [ "$TRIGGER" = "schedule" ]; then
+            # 2:00 AM IST — BOB UAT only
             MATRIX='{"include":[
-              {"client":"BOB","environment":"QA"},
-              {"client":"BOB","environment":"UAT"},
-              {"client":"BOB","environment":"PROD"},
-              {"client":"IDFC","environment":"QA"},
-              {"client":"IDFC","environment":"UAT"},
-              {"client":"IDFC","environment":"PROD"}
+              {"client":"BOB","environment":"UAT"}
             ]}'
           else
-            # push to main — quick smoke on QA for both clients
+            # push to main — BOB UAT only
             MATRIX='{"include":[
-              {"client":"BOB","environment":"QA"},
-              {"client":"IDFC","environment":"QA"}
+              {"client":"BOB","environment":"UAT"}
             ]}'
           fi
 
