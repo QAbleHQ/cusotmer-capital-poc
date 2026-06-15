@@ -8,6 +8,8 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout repository
@@ -137,6 +139,14 @@ jobs:
           retention-days: 30
           if-no-files-found: ignore
 
+      - name: Ensure playwright-report exists
+        if: always()
+        run: |
+          if [ ! -f "playwright-report/index.html" ]; then
+            mkdir -p playwright-report
+            echo "<html><body><h2>No report generated for run ${{ github.run_id }}</h2></body></html>" > playwright-report/index.html
+          fi
+
       - name: Deploy report to GitHub Pages
         if: always()
         uses: peaceiris/actions-gh-pages@v3
@@ -145,6 +155,8 @@ jobs:
           publish_dir: ./playwright-report
           destination_dir: reports/${{ github.run_id }}
           keep_files: true
+          user_name: github-actions[bot]
+          user_email: github-actions[bot]@users.noreply.github.com
 
       - name: Set report URL
         if: always()
