@@ -1,4 +1,6 @@
-name: BOB UAT Tests
+name: UAT Tests
+
+run-name: ${{ github.event.inputs.client || 'BOB' }} UAT Tests
 
 # Triggers:
 #   1. push     → auto run on every push to main (BOB UAT)
