@@ -1,5 +1,5 @@
 import { expect, Page } from '@playwright/test';
-const idfcTestData = require('../testdata/idfctestdata.json');
+const idfcTestData = require('../testdata/tripStacc.json');
 
 export class VerificationHelpers {
     static async verifyTextVisible(page: any, SubscribingText: string, expectedText: string): Promise<void> {

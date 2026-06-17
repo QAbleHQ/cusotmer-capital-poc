@@ -1,6 +1,5 @@
 import { defineConfig } from '@playwright/test';
-import { BOB_URLS } from './config/BOB.config';
-import { IDFC_URLS } from './config/IDFC.config';
+import { BOB_TS, IDFC_TS, BOB_SS } from './config/ts.config';
  
 const mobileDevices = require('./mobileDevices');
  
@@ -9,13 +8,14 @@ type BrowserName = 'chromium' | 'firefox' | 'webkit';
 const projectEnv = process.env.PROJECT || '';
 const parts = projectEnv.split('-');
  
-// Examples:
-// IDFC-chrome-uat
-// IDFC-chrome-uat-smoke
-// IDFC-chrome-uat-mobile-iphone13
-// IDFC-chrome-uat-mobile-iphone13-smoke
- 
-const product = parts[0]?.toUpperCase();
+// New format (preferred):
+// tripstacc-chrome-UAT
+// tripstacc-chrome-UAT-Loginpage
+// tripstacc-chrome-UAT-mobile-iphone13
+// shopstacc-chrome-UAT
+// shopstacc-chrome-UAT-Loginpage
+
+const product = parts[0]?.toLowerCase();
 const browserEnv = parts[1]?.toLowerCase();
 const environment = parts[2]?.toUpperCase();
  
@@ -49,10 +49,17 @@ const mappedBrowser: BrowserName =
       ? 'webkit'
       : 'chromium';
  
+const testDir =
+  product === 'tripstacc' ? './TripStacc/tests'
+  : product === 'shopstacc' ? './ShopStacc/tests'
+  : product === 'idfc' ? './TripStacc/tests'    // backward compat
+  : `./tests/${product.toUpperCase()}`;
+
 const baseURL =
-  product === 'BOB'
-    ? BOB_URLS[environment as keyof typeof BOB_URLS] || BOB_URLS.QA
-    : IDFC_URLS[environment as keyof typeof IDFC_URLS] || IDFC_URLS.QA;
+  product === 'tripstacc' ? IDFC_TS[environment as keyof typeof IDFC_TS] || IDFC_TS.QA
+  : product === 'shopstacc' ? BOB_SS[environment as keyof typeof BOB_SS] || BOB_SS.QA
+  : product === 'idfc' ? IDFC_TS[environment as keyof typeof IDFC_TS] || IDFC_TS.QA
+  : BOB_TS[environment as keyof typeof BOB_TS] || BOB_TS.QA;
  
 const projects: any[] = [];
  
@@ -70,7 +77,7 @@ if (deviceName) {
   if (selectedDevice) {
     projects.push({
       name: `${product}-${browserEnv}-${environment}-mobile-${selectedDevice.name.toLowerCase()}`,
-      testDir: `./tests/${product}`,
+      testDir,
       use: {
         baseURL,
         browserName: mappedBrowser,
@@ -89,7 +96,7 @@ if (deviceName) {
 } else {
   projects.push({
     name: `${product}-${browserEnv}-${environment}`,
-    testDir: `./tests/${product}`,
+    testDir,
     use: {
       baseURL,
       browserName: mappedBrowser,
@@ -124,7 +131,7 @@ export default defineConfig({
 
   reporter: [
     ['list'],
-    ['json', { outputFile: 'reports/test-results.json' }],
+    ['json', { outputFile: 'playwright-report/test-results.json' }],
     ['html', { outputFolder: './playwright-report', open: 'never' }],
   ],
  
