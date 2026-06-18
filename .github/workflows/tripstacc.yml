@@ -24,7 +24,7 @@ on:
         options: [QA, UAT, PROD]
         default: UAT
       feature:
-        description: "Optional feature tag without @ (e.g. Loginpage, Homepageflight)"
+        description: "Optional feature tag without @ (e.g. BOB, IDFC, Loginpage, Homepageflight, Smoke, Sanity, Regression)"
         required: false
         default: ""
 
@@ -58,6 +58,7 @@ jobs:
         id: run-tests
         continue-on-error: true
         run: |
+          mkdir -p reports
           if [ -n "$FEATURE_TAG" ]; then
             PROJECT_VAL="tripstacc-chrome-${ENVIRONMENT}-${FEATURE_TAG}"
           else

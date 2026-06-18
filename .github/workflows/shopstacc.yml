@@ -58,6 +58,7 @@ jobs:
         id: run-tests
         continue-on-error: true
         run: |
+          mkdir -p reports
           if [ -n "$FEATURE_TAG" ]; then
             PROJECT_VAL="shopstacc-chrome-${ENVIRONMENT}-${FEATURE_TAG}"
           else
