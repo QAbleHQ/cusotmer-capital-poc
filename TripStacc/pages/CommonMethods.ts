@@ -1,29 +1,39 @@
 import { test, Page } from '@playwright/test';
 import { CommonHelper } from '../../utils/commonHelper';
-import { LoginPage as BobLoginPage } from './LoginPage';
-import { LoginPage as IdfcLoginPage } from './LoginPage';
- 
+import { LoginPage } from './LoginPage';
+import { HomePage } from './Homepage';
+import { HotelHomePage } from './HotelHomePage';
+
 export class BaseHelper {
- 
-  static async launchAndLogin (page: Page): Promise<void> {
+
+  static async launchAndLogin(page: Page): Promise<void> {
     try {
+
       const projectName = test.info().project.name.toLowerCase();
-      console.log(`Running setup for: ${projectName}`);
- 
+      console.log(`✅ Running setup for: ${projectName}`);
       await CommonHelper.navigateToHomePage(page);
- 
+      await LoginPage.verifyMobileNumberFieldAcceptsInput(page);
+      await LoginPage.clickGetOtpButton(page);
+      await LoginPage.verifyOtpPageVisible(page);
+      await LoginPage.verifyOtpFieldAcceptsInput(page);
       if (projectName.includes('bob')) {
-        console.log('Executing BOB setup');
-        await BobLoginPage.LoginCredEnterBeforeEach(page);
-        await BobLoginPage.RestrictionPageBeforeEach(page);
+        await LoginPage.verifyLoginButtonWorks(page);
+        await page.waitForLoadState('domcontentloaded')
+        await HomePage.handlePostLoginFlow(page); 
+
+      } else if (projectName.includes('idfc')) {
+        await LoginPage.verifyLoginButtonWorks(page);
+        await HotelHomePage.verifyHotelHomePageLoaded(page);
+
+      } else {
+        console.warn('⚠️ Unknown client, running default flow');
+
+        await LoginPage.verifyLoginButtonWorks(page);
       }
-      else if (projectName.includes('idfc')) {
-        console.log('Executing IDFC setup');
-        await IdfcLoginPage.loginWithValidCredentials(page);
-      }
- 
+
     } catch (error) {
-      console.error(`Setup failed: ${(error as Error).message}`);
+      console.error(`❌ Setup failed: ${(error as Error).message}`);
+      throw error;
     }
   }
 }

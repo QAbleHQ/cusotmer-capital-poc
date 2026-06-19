@@ -23,6 +23,16 @@
     "mail": "node utils/send-report-email.js",
     "report:mail": "npm run report:generate && npm run mail",
 
+"test:tripstacc:bob:uat:headed": "cross-env PROJECT=tripstacc-chrome-UAT CLIENT=BOB HEADED=true npx playwright test TripStacc/tests",
+  "test:tripstacc:idfc:uat:headed": "cross-env PROJECT=tripstacc-chrome-UAT CLIENT=IDFC HEADED=true npx playwright test TripStacc/tests",
+"test:tripstacc:bob:qa": "cross-env PROJECT=tripstacc-chrome-QA CLIENT=BOB npx playwright test TripStacc/tests",
+  "test:tripstacc:idfc:qa": "cross-env PROJECT=tripstacc-chrome-QA CLIENT=IDFC npx playwright test TripStacc/tests",
+
+  "test:tripstacc:bob:uat": "cross-env PROJECT=tripstacc-chrome-UAT CLIENT=BOB npx playwright test TripStacc/tests",
+  "test:tripstacc:idfc:uat": "cross-env PROJECT=tripstacc-chrome-UAT CLIENT=IDFC npx playwright test TripStacc/tests",
+
+
+   "bob_ts:qa": "cross-env PROJECT=tripstacc-chrome-QA npx playwright test TripStacc/tests",
     "test:tripstacc:qa": "cross-env PROJECT=tripstacc-chrome-QA npx playwright test TripStacc/tests",
     "test:tripstacc:uat": "cross-env PROJECT=tripstacc-chrome-UAT npx playwright test TripStacc/tests",
     "test:tripstacc:prod": "cross-env PROJECT=tripstacc-chrome-PROD npx playwright test TripStacc/tests",
@@ -31,15 +41,12 @@
     "test:tripstacc:qa:mail": "npm run test:tripstacc:qa; npm run report:mail",
     "test:tripstacc:uat:mail": "npm run test:tripstacc:uat; npm run report:mail",
     "test:tripstacc:uat:headed:mail": "cross-env PROJECT=tripstacc-chrome-UAT HEADED=true npx playwright test TripStacc/tests --workers=1; npm run report:mail",
-
     "test:tripstacc:qa:firefox": "cross-env PROJECT=tripstacc-firefox-QA npx playwright test TripStacc/tests",
     "test:tripstacc:qa:webkit": "cross-env PROJECT=tripstacc-webkit-QA npx playwright test TripStacc/tests",
     "test:tripstacc:qa:edge": "cross-env PROJECT=tripstacc-edge-QA npx playwright test TripStacc/tests",
-
     "test:tripstacc:qa:iphone13": "cross-env PROJECT=tripstacc-chrome-QA-iPhone13 npx playwright test TripStacc/tests",
     "test:tripstacc:qa:galaxys21": "cross-env PROJECT=tripstacc-chrome-QA-GalaxyS21 npx playwright test TripStacc/tests",
     "test:tripstacc:qa:mobile:headed": "cross-env PROJECT=tripstacc-chrome-QA-iPhone13 HEADED=true npx playwright test TripStacc/tests",
-
     "test:tripstacc:qa:tag:loginpage": "cross-env PROJECT=tripstacc-chrome-QA-Loginpage npx playwright test TripStacc/tests",
     "test:tripstacc:qa:tag:homepageflight": "cross-env PROJECT=tripstacc-chrome-QA-Homepageflight npx playwright test TripStacc/tests",
     "test:tripstacc:qa:tag:homepagehotel": "cross-env PROJECT=tripstacc-chrome-QA-Homepagehotel npx playwright test TripStacc/tests",
@@ -47,7 +54,6 @@
     "test:tripstacc:qa:tag:payment": "cross-env PROJECT=tripstacc-chrome-QA-Payment npx playwright test TripStacc/tests",
     "test:tripstacc:qa:tag:bookingconfirmation": "cross-env PROJECT=tripstacc-chrome-QA-Bookingconfirmation npx playwright test TripStacc/tests",
     "test:tripstacc:qa:tag:myaccount": "cross-env PROJECT=tripstacc-chrome-QA-Myaccount npx playwright test TripStacc/tests",
-
     "test:tripstacc:uat:tag:loginpage": "cross-env PROJECT=tripstacc-chrome-UAT-Loginpage npx playwright test TripStacc/tests",
     "test:tripstacc:uat:tag:homepageflight": "cross-env PROJECT=tripstacc-chrome-UAT-Homepageflight npx playwright test TripStacc/tests",
     "test:tripstacc:uat:tag:homepagehotel": "cross-env PROJECT=tripstacc-chrome-UAT-Homepagehotel npx playwright test TripStacc/tests",
@@ -55,12 +61,10 @@
     "test:tripstacc:uat:tag:payment": "cross-env PROJECT=tripstacc-chrome-UAT-Payment npx playwright test TripStacc/tests",
     "test:tripstacc:uat:tag:bookingconfirmation": "cross-env PROJECT=tripstacc-chrome-UAT-Bookingconfirmation npx playwright test TripStacc/tests",
     "test:tripstacc:uat:tag:myaccount": "cross-env PROJECT=tripstacc-chrome-UAT-Myaccount npx playwright test TripStacc/tests",
-
     "test:tripstacc:qa:mobile:tag:loginpage": "cross-env PROJECT=tripstacc-chrome-QA-iPhone13-Loginpage npx playwright test TripStacc/tests",
     "test:tripstacc:qa:mobile:tag:homepageflight": "cross-env PROJECT=tripstacc-chrome-QA-iPhone13-Homepageflight npx playwright test TripStacc/tests",
     "test:tripstacc:qa:mobile:tag:checkout": "cross-env PROJECT=tripstacc-chrome-QA-iPhone13-Checkout npx playwright test TripStacc/tests",
     "test:tripstacc:qa:mobile:tag:payment": "cross-env PROJECT=tripstacc-chrome-QA-iPhone13-Payment npx playwright test TripStacc/tests",
-
     "test:shopstacc:qa": "cross-env PROJECT=shopstacc-chrome-QA npx playwright test ShopStacc/tests",
     "test:shopstacc:uat": "cross-env PROJECT=shopstacc-chrome-UAT npx playwright test ShopStacc/tests",
     "test:shopstacc:prod": "cross-env PROJECT=shopstacc-chrome-PROD npx playwright test ShopStacc/tests",
@@ -69,27 +73,22 @@
     "test:shopstacc:qa:mail": "npm run test:shopstacc:qa; npm run report:mail",
     "test:shopstacc:uat:mail": "npm run test:shopstacc:uat; npm run report:mail",
     "test:shopstacc:uat:headed:mail": "cross-env PROJECT=shopstacc-chrome-UAT HEADED=true npx playwright test ShopStacc/tests --workers=1; npm run report:mail",
-
     "test:shopstacc:qa:firefox": "cross-env PROJECT=shopstacc-firefox-QA npx playwright test ShopStacc/tests",
     "test:shopstacc:qa:webkit": "cross-env PROJECT=shopstacc-webkit-QA npx playwright test ShopStacc/tests",
     "test:shopstacc:qa:edge": "cross-env PROJECT=shopstacc-edge-QA npx playwright test ShopStacc/tests",
-
     "test:shopstacc:qa:iphone13": "cross-env PROJECT=shopstacc-chrome-QA-iPhone13 npx playwright test ShopStacc/tests",
     "test:shopstacc:qa:galaxys21": "cross-env PROJECT=shopstacc-chrome-QA-GalaxyS21 npx playwright test ShopStacc/tests",
     "test:shopstacc:qa:mobile:headed": "cross-env PROJECT=shopstacc-chrome-QA-iPhone13 HEADED=true npx playwright test ShopStacc/tests",
-
     "test:shopstacc:qa:tag:login": "cross-env PROJECT=shopstacc-chrome-QA-Login npx playwright test ShopStacc/tests",
     "test:shopstacc:qa:tag:homepage": "cross-env PROJECT=shopstacc-chrome-QA-Homepage npx playwright test ShopStacc/tests",
     "test:shopstacc:qa:tag:checkout": "cross-env PROJECT=shopstacc-chrome-QA-Checkout npx playwright test ShopStacc/tests",
     "test:shopstacc:qa:tag:plp": "cross-env PROJECT=shopstacc-chrome-QA-PLP npx playwright test ShopStacc/tests",
     "test:shopstacc:qa:tag:giftcard": "cross-env PROJECT=shopstacc-chrome-QA-Giftcard npx playwright test ShopStacc/tests",
-
     "test:shopstacc:uat:tag:login": "cross-env PROJECT=shopstacc-chrome-UAT-Login npx playwright test ShopStacc/tests",
     "test:shopstacc:uat:tag:homepage": "cross-env PROJECT=shopstacc-chrome-UAT-Homepage npx playwright test ShopStacc/tests",
     "test:shopstacc:uat:tag:checkout": "cross-env PROJECT=shopstacc-chrome-UAT-Checkout npx playwright test ShopStacc/tests",
     "test:shopstacc:uat:tag:plp": "cross-env PROJECT=shopstacc-chrome-UAT-PLP npx playwright test ShopStacc/tests",
     "test:shopstacc:uat:tag:giftcard": "cross-env PROJECT=shopstacc-chrome-UAT-Giftcard npx playwright test ShopStacc/tests",
-
     "test:shopstacc:qa:mobile:tag:login": "cross-env PROJECT=shopstacc-chrome-QA-iPhone13-Login npx playwright test ShopStacc/tests",
     "test:shopstacc:qa:mobile:tag:checkout": "cross-env PROJECT=shopstacc-chrome-QA-iPhone13-Checkout npx playwright test ShopStacc/tests",
     "test:shopstacc:qa:mobile:tag:homepage": "cross-env PROJECT=shopstacc-chrome-QA-iPhone13-Homepage npx playwright test ShopStacc/tests"

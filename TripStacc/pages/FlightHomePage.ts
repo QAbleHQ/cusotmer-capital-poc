@@ -4,6 +4,7 @@ import { VerificationHelpers } from '../../utils/verificationHelper';
 import { ElementHelper } from '../../utils/elementHelper';
 import { CommonHelper } from '../../utils/commonHelper';
 import { DeviceHelper } from '../../utils/deviceHelper';
+import { HomePageLocators } from '../locators/HomePageLocators';
 
 export class FlightHomePage {
   static async clickOnRoundTripOption(page: any) {
@@ -28,6 +29,38 @@ export class FlightHomePage {
       await ElementHelper.clickElement(page, FlightPageLocators.toCity);
     }
   }
+
+  static async verifyCardSelectionPopupVisible(page: Page): Promise<void> {
+
+  const popup = page.locator(HomePageLocators.cardPopup);
+
+  await expect(popup).toBeVisible();
+
+  console.log('✅ Card selection popup is visible');
+}
+static async selectCard(page: Page): Promise<void> {
+
+  const firstCard = page.locator(HomePageLocators.cardOption).first();
+  const continueButton = page.locator(HomePageLocators.continueButton);
+
+  await expect(firstCard).toBeVisible();
+
+  await firstCard.click();
+
+  await expect(continueButton).toBeEnabled();
+
+  await continueButton.click();
+
+  console.log('✅ Card selected and continue clicked');
+}
+static async verifyPopupClosed(page: Page): Promise<void> {
+
+  const popup = page.locator(HomePageLocators.cardPopup);
+
+  await expect(popup).not.toBeVisible();
+
+  console.log('✅ Card selection popup closed successfully');
+}
 
   static async EnterCityFromAirport(page: any, data: any) {
     if(DeviceHelper.isMobile()){
@@ -81,6 +114,11 @@ export class FlightHomePage {
       await ElementHelper.clickElement(page, FlightPageLocators.firstSearchResulttoCityDropdown);
     }
   }
+static async verifyRoute(page: Page, from: string, to: string) {
+  const card = page.locator(FlightPageLocators.firstFlightCard);
+  await expect(card).toContainText(from);
+  await expect(card).toContainText(to);
+}
 
   static async clickOnDepartureDate(page: any) {
     if(DeviceHelper.isMobile()) {
@@ -189,6 +227,29 @@ export class FlightHomePage {
       await ElementHelper.clickElement(page, FlightPageLocators.closeTravellerAndCabinButtonMobile);
     }
   }
+static async verifyFlightSearchFields(page: any) {
+  await expect(page.locator(FlightPageLocators.fromCity)).toBeVisible();
+  await expect(page.locator(FlightPageLocators.toCity)).toBeVisible();
+  await expect(page.locator(FlightPageLocators.departureDate)).toBeVisible();
+  await expect(page.locator(FlightPageLocators.returnDate)).toBeVisible();
+  await expect(page.locator(FlightPageLocators.travellersAndCabinClass)).toBeVisible();
+
+  console.log('✅ All search fields visible');
+}
+
+
+static async verifyCityEntered(page: Page, locator: string, value: string) {
+  await expect(page.locator(locator)).toHaveValue(value);
+}
+
+static async verifyDateSelected(page: Page) {
+  const value = await page.locator(FlightPageLocators.departureDate).inputValue();
+  expect(value).not.toBe('');
+}
+static async verifyTravellerOptions(page: Page) {
+  await expect(page.locator(FlightPageLocators.roomCountDropdown)).toBeVisible();
+}
+
 
   static async clickOnAdultPlusButton(page: any) {
     await ElementHelper.clickElement(page, FlightPageLocators.travellersAdultPlusButton);
