@@ -2,6 +2,7 @@ import { test, Page, BrowserContext } from '@playwright/test';
 import { FlightHomePage } from '../pages/FlightHomePage';
 const idfcTestData = require('../../testdata/tripStacc.json');
 import { BaseHelper } from '../pages/CommonMethods';
+import { Data } from '../../utils/dataProvider';
 let context: BrowserContext;
 let page: Page;
 
@@ -16,7 +17,7 @@ test.beforeEach(async ({ browser }) => {
 test('SC_003: Search ', { tag: ['@IDFC','@BOB', '@Homepageflight', '@Smoke', '@Sanity', '@Regression'] }, async () => {
 await test.step("Step 1: Enter City From Airport", async () => {
   await FlightHomePage.clickOnCityFromAirport(page);
-  await FlightHomePage.EnterCityFromAirport(page, idfcTestData.flightPage.enterCityFrom);
+  await FlightHomePage.EnterCityFromAirport(page, Data.flightPage.enterCityFrom);
 })
 
 await test.step("Step 2: Verify From Airport Dropdown Visible", async () => {
@@ -26,7 +27,7 @@ await test.step("Step 2: Verify From Airport Dropdown Visible", async () => {
 
 await test.step("Step 3: Enter City To Airport", async () => {
   await FlightHomePage.clickOnToAirport(page);
-  await FlightHomePage.EnterCityToAirport(page, idfcTestData.flightPage.enterCityTo);
+  await FlightHomePage.EnterCityToAirport(page, Data.flightPage.enterCityTo);
 })  
 
 await test.step("Step 4: Verify To Airport Dropdown Visible", async () => {
@@ -62,6 +63,7 @@ await test.step("Step 8: Click search flights button", async () => {
 });
 
 await test.step("Step 9: Verify first flight card visible", async () => {
+  await page.waitForLoadState('domcontentloaded');
   await FlightHomePage.VerifyFirstFlightCardVisible(page);
 });
 });

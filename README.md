@@ -50,7 +50,7 @@ POC/
 ## Architecture Overview
 
 The framework follows a layered **Page Object Model**:
-
+.
 
 ### Data Flow Example
 

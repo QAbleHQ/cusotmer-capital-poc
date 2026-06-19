@@ -15,7 +15,7 @@ test.beforeEach(async ({ browser }) => {
 });
 
 
-test('SC_012: Booking Confirmation Page (Confirmed/Pending/Failed)', { tag: ['@IDFC','@BOB', '@Bookingconfirmation', '@Regression'] }, async () => {
+test('SC_012: Booking Confirmation Page (Confirmed/Pending/Failed)', { tag: ['@SC_012','@IDFC','@BOB', '@Bookingconfirmation', '@Regression'] }, async () => {
     await test.step("Step 1: Enter City From Airport", async () => {
       await page.waitForTimeout(8000);
       await FlightHomePage.clickOnCityFromAirport(page);

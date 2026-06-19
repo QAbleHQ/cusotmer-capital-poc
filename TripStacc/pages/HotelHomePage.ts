@@ -12,7 +12,7 @@ export class HotelHomePage {
   static async verifyHotelHomePageLoaded(page: Page) {
     await ElementHelper.waitForElementVisible(page, HotelPageLocators.profileIconButton);
     await expect(page.locator(HotelPageLocators.profileIconButton)).toBeVisible();
-    console.log(" Hotel Home Page loaded");
+    console.log("User redirected to homepage successfully");
   }
 
   static async clickHotelTabBTN(page: Page) {

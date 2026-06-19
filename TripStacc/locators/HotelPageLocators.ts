@@ -108,4 +108,7 @@ export const HotelPageLocators = {
   editFilterMobile: `//span[@class="edit_fltr"]`,
   editFilterDateInputMobile: `//input[@id="hotel_daterange1"]`,
   sortAndFilterMobile: `//button[@id="sort_filtr"]`,
+
+
+
 };
