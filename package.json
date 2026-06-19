@@ -54,6 +54,7 @@
     "test:tripstacc:qa:tag:payment": "cross-env PROJECT=tripstacc-chrome-QA-Payment npx playwright test TripStacc/tests",
     "test:tripstacc:qa:tag:bookingconfirmation": "cross-env PROJECT=tripstacc-chrome-QA-Bookingconfirmation npx playwright test TripStacc/tests",
     "test:tripstacc:qa:tag:myaccount": "cross-env PROJECT=tripstacc-chrome-QA-Myaccount npx playwright test TripStacc/tests",
+    "test:tripstacc:qa:tag:bobtest": "cross-env PROJECT=tripstacc-chrome-QA-BOBTest npx playwright test TripStacc/tests",
     "test:tripstacc:uat:tag:loginpage": "cross-env PROJECT=tripstacc-chrome-UAT-Loginpage npx playwright test TripStacc/tests",
     "test:tripstacc:uat:tag:homepageflight": "cross-env PROJECT=tripstacc-chrome-UAT-Homepageflight npx playwright test TripStacc/tests",
     "test:tripstacc:uat:tag:homepagehotel": "cross-env PROJECT=tripstacc-chrome-UAT-Homepagehotel npx playwright test TripStacc/tests",
