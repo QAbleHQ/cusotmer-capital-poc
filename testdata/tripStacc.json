@@ -1,10 +1,32 @@
 {
   "common": {
     "loginDataFill": {
-      "regularEmail": "user@example.com"
+    "regularEmail": "user@example.com",
+    "regularPassword": "password123",
+    "mobileNumber": "8448661387",
+    "otp": "2248",
+    "restrictedAccessUsername": "temp",
+    "restrictedAccessPassword": "Tp@123#1",
+    "city": "Dubai",
+    "checkInDate": "10",
+    "checkOutDate": "12"
     },
     "hotelPage": {
-      "rooms": 1
+      "rooms": 1,
+      "domestic": "ahmedabad",
+       "international": "qatar",
+       "searcHotelName": "Itc Narmada",
+       "searcHotelNameInternational": "Souq Waqif Boutique Hotels by Tivoli",
+       "adults": 2,
+       "children": 0,
+       "hotelRoom1": 1,
+       "hotelAdult1": 2,
+       "hotelChildren1": 1,
+       "hotelChildrenAge1": [5],
+       "hotelRoom2": 1,
+       "hotelAdult2": 3,
+       "hotelChildren2": 2,
+       "hotelChildrenAge2": [5, 10]
     },
     "flightPage": {
       "enterCityFrom": "Mumb",

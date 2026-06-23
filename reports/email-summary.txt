@@ -1,0 +1,12 @@
+Playwright Test Run Summary
+===========================
+Total: 0
+Passed: 0
+Failed: 0
+Skipped: 0
+Flaky: 0
+Duration: 0s
+
+Failure Highlights
+------------------
+1. Report file not found: reports/test-results.json

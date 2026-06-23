@@ -1,6 +1,6 @@
 name: TripStacc Tests
 
-run-name: "TripStacc ${{ github.event.inputs.environment || 'UAT' }}${{ github.event.inputs.feature && format(' @{0}', github.event.inputs.feature) || '' }}"
+run-name: "TripStacc ${{ github.event.inputs.client || 'BOB' }} ${{ github.event.inputs.environment || 'UAT' }}${{ github.event.inputs.feature && format(' @{0}', github.event.inputs.feature) || '' }}"
 
 # Triggers:
 #   1. push     → auto run on every push to main (UAT, all tests)
@@ -17,6 +17,12 @@ on:
 
   workflow_dispatch:
     inputs:
+      client:
+        description: "Client (BOB or IDFC)"
+        required: true
+        type: choice
+        options: [BOB, IDFC]
+        default: BOB
       environment:
         description: "Environment (QA, UAT, PROD)"
         required: true
@@ -24,7 +30,7 @@ on:
         options: [QA, UAT, PROD]
         default: UAT
       feature:
-        description: "Optional feature tag without @ (e.g. BOB, IDFC, Loginpage, Homepageflight, Smoke, Sanity, Regression)"
+        description: "Optional feature tag without @ (e.g. Loginpage, Homepageflight, Smoke, Sanity, Regression)"
         required: false
         default: ""
 
@@ -35,6 +41,7 @@ jobs:
       contents: write
     env:
       CI: true
+      CLIENT: ${{ github.event.inputs.client || 'BOB' }}
       ENVIRONMENT: ${{ github.event.inputs.environment || 'UAT' }}
       FEATURE_TAG: ${{ github.event.inputs.feature || '' }}
 
