@@ -140,7 +140,7 @@ if (deviceName) {
 export default defineConfig({
   projects,
 
-  timeout: 540000,
+  timeout: 120000,
   fullyParallel: true,
   workers: process.env.CI ? 4 : 2,
   retries: 2,
