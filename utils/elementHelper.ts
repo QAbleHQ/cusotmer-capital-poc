@@ -22,6 +22,7 @@ export class ElementHelper {
  
   static async clickElement(page: any, selector: any, timeout = 30000) {
     await page.waitForLoadState('domcontentloaded');
+    await this.scrollElementToCentre(page, selector);
     await page.waitForSelector(selector, { state: 'visible', timeout });
     await page.click(selector, { force: true });
     console.log(`Clicked on element: ${selector}`);
@@ -29,6 +30,7 @@ export class ElementHelper {
 
   static async clearTextField(page: Page, locatorValue: string): Promise<void> {
     await page.waitForLoadState('domcontentloaded');
+    await this.scrollElementToCentre(page, locatorValue);
     console.log(`Clear value from "${locatorValue}" text field`);
     const element = await page.waitForSelector(locatorValue);
     await element.fill('');
@@ -38,9 +40,19 @@ export class ElementHelper {
     console.log(`Clear value from "${locatorValue}" text field and enter text "${textToEnter}"`);
     await page.waitForLoadState('domcontentloaded');
     const element = await page.waitForSelector(locatorValue);
+    await this.scrollElementToCentre(page, locatorValue);
     await element.fill(''); // Clears the text field.
     await element.fill(textToEnter); // Enters the specified text.
   }
+
+    static async clearAndTypeInTextField(page: Page, locatorValue: string, textToEnter: string): Promise<void> {
+    console.log(`Clear value from "${locatorValue}" text field and enter text "${textToEnter}"`);
+    await page.waitForLoadState('domcontentloaded');
+    const element = await page.waitForSelector(locatorValue);
+    await element.fill(''); // Clears the text field.
+    await element.type(textToEnter); // Enters the specified text.
+  }
+
   static async clickElementWithRetry(page: Page, selector: string, retries: number = 3): Promise<void> {
     for (let i = 0; i < retries; i++) {
       try {
@@ -83,6 +95,23 @@ export class ElementHelper {
     const element = await page.locator(locatorValue);
     await element.scrollIntoViewIfNeeded();
     console.log(`Scrolled to element with locator: "${locatorValue}"`);
+  }
+
+  static async scrollElementToCentre(page: Page, locatorValue: string): Promise<void> {
+  const element = page.locator(locatorValue);
+
+  await element.waitFor({ state: 'visible' });
+
+  await element.evaluate((el) => {
+    el.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center',
+      inline: 'center'
+    });
+  });
+
+  console.log(`Scrolled element to center with locator: "${locatorValue}"`);
+  await page.waitForTimeout(500); // Optional: wait for scroll animation to complete
   }
 
   static async scrollByAmount(page: Page, x: number, y: number): Promise<void> {
@@ -372,7 +401,7 @@ export class ElementHelper {
         ? page.locator(selector).first()
         : selector.first();
   
-    await element.waitFor({ state: 'visible', timeout });
+    // await element.waitFor({ state: 'visible', timeout });
   
     const text =
       (await element.inputValue().catch(() => null)) ??

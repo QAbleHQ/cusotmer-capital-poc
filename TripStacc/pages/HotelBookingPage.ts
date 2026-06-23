@@ -7,6 +7,8 @@ import { DeviceHelper } from '../../utils/deviceHelper';
 import { FlightHomePage } from './FlightHomePage';
 import { FlightPageLocators } from '../../TripStacc/locators/FlightPageLocators';
 import { HotelHomePage } from './HotelHomePage';
+import { Data } from '../../utils/dataProvider';
+import { CommonHelper } from '../../utils/commonHelper';
 
 export class HotelBookingPage {
   static async clickFirstRoomSelectionButton(page: Page) {
@@ -26,9 +28,62 @@ export class HotelBookingPage {
   }
 
   static async verifyPrimaryGuestDetailsHeaderVisible(page: Page) {
+    await ElementHelper.scrollElementToCentre(page, HotelPageLocators.primaryGuestDetailsHeader);
+    await page.waitForTimeout(2000);
     await expect(page.locator(HotelPageLocators.primaryGuestDetailsHeader)).toBeVisible();
     console.log('Primary guest details header is displayed');
   }
+
+  static async removePopup(page: Page): Promise<void> {
+    const frame = page.frameLocator('//iframe[contains(@title,"notification-frame")]');
+    const popupImg = frame.locator(HotelPageLocators.popupImg);
+
+    if (await popupImg.count() > 0 && await popupImg.isVisible()) {
+        await frame.locator(HotelPageLocators.outOfPopupImg).click({
+            position: {
+                x: 500, // adjust as needed
+                y: 5
+            }
+        });
+
+        console.log('Popup closed');
+    }
+  }
+
+    static async removePopupForIDFC(page: Page): Promise<void> {
+    const CLIENT = process.env.CLIENT?.toUpperCase();
+    switch (CLIENT) {
+        case 'IDFC':
+            try {
+                const frame = page.frameLocator('//iframe[contains(@title,"notification-frame")]');
+                const popupImg = frame.locator(HotelPageLocators.popupImg);
+                if (
+                    await popupImg.count() > 0 &&
+                    await popupImg.isVisible({ timeout: 30000 })
+                ) {
+                    await frame.locator(HotelPageLocators.outOfPopupImg).click({
+                        position: {
+                            x: 500,
+                            y: 5
+                        }
+                    });
+                    console.log('IDFC popup closed');
+                } else {
+                    console.log('IDFC popup not displayed');
+                }
+            } catch (error) {
+                console.log('IDFC popup not found or already closed');
+            }
+            break;
+
+        case 'BOB':
+            console.log('⏭️ BOB: Skipping popup handling');
+            break;
+        default:
+            console.log(`⏭️ ${CLIENT}: No popup handling configured`);
+            break;
+    }
+}
 
   static async clickAddGuestButton(page: Page) {
     if (DeviceHelper.isMobile()) {
@@ -80,6 +135,66 @@ export class HotelBookingPage {
     }
   }
 
+  static async clickAddGuestButtonForIDFC(page: Page) {
+  const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'IDFC':
+              if (DeviceHelper.isMobile()) {
+                    let attempts = 0;
+                    const maxAttempts = 3;
+                    let popupClosed = false;
+
+                    while (attempts < maxAttempts && !popupClosed) {
+                        try {
+                            const popup = page.locator(HotelPageLocators.beePopupForMobile);
+                            
+                            if (await popup.isVisible()) {
+                                console.log(`Attempt ${attempts + 1}: Bee popup detected, attempting to close...`);
+                                
+                                await page.locator(HotelPageLocators.clickOutsideOfBeePopupForMobile).click();
+                                
+                                await popup.waitFor({ state: 'hidden', timeout: 3000 });
+                                popupClosed = true;
+                                console.log('Bee popup successfully closed');
+                            } else {
+                                break;
+                            }
+                        } catch (e) {
+                            attempts++;
+                            console.log(`Attempt ${attempts} failed, retrying...`);
+                            await page.waitForTimeout(1000); 
+                        }
+                    }
+                }
+
+                await page.locator(HotelPageLocators.addGuestButton).click();
+                console.log('Add Guest button clicked');
+
+                  await page.waitForTimeout(5000);
+                  if(DeviceHelper.isMobile()) {
+                    try {
+                      const popup = page.locator(HotelPageLocators.beePopupForMobile);
+                      await popup.waitFor({ state: 'visible', timeout: 10000 });
+                    
+                      await ElementHelper.clickElement(page, HotelPageLocators.clickOutsideOfBeePopupForMobile);
+                      console.log('Bee popup detected and closed');
+                    } catch (e) {
+                      console.log('Bee popup did not appear, proceeding...');
+                    }
+                  }
+                  if(await ElementHelper.isElementDisplayed(page, HotelPageLocators.addGuestButton)) {
+                    await page.locator(HotelPageLocators.addGuestButton).click();
+                    console.log('Add Guest button clicked');
+                  }
+      break;
+ 
+    case 'BOB':
+    console.log('⏭️ BOB: Skipping ');
+    break;
+  }
+
+  }
+
   static async clickAddNewGuestButton(page: Page) {
     if(DeviceHelper.isMobile()) {
       try {
@@ -96,9 +211,65 @@ export class HotelBookingPage {
     console.log('Add New Guest button clicked');
   }
 
+  static async clickAddNewGuestButtonForIdfc(page: Page): Promise<void> {
+
+    const CLIENT = process.env.CLIENT?.toUpperCase();
+
+    switch (CLIENT) {
+
+        case 'IDFC':
+
+            if (DeviceHelper.isMobile()) {
+                try {
+                    const popup = page.locator(HotelPageLocators.beePopupForMobile);
+
+                    await popup.waitFor({
+                        state: 'visible',
+                        timeout: 10000
+                    });
+
+                    await ElementHelper.clickElement(
+                        page,
+                        HotelPageLocators.clickOutsideOfBeePopupForMobile
+                    );
+
+                    console.log('Bee popup detected and closed');
+                } catch (e) {
+                    console.log('Bee popup did not appear, proceeding...');
+                }
+            }
+            this.removePopupForIDFC(page);
+            await page.locator(HotelPageLocators.addGuestBtn).click();
+            console.log('Add New Guest button clicked');
+
+            break;
+
+        case 'BOB':
+              console.log('⏭️ BOB: Skipping ');
+            break;
+
+        default:
+
+            await page.locator(HotelPageLocators.addGuestBtn).click();
+            console.log('Add New Guest button clicked');
+
+            break;
+    }
+}
+
   static async clickEditTraveler(page: Page) {
-    await page.locator(HotelPageLocators.editTravelerButton).click();
-    console.log('Edit traveler button clicked');
+      const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
+		console.log('⏭️ BOB: Skipping ');
+      break;
+ 
+    case 'IDFC':
+        await page.locator(HotelPageLocators.editTravelerButton).click();
+        console.log('Edit traveler button clicked');
+    break;
+  }
+
   }
 
   static async verifyCannotProceedWithoutConditions(page: Page) {
@@ -115,26 +286,81 @@ export class HotelBookingPage {
     console.log('Checkbox after redeem action clicked');
   }
 
-  static async fillGuestDetailsInsideForm(page: Page) {
-    await page.locator(HotelPageLocators.radioButtonMr).click();
-    await page.waitForTimeout(2000);
-    await page.locator(HotelPageLocators.firstNameField).fill(idfcTestData.hotelBookingDataFill.firstName);
-    await page.waitForTimeout(2000);
-    await page.locator(HotelPageLocators.lastNameField).fill(idfcTestData.hotelBookingDataFill.lastName);
-    await page.waitForTimeout(2000);
-    console.log('Guest details form inside fields filled');
+  static async fillGuestDetailsInsideForm(page: any) {
+  const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
+          await page.locator(HotelPageLocators.radioButtonMr).click();
+          await page.waitForTimeout(2000);
+          const firstName = CommonHelper.generateRandomName(7);
+          const lastName = CommonHelper.generateRandomName(7);
+
+          await page.locator(HotelPageLocators.firstNameField).fill(firstName);
+          await page.waitForTimeout(2000);
+          await page.locator(HotelPageLocators.lastNameField).fill(lastName);
+          await page.waitForTimeout(2000);
+          console.log('Guest details form inside fields filled');
+          await ElementHelper.clickElement(page, HotelPageLocators.saveGuestLocator);
+          console.log('Clicked on Save Guest checkbox');
+          await ElementHelper.isElementDisplayed(page, HotelPageLocators.travellerSavedSuccessfully);
+          console.log('Traveller saved successfully message is displayed');
+
+          await ElementHelper.clickElement(page, HotelPageLocators.saveGuestLocator);
+          console.log('Clicked on Save Guest checkbox');
+          await page.locator(HotelPageLocators.firstNameField).fill(firstName);
+          await page.waitForTimeout(2000);
+          await page.locator(HotelPageLocators.lastNameField).fill(lastName);
+          await page.waitForTimeout(2000);
+          await ElementHelper.clickElement(page, HotelPageLocators.saveGuestLocator);
+          console.log('Clicked on Save Guest checkbox');
+          await ElementHelper.isElementDisplayed(page, HotelPageLocators.travellerUserAlreadyExists);
+          console.log('Traveller User Already Exists message is displayed');
+      break;
+ 
+    case 'IDFC':
+      await page.locator(HotelPageLocators.radioButtonMr).click();
+      await page.waitForTimeout(2000);
+      await page.locator(HotelPageLocators.firstNameField).fill(Data.hotelBookingDataFill.firstName);
+      await page.waitForTimeout(2000);
+      await page.locator(HotelPageLocators.lastNameField).fill(Data.hotelBookingDataFill.lastName);
+      await page.waitForTimeout(2000);
+      console.log('Guest details form inside fields filled');
+    break;
   }
+  }
+
+
+
   static async fillGuestDetailsoutsideForm(page: Page) {
-    await page.locator(HotelPageLocators.contactNumberField).fill(idfcTestData.hotelBookingDataFill.contactNumber);
-    await page.waitForTimeout(2000);
-    await page.locator(HotelPageLocators.emailField).fill(idfcTestData.hotelBookingDataFill.email);
-    await page.waitForTimeout(2000);
-    console.log('Guest details form contact information filled');
+      const CLIENT = process.env.CLIENT?.toUpperCase();
+      switch (CLIENT) {
+        case 'BOB':
+        console.log('⏭️ BOB: Skipping ');
+          break;
+    
+        case 'IDFC':
+            await page.locator(HotelPageLocators.contactNumberField).fill(Data.hotelBookingDataFill.contactNumber);
+        await page.waitForTimeout(2000);
+        await page.locator(HotelPageLocators.emailField).fill(Data.hotelBookingDataFill.email);
+        await page.waitForTimeout(2000);
+        console.log('Guest details form contact information filled');
+        break;
+      }
   }
+
   static async clickEditGuestButton(page: Page) {
-    const editGuestButtonLocator = HotelPageLocators.editGuestButton;
-    await ElementHelper.clickElement(page, editGuestButtonLocator);
-    console.log('Edit guest button clicked');
+      const CLIENT = process.env.CLIENT?.toUpperCase();
+      switch (CLIENT) {
+        case 'BOB':
+        console.log('⏭️ BOB: Skipping ');
+          break;
+    
+        case 'IDFC':
+        const editGuestButtonLocator = HotelPageLocators.editGuestButton;
+        await ElementHelper.clickElement(page, editGuestButtonLocator);
+        console.log('Edit guest button clicked');
+        break;
+      }
   }
 
   static async updateFirstName(page: Page, firstName: string) {
@@ -144,14 +370,39 @@ export class HotelBookingPage {
   }
 
   static async verifyGuestDetailsFormVisible(page: Page) {
+      const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
+		console.log('⏭️ BOB: Skipping ');
+      break;
+ 
+    case 'IDFC':
     await expect(page.locator(HotelPageLocators.guestDetailsForm)).toBeVisible();
     console.log('Guest details form is displayed');
+    break;
+  }
   }
 
   static async addButtonAfterAddingGuest(page: Page) {
     const addButtonLocator = HotelPageLocators.addButtonAfterAddingGuest;
     await ElementHelper.clickElement(page, addButtonLocator);
     console.log('Add button after adding guest clicked');
+  }
+
+    static async addButtonAfterAddingGuestForIdfc(page: Page) {
+
+      const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
+		console.log('⏭️ BOB: Skipping ');
+      break;
+ 
+    case 'IDFC':
+        const addButtonLocator = HotelPageLocators.addButtonAfterAddingGuest;
+    await ElementHelper.clickElement(page, addButtonLocator);
+    console.log('Add button after adding guest clicked');
+    break;
+  }
   }
 
   static async nextButtonAfterAddingGuest(page: Page) {
@@ -172,32 +423,67 @@ export class HotelBookingPage {
   }
 
   static async verifyValidPanNumberAccepted(page: Page) {
-    await page.locator(HotelPageLocators.panNumberField).fill(idfcTestData.hotelBookingDataFill.panNumber);
+    await page.locator(HotelPageLocators.panNumberField).fill(Data.hotelBookingDataFill.panNumber);
     const value = await page.locator(HotelPageLocators.panNumberField).inputValue();
-    if (value === idfcTestData.hotelBookingDataFill.panNumber) {
+    if (value === Data.hotelBookingDataFill.panNumber) {
       console.log('Valid PAN number accepted successfully');
     }
   }
 
 
   static async verifySavedGuestTextVisible(page: Page) {
-    await expect(page.locator(HotelPageLocators.savedGuestText)).toBeVisible();
-    console.log('Saved guest text is displayed');
-  }
-
-  static async printSavedGuestList(page: Page) {
-    const guests = await page.$$(HotelPageLocators.savedGuestList);
-    for (let i = 0; i < guests.length; i++) {
-
-      if (await guests[i].textContent()) {
-        console.log('Saved guest item displayed');
+      const CLIENT = process.env.CLIENT?.toUpperCase();
+      switch (CLIENT) {
+        case 'BOB':
+        console.log('⏭️ BOB: Skipping ');
+          break;
+    
+        case 'IDFC':
+            await expect(page.locator(HotelPageLocators.savedGuestText)).toBeVisible();
+        console.log('Saved guest text is displayed');
+        break;
       }
-    }
   }
 
-  static async getSavedGuestName(page: Page): Promise<string> {
-    return (await page.locator(HotelPageLocators.savedGuestName).textContent())?.trim() || '';
-  }
+    static async printSavedGuestList(page: Page) {
+        const CLIENT = process.env.CLIENT?.toUpperCase();
+        switch (CLIENT) {
+          case 'BOB':
+          console.log('⏭️ BOB: Skipping ');
+            break;
+      
+          case 'IDFC':
+              const guests = await page.$$(HotelPageLocators.savedGuestList);
+          for (let i = 0; i < guests.length; i++) {
+
+            if (await guests[i].textContent()) {
+              console.log('Saved guest item displayed');
+            }
+          }
+          break;
+        }
+    
+    }
+
+    static async getSavedGuestName(page: Page): Promise<string> {
+        const CLIENT = process.env.CLIENT?.toUpperCase();
+
+        switch (CLIENT) {
+            case 'BOB':
+                console.log('⏭️ BOB: Skipping');
+                return '';
+
+            case 'IDFC':
+                return (
+                    (await page.locator(HotelPageLocators.savedGuestName).textContent())
+                        ?.trim() || ''
+                );
+
+            default:
+                console.log(`⏭️ ${CLIENT}: No implementation found`);
+                return '';
+        }
+    }
 
   static async verifyAndCountSavedGuestList(page: Page): Promise<number> {
     const savedGuestListLocator = HotelPageLocators.verifysavedGuestList;
@@ -238,7 +524,7 @@ export class HotelBookingPage {
           await HotelHomePage.clickHotelTabBTN(page);
         }
       }
-      const isVisible = await page.locator(HotelPageLocators.whereToTextBox).isVisible().catch(() => false);
+      const isVisible = await page.locator(HotelPageLocators.searchHotelButton).isVisible().catch(() => false);
       if (isVisible) {
         console.log('Location search box is displayed');
         return;
@@ -266,7 +552,7 @@ export class HotelBookingPage {
 
   static async redeamPointInputField(page: Page) {
     const inputFieldLocator = HotelPageLocators.redeamPointInputField;
-    await ElementHelper.clearAndEnterInTextField(page, inputFieldLocator, idfcTestData.redeemPointSection.enterRedeemPoint);
+    await ElementHelper.clearAndEnterInTextField(page, inputFieldLocator, Data.redeemPointSection.enterRedeemPoint);
     console.log('Redeem points input field filled');
   }
 

@@ -47,8 +47,12 @@ export class HotelHomePage {
     } else {
       await page.waitForTimeout(2500);
       const whereToTextBox = HotelPageLocators.whereToTextBox;
+      await ElementHelper.scrollElementToCentre(page, whereToTextBox);
+      await page.waitForTimeout(2000);
       await VerificationHelpers.elementIsVisible(page, whereToTextBox);
-      await ElementHelper.clearAndEnterInTextField(page, whereToTextBox, text);
+      await ElementHelper.clickElement(page, HotelPageLocators.whereToTextBox);
+      await page.waitForTimeout(1000);
+      await ElementHelper.clearAndTypeInTextField(page, whereToTextBox, text);
     }
   }
 
@@ -59,7 +63,7 @@ export class HotelHomePage {
       // const whereToTextBoxMobile = HotelPageLocators.whereToTextBoxMobile;
       // await VerificationHelpers.elementIsVisible(page, whereToTextBoxMobile);
     } else {
-      await page.waitForTimeout(2500);
+      await page.waitForTimeout(5000);
       const whereToTextBox = HotelPageLocators.whereToTextBox;
       await ElementHelper.isElementDisplayed(page, whereToTextBox);
     }
@@ -72,18 +76,57 @@ export class HotelHomePage {
       await VerificationHelpers.elementIsVisible(page, whereToDropdownSelectFirstOption);
       await ElementHelper.clickElement(page, whereToDropdownSelectFirstOption);
     } else {
-      await page.waitForTimeout(2500);
-      const whereToDropdownSelectFirstOption = HotelPageLocators.whereToDropdownSelectFirstOption;
+      await page.waitForTimeout(7000);
+      const dropdownOpened = page.locator(HotelPageLocators.dropdownOpened);
+
+    if (await dropdownOpened.isVisible()) {
+        console.log('Dropdown opened');
+    } else {
+        console.log('Dropdown closed');
+        await ElementHelper.clickElement(page, HotelPageLocators.whereToTextBox);
+        await page.waitForTimeout(4000);
+    }
+
+    const whereToDropdownSelectFirstOption = HotelPageLocators.whereToDropdownSelectFirstOption;
+    if (await page.locator(whereToDropdownSelectFirstOption).isVisible()) {
+        console.log('Dropdown opened');
+    } else {
+        console.log('Dropdown closed');
+        await ElementHelper.clickElement(page, HotelPageLocators.whereToTextBox);
+        await page.waitForTimeout(4000);
+    }
       await VerificationHelpers.elementIsVisible(page, whereToDropdownSelectFirstOption);
       await ElementHelper.clickElement(page, whereToDropdownSelectFirstOption);
     }
   }
 
-  static async clickDateButton(page: any) {
+static async clickDateButton(page: any) {
     const dateButton = HotelPageLocators.dateButton;
-    await ElementHelper.clickElement(page, dateButton);
-    console.log(" Date button clicked");
-  }
+    const checkInDateBoxOpened = HotelPageLocators.checkInDateBoxOpened;
+
+    const dateBox = page.locator(checkInDateBoxOpened);
+
+    // First check without clicking
+    if (await dateBox.count() > 0 && await dateBox.isVisible()) {
+        console.log("Check-in date box opened");
+        return;
+    }
+
+    // Try clicking up to 2 times
+    for (let attempt = 1; attempt <= 3; attempt++) {
+        await ElementHelper.clickElement(page, dateButton);
+        console.log(`Date button clicked - Attempt ${attempt}`);
+
+        await page.waitForTimeout(1000); // optional
+
+        if (await dateBox.count() > 0 && await dateBox.isVisible()) {
+            console.log("Check-in date box opened");
+            return;
+        }
+    }
+
+    console.log("Check-in date box is still not opened after 3 attempts");
+}
 
   static async verifyDateButtonDisplayed(page: any) {
     const dateButton = HotelPageLocators.dateButton;
@@ -96,7 +139,10 @@ export class HotelHomePage {
       const clickButton = HotelPageLocators.roomAndGuestButtonMobile;
       await ElementHelper.clickElement(page, clickButton);
     } else {
+      await page.waitForTimeout(2000);      
       const clickButton = HotelPageLocators.roomsAndGuestButton;
+      await ElementHelper.scrollElementToCentre(page, HotelPageLocators.roomsAndGuestButton);
+      await page.waitForTimeout(2000);
       await ElementHelper.clickElement(page, clickButton);
     }
     console.log(" Rooms and Guests button clicked");
@@ -115,6 +161,7 @@ export class HotelHomePage {
 
   static async clickSearchHotelButton(page: any) {
     const searchHotelButton = HotelPageLocators.searchHotelButton;
+    await ElementHelper.scrollElementToCentre(page, searchHotelButton);
     await ElementHelper.clickElement(page, searchHotelButton);
     await page.waitForTimeout(5000); 
     console.log(" Search Hotel button clicked");
@@ -224,6 +271,7 @@ export class HotelHomePage {
     const locationElement = page.locator(
       HotelPageLocators.getTextFromSearchResult
     );
+    // await ElementHelper.scrollElementToCentre(page, HotelPageLocators.getTextFromSearchResult);
     return String(
       await ElementHelper.getExpectedTextFromLocator(page, locationElement)
     );
@@ -630,14 +678,15 @@ export class HotelHomePage {
     if(DeviceHelper.isMobile()){
       const whereToTextBox = HotelPageLocators.whereToTextBox;
       await VerificationHelpers.elementIsVisible(page, whereToTextBox);
-      await ElementHelper.clickElement(page, whereToTextBox);
+      await ElementHelper.clickElement(page, HotelPageLocators.whereToTextBox);
       const whereToTextBoxMobile = HotelPageLocators.whereToTextBoxMobile;
       await VerificationHelpers.elementIsVisible(page, whereToTextBoxMobile);
       await ElementHelper.clearAndEnterInTextField(page, whereToTextBoxMobile, text);
     } else {
       const whereToTextBox = HotelPageLocators.whereToTextBox;
       await VerificationHelpers.elementIsVisible(page, whereToTextBox);
-      await ElementHelper.clearAndEnterInTextField(page, whereToTextBox, text);
+      await ElementHelper.clickElement(page, HotelPageLocators.whereToTextBox);
+      await ElementHelper.clearAndTypeInTextField(page, whereToTextBox, text);
     }
   }
   
