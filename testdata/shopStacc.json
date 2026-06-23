@@ -1,10 +1,10 @@
-{
+ {
+  "BOBCard": {
     "loginDataFill": {
-      "regularEmail": "user@example.com",
-      "regularPassword": "password123",
       "mobileNumber": "8448661387",
       "otp": "2248",
       "userId": "temp",
       "userPassword": "Tp@123#1"
     }
   }
+}

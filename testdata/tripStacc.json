@@ -6,13 +6,26 @@
     "hotelPage": {
       "rooms": 1
     },
-    
-  "flightPage": {
+    "flightPage": {
       "enterCityFrom": "Mumb",
-      "enterCityTo": "Banga"
+      "enterCityTo": "Banga",
+      "enterInternationalCityTo": "Dub"
+    }  ,
+    "travellername": {
+      "firstName": "John",
+      "lastName": "Doe",
+      "WrongfirstName": "J",
+      "WronglastName": "D",
+      "editedFirstName": "Test",
+      "editedLastName": "Demo",
+      "email": "Test@demo.com",
+      "phone": "9999999999",
+      "gst": "MMM999MMM",
+      "passport": "368994478",
+      "country": "I"
     }
-
   },
+  
   "BOB": {
     "loginDataFill": {
       "mobileNumber": "9999999999",
