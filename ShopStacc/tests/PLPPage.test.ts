@@ -2,16 +2,26 @@ import { test, Page, BrowserContext } from '@playwright/test';
 import { HomePage } from '../pages/HomePage';
 import { PLPPage } from '../pages/PlpPage';
 import { BaseHelper } from '../../TripStacc/pages/CommonMethods';
+import { CommonHelper } from '../../utils/commonHelper';
+import { LoginPage } from '../pages/LoginPage';
 let context: BrowserContext;
 let page: Page;
 
 test.beforeEach(async ({ browser }) => {
   context = await browser.newContext();
   page = await context.newPage();
-  await BaseHelper.launchAndLogin(page);
+  await CommonHelper.navigateToHomePage(page);
+  await LoginPage.LoginCredEnterBeforeEach(page);
+  await LoginPage.RestrictionPageBeforeEach(page);
 });
 
-test("SC_005,Gift Card PDP - Verify details and actions", { tag: ['@BOB', '@PLP','@Regression', '@Sanity'] },async ({ }) => {
+test.afterEach(async () => {
+   await page.close();
+   await context.close();
+ });
+ 
+
+test("SC_005,Gift Card PDP - Verify details and actions", { tag: ['@BOBCard', '@PLP','@Regression', '@Sanity'] },async ({ }) => {
 
   await test.step("Click Gift Card option", async () => {
     await page.waitForLoadState('domcontentloaded')

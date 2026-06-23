@@ -28,52 +28,26 @@
        "hotelChildren2": 2,
        "hotelChildrenAge2": [5, 10]
     },
-
-  "dateSelector": {
-    "fromDate": "8",
-    "fromMonth": "Jul 2026",
-    "toDate": "30",
-    "toMonth": "Jul 2026"
-  },
-    "hotelBookingDataFill": {
-    "firstName": "John",
-    "lastName": "Doe",
-    "panNumber": "ABCDE1234F",
-    "contactNumber": "9876543210",
-    "email": "john.doe@example.com"
-  },
-    
-  "flightPage": {
+    "flightPage": {
       "enterCityFrom": "Mumb",
       "enterCityTo": "Banga",
-      "enterInternationalCityTo": "dub"
-    },
+      "enterInternationalCityTo": "Dub"
+    }  ,
     "travellername": {
-    "firstName": "John",
-    "lastName": "Doe",
-    "editedFirstName": "Test",
-    "editedLastName": "Demo",
-    "email": "Test@demo.com",
-    "phone": "9999999999",
-    "gst": "MMM999MMM",
-    "passport": "368994478",
-    "country": "I"
+      "firstName": "John",
+      "lastName": "Doe",
+      "WrongfirstName": "J",
+      "WronglastName": "D",
+      "editedFirstName": "Test",
+      "editedLastName": "Demo",
+      "email": "Test@demo.com",
+      "phone": "9999999999",
+      "gst": "MMM999MMM",
+      "passport": "368994478",
+      "country": "I"
+    }
   },
-
-  "redeemPointSection": {
-    "enterRedeemPoint": "10"
-  },
-
-  "paymentDataFill": {
-    "cardNumber": "4405235026842471",
-    "cardExpiry": "05/30",
-    "cardCvv": "123",
-    "cardName": "John Doe",
-    "otp": "123456"
-  }
-
-
-  },
+  
   "BOB": {
     "loginDataFill": {
       "mobileNumber": "9999999999",

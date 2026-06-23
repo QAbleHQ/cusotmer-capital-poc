@@ -10,9 +10,13 @@ test.beforeEach(async ({ browser }) => {
   await BaseHelper.launchAndLogin(page);
 });
 
- 
+ test.afterEach(async () => {
+   await page.close();
+   await context.close();
+ });
 
 test('SC:013: Booking Status on My Account Section', { tag: ['@IDFC','@BOB', '@Myaccount', '@Sanity', '@Regression'] }, async () => {
+  
   await test.step('Step 1: Click My Account', async () => {
     await page.waitForTimeout(6000);
     await MyAccountPage.clickMyAccount(page);
@@ -41,6 +45,7 @@ test('SC:013: Booking Status on My Account Section', { tag: ['@IDFC','@BOB', '@M
 
   await test.step('Step 7: Verify Flights Completed Tab is visible', async () => {
     await MyAccountPage.verifyFlightsCompletedTabVisible(page);
+    await MyAccountPage.clickFlightsUpcomingTab(page);
   });
 
   await test.step('Step 8: Print From/To Text', async () => {
@@ -74,4 +79,12 @@ test('SC:013: Booking Status on My Account Section', { tag: ['@IDFC','@BOB', '@M
   await test.step('Step 15: Verify Buttons Based on Status', async () => {
     await MyAccountPage.verifyButtonsBasedOnStatus(page);
   });
+  await test.step('Step 16: Handle Confirmed Booking Actions', async () => {
+    await MyAccountPage.handleConfirmedBookingActions(page);
+  });
+  // await test.step('Step 17: Verify Hotel Bookings', async () => {
+  //    await page.waitForTimeout(6000);
+  //   await MyAccountPage.verifyHotelBookings(page);
+  // });
+
 });

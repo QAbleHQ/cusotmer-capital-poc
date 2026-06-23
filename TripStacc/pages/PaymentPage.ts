@@ -9,7 +9,86 @@ export class PaymentPage {
   static async clickCheckoutPayButton(page: Page) {
     await ElementHelper.clickElement(page, PaymentPageLocators.checkoutPayButton);
   }
+  static async completePaymentFlowBOB(page: Page) {
+    await ElementHelper.clickElement(page, PaymentPageLocators.termsConditionCheckboxBob);
+    await ElementHelper.clickElement(page, PaymentPageLocators.payNowButtonBob);
+    await ElementHelper.clickElement(page, PaymentPageLocators.continueTravellerButtonBob);
+    await ElementHelper.clickElement(page, PaymentPageLocators.continueButtonPaymentBob);
+    await PaymentPage.verifyCardOptions(page);
+    await page.waitForTimeout(2000);
+    await PaymentPage.clickCardOptionSelector(page);
+    await page.waitForTimeout(2000);
+    await PaymentPage.verifyCardFieldsVisible(page);
+    await page.waitForTimeout(2000);
+    await PaymentPage.fillCardNumber(page);
+    await page.waitForTimeout(2000);
+    await PaymentPage.fillCardExpiry(page);
+    await page.waitForTimeout(2000);
+    await PaymentPage.fillCardCvv(page);
+    await page.waitForTimeout(2000);
+    await PaymentPage.fillCardName(page);
+    await page.waitForTimeout(2000);
+    await PaymentPage.verifySaveCardPopupVisible(page);
+    await page.waitForTimeout(2000);
+    await PaymentPage.clickProceedButton(page);
+    await page.waitForTimeout(2000);
+    try {
+      await ElementHelper.clickElement(page, `//button[text()='Skip OTP']`);
+    } catch (e) {
+    }
+    await page.waitForSelector(PaymentPageLocators.otpInputField);
 
+    await ElementHelper.clearAndEnterInTextField(
+      page,
+      PaymentPageLocators.otpInputField,
+      idfcTestData.paymentDataFill.otp
+    );
+    await ElementHelper.clickElement(page, PaymentPageLocators.finalPaymentButtonBob);
+  }
+
+  static async completeCardPaymentFlowIDFC(page: Page) {
+    await PaymentPage.verifyCardOptions(page);
+    await page.waitForTimeout(2000);
+    await PaymentPage.clickCardOptionSelector(page);
+    await page.waitForTimeout(2000);
+    await PaymentPage.verifyCardFieldsVisible(page);
+    await page.waitForTimeout(2000);
+    await PaymentPage.fillCardNumber(page);
+    await page.waitForTimeout(2000);
+    await PaymentPage.fillCardExpiry(page);
+    await page.waitForTimeout(2000);
+    await PaymentPage.fillCardCvv(page);
+    await page.waitForTimeout(2000);
+    await PaymentPage.fillCardName(page);
+    await page.waitForTimeout(2000);
+    await PaymentPage.verifySaveCardPopupVisible(page);
+    await page.waitForTimeout(2000);
+    await PaymentPage.clickProceedButton(page);
+    await page.waitForTimeout(2000);
+    await PaymentPage.clickCloseWithoutSaveButton(page);
+    await page.waitForTimeout(2000);
+    await PaymentPage.verifyOtpPageVisibleandFillValue(page);
+    await page.waitForTimeout(2000);
+    await PaymentPage.clickSubmitButton(page);
+    await page.waitForTimeout(2000);
+  }
+
+static async completeCardPaymentFlow(page: Page, bank?: string) {
+  const CLIENT = bank?.toUpperCase() || process.env.CLIENT?.toUpperCase();
+
+  switch (CLIENT) {
+    case 'BOB':
+      await this.completePaymentFlowBOB(page);
+      break;
+
+    case 'IDFC':
+      await this.completeCardPaymentFlowIDFC(page);
+      break;
+
+    default:
+      break;
+  }
+}
   static async verifyCheckoutPayButton(page: Page) {
     await page.waitForSelector(PaymentPageLocators.checkoutPayButton, { state: 'visible' });
     const payableText = await page.textContent(PaymentPageLocators.checkoutPayButton);
@@ -26,7 +105,7 @@ export class PaymentPage {
   }
 
   static async clickBackIconButton(page: Page) {
-    if(DeviceHelper.isMobile()) {
+    if (DeviceHelper.isMobile()) {
       await ElementHelper.clickElement(page, PaymentPageLocators.backIconButtonMobile);
     } else {
       await ElementHelper.clickElement(page, PaymentPageLocators.backIconButton);

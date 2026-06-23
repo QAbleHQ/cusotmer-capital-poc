@@ -3,17 +3,25 @@ import { HomePage } from '../pages/HomePage';
 import { PLPPage } from '../pages/PlpPage';
 import { Checkoutpage } from '../pages/Checkoutpage';
 import { BaseHelper } from '../../TripStacc/pages/CommonMethods';
+import { CommonHelper } from '../../utils/commonHelper';
+import { LoginPage } from '../pages/LoginPage';
 let context: BrowserContext;
 let page: Page;
 
 test.beforeEach(async ({ browser }) => {
   context = await browser.newContext();
   page = await context.newPage();
-  await BaseHelper.launchAndLogin(page);
+  await CommonHelper.navigateToHomePage(page);
+  await LoginPage.LoginCredEnterBeforeEach(page);
+  await LoginPage.RestrictionPageBeforeEach(page);
 });
 
-
-test("SC_006, PDP — 'Buy Now' CTA redirects to Checkout page", { tag: ['@BOB', '@Checkout', '@Regression', '@Smoke'] },async ({ }) => {
+test.afterEach(async () => {
+   await page.close();
+   await context.close();
+ });
+ 
+test("SC_006, PDP — 'Buy Now' CTA redirects to Checkout page", { tag: ['@BOBCard', '@Checkout', '@Regression', '@Smoke'] },async ({ }) => {
 
   await test.step("Click Gift Card option", async () => {
     await page.waitForLoadState('domcontentloaded');

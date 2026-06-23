@@ -14,6 +14,10 @@ test.beforeEach(async ({ browser }) => {
   await BaseHelper.launchAndLogin(page);
 });
 
+test.afterEach(async () => {
+  await page.close();
+  await context.close();
+});
 
 test('SC_012: Booking Confirmation Page (Confirmed/Pending/Failed)', { tag: ['@SC_012','@IDFC','@BOB', '@Bookingconfirmation', '@Regression'] }, async () => {
     await test.step("Step 1: Enter City From Airport", async () => {

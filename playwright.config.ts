@@ -1,5 +1,5 @@
 import { defineConfig } from '@playwright/test';
-import { BOB_TS, IDFC_TS, BOB_SS } from './config/ts.config';
+import { BOB_TS, IDFC_TS, BOBCard_SS } from './config/ts.config';
 const mobileDevices = require('./mobileDevices');
 
 type BrowserName = 'chromium' | 'firefox' | 'webkit';
@@ -62,11 +62,16 @@ if (product === 'tripstacc') {
   } else {
     throw new Error(`Invalid CLIENT: ${CLIENT}`);
   }
+
 } else if (product === 'shopstacc') {
-  baseURL = BOB_SS[environment as keyof typeof BOB_SS] || BOB_SS.QA;
+
+  // ✅ FIX: Force BOBCard for ShopStacc (ignore CLIENT)
+  baseURL = BOBCard_SS[environment as keyof typeof BOBCard_SS] || BOBCard_SS.QA;
+
 } else {
   baseURL = BOB_TS[environment as keyof typeof BOB_TS] || BOB_TS.QA;
 }
+
 
 // ✅ Projects
 const projects: any[] = [];

@@ -9,4 +9,9 @@ export const LoginPageLocators = {
   otpText: `//div[@class='bodytext ']`,
   otpInputField: `//div[@class='otp-warpper']//input`,
   validateAndLoginButton: `//button[@class='login-button logindown userorlogin ']`,
+  enterUserID: `//input[@id="username"]`,
+  enterUserPass: `//input[@id="password"]`,
+  enterLoginBTN: `//button[@onclick="login()"]`,
+  DialogBox: `//dialog[@aria-describedby="tour_step_0-description"]`,
+  skipButtonInsideDialogBox: `//button[text()="Skip"]`
 };
