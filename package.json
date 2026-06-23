@@ -32,6 +32,7 @@
     "test:tripstacc:idfc:uat": "cross-env PROJECT=tripstacc-chrome-UAT CLIENT=IDFC npx playwright test TripStacc/tests",
     "test:tripstacc:bob:uat:mobile:iphone13:headed": "cross-env PROJECT=tripstacc-chrome-UAT-mobile-iphone13 CLIENT=BOB HEADED=true npx playwright test TripStacc/tests",
     "test:tripstacc:idfc:uat:mobile:iphone13:headed": "cross-env PROJECT=tripstacc-chrome-UAT-mobile-iphone13 CLIENT=IDFC HEADED=true npx playwright test TripStacc/tests",
+    "test:tripstacc:idfc:uat:mobile:iphone13:loginpage:headed": "cross-env PROJECT=tripstacc-chrome-UAT-mobile-iphone13-Loginpage CLIENT=IDFC HEADED=true npx playwright test TripStacc/tests",
 
   
 

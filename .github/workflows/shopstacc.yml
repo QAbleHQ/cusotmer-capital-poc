@@ -47,6 +47,7 @@ jobs:
       contents: write
     env:
       CI: true
+      CLIENT: BOBCARD
       ENVIRONMENT: ${{ github.event.inputs.environment || 'UAT' }}
       BROWSER: ${{ github.event.inputs.browser || 'Chrome' }}
       VIEWPORT: ${{ github.event.inputs.viewport || 'Web' }}
