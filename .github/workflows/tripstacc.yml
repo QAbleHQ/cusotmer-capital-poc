@@ -75,6 +75,7 @@ jobs:
       - name: Install Playwright browsers
         run: |
           case "$BROWSER" in
+            Chrome)  npx playwright install --with-deps chrome ;;
             Firefox) npx playwright install --with-deps firefox ;;
             WebKit)  npx playwright install --with-deps webkit ;;
             *)       npx playwright install --with-deps chromium ;;
