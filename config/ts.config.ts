@@ -9,7 +9,7 @@
   PROD: '',
   };
 
-   export const BOB_SS = {
+   export const BOBCard_SS = {
     QA: 'https://qa-sso.ai-loyalty.com/Login/BOBQASSQA13012026',
     UAT: 'https://uat-sso.ai-loyalty.com/Login/BOBUAT-SHOP01-20260204',
     PROD: '',
