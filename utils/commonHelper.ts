@@ -37,6 +37,21 @@ export class CommonHelper {
     }
     return result;
   }
+  
+  static generateRandomName(
+        length: number = 6,
+        characters: string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+      ): string {
+        let result = '';
+
+      for (let i = 0; i < length; i++) {
+        result += characters.charAt(
+            Math.floor(Math.random() * characters.length)
+        );
+      }
+        return result;
+    }
+
   static async waitForNavigation(page: any, timeout: number = 30000) {
     await page.waitForNavigation({ timeout });
     console.log('Navigation completed.');
