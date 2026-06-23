@@ -2,6 +2,13 @@ import { defineConfig } from '@playwright/test';
 import { BOB_TS, IDFC_TS, BOBCard_SS } from './config/ts.config';
 const mobileDevices = require('./mobileDevices');
 
+// ─── SETTINGS ────────────────────────────────────────────────────────────────
+const TIMEOUT = 120000;        // 2 min — max time per test
+const RETRIES = 2;             // retries on failure
+const WORKERS = { ci: 4, local: 2 };
+const HEADED  = process.env.HEADED === 'true';
+// ─────────────────────────────────────────────────────────────────────────────
+
 type BrowserName = 'chromium' | 'firefox' | 'webkit';
 
 // ✅ ENV + CLIENT
@@ -95,7 +102,7 @@ if (deviceName) {
             : browserEnv === 'edge'
             ? 'msedge'
             : undefined,
-        headless: process.env.HEADED !== 'true',
+        headless: !HEADED,
 
         viewport: selectedDevice.viewport,
         isMobile: selectedDevice.isMobile,
@@ -122,7 +129,7 @@ if (deviceName) {
           ? 'msedge'
           : undefined,
 
-      headless: process.env.HEADED !== 'true',
+      headless: !HEADED,
       viewport: null,
 
       screenshot: 'only-on-failure',
@@ -140,10 +147,10 @@ if (deviceName) {
 export default defineConfig({
   projects,
 
-  timeout: 120000,
+  timeout: TIMEOUT,
   fullyParallel: true,
-  workers: process.env.CI ? 4 : 2,
-  retries: 2,
+  workers: process.env.CI ? WORKERS.ci : WORKERS.local,
+  retries: RETRIES,
 
   reporter: [
     ['list'],
