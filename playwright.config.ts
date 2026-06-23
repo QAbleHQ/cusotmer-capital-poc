@@ -89,6 +89,12 @@ if (deviceName) {
       use: {
         baseURL,
         browserName: mappedBrowser,
+        channel:
+          browserEnv === 'chrome'
+            ? 'chrome'
+            : browserEnv === 'edge'
+            ? 'msedge'
+            : undefined,
         headless: process.env.HEADED !== 'true',
 
         viewport: selectedDevice.viewport,
