@@ -1,6 +1,7 @@
 import { test, Page, BrowserContext } from '@playwright/test';
 import { CommonHelper } from '../../utils/commonHelper';
-import { LoginPage } from '../pages/LoginPage';
+import { VerificationHelpers } from '../../utils/verificationHelper';
+import { LoginPage } from '../../ShopStacc/pages/LoginPage';
 import bobTestData from '../../testdata/shopStacc.json';
 
 let context: BrowserContext;
@@ -12,9 +13,13 @@ test.beforeEach(async ({ browser }) => {
   await CommonHelper.navigateToHomePage(page);
    
 });
+test.afterEach(async () => {
+   await page.close();
+   await context.close();
+ });
+ 
 
-
-test('SC_001, Login with valid mobile number and OTP', { tag: ['@BOB','@Login', '@Smoke', '@Sanity'] }, async () => {
+test('SC_001, Login with valid mobile number and OTP', { tag: ['@BOBCard','@Login', '@smoke', '@sanity'] }, async () => {
   
   await test.step('If login button is displayed, then uncomment this', async () => {
     await LoginPage.LoginCredEnterBeforeEach(page);

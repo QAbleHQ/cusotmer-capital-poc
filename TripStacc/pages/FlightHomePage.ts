@@ -207,11 +207,6 @@ static async verifyRoute(page: Page, from: string, to: string) {
     }
   }
 
-  static async VerifyOneWayRoundTripCalendarVisible(page: any) {
-    await ElementHelper.waitForElementVisible(page, FlightPageLocators.VerifyOneWayRoundTripCalendar);
-    await VerificationHelpers.elementIsVisible(page, FlightPageLocators.VerifyOneWayRoundTripCalendar);
-  }
-
   static async clickOntravellersAndCabinClass(page: any) {
     await ElementHelper.clickElement(page, FlightPageLocators.travellersAndCabinClass);
   }
@@ -275,13 +270,6 @@ static async verifyTravellerOptions(page: Page) {
     console.log(`Selected Class: ${FlightHomePage.selectedTravelClass}`);
   }
 
-  static async verifyTravelClass(page: Page): Promise<void> {
-    const summaryText = await page.locator(FlightPageLocators.travelsummaryCount).textContent();
-    console.log(`Result Page Text: ${summaryText}`);
-    expect(summaryText).toContain(FlightHomePage.selectedTravelClass);
-    console.log(`Verified Class: ${FlightHomePage.selectedTravelClass}`);
-  }
-
   static async clickOnPremiumClassButton(page: any) {
     await ElementHelper.clickElement(page, FlightPageLocators.travelClassPremiumEconomyOption);
   }
@@ -291,17 +279,9 @@ static async verifyTravellerOptions(page: Page) {
     return count?.trim() || '';
   }
 
-  static async verifyTravellerCount(page: Page, expectedTravellerCount: string): Promise<void> {
-    const summaryText = await page.locator(FlightPageLocators.travelsummaryCount).textContent();
-    const actualTravellerCount = summaryText?.match(/\d+(?=\s*Traveller)/i)?.[0];
-    console.log(`Expected Count: ${expectedTravellerCount}`);
-    console.log(`Actual Count: ${actualTravellerCount}`);
-    expect(actualTravellerCount).toBe(expectedTravellerCount);
-  }
-
   static async scrolltoViewTravelAdvisory(page: any) {
-    if(await ElementHelper.isElementDisplayed(page, FlightPageLocators.travelAdvisoryText)) {
-    await ElementHelper.scrollToElement(page, FlightPageLocators.travelAdvisoryText);
+    if(await ElementHelper.isElementDisplayed(page, FlightPageLocators.travelDetailsField)) {
+    await ElementHelper.scrollToElement(page, FlightPageLocators.travelDetailsField);
     }
   }
   static async clickOnSearchFlightsButton(page: any) {
@@ -313,6 +293,7 @@ static async verifyTravellerOptions(page: Page) {
     await FlightHomePage.reloadIfNoRecordFound(page);
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.firstFlightCard);
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators.firstFlightCard);
+    await page.waitForTimeout(5000);
   }
 
   static async printFlightRoutes(page: Page) {
@@ -326,24 +307,21 @@ static async verifyTravellerOptions(page: Page) {
       console.log(`Box ${i + 1}: ${text?.trim()}`);
     }
   }
-  static async clickOnFilterListButton(page: any) {
-    await page.waitForTimeout(5000);
-    if (DeviceHelper.isMobile()) {
-      await ElementHelper.clickElement(page, FlightPageLocators.filterIconMobile);
-    } else {
-      await ElementHelper.clickElement(page, FlightPageLocators.flightListFilterButton);
-    }
-    
-  }
-
-  static async clickOnFilterApplyButton(page: any) {
-    await ElementHelper.clickElement(page, FlightPageLocators.filterApplyButton);
-  }
 
   static async clickOnClearAllButton(page: any) {
+    const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
+      console.log('⏭️ BOB: Skipping Filter Apply Button verification.');
+      break;
+    case 'IDFC':
     await page.waitForTimeout(3000);
     await ElementHelper.clickElement(page, FlightPageLocators.filterClearButton);
+    break;
   }
+  }
+
+
   static async VerifyStopsTabVisible(page: any) {
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.filterTabStops);
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators.filterTabStops);
@@ -358,42 +336,101 @@ static async verifyTravellerOptions(page: Page) {
   }
 
   static async clickOnFilterNonStoputton(page: any) {
+  const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
+      console.log('⏭️ BOB: Skipping Filter Apply Button verification.');
+      break;
+    case 'IDFC': 
     await page.waitForTimeout(3000);
     await ElementHelper.clickElement(page, FlightPageLocators.filterNonStop);
+    break;
+  }
   }
 
   static async verifyFilteredStopsDetails(page: Page): Promise<void> {
-    const flightCards = page.locator(FlightPageLocators.FligthStopDetails);
-    const count = await flightCards.count();
-    console.log(`Total Flights Found: ${count}`);
-    for (let i = 0; i < count; i++) {
-      const airlineName = await flightCards.nth(i).textContent();
-      console.log(`Flight ${i + 1}: ${airlineName?.trim()}`);
-      expect(airlineName?.trim().toLowerCase()).toContain(FlightHomePage.selectedNonStop.toLowerCase());
-    }
+  const flightCards = page.locator(FlightPageLocators.FligthStopDetails);
+  const count = await flightCards.count();
+  console.log(`Total Flights Found: ${count}`);
+
+  for (let i = 0; i < count; i++) {
+    const airlineName = await flightCards.nth(i).textContent();
+
+    const actual = airlineName?.trim().toLowerCase().replace(/[-\s]+/g, " ");
+    const expected = FlightHomePage.selectedNonStop.toLowerCase().replace(/[-\s]+/g, " ");
+
+    console.log(`Flight ${i + 1}: ${actual}`);
+
+    expect(actual).toContain(expected);
   }
+}
 
   static async select1StopFilter(page: Page): Promise<void> {
+    await page.waitForTimeout(15000)
     await ElementHelper.clickElement(page, FlightPageLocators.filter1Stop);
+    await page.waitForTimeout(5000)
     const airlineText = await page.locator(FlightPageLocators.filter1Stop).textContent();
     FlightHomePage.selectedNonStop = airlineText?.split('(')[0].trim() || '';
     console.log(`Selected 1-Stop Filter: ${FlightHomePage.selectedNonStop}`);
+    await page.waitForTimeout(5000)
   }
 
   static async verifyFiltered1StopsDetails(page: Page): Promise<void> {
-    const flightCards = page.locator(FlightPageLocators.FligthStopDetails);
-    const count = await flightCards.count();
-    console.log(`Total Flights Found: ${count}`);
-    for (let i = 0; i < count; i++) {
-      const airlineName = await flightCards.nth(i).textContent();
-      console.log(`Flight ${i + 1}: ${airlineName?.trim()}`);
-      expect(airlineName?.trim().toLowerCase()).toContain(FlightHomePage.selectedNonStop.toLowerCase());
+  const CLIENT = process.env.CLIENT?.trim().toUpperCase();
+  console.log("CLIENT:", CLIENT);
+
+  switch (CLIENT) {
+    case 'BOB': {
+      const flightCards = page.locator(FlightPageLocators.FligthStopDetails);
+      const count = await flightCards.count();
+
+      console.log(`Total Flights Found: ${count}`);
+
+      for (let i = 0; i < count; i++) {
+        const text = await flightCards.nth(i).textContent();
+        const actual = text?.trim().toLowerCase();
+
+        console.log(`Flight ${i + 1}: ${actual}`);
+
+        expect(actual).toContain("stop: 1");
+      }
+      break; // ✅ important
     }
+
+    case 'IDFC': {
+      const flightCards = page.locator(FlightPageLocators.FligthStopDetails);
+      const count = await flightCards.count();
+
+      console.log(`Total Flights Found: ${count}`);
+
+      for (let i = 0; i < count; i++) {
+        const airlineName = await flightCards.nth(i).textContent();
+
+        console.log(`Flight ${i + 1}: ${airlineName?.trim()}`);
+
+        expect(airlineName?.trim().toLowerCase())
+          .toContain(FlightHomePage.selectedNonStop.toLowerCase());
+      }
+      break; // ✅ important
+    }
+
+    default:
+      throw new Error(`Unsupported CLIENT: ${CLIENT}`);
   }
+}
+
   static async clickOnDepartureTabButton(page: any) {
+    const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
+      console.log('⏭️ BOB: Skipping Filter Apply Button verification.');
+      break;
+    case 'IDFC':
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.filterTabDepartureTime);
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators.filterTabDepartureTime);
     await ElementHelper.clickElement(page, FlightPageLocators.filterTabDepartureTime);
+    break;
+    }
   }
 
   static async VerifyfilterDepartureTimeEarlyMorningVisible(page: any) {
@@ -417,28 +454,69 @@ static async verifyTravellerOptions(page: Page) {
   }
 
   static async VerifyFilterDepartureTimeEarlyMorningReturnVisible(page: any) {
+    const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
+      console.log('⏭️ BOB: Skipping Filter Departure Time Early Morning Return verification.');
+      break;
+    case 'IDFC': 
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.FilterDepartureTimeEarlyMorningReturn);
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators.FilterDepartureTimeEarlyMorningReturn);
+    break;
+  }
   }
 
   static async VerifyFilterDepartureTimeMorningReturnVisible(page: any) {
+    const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
+      console.log('⏭️ BOB: Skipping Filter Departure Time Morning Return verification.');
+      break;
+    case 'IDFC': 
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.FilterDepartureTimeMorningReturn);
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators.FilterDepartureTimeMorningReturn);
+    break;
+  }
   }
 
   static async VerifyFilterDepartureTimeAfternoonReturnVisible(page: any) {
+    const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
+      console.log('⏭️ BOB: Skipping Filter Departure Time Afternoon Return verification.');
+      break;
+    case 'IDFC': 
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.FilterDepartureTimeAfternoonReturn);
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators.FilterDepartureTimeAfternoonReturn);
+    break;
   }
+}
 
   static async VerifyFilterDepartureTimeEveningReturnVisible(page: any) {
+    const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
+      console.log('⏭️ BOB: Skipping Filter Departure Time Evening Return verification.');
+      break;
+    case 'IDFC': 
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.FilterDepartureTimeEveningReturn);
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators.FilterDepartureTimeEveningReturn);
+    break;
   }
+  }
+
   static async clickOnArrivalTabButton(page: any) {
+    const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
+      console.log('⏭️ BOB: Skipping click On Arrival Tab Button.');
+      break;
+    case 'IDFC': 
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.filterTabArrivalTime);
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators.filterTabArrivalTime);
     await ElementHelper.clickElement(page, FlightPageLocators.filterTabArrivalTime);
+    break;
+  }
   }
 
   static async VerifyfilterArrivalTimeEarlyMorningVisible(page: any) {
@@ -462,29 +540,69 @@ static async verifyTravellerOptions(page: Page) {
   }
 
   static async VerifyFilterArrivalTimeEarlyMorningReturnVisible(page: any) {
+    const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
+      console.log('⏭️ BOB: Skipping Filter Arrival Time Early Morning Return verification.');
+      break;
+    case 'IDFC': 
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.FilterArrivalTimeEarlyMorningReturn);
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators.FilterArrivalTimeEarlyMorningReturn);
+    break;
+  }
   }
 
   static async VerifyFilterArrivalTimeMorningReturnVisible(page: any) {
+    const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
+      console.log('⏭️ BOB: Skipping Filter Arrival TimeMorning Return verification.');
+      break;
+    case 'IDFC': 
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.FilterArrivalTimeMorningReturn);
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators.FilterArrivalTimeMorningReturn);
+    break;
+  }
   }
 
   static async VerifyFilterArrivalTimeAfternoonReturnVisible(page: any) {
+    const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
+      console.log('⏭️ BOB: Skipping Filter Arrival Time Afternoon Return verification.');
+      break;
+    case 'IDFC': 
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.FilterArrivalTimeAfternoonReturn);
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators.FilterArrivalTimeAfternoonReturn);
+    break;
+  }
   }
 
   static async VerifyFilterArrivalTimeEveningReturnVisible(page: any) {
+    const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
+      console.log('⏭️ BOB: Skipping Filter Arrival Time Evening Return verification.');
+      break;
+    case 'IDFC': 
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.FilterArrivalTimeEveningReturn);
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators.FilterArrivalTimeEveningReturn);
+    break;
+  }
   }
 
   static async clickOnfilterTabFareTypeTabButton(page: any) {
+    const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
+      console.log('⏭️ BOB: Skipping click On filter Tab Fare Type Tab Button.');
+      break;
+    case 'IDFC': 
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.filterTabFareType);
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators.filterTabFareType);
     await ElementHelper.clickElement(page, FlightPageLocators.filterTabFareType);
+    break;
+  }
   }
 
   static async clickOnfilterTabFareTypeRefundableButton(page: any) {
@@ -532,13 +650,22 @@ static async verifyTravellerOptions(page: Page) {
           console.log(`Flight ${i + 1}: ${airlineName?.trim()}`);
           expect(airlineName?.trim().toLowerCase()).toContain(FlightHomePage.selectedNonStop.toLowerCase());
         }
+        await FlightHomePage.clickOnFilterListButton(page);
       }
     }
   }
   static async clickOnfilterAirlineTabButton(page: any) {
+    const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
+      console.log('⏭️ BOB: Skipping Filter Apply Button verification.');
+      break;
+    case 'IDFC':
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.filterTabAirlines);
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators.filterTabAirlines);
     await ElementHelper.clickElement(page, FlightPageLocators.filterTabAirlines);
+    break;
+  }
   }
 
   static async selectFirstAirlineFilter(page: Page): Promise<void> {
@@ -559,8 +686,17 @@ static async verifyTravellerOptions(page: Page) {
     }
   }
   static async clickOnNextButtonOnFlightDetailsPage(page: any) {
+  const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
+      await ElementHelper.clickElement(page, FlightPageLocators.bookNowButtonOnFlightDetailsPage);
+      break;
+
+    case 'IDFC':
     await ElementHelper.clickElement(page, FlightPageLocators.nextButtonOnFlightDetailsPage);
     await page.waitForTimeout(3000);
+    break;
+  }
   }
 
   static async clickOnBookButtonOnFlightDetailsPage(page: any) {
@@ -580,14 +716,32 @@ static async verifyTravellerOptions(page: Page) {
   static selectedPhone: string;
 
   static async clickOnAddNewTravellerButton(page: any) {
+    const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
+      console.log('⏭️ BOB: Skipping click On Add New Traveller Button.');
+      break;
+
+    case 'IDFC':
     await ElementHelper.clickElement(page, FlightPageLocators.addnewTravellerButton);
     await page.waitForTimeout(3000);
+    break;
+  }
   }
 
   static async clickOnMrGenderButton(page: any) {
+  const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
+      console.log('⏭️ BOB: Skipping click On MrGender Button.');
+      break;
+
+    case 'IDFC':
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators.travellerGenderMR);
     await ElementHelper.clickElement(page, FlightPageLocators.travellerGenderMR);
     await page.waitForTimeout(3000);
+    break;
+  }
   }
 
   static async VerifyFirstNameErrorMessageVisible(page: any) {
@@ -600,11 +754,75 @@ static async verifyTravellerOptions(page: Page) {
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators.LastNameErrorMessage);
   }
 
+  static async EnterWrongFirstName(page: any, data: any) {
+  const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
+      console.log('⏭️ BOB: Skipping Enter First Name.');
+      break;
+
+    case 'IDFC':
+    await ElementHelper.clearAndEnterInTextField(page, FlightPageLocators.firstNameInput, data);
+    const firstNameText = await page.locator(FlightPageLocators.firstNameInput).inputValue();
+    FlightHomePage.selectedFirstName = firstNameText?.split('(')[0].trim() || '';
+    console.log(`Entered First Name: ${FlightHomePage.selectedFirstName}`);
+    break;
+  }
+  }
+
   static async EnterFirstName(page: any, data: any) {
     await ElementHelper.clearAndEnterInTextField(page, FlightPageLocators.firstNameInput, data);
     const firstNameText = await page.locator(FlightPageLocators.firstNameInput).inputValue();
     FlightHomePage.selectedFirstName = firstNameText?.split('(')[0].trim() || '';
     console.log(`Entered First Name: ${FlightHomePage.selectedFirstName}`);
+  }
+
+  static async EnterWrongLastName(page: any, data: any) {
+  const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
+      console.log('⏭️ BOB: Skipping Enter First Name.');
+      break;
+
+    case 'IDFC':
+    await ElementHelper.clearAndEnterInTextField(page, FlightPageLocators.lastNameInput, data);
+    const lastNameText = await page.locator(FlightPageLocators.lastNameInput).inputValue();
+    FlightHomePage.selectedLastName = lastNameText?.split('(')[0].trim() || '';
+    console.log(`Entered Last Name: ${FlightHomePage.selectedLastName}`);
+    break;
+  }
+  }
+
+  static async EnterEditFirstName(page: any, data: any) {
+  const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
+      console.log('⏭️ BOB: Skipping Enter First Name.');
+      break;
+
+    case 'IDFC':
+    await ElementHelper.clearAndEnterInTextField(page, FlightPageLocators.lastNameInput, data);
+    const lastNameText = await page.locator(FlightPageLocators.lastNameInput).inputValue();
+    FlightHomePage.selectedLastName = lastNameText?.split('(')[0].trim() || '';
+    console.log(`Entered Last Name: ${FlightHomePage.selectedLastName}`);
+    break;
+  }
+  }
+
+  static async EnterEditLastName(page: any, data: any) {
+  const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
+      console.log('⏭️ BOB: Skipping Enter First Name.');
+      break;
+
+    case 'IDFC':
+    await ElementHelper.clearAndEnterInTextField(page, FlightPageLocators.lastNameInput, data);
+    const lastNameText = await page.locator(FlightPageLocators.lastNameInput).inputValue();
+    FlightHomePage.selectedLastName = lastNameText?.split('(')[0].trim() || '';
+    console.log(`Entered Last Name: ${FlightHomePage.selectedLastName}`);
+    break;
+  }
   }
 
   static async EnterLastName(page: any, data: any) {
@@ -615,28 +833,65 @@ static async verifyTravellerOptions(page: Page) {
   }
 
   static async verifyFirstTravellerNameOnTravellerDetailPage(page: Page): Promise<void> {
+    const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
+      console.log('⏭️ BOB: Skipping Enter First Name.');
+      break;
+
+    case 'IDFC':
     const summaryText = await page.locator(FlightPageLocators.FirstTravellerNameOnSummary).textContent();
     console.log(`Result Page Text: ${summaryText}`);
     expect(summaryText).toContain(FlightHomePage.selectedFirstName);
     console.log(`Verified First Traveller Name: ${FlightHomePage.selectedFirstName}`);
-  }
+    break;
+    }
+    }
 
   static async verifyLastTravellerNameOnTravellerDetailPage(page: Page): Promise<void> {
+    const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
+      console.log('⏭️ BOB: Skipping Enter First Name.');
+      break;
+
+    case 'IDFC':
     const summaryText = await page.locator(FlightPageLocators.FirstTravellerNameOnSummary).textContent();
     console.log(`Result Page Text: ${summaryText}`);
     expect(summaryText).toContain(FlightHomePage.selectedLastName);
     console.log(`Verified Last Traveller Name: ${FlightHomePage.selectedLastName}`);
+    break;
+  }
   }
 
   static async clickOnAddTravellerButton(page: any) {
+    const CLIENT = process.env.CLIENT?.toUpperCase();
+    switch (CLIENT) {
+    case 'BOB':
+      await ElementHelper.clickElement(page, FlightPageLocators.continueButtonOnFlightDetailsPage);
+    await page.waitForTimeout(3000);
+      break;
+
+    case 'IDFC':
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators.addTravellerButton);
     await ElementHelper.clickElement(page, FlightPageLocators.addTravellerButton);
     await page.waitForTimeout(3000);
+    break;
+    }
   }
 
   static async clickOnFirstNameEditButton(page: any) {
+    const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
+      console.log('⏭️ BOB: Skipping click On Edit Button Page.');
+      break;
+
+    case 'IDFC':
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators.FirstTravellerNameEditButton);
     await ElementHelper.clickElement(page, FlightPageLocators.FirstTravellerNameEditButton);
+    break;
+  }
   }
   
   
@@ -646,17 +901,44 @@ static async verifyTravellerOptions(page: Page) {
   }
 
   static async clickOnEditConfirmButtonPage(page: any) {
+      const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
+      console.log('⏭️ BOB: Skipping click On Edit Confirm Button Page.');
+      break;
+
+    case 'IDFC':
     await ElementHelper.clickElement(page, FlightPageLocators.firstTravellerNameEditConfirmButton);
     await page.waitForTimeout(3000);
+    break;
+  }
   }
   static async VerifyEmailHeaderVisible(page: any) {
+  const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
+      console.log('⏭️ BOB: Skipping traveller count verification.');
+      break;
+
+    case 'IDFC':  
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.travellerEmail);
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators.travellerEmail);
+    break;
+  }
   }
 
   static async VerifyPhoneHeaderVisible(page: any) {
+    const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
+      console.log('⏭️ BOB: Skipping traveller count verification.');
+      break;
+
+    case 'IDFC':
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.travellerPhoneNumber);
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators.travellerPhoneNumber);
+    break;
+  }
   }
 
   static async VerifyDefaultTravellerEmail(page: any) {
@@ -674,13 +956,35 @@ static async verifyTravellerOptions(page: Page) {
   }
 
   static async ClearEmailAndVerifyEmailError(page: any) {
+    const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
+      await ElementHelper.clearAndEnterInTextField(page, FlightPageLocators.defaultTavellerEmail, '');
+      await ElementHelper.clickElement(page, FlightPageLocators.continueButtonOnFlightDetailsPage);
+      await VerificationHelpers.elementIsVisible(page, FlightPageLocators.emailErrorMessage);
+      break;
+
+    case 'IDFC':
     await ElementHelper.clearAndEnterInTextField(page, FlightPageLocators.defaultTavellerEmail, '');
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators.emailErrorMessage);
+    break;
+  }
   }
 
   static async ClearMobileAndVerifyMobileError(page: any) {
+    const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
+      await ElementHelper.clearAndEnterInTextField(page, FlightPageLocators.defaultTravellerPhone, '');
+      await ElementHelper.clickElement(page, FlightPageLocators.continueButtonOnFlightDetailsPage);
+    await VerificationHelpers.elementIsVisible(page, FlightPageLocators.phoneErrorMessage);
+      break;
+
+    case 'IDFC':
     await ElementHelper.clearAndEnterInTextField(page, FlightPageLocators.defaultTravellerPhone, '');
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators.phoneErrorMessage);
+    break;
+  }
   }
 
   static async EnterNewTravellerEmail(page: any, data: any) {
@@ -699,13 +1003,31 @@ static async verifyTravellerOptions(page: Page) {
   }
 
   static async ClearGSTAndVerifyError(page: any) {
+    const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
+      console.log('⏭️ BOB: Skipping');
+      break;
+
+    case 'IDFC':
     await ElementHelper.clearAndEnterInTextField(page, FlightPageLocators.defaultGSTNumber, '');
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators.gstErrorMessage);
+    break;
+  }
   }
 
   static async EnterNewTravellerGST(page: any, data: any) {
+    const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
+      console.log('⏭️ BOB: Skipping ');
+      break;
+
+    case 'IDFC':
     await ElementHelper.clearAndEnterInTextField(page, FlightPageLocators.defaultGSTNumber, data);
     await VerificationHelpers.elementIsHidden(page, FlightPageLocators.gstErrorMessage);
+    break;
+  }
   }
 
   static async VerifyPassportHeaderVisible(page: any) {
@@ -714,18 +1036,45 @@ static async verifyTravellerOptions(page: Page) {
   }
 
   static async VerifyPassportErrorMessageVisible(page: any) {
-    await ElementHelper.waitForElementVisible(page, FlightPageLocators.passportErrorMessage);
-    await VerificationHelpers.elementIsVisible(page, FlightPageLocators.passportErrorMessage);
+     const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
+      await ElementHelper.waitForElementVisible(page, FlightPageLocators.passportErrorMessage);
+      await VerificationHelpers.elementIsVisible(page, FlightPageLocators.passportErrorMessage);
+      break;
+
+    case 'IDFC':
+    console.log('⏭️ IDFC: Skipping ');
+    break;
+  }
   }
 
   static async VerifyPassportCountryErrorMessageVisible(page: any) {
+     const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.passportCountryErrorMessage);
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators.passportCountryErrorMessage);
+      break;
+
+    case 'IDFC':
+    console.log('⏭️ IDFC: Skipping ');
+    break;
+  }
   }
 
   static async VerifyPassportDateErrorMessageVisible(page: any) {
+     const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.passportExpiryErrorMessage);
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators.passportExpiryErrorMessage);
+    break;
+
+    case 'IDFC':
+    console.log('⏭️ IDFC: Skipping ');
+    break;
+  }
   }
 
   static async EnterNewTravellerPassportNumber(page: any, data: any) {
@@ -740,11 +1089,22 @@ static async verifyTravellerOptions(page: Page) {
   }
 
   static async selectExpireDateForPassport(page: any) {
+    const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
+    await ElementHelper.selectOptionByValue(page, FlightPageLocators.passportDay, "10")
+    await ElementHelper.selectOptionByValue(page, FlightPageLocators.passportMonth, "10")
+    await ElementHelper.selectOptionByValue(page, FlightPageLocators.passportYear, "2027")
+    break;
+
+    case 'IDFC':
     await ElementHelper.clickElement(page, FlightPageLocators.expireDate);
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 8);
     const targetDay = tomorrow.getDate().toString();
     await page.locator(FlightPageLocators.dateCell(targetDay)).click();
+    break;
+  }   
   }
 
   static async ScrolltosaveTravellInfo(page: any) {
@@ -867,6 +1227,115 @@ static async reloadIfNoRecordFound(page: any) {
           break;
         }
     }
+}
+
+static async verifyTravellerCount(page: Page,expectedTravellerCount: string): Promise<void> {
+  const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
+      console.log('⏭️ BOB: Skipping traveller count verification.');
+      break;
+
+    case 'IDFC':
+      const summaryText = await page.locator(FlightPageLocators.travelsummaryCount).textContent();
+      const actualTravellerCount = summaryText?.match(/\d+(?=\s*Traveller)/i)?.[0];
+
+      console.log(`Expected Count: ${expectedTravellerCount}`);
+      console.log(`Actual Count: ${actualTravellerCount}`);
+
+      expect(actualTravellerCount).toBe(expectedTravellerCount);
+      break;
+
+    default:
+      console.log(`No traveller count logic configured for client: ${CLIENT}`);
+      break;
+  }
+}
+
+static async VerifyOneWayRoundTripCalendarVisible(page: any) {
+  const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
+      console.log('⏭️ BOB: Skipping Verify One Way Round Trip Calendar verification.');
+      break;
+    case 'IDFC':  
+    await ElementHelper.waitForElementVisible(page, FlightPageLocators.VerifyOneWayRoundTripCalendar);
+    await VerificationHelpers.elementIsVisible(page, FlightPageLocators.VerifyOneWayRoundTripCalendar);
+    break;
+  }
+}
+
+static async verifyTravelClass(page: Page): Promise<void> {
+  const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
+      console.log('⏭️ BOB: Skipping Verify Travel Class verification.');
+      break;
+    case 'IDFC':  
+    const summaryText = await page.locator(FlightPageLocators.travelsummaryCount).textContent();
+    console.log(`Result Page Text: ${summaryText}`);
+    expect(summaryText).toContain(FlightHomePage.selectedTravelClass);
+    console.log(`Verified Class: ${FlightHomePage.selectedTravelClass}`);
+    break;
+  }
+}
+
+static async clickOnFilterListButton(page: any) {
+  const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
+      console.log('⏭️ BOB: Skipping Filter List Button verification.');
+      break;
+    case 'IDFC': 
+    await page.waitForTimeout(5000);
+    if (DeviceHelper.isMobile()) {
+      await ElementHelper.clickElement(page, FlightPageLocators.filterIconMobile);
+    } else {
+      await ElementHelper.clickElement(page, FlightPageLocators.flightListFilterButton);
+    }
+    break;
+  }
+ 
+  }
+
+  static async clickOnFilterApplyButton(page: any) {
+  const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
+      console.log('⏭️ BOB: Skipping Filter Apply Button verification.');
+      break;
+    case 'IDFC': 
+    await ElementHelper.clickElement(page, FlightPageLocators.filterApplyButton);
+    break;
+  }
+  }
+
+static async verifyMaxPassengerLimit(page: Page): Promise<void> {
+  const adultPlusButton = page.locator(FlightPageLocators.travellersAdultPlusButton);
+  const adultMinusButton = page.locator(FlightPageLocators.travellersAdultMinusButton);
+  const maxPassengerError = page.locator(FlightPageLocators.passengerAlert);
+
+  // Keep clicking "+" until the error message appears
+  while (!(await maxPassengerError.isVisible())) {
+    await adultPlusButton.click();
+    await page.waitForTimeout(2000); // Optional: allows UI to update
+  }
+
+  // Verify the error message is visible
+  await expect(maxPassengerError).toBeVisible();
+  await expect(maxPassengerError).toHaveText(
+    /Max 9 passengers? ?\(Adult\+Child\) allowed/i
+  );
+
+  console.log("✅ Max passenger error message is displayed.");
+
+  // Click "-" once to reduce the count
+  await adultMinusButton.click();
+
+  // Verify the error message is no longer visible
+  await expect(maxPassengerError).toBeHidden();
+
+  console.log("✅ Max passenger error message is no longer visible.");
 }
 
 

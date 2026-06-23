@@ -12,6 +12,7 @@ export class HomePage {
   const CLIENT = process.env.CLIENT?.toUpperCase();
   switch (CLIENT) {
     case 'BOB':
+      await page.waitForLoadState('domcontentloaded');
       await FlightHomePage.verifyCardSelectionPopupVisible(page);
       await FlightHomePage.selectCard(page);
       await FlightHomePage.verifyPopupClosed(page);

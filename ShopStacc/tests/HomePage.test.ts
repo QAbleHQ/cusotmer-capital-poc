@@ -1,17 +1,25 @@
 import { test, Page, BrowserContext } from '@playwright/test';
 import { HomePage } from '../pages/HomePage';
 import { BaseHelper } from '../../TripStacc/pages/CommonMethods';
+import { LoginPage } from '../pages/LoginPage';
+import { CommonHelper } from '../../utils/commonHelper';
 let context: BrowserContext;
 let page: Page;
 
 test.beforeEach(async ({ browser }) => {
   context = await browser.newContext();
   page = await context.newPage();
-  await BaseHelper.launchAndLogin(page);
+  await CommonHelper.navigateToHomePage(page);
+  await LoginPage.LoginCredEnterBeforeEach(page);
+  await LoginPage.RestrictionPageBeforeEach(page);
 });
 
-
-test('SC_002, Home page — Trending Categories section visible and clickable', { tag: ['@BOB', '@Homepage', '@Smoke', '@Sanity'] }, async () => {
+test.afterEach(async () => {
+   await page.close();
+   await context.close();
+ });
+ 
+test('SC_002, Home page — Trending Categories section visible and clickable', { tag: ['@BOBCard', '@Homepage', '@Smoke', '@Sanity'] }, async () => {
   
   await test.step('Verify All homepage sections is visible: banner, categories, trending section Displayed', async () => {
     await HomePage.verifyBannerSectionDisplayed(page);
@@ -27,7 +35,7 @@ test('SC_002, Home page — Trending Categories section visible and clickable', 
   
 }); 
 
-test("SC_004, Gift Card PLP — product card details and layout", { tag: ['@BOB', '@Homepage','@Giftcard', '@Regression'] }, async ({ }) => {
+test("SC_004, Gift Card PLP — product card details and layout", { tag: ['@BOBCard', '@Homepage','@Giftcard', '@Regression'] }, async ({ }) => {
 
   await test.step("Click Gift Card option", async () => {
     await page.waitForLoadState('domcontentloaded')
@@ -71,7 +79,7 @@ test("SC_004, Gift Card PLP — product card details and layout", { tag: ['@BOB'
 
 });
 
-test("SC_003 - Earn More Deals → PDP Verification", { tag: ['@BOB', '@Homepage', '@Regression','@Smoke'] }, async ({ }) => {
+test("SC_003 - Earn More Deals → PDP Verification", { tag: ['@BOBCard', '@Homepage', '@Regression','@Smoke'] }, async ({ }) => {
   let productData: any;
 
   await test.step("Step 2: Scroll to section", async () => {
