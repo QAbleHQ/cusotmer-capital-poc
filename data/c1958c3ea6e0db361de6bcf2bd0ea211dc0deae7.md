@@ -6,8 +6,8 @@
 
 # Test info
 
-- Name: ShopStacc/tests/HomePage.test.ts >> SC_004, Gift Card PLP — product card details and layout
-- Location: ShopStacc/tests/HomePage.test.ts:38:5
+- Name: ShopStacc/tests/HomePage.test.ts >> SC_002, Home page — Trending Categories section visible and clickable
+- Location: ShopStacc/tests/HomePage.test.ts:22:5
 
 # Error details
 
