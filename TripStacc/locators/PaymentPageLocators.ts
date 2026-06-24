@@ -3,11 +3,13 @@ export const PaymentPageLocators = {
   proceedButton: `//button[@class="common-btn" and normalize-space()="PROCEED"]`,
   backIconButton: `//i[@class='back-btn']`,
   confirmBackButton: `//button[@class="common-btn txt-btn"]`,
-  cardOptionSelector: `//div[@class='boxedPaymentOptions']//ul//li | (//div[@class='text-base empty:hidden'])[1]`,
+  cardOptionSelector: `//div[@data-testid='card']`,
   debitcreditcardOption: `//div[@class='boxedPaymentOptions']//ul//li[1]`,
-  cardNumberField: `//input[@id='cardNumber'] | //input[@name='card.number']`,
-  cardExpiryField: `//input[@id='cardExpiry'] | //input[@name='card.expiry']`,
-  cardCvvField: `//input[@id='cardCvv'] | //input[@name='card.cvv']`,
+ cardNumberField: "(//input[@id='cardNumber' or @name='card.number'])[1]",
+
+cardExpiryField: "(//input[@id='cardExpiry' or @name='card.expiry'])[1]",
+
+cardCvvField: "(//input[@id='cardCvv' or @name='card.cvv'])[1]",
   cardownername: `//input[@id='cardOwnerName']`,
   payotp:`//input[@id='password']`,
   saveCardPopup: `//input[@id='userConsentCheckbox'] | //input[@data-testid='save-card-checkbox']`,
@@ -33,6 +35,15 @@ export const PaymentPageLocators = {
   continuebtn: `(//button[@class='btn btn-primarycontinue'])[1]`,
   continueButtonPaymentBob: `//button[@name='button']`,
   otpInputFieldBob: `//input[@name='otp']`,
-  finalPaymentButtonBob: `//button[@name='button']`
-
+  finalPaymentButtonBob: `//button[@name='button']`,
+  pointsSlider: `//span[@class="switchslider"]`,
+  payOfPointPOPUP: `//div[@class="modal-content redemption-limit"]`,
+  usePoint: `//input[@id="currentValue"]`,
+  payButton: `//button[@id="rzp-payment-button"]`,
+  promoCodeInput: `//input[@id="code"]`,
+  promoCodeApplyButton: `//input[@id="apply"]`,
+  invalidMessage: `//p[text()="Invalid promo code!"]`,
+  mobileNoField: `(//span[@class='relative z-[5] ml-auto flex cursor-text items-center'])[3]`,
+  continuebtnformobile: `//button[@name='button']`,
+  payviacard:`//div[@data-testid='card']`
 };

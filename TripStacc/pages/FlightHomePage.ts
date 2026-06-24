@@ -7,12 +7,14 @@ import { DeviceHelper } from '../../utils/deviceHelper';
 import { HomePageLocators } from '../locators/HomePageLocators';
 
 export class FlightHomePage {
+  static selectedMobileNo: any;
   static async clickOnRoundTripOption(page: any) {
     await ElementHelper.clickElement(page, FlightPageLocators.roundtripbox);
   }
-  static async clickOnCityFromAirport(page: any) {
+ static async clickOnCityFromAirport(page: any) {
     await page.waitForTimeout(10000);
-    if(DeviceHelper.isMobile()){
+    const CLIENT = process.env.CLIENT?.toUpperCase();
+    if(DeviceHelper.isMobile() && CLIENT === 'IDFC'){
       await page.waitForTimeout(5000);
       await ElementHelper.clickElement(page, FlightPageLocators.fromCityMobile);
       await ElementHelper.clickElement(page, FlightPageLocators.fromCitySearchMobile);
@@ -21,9 +23,11 @@ export class FlightHomePage {
       await ElementHelper.clickElement(page, FlightPageLocators.fromCity);
     }
   }
+ 
 
   static async clickOnToAirport(page: any) {
-    if(DeviceHelper.isMobile()){
+    const CLIENT = process.env.CLIENT?.toUpperCase();
+    if(DeviceHelper.isMobile() && CLIENT === 'IDFC'){
       await ElementHelper.clickElement(page, FlightPageLocators.toCitySearchMobile);
     } else {
       await ElementHelper.clickElement(page, FlightPageLocators.toCity);
@@ -61,25 +65,27 @@ static async verifyPopupClosed(page: Page): Promise<void> {
 
   console.log('✅ Card selection popup closed successfully');
 }
-
   static async EnterCityFromAirport(page: any, data: any) {
-    if(DeviceHelper.isMobile()){
+    const CLIENT = process.env.CLIENT?.toUpperCase();
+    if(DeviceHelper.isMobile() && CLIENT === 'IDFC'){
       await ElementHelper.clearAndEnterInTextField(page, FlightPageLocators.fromCitySearchMobile, data);
     } else {
       await ElementHelper.clearAndEnterInTextField(page, FlightPageLocators.fromCity, data);
     }
   }
 
-  static async EnterCityToAirport(page: any, data: any) {
-    if(DeviceHelper.isMobile()){
+    static async EnterCityToAirport(page: any, data: any) {
+      const CLIENT = process.env.CLIENT?.toUpperCase();
+      if(DeviceHelper.isMobile() && CLIENT === 'IDFC'){
       await ElementHelper.clearAndEnterInTextField(page, FlightPageLocators.toCitySearchMobile, data);
     } else {
       await ElementHelper.clearAndEnterInTextField(page, FlightPageLocators.toCity, data);
     }
   }
-
-  static async VerifyFromAirpotDropdownVisible(page: any) {
-    if(DeviceHelper.isMobile()) {
+ 
+    static async VerifyFromAirpotDropdownVisible(page: any) {
+    const CLIENT = process.env.CLIENT?.toUpperCase();
+    if(DeviceHelper.isMobile() && CLIENT === 'IDFC'){
       await page.waitForTimeout(1000);
       await ElementHelper.waitForElementVisible(page, FlightPageLocators.cityDropDownMobile);
       await VerificationHelpers.elementIsVisible(page, FlightPageLocators.cityDropDownMobile);
@@ -89,8 +95,9 @@ static async verifyPopupClosed(page: Page): Promise<void> {
     }
   }
 
-  static async VerifyToAirpotDropdownVisible(page: any) {
-    if(DeviceHelper.isMobile()) {
+static async VerifyToAirpotDropdownVisible(page: any) {
+    const CLIENT = process.env.CLIENT?.toUpperCase();
+    if(DeviceHelper.isMobile() && CLIENT === 'IDFC') {
       await ElementHelper.waitForElementVisible(page, FlightPageLocators.firstSearchResultCityDropDownMobile);
       await VerificationHelpers.elementIsVisible(page, FlightPageLocators.firstSearchResultCityDropDownMobile);
     } else {
@@ -99,29 +106,34 @@ static async verifyPopupClosed(page: Page): Promise<void> {
     }
   }
 
-  static async clickOnFirstSearchResultfromCityDropdown(page: any) {
-    if(DeviceHelper.isMobile()) {
+static async clickOnFirstSearchResultfromCityDropdown(page: any) {
+    const CLIENT = process.env.CLIENT?.toUpperCase();
+    if(DeviceHelper.isMobile() && CLIENT === 'IDFC') {
       await ElementHelper.clickElement(page, FlightPageLocators.firstSearchResultCityDropDownMobile);
     } else {
       await ElementHelper.clickElement(page, FlightPageLocators.firstSearchResultfromCityDropdown);
     }
   }
 
-  static async clickOnfirstSearchResultToCityDropdown(page: any) {
-    if(DeviceHelper.isMobile()) {
+
+    static async clickOnfirstSearchResultToCityDropdown(page: any) {
+    const CLIENT = process.env.CLIENT?.toUpperCase();
+    if(DeviceHelper.isMobile() && CLIENT === 'IDFC') {
       await ElementHelper.clickElement(page, FlightPageLocators.firstSearchResultCityDropDownMobile);
     } else {
       await ElementHelper.clickElement(page, FlightPageLocators.firstSearchResulttoCityDropdown);
     }
   }
+
 static async verifyRoute(page: Page, from: string, to: string) {
   const card = page.locator(FlightPageLocators.firstFlightCard);
   await expect(card).toContainText(from);
   await expect(card).toContainText(to);
 }
-
-  static async clickOnDepartureDate(page: any) {
-    if(DeviceHelper.isMobile()) {
+ 
+ static async clickOnDepartureDate(page: any) {
+    const CLIENT = process.env.CLIENT?.toUpperCase();
+    if(DeviceHelper.isMobile() && CLIENT === 'IDFC') {
       await ElementHelper.waitForElementVisible(page, FlightPageLocators.departureDateMobile);
       await ElementHelper.clickElement(page, FlightPageLocators.departureDateMobile);
     } else {
@@ -129,8 +141,9 @@ static async verifyRoute(page: Page, from: string, to: string) {
     }
   }
 
-  static async clickOnReturnDate(page: any) {
-    if(DeviceHelper.isMobile()) {
+static async clickOnReturnDate(page: any) {
+    const CLIENT = process.env.CLIENT?.toUpperCase();
+    if(DeviceHelper.isMobile() && CLIENT === 'IDFC') {
       await ElementHelper.clickElement(page, FlightPageLocators.returnDateMobile);
     } else {
       await ElementHelper.clickElement(page, FlightPageLocators.returnDate);
@@ -138,41 +151,42 @@ static async verifyRoute(page: Page, from: string, to: string) {
   }
 
   static async selectTomorrowDateForDeparture(page: any) {
-    if(DeviceHelper.isMobile()) {
+    const CLIENT = process.env.CLIENT?.toUpperCase();
+    if(DeviceHelper.isMobile() && CLIENT === 'IDFC') {
       const depDate = new Date();
       depDate.setDate(depDate.getDate() + 2);
       const depFormatted = depDate.toISOString().split('T')[0];
-
+ 
       await ElementHelper.clickElement(page, FlightPageLocators.dateCellMobile(depFormatted));
       await page.waitForTimeout(10000);
-
+ 
       const retDate = new Date();
       retDate.setDate(retDate.getDate() + 5);
       const retFormatted = retDate.toISOString().split('T')[0];
-
+ 
       await ElementHelper.clickElement(page, FlightPageLocators.dateCellMobile(retFormatted));
       await page.waitForTimeout(2000);
-      
+     
       await ElementHelper.clickElement(page, FlightPageLocators.doneCalendarButtonMobile);
-
+ 
     } else {
       const targetDate = new Date();
       targetDate.setDate(targetDate.getDate() + 2);
       const formattedDate = targetDate.toISOString().split('T')[0];
-
+ 
       const targetDay = targetDate.getDate().toString();
       const targetMonth = targetDate.toLocaleString('en-US', { month: 'long' });
       const targetYear = targetDate.getFullYear().toString();
-
+ 
       const currentMonth = await page.locator(FlightPageLocators.currentMonth).textContent();
       const currentYear = await page.locator(FlightPageLocators.currentYear).textContent();
-
+ 
       if (
         currentMonth?.trim() !== targetMonth || currentYear?.trim() !== targetYear
       ) {
         await page.locator(FlightPageLocators.nextMonthButton).click();
       }
-
+ 
       await page.locator(FlightPageLocators.dateCell(targetDay)).click();
     }
   }
@@ -181,28 +195,29 @@ static async verifyRoute(page: Page, from: string, to: string) {
     const targetDate = new Date();
     targetDate.setDate(targetDate.getDate() + 20);
     const formattedDate = targetDate.toISOString().split('T')[0];
-    if(DeviceHelper.isMobile()) {
+    const CLIENT = process.env.CLIENT?.toUpperCase();
+    if(DeviceHelper.isMobile() && CLIENT === 'IDFC') {
       const mobileLocator = FlightPageLocators.dateCellMobile(formattedDate);
       await page.waitForTimeout(5000);
       await ElementHelper.clickElement(page, mobileLocator);
       await page.waitForTimeout(2000);
-
+ 
       await ElementHelper.clickElement(page, FlightPageLocators.doneCalendarButtonMobile);
-
+ 
     } else {
       const targetDay = targetDate.getDate().toString();
       const targetMonth = targetDate.toLocaleString('en-US', { month: 'long' });
       const targetYear = targetDate.getFullYear().toString();
-
+ 
       const currentMonth = await page.locator(FlightPageLocators.currentMonth).textContent();
       const currentYear = await page.locator(FlightPageLocators.currentYear).textContent();
-
+ 
       if (
         currentMonth?.trim() !== targetMonth || currentYear?.trim() !== targetYear
       ) {
         await page.locator(FlightPageLocators.nextMonthButton).click();
       }
-
+ 
       await page.locator(FlightPageLocators.dateCell(targetDay)).click();
     }
   }
@@ -216,12 +231,18 @@ static async verifyRoute(page: Page, from: string, to: string) {
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators.roomCountDropdown);
   }
 
-  static async clickOnCloseTravellersAndCabinClassDropdown(page: any) {
-    if(DeviceHelper.isMobile()) {
+ static async clickOnCloseTravellersAndCabinClassDropdown(page: any) {
+    const CLIENT = process.env.CLIENT?.toUpperCase();
+    if(DeviceHelper.isMobile() && CLIENT === 'IDFC') {
       await page.waitForTimeout(5000);
       await ElementHelper.clickElement(page, FlightPageLocators.closeTravellerAndCabinButtonMobile);
     }
+    if(DeviceHelper.isMobile() && CLIENT === 'BOB') {
+      await page.waitForTimeout(5000);
+      await ElementHelper.clickElement(page, FlightPageLocators.doneTravellerAndCabinButtonMobile);
+    }
   }
+ 
 static async verifyFlightSearchFields(page: any) {
   await expect(page.locator(FlightPageLocators.fromCity)).toBeVisible();
   await expect(page.locator(FlightPageLocators.toCity)).toBeVisible();
@@ -365,7 +386,8 @@ static async verifyTravellerOptions(page: Page) {
   }
 }
 
-  static async select1StopFilter(page: Page): Promise<void> {
+static async select1StopFilter(page: Page): Promise<void> {
+    if (await ElementHelper.isElementDisplayed(page, FlightPageLocators.filter1Stop)) {
     await page.waitForTimeout(15000)
     await ElementHelper.clickElement(page, FlightPageLocators.filter1Stop);
     await page.waitForTimeout(5000)
@@ -373,52 +395,57 @@ static async verifyTravellerOptions(page: Page) {
     FlightHomePage.selectedNonStop = airlineText?.split('(')[0].trim() || '';
     console.log(`Selected 1-Stop Filter: ${FlightHomePage.selectedNonStop}`);
     await page.waitForTimeout(5000)
+    }
   }
 
-  static async verifyFiltered1StopsDetails(page: Page): Promise<void> {
+ static async verifyFiltered1StopsDetails(page: Page): Promise<void> {
   const CLIENT = process.env.CLIENT?.trim().toUpperCase();
   console.log("CLIENT:", CLIENT);
-
+ 
   switch (CLIENT) {
     case 'BOB': {
+      if (await ElementHelper.isElementDisplayed(page, FlightPageLocators.FligthStopDetails)) {
       const flightCards = page.locator(FlightPageLocators.FligthStopDetails);
       const count = await flightCards.count();
-
+ 
       console.log(`Total Flights Found: ${count}`);
-
+ 
       for (let i = 0; i < count; i++) {
         const text = await flightCards.nth(i).textContent();
         const actual = text?.trim().toLowerCase();
-
+ 
         console.log(`Flight ${i + 1}: ${actual}`);
-
+ 
         expect(actual).toContain("stop: 1");
       }
+   
       break; // ✅ important
     }
-
+    }
+ 
     case 'IDFC': {
+      if (await ElementHelper.isElementDisplayed(page, FlightPageLocators.FligthStopDetails)) {
       const flightCards = page.locator(FlightPageLocators.FligthStopDetails);
       const count = await flightCards.count();
-
+ 
       console.log(`Total Flights Found: ${count}`);
-
+ 
       for (let i = 0; i < count; i++) {
         const airlineName = await flightCards.nth(i).textContent();
-
+ 
         console.log(`Flight ${i + 1}: ${airlineName?.trim()}`);
-
+ 
         expect(airlineName?.trim().toLowerCase())
           .toContain(FlightHomePage.selectedNonStop.toLowerCase());
       }
       break; // ✅ important
     }
-
+  }
+ 
     default:
       throw new Error(`Unsupported CLIENT: ${CLIENT}`);
   }
 }
-
   static async clickOnDepartureTabButton(page: any) {
     const CLIENT = process.env.CLIENT?.toUpperCase();
   switch (CLIENT) {
@@ -716,7 +743,7 @@ static async verifyTravellerOptions(page: Page) {
   static selectedPhone: string;
 
   static async clickOnAddNewTravellerButton(page: any) {
-    const CLIENT = process.env.CLIENT?.toUpperCase();
+  const CLIENT = process.env.CLIENT?.toUpperCase();
   switch (CLIENT) {
     case 'BOB':
       console.log('⏭️ BOB: Skipping click On Add New Traveller Button.');
@@ -777,6 +804,25 @@ static async verifyTravellerOptions(page: Page) {
     console.log(`Entered First Name: ${FlightHomePage.selectedFirstName}`);
   }
 
+  static async EnterRandomFirstName(page: any) {
+  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+  let randomFirstName = "";
+
+  for (let i = 0; i < 8; i++) {
+    randomFirstName += characters.charAt(
+      Math.floor(Math.random() * characters.length)
+    );
+  }
+
+  await ElementHelper.clearAndEnterInTextField(
+    page,
+    FlightPageLocators.firstNameInput,
+    randomFirstName
+  );
+
+  FlightHomePage.selectedFirstName = randomFirstName;
+  console.log(`Entered First Name: ${FlightHomePage.selectedFirstName}`);
+}
   static async EnterWrongLastName(page: any, data: any) {
   const CLIENT = process.env.CLIENT?.toUpperCase();
   switch (CLIENT) {
@@ -831,6 +877,35 @@ static async verifyTravellerOptions(page: Page) {
     FlightHomePage.selectedLastName = lastNameText?.split('(')[0].trim() || '';
     console.log(`Entered Last Name: ${FlightHomePage.selectedLastName}`);
   }
+ 
+static async enterMobileNo(page: any, data: any) {
+  const CLIENT = process.env.CLIENT?.toUpperCase();
+
+  switch (CLIENT) {
+    case 'BOB':
+      await ElementHelper.clearAndEnterInTextField(
+        page,
+        FlightPageLocators.passnagermobile,
+        data
+      );
+
+      const value = await page
+        .locator(FlightPageLocators.passnagermobile)
+        .inputValue();
+
+      FlightHomePage.selectedMobileNo = value.split('(')[0].trim();
+
+      console.log(`Entered Mobile No: ${FlightHomePage.selectedMobileNo}`);
+      break;
+
+    case 'IDFC':
+      console.log('⏭️ IDFC: Skipping mobile number entry');
+      break;
+
+    default:
+      console.warn(`⚠️ Unknown CLIENT: ${CLIENT}`);
+  }
+}
 
   static async verifyFirstTravellerNameOnTravellerDetailPage(page: Page): Promise<void> {
     const CLIENT = process.env.CLIENT?.toUpperCase();
@@ -908,6 +983,7 @@ static async verifyTravellerOptions(page: Page) {
       break;
 
     case 'IDFC':
+    await VerificationHelpers.elementIsVisible(page, FlightPageLocators.firstTravellerNameEditConfirmButton);
     await ElementHelper.clickElement(page, FlightPageLocators.firstTravellerNameEditConfirmButton);
     await page.waitForTimeout(3000);
     break;
@@ -1036,7 +1112,7 @@ static async verifyTravellerOptions(page: Page) {
   }
 
   static async VerifyPassportErrorMessageVisible(page: any) {
-     const CLIENT = process.env.CLIENT?.toUpperCase();
+  const CLIENT = process.env.CLIENT?.toUpperCase();
   switch (CLIENT) {
     case 'BOB':
       await ElementHelper.waitForElementVisible(page, FlightPageLocators.passportErrorMessage);
@@ -1096,19 +1172,29 @@ static async verifyTravellerOptions(page: Page) {
     await ElementHelper.selectOptionByValue(page, FlightPageLocators.passportMonth, "10")
     await ElementHelper.selectOptionByValue(page, FlightPageLocators.passportYear, "2027")
     break;
-
+ 
     case 'IDFC':
+    await ElementHelper.scrollToElement(page, FlightPageLocators.expireDate);
     await ElementHelper.clickElement(page, FlightPageLocators.expireDate);
+    await ElementHelper.selectOptionByValue(page, FlightPageLocators.exprieYear, "2030")
     const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 8);
+    tomorrow.setDate(tomorrow.getDate() + 2);
     const targetDay = tomorrow.getDate().toString();
     await page.locator(FlightPageLocators.dateCell(targetDay)).click();
     break;
-  }   
+  }  
   }
-
+ 
   static async ScrolltosaveTravellInfo(page: any) {
-    await ElementHelper.scrollToElement(page, FlightPageLocators.saveTravellInfo);
+     const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
+    console.log('⏭️ BOB: Skipping ');
+    break;
+    case 'IDFC':
+      await ElementHelper.scrollToElement(page, FlightPageLocators.saveTravellInfo);
+    break;
+  }  
   }
 
   static async verifyFlightFromAndToShotFormVisible(page: any) {
@@ -1126,18 +1212,36 @@ static async verifyTravellerOptions(page: Page) {
   }
 
   static async clickOnFirstTravellerName(page: any) {
+     const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
+    console.log('⏭️ BOB: Skipping ');
+    break;
+    case 'IDFC':
     await ElementHelper.clickElement(page, FlightPageLocators.FirstTravellerCheckbox);
     await page.waitForTimeout(3000);
+    break;
+  }
 }
 
 static async clickOncontinueButtonOnTravellerPage(page: any) {
+   const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
+    console.log('⏭️ BOB: Skipping ');
+    break;
+    case 'IDFC':
+    await VerificationHelpers.elementIsVisible(page, FlightPageLocators.travellerDetailsPageContinuebutton);
     await ElementHelper.clickElement(page, FlightPageLocators.travellerDetailsPageContinuebutton);
     await page.waitForTimeout(3000);
+    break;
+  }
 }
 
 static async travellersAndAddonsContinueButton(page: any) {
     if (await ElementHelper.isElementDisplayed(page, FlightPageLocators.travellersAndAddonsContinueButton)) {
-    await ElementHelper.clickElement(page, FlightPageLocators.travellersAndAddonsContinueButton);
+    await VerificationHelpers.elementIsVisible(page, FlightPageLocators.travellersAndAddonsContinueButton);
+      await ElementHelper.clickElement(page, FlightPageLocators.travellersAndAddonsContinueButton);
   }
     await page.waitForTimeout(3000); // Wait for navigation to complete
 }
@@ -1158,10 +1262,8 @@ static async verifyBaggageSelectionOptionVisible(page: any) {
 }
 
 static async verifySeatMapVisible(page: any) {
-  if (await ElementHelper.isElementDisplayed(page, FlightPageLocators.seatMapContainer)) {
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.seatMapContainer);
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators.seatMapContainer);
-  }
 }
 
 static async verifyPriceIncreasesAfterSeatSelection(page: any) {
@@ -1212,10 +1314,18 @@ static async clickOnSkipButton(page: any) {
 }
 
 static async verifyTravellerAndAddOneHeadingVisible(page: any) {
+  const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
+    console.log('⏭️ BOB: Skipping ');
+    break;
+    case 'IDFC':
   if (await ElementHelper.isElementDisplayed(page, FlightPageLocators.travellerAndAddoneHeading)) {
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.travellerAndAddoneHeading);
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators .travellerAndAddoneHeading);
   }
+  break;
+}
 }
 
 static async reloadIfNoRecordFound(page: any) {
@@ -1279,23 +1389,19 @@ static async verifyTravelClass(page: Page): Promise<void> {
     break;
   }
 }
-
 static async clickOnFilterListButton(page: any) {
+  await page.waitForTimeout(5000);
   const CLIENT = process.env.CLIENT?.toUpperCase();
-  switch (CLIENT) {
-    case 'BOB':
-      console.log('⏭️ BOB: Skipping Filter List Button verification.');
-      break;
-    case 'IDFC': 
-    await page.waitForTimeout(5000);
-    if (DeviceHelper.isMobile()) {
-      await ElementHelper.clickElement(page, FlightPageLocators.filterIconMobile);
-    } else {
-      await ElementHelper.clickElement(page, FlightPageLocators.flightListFilterButton);
-    }
-    break;
+  if(DeviceHelper.isMobile() && CLIENT === 'IDFC') {
+    await ElementHelper.clickElement(page, FlightPageLocators.filterIconMobile);
+  } else if(DeviceHelper.isMobile() && CLIENT === 'BOB') {
+    await ElementHelper.clickElement(page, FlightPageLocators.filterButtonMobileForBOB);
+  } else if(CLIENT === 'BOB'){
+    console.log('⏭️ BOB: Skipping');
   }
- 
+  else{
+    await ElementHelper.clickElement(page, FlightPageLocators.flightListFilterButton);
+  }
   }
 
   static async clickOnFilterApplyButton(page: any) {

@@ -18,7 +18,7 @@ test.afterEach(async () => {
   await context.close();
 });
 
-test.only('SC_015: Hotel Search', { tag: ['@IDFC','@BOB', '@Homepagehotel', '@Smoke', '@Sanity'] }, async () => {
+test('SC_015: Hotel Search', { tag: ['@IDFC','@BOB', '@Homepagehotel', '@Smoke', '@Sanity'] }, async () => {
   await test.step('Step 1: Open Hotels Section', async () => {
     await HotelHomePage.verifyHotelTabBtnDisplayed(page);
     await page.waitForTimeout(500); 
@@ -29,10 +29,8 @@ test.only('SC_015: Hotel Search', { tag: ['@IDFC','@BOB', '@Homepagehotel', '@Sm
   await test.step('Step 2: Search domestic hotel and pick first suggestion', async () => {
     await HotelHomePage.verifyWhereToTextBoxDisplayed(page);
     await page.waitForTimeout(500);
-        await page.pause();
     await HotelHomePage.searchValueInTestBox(page, Data.hotelPage.domestic);
     await page.waitForTimeout(500);
-
     await HotelHomePage.selectFirstOptionFromDropdown(page);
     await page.waitForTimeout(500);
   });
