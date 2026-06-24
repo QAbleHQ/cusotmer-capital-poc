@@ -120,11 +120,12 @@ export class HotelBookingPage {
     await page.waitForTimeout(5000);
     if(DeviceHelper.isMobile()) {
       try {
-        const popup = page.locator(HotelPageLocators.beePopupForMobile);
-        await popup.waitFor({ state: 'visible', timeout: 10000 });
+        // const popup = page.locator(HotelPageLocators.beePopupForMobile);
+        // await popup.waitFor({ state: 'visible', timeout: 10000 });
       
-        await ElementHelper.clickElement(page, HotelPageLocators.clickOutsideOfBeePopupForMobile);
-        console.log('Bee popup detected and closed');
+        // await ElementHelper.clickElement(page, HotelPageLocators.clickOutsideOfBeePopupForMobile);
+        // console.log('Bee popup detected and closed');
+        this.removePopup(page);
       } catch (e) {
         console.log('Bee popup did not appear, proceeding...');
       }
@@ -139,33 +140,33 @@ export class HotelBookingPage {
   const CLIENT = process.env.CLIENT?.toUpperCase();
   switch (CLIENT) {
     case 'IDFC':
-              if (DeviceHelper.isMobile()) {
-                    let attempts = 0;
-                    const maxAttempts = 3;
-                    let popupClosed = false;
+              // if (DeviceHelper.isMobile()) {
+              //       let attempts = 0;
+              //       const maxAttempts = 3;
+              //       let popupClosed = false;
 
-                    while (attempts < maxAttempts && !popupClosed) {
-                        try {
-                            const popup = page.locator(HotelPageLocators.beePopupForMobile);
+              //       while (attempts < maxAttempts && !popupClosed) {
+              //           try {
+              //               const popup = page.locator(HotelPageLocators.beePopupForMobile);
                             
-                            if (await popup.isVisible()) {
-                                console.log(`Attempt ${attempts + 1}: Bee popup detected, attempting to close...`);
+              //               if (await popup.isVisible()) {
+              //                   console.log(`Attempt ${attempts + 1}: Bee popup detected, attempting to close...`);
                                 
-                                await page.locator(HotelPageLocators.clickOutsideOfBeePopupForMobile).click();
+              //                   await page.locator(HotelPageLocators.clickOutsideOfBeePopupForMobile).click();
                                 
-                                await popup.waitFor({ state: 'hidden', timeout: 3000 });
-                                popupClosed = true;
-                                console.log('Bee popup successfully closed');
-                            } else {
-                                break;
-                            }
-                        } catch (e) {
-                            attempts++;
-                            console.log(`Attempt ${attempts} failed, retrying...`);
-                            await page.waitForTimeout(1000); 
-                        }
-                    }
-                }
+              //                   await popup.waitFor({ state: 'hidden', timeout: 3000 });
+              //                   popupClosed = true;
+              //                   console.log('Bee popup successfully closed');
+              //               } else {
+              //                   break;
+              //               }
+              //           } catch (e) {
+              //               attempts++;
+              //               console.log(`Attempt ${attempts} failed, retrying...`);
+              //               await page.waitForTimeout(1000); 
+              //           }
+              //       }
+              //   }
 
                 await page.locator(HotelPageLocators.addGuestButton).click();
                 console.log('Add Guest button clicked');
@@ -515,26 +516,30 @@ export class HotelBookingPage {
   }
 
 
-  static async goBackUntilLocationSearchBoxVisible(page: Page) {
-    let attempts = 0;
-    const maxAttempts = 10;
-    while (attempts < maxAttempts) {
-      if(DeviceHelper.isMobile()) {
-        if (await ElementHelper.isElementDisplayed(page, FlightPageLocators.fromCityMobile)) {
-          await HotelHomePage.clickHotelTabBTN(page);
-        }
-      }
-      const isVisible = await page.locator(HotelPageLocators.searchHotelButton).isVisible().catch(() => false);
-      if (isVisible) {
-        console.log('Location search box is displayed');
-        return;
-      }
-      await page.goBack();
-      await page.waitForTimeout(20000);
-      attempts++;
+static async goBackUntilLocationSearchBoxVisible(page: Page) {
+  const maxAttempts = 10;
+
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    const isVisible = await page
+      .locator(HotelPageLocators.searchHotelButton)
+      .isVisible()
+      .catch(() => false);
+
+    if (isVisible) {
+      console.log('✅ Search Hotel Button is visible');
+      return;
     }
-    throw new Error('Location search box not visible after multiple back navigations.');
+
+    console.log(`🔙 Going back... Attempt ${attempt}/${maxAttempts}`);
+    await page.goBack();
+    await page.waitForLoadState('domcontentloaded').catch(() => {});
+    await page.waitForTimeout(3000);
   }
+
+  throw new Error(
+    '❌ Search Hotel Button not visible after multiple back navigations.'
+  );
+}
 
 
   static async searchHotelNameInTestBox(page: Page, hotelName: string) {

@@ -11,6 +11,19 @@
     "checkInDate": "10",
     "checkOutDate": "12"
     },
+      "dateSelector": {
+    "fromDate": "8",
+    "fromMonth": "Jul 2026",
+    "toDate": "30",
+    "toMonth": "Jul 2026"
+  },
+    "hotelBookingDataFill": {
+    "firstName": "John",
+    "lastName": "Doe",
+    "panNumber": "ABCDE1234F",
+    "contactNumber": "9876543210",
+    "email": "john.doe@example.com"
+  },
     "hotelPage": {
       "rooms": 1,
       "domestic": "ahmedabad",
