@@ -140,7 +140,7 @@ export const FlightPageLocators = {
   hotelRedirectLink: `//ul[@class='star']`,
   FlightFromNameShotform: `(//div[contains(@class,'flight') and contains(@class,'Card')])[1]//*[contains(text(),"NMI")] | (//div[contains(@class,'flight') and contains(@class,'Card')])[1]//*[contains(text(),"BOM")] `,
   FlightToNameShotForm: `(//div[contains(@class,'flight') and contains(@class,'Card')])[1]//*[contains(text(),"BLR")] | (//div[text()="(BLR)"])[1]`,
-  FlightTOInternationalName: `//h4[text()="DXB"] | (//div[text()="(DXB)"])[1] `, 
+  FlightTOInternationalName: `//h4[text()="DXB"] | (//div[text()="(DXB)"])[1] `,
   FirstTravellerCheckbox: `(//div[@class="inputcheckbox"])[1]`,
   travellerDetailsPageContinuebutton: `//button[@class="flbookbtn traveller_details_continue"]`,
   seatSelectionOption: '//li[@class="seat_li active"]',
@@ -153,7 +153,7 @@ export const FlightPageLocators = {
   weightIncreasePlusButton: `//h3[text()="5 KG"]/parent::div/following-sibling::div//span[@class="coplus"]`,
   skipAndPayButton: '//a[@class="skipbtn skipToCheckout"]',
   travellerAndAddoneHeading: `//h4[text()="Travellers & Add-ons"]`,
-  travellersAndAddonsContinueButton: `//button[@class="flbookbtn extra_service_cont_btn"]`,
+  travellersAndAddonsContinueButton: `//button[@class="bookcont continue_redm_button poptimemsg"]`,
   noFlightsText: `//h5[@class="no_flts"]`,
   fromCityMobile: `//input[@id="from" and @placeholder="Select city or airport"]`,
   fromCitySearchMobile: `(//input[@id="from" and @placeholder="Search for city or airport"])[2]`,
@@ -168,5 +168,11 @@ export const FlightPageLocators = {
   doneCalendarButtonMobile: `//button[@id="clendr-btn"]`,
   closeTravellerAndCabinButtonMobile: `(//span[text()="×"]/parent::button)[1]`,
   filterIconMobile: `//a[@class="filterbtn"]`,
-  passengerAlert: `//small[text()="Max 9 Passenger(Adult+Child) Allowed"] | //span[text()="Max 9 passengers (Adult+Child) allowed"]`
+  passengerAlert: `//small[text()="Max 9 Passenger(Adult+Child) Allowed"] | //span[text()="Max 9 passengers (Adult+Child) allowed"]`,
+  passnagermobile:`//input[@name='passenger_contact']`,
+  doneTravellerAndCabinButtonMobile: `//a[@class="done1 comnbtn_room1"]`,
+  filterButtonMobileForBOB: `//li[@class="sortli filt_mob filter_tab"]`,
+  exprieYear: `//select[@class="ui-datepicker-year"]`,
+ 
 };
+ 

@@ -30,11 +30,9 @@ test('SC_015: Hotel Search', { tag: ['@IDFC','@BOB', '@Homepagehotel', '@Smoke',
   await test.step('Step 2: Search domestic hotel and pick first suggestion', async () => {
     await HotelHomePage.verifyWhereToTextBoxDisplayed(page);
     await page.waitForTimeout(500);
-
     await HotelHomePage.searchValueInTestBox(page, Data.hotelPage.domestic);
     
     await page.waitForTimeout(500);
-
     await HotelHomePage.selectFirstOptionFromDropdown(page);
     await page.waitForTimeout(500);
   });
