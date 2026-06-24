@@ -24,15 +24,14 @@
     "report:mail": "npm run report:generate && npm run mail",
 
    
-    "test:tripstacc:bob:uat:headed": "cross-env PROJECT=tripstacc-chrome-UAT CLIENT=BOB HEADED=true npx playwright test TripStacc/tests",
-    "test:tripstacc:idfc:uat:headed": "cross-env PROJECT=tripstacc-chrome-UAT CLIENT=IDFC HEADED=true npx playwright test TripStacc/tests",
+    "test:tripstacc:bob:uat:headed": "cross-env PROJECT=tripstacc-chrome-UAT CLIENT=BOB HEADED=true npx playwright test TripStacc/tests/HotelPage.test.ts",
+    "test:tripstacc:idfc:uat:headed": "cross-env PROJECT=tripstacc-chrome-UAT CLIENT=IDFC HEADED=true npx playwright test TripStacc/tests/HotelPage.test.ts",
     "test:tripstacc:bob:qa": "cross-env PROJECT=tripstacc-chrome-QA CLIENT=BOB npx playwright test TripStacc/tests",
     "test:tripstacc:idfc:qa": "cross-env PROJECT=tripstacc-chrome-QA CLIENT=IDFC npx playwright test TripStacc/tests",
     "test:tripstacc:bob:uat": "cross-env PROJECT=tripstacc-chrome-UAT CLIENT=BOB npx playwright test TripStacc/tests",
     "test:tripstacc:idfc:uat": "cross-env PROJECT=tripstacc-chrome-UAT CLIENT=IDFC npx playwright test TripStacc/tests",
-    "test:tripstacc:bob:uat:mobile:iphone13:headed": "cross-env PROJECT=tripstacc-chrome-UAT-mobile-iphone13 CLIENT=BOB HEADED=true npx playwright test TripStacc/tests",
-    "test:tripstacc:idfc:uat:mobile:iphone13:headed": "cross-env PROJECT=tripstacc-chrome-UAT-mobile-iphone13 CLIENT=IDFC HEADED=true npx playwright test TripStacc/tests",
-    "test:tripstacc:idfc:uat:mobile:iphone13:loginpage:headed": "cross-env PROJECT=tripstacc-chrome-UAT-mobile-iphone13-Loginpage CLIENT=IDFC HEADED=true npx playwright test TripStacc/tests",
+    "test:tripstacc:bob:uat:mobile:iphone13:headed": "cross-env PROJECT=tripstacc-chrome-UAT-mobile-iphone13 CLIENT=BOB HEADED=true npx playwright test TripStacc/tests/HotelPage.test.ts",
+    "test:tripstacc:idfc:uat:mobile:iphone13:headed": "cross-env PROJECT=tripstacc-chrome-UAT-mobile-iphone13 CLIENT=IDFC HEADED=true npx playwright test TripStacc/tests/HotelPage.test.ts",
 
   
 

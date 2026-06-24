@@ -103,7 +103,8 @@ export const HotelPageLocators = {
   radioButtonMrs: `//label[@class="radio-custom-label" and @for="radio-3"]`,
   hotelTabMobile: `//span[text()="Hotels"]/parent::label/parent::a`,
   whereToTextBoxMobile: `//input[@id="locationInputHotel"]`,
-  whereToDropdownSelectFirstOptionMobile: `(//div[@class="srch_main_hotel"]//li)[1] | (//ul[@class="ui-autocomplete ui-front ui-menu ui-widget ui-widget-content customautocompleteHotel"]//li)[1]`,
+  whereToDropdownSelectFirstOptionMobile: `(//ul[@class="ui-menu ui-widget ui-widget-content ui-autocomplete ui-front" or @class="ui-autocomplete ui-front ui-menu ui-widget ui-widget-content customautocompleteHotel"]//li)[1]`,
+  whereToDropdownSelectFirstOptionMobileIDFC: `(//div[@id="hotel-autocomplete-results"]//ul//li)[1]`,
   doneCalendarButtonMobile: `//button[@id="clendr-btn-hotel"]`,
   beePopupForMobile: `//img[contains(@class, "bee-popup-fullwidthOnMobile")]`,
   clickOutsideOfBeePopupForMobile: `//div[@class="wrapper"]`,
@@ -115,4 +116,5 @@ export const HotelPageLocators = {
   sortAndFilterMobile: `//button[@id="sort_filtr"]`,
   popupImg: `(//a[@target="_blank"])//img`,
   outOfPopupImg: `//div[@class="wrapper-outer"]`,
+  addguestbutton: `//a[@id='addroombox_1']`,
 };

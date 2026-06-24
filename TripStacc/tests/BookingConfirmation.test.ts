@@ -146,13 +146,7 @@ test('SC_012: Booking Confirmation Page (Confirmed/Pending/Failed)', { tag: ['@S
       await PaymentPage.clickSubmitButton(page);
       await page.waitForTimeout(10000);
     });
-
-  // await test.step('Step 21: Verify Confirmed Voucher is visible', async () => {
-  //   await FlightBookingPage.verifyConfirmedVoucherVisible(page);
-  //   await page.waitForTimeout(1000);
-  // });
   
-
   await test.step('Verify after payment page content on booking confirmation', async () => {
 
     await page.waitForTimeout(8000);

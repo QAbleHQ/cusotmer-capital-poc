@@ -11,6 +11,19 @@
     "checkInDate": "10",
     "checkOutDate": "12"
     },
+      "dateSelector": {
+    "fromDate": "8",
+    "fromMonth": "Jul 2026",
+    "toDate": "30",
+    "toMonth": "Jul 2026"
+  },
+    "hotelBookingDataFill": {
+    "firstName": "John",
+    "lastName": "Doe",
+    "panNumber": "ABCDE1234F",
+    "contactNumber": "9876543210",
+    "email": "john.doe@example.com"
+  },
     "hotelPage": {
       "rooms": 1,
       "domestic": "ahmedabad",
@@ -44,14 +57,26 @@
       "phone": "9999999999",
       "gst": "MMM999MMM",
       "passport": "368994478",
-      "country": "I"
+      "country": "I",
+      "mobileNo": "8140567678"
+    },
+    "promocode": {
+      "invalidPromoCode": "INVALIDCODE"
+    },
+    "redeemPointSection": {
+      "enterRedeemPoint": "100"
     }
   },
-  
+ 
   "BOB": {
     "loginDataFill": {
       "mobileNumber": "9999999999",
       "otp": "2248"
+    },
+    "paymentDataFill": {
+      "cardNumber": "4405-2350-2684-2471",
+      "expiryDate": " 05/30",
+      "cvv": "123"
     }
   },
   "IDFC": {

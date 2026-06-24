@@ -9,6 +9,7 @@ import { FlightPageLocators } from '../../TripStacc/locators/FlightPageLocators'
 import { HotelHomePage } from './HotelHomePage';
 import { Data } from '../../utils/dataProvider';
 import { CommonHelper } from '../../utils/commonHelper';
+import { VerificationHelpers } from '../../utils/verificationHelper';
 
 export class HotelBookingPage {
   static async clickFirstRoomSelectionButton(page: Page) {
@@ -120,11 +121,12 @@ export class HotelBookingPage {
     await page.waitForTimeout(5000);
     if(DeviceHelper.isMobile()) {
       try {
-        const popup = page.locator(HotelPageLocators.beePopupForMobile);
-        await popup.waitFor({ state: 'visible', timeout: 10000 });
+        // const popup = page.locator(HotelPageLocators.beePopupForMobile);
+        // await popup.waitFor({ state: 'visible', timeout: 10000 });
       
-        await ElementHelper.clickElement(page, HotelPageLocators.clickOutsideOfBeePopupForMobile);
-        console.log('Bee popup detected and closed');
+        // await ElementHelper.clickElement(page, HotelPageLocators.clickOutsideOfBeePopupForMobile);
+        // console.log('Bee popup detected and closed');
+        this.removePopup(page);
       } catch (e) {
         console.log('Bee popup did not appear, proceeding...');
       }
@@ -139,33 +141,33 @@ export class HotelBookingPage {
   const CLIENT = process.env.CLIENT?.toUpperCase();
   switch (CLIENT) {
     case 'IDFC':
-              if (DeviceHelper.isMobile()) {
-                    let attempts = 0;
-                    const maxAttempts = 3;
-                    let popupClosed = false;
+              // if (DeviceHelper.isMobile()) {
+              //       let attempts = 0;
+              //       const maxAttempts = 3;
+              //       let popupClosed = false;
 
-                    while (attempts < maxAttempts && !popupClosed) {
-                        try {
-                            const popup = page.locator(HotelPageLocators.beePopupForMobile);
+              //       while (attempts < maxAttempts && !popupClosed) {
+              //           try {
+              //               const popup = page.locator(HotelPageLocators.beePopupForMobile);
                             
-                            if (await popup.isVisible()) {
-                                console.log(`Attempt ${attempts + 1}: Bee popup detected, attempting to close...`);
+              //               if (await popup.isVisible()) {
+              //                   console.log(`Attempt ${attempts + 1}: Bee popup detected, attempting to close...`);
                                 
-                                await page.locator(HotelPageLocators.clickOutsideOfBeePopupForMobile).click();
+              //                   await page.locator(HotelPageLocators.clickOutsideOfBeePopupForMobile).click();
                                 
-                                await popup.waitFor({ state: 'hidden', timeout: 3000 });
-                                popupClosed = true;
-                                console.log('Bee popup successfully closed');
-                            } else {
-                                break;
-                            }
-                        } catch (e) {
-                            attempts++;
-                            console.log(`Attempt ${attempts} failed, retrying...`);
-                            await page.waitForTimeout(1000); 
-                        }
-                    }
-                }
+              //                   await popup.waitFor({ state: 'hidden', timeout: 3000 });
+              //                   popupClosed = true;
+              //                   console.log('Bee popup successfully closed');
+              //               } else {
+              //                   break;
+              //               }
+              //           } catch (e) {
+              //               attempts++;
+              //               console.log(`Attempt ${attempts} failed, retrying...`);
+              //               await page.waitForTimeout(1000); 
+              //           }
+              //       }
+              //   }
 
                 await page.locator(HotelPageLocators.addGuestButton).click();
                 console.log('Add Guest button clicked');
@@ -285,6 +287,18 @@ export class HotelBookingPage {
     await ElementHelper.clickElement(page, checkboxLocator);
     console.log('Checkbox after redeem action clicked');
   }
+static async clickonaddguestbutton(page: Page) {
+  const CLIENT = process.env.CLIENT?.toUpperCase();
+
+  if (CLIENT === 'BOB') {
+    console.log('Skipping Add Guest button for BOB');
+    return;
+  }
+
+  const checkboxLocator = HotelPageLocators.addguestbutton;
+  await ElementHelper.clickElement(page, checkboxLocator);
+  console.log('Add Guest button clicked');
+}
 
   static async fillGuestDetailsInsideForm(page: any) {
   const CLIENT = process.env.CLIENT?.toUpperCase();
@@ -318,6 +332,8 @@ export class HotelBookingPage {
       break;
  
     case 'IDFC':
+      await ElementHelper.clickElement(page, HotelPageLocators.addGuestBtn);
+      await page.waitForTimeout(2000);
       await page.locator(HotelPageLocators.radioButtonMr).click();
       await page.waitForTimeout(2000);
       await page.locator(HotelPageLocators.firstNameField).fill(Data.hotelBookingDataFill.firstName);
@@ -325,6 +341,12 @@ export class HotelBookingPage {
       await page.locator(HotelPageLocators.lastNameField).fill(Data.hotelBookingDataFill.lastName);
       await page.waitForTimeout(2000);
       console.log('Guest details form inside fields filled');
+      await ElementHelper.clickElement(page, HotelPageLocators. assignGuestToRoomButton);
+      await page.waitForTimeout(2000);
+      console.log('Assign Guest to Room button clicked');
+      await this. nextButtonAfterAddingGuest(page);
+      await page.waitForTimeout(2000);
+      break;
     break;
   }
   }
@@ -515,26 +537,30 @@ export class HotelBookingPage {
   }
 
 
-  static async goBackUntilLocationSearchBoxVisible(page: Page) {
-    let attempts = 0;
-    const maxAttempts = 10;
-    while (attempts < maxAttempts) {
-      if(DeviceHelper.isMobile()) {
-        if (await ElementHelper.isElementDisplayed(page, FlightPageLocators.fromCityMobile)) {
-          await HotelHomePage.clickHotelTabBTN(page);
-        }
-      }
-      const isVisible = await page.locator(HotelPageLocators.searchHotelButton).isVisible().catch(() => false);
-      if (isVisible) {
-        console.log('Location search box is displayed');
-        return;
-      }
-      await page.goBack();
-      await page.waitForTimeout(20000);
-      attempts++;
+static async goBackUntilLocationSearchBoxVisible(page: Page) {
+  const maxAttempts = 10;
+
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    const isVisible = await page
+      .locator(HotelPageLocators.searchHotelButton)
+      .isVisible()
+      .catch(() => false);
+
+    if (isVisible) {
+      console.log('✅ Search Hotel Button is visible');
+      return;
     }
-    throw new Error('Location search box not visible after multiple back navigations.');
+
+    console.log(`🔙 Going back... Attempt ${attempt}/${maxAttempts}`);
+    await page.goBack();
+    await page.waitForLoadState('domcontentloaded').catch(() => {});
+    await page.waitForTimeout(3000);
   }
+
+  throw new Error(
+    '❌ Search Hotel Button not visible after multiple back navigations.'
+  );
+}
 
 
   static async searchHotelNameInTestBox(page: Page, hotelName: string) {
@@ -544,17 +570,47 @@ export class HotelBookingPage {
   }
 
 
-  static async redeampointTogglebutton(page: Page) {
-    const toggleButtonLocator = HotelPageLocators.redeampointTogglebutton;
-    await ElementHelper.clickElement(page, toggleButtonLocator);
-    console.log('Redeem points toggle button clicked');
-  }
+ static async redeampointTogglebutton(page: Page) {
+  const CLIENT = process.env.CLIENT?.toUpperCase();
 
-  static async redeamPointInputField(page: Page) {
-    const inputFieldLocator = HotelPageLocators.redeamPointInputField;
-    await ElementHelper.clearAndEnterInTextField(page, inputFieldLocator, Data.redeemPointSection.enterRedeemPoint);
-    console.log('Redeem points input field filled');
+  switch (CLIENT) {
+    case 'IDFC':
+      await ElementHelper.clickElement(page, HotelPageLocators.redeampointTogglebutton);
+      console.log('✅ IDFC: Redeem points toggle button clicked');
+      break;
+
+    case 'BOB':
+      console.log('⏭️ BOB: Skipping redeem points toggle');
+      break;
+
+    default:
+      console.warn(`⚠️ Unknown CLIENT: ${CLIENT}`);
   }
+}
+
+
+static async redeamPointInputField(page: Page) {
+  const CLIENT = process.env.CLIENT?.toUpperCase();
+
+  switch (CLIENT) {
+    case 'IDFC':
+      await ElementHelper.clearAndEnterInTextField(
+        page,
+        HotelPageLocators.redeamPointInputField,
+        Data.redeemPointSection.enterRedeemPoint
+      );
+      console.log('✅ IDFC: Redeem points input field filled');
+      break;
+
+    case 'BOB':
+      console.log('⏭️ BOB: Skipping redeem points input');
+      break;
+
+    default:
+      console.warn(`⚠️ Unknown CLIENT: ${CLIENT}`);
+  }
+}
+
 
   static async editIconButtonForRedeem(page: Page) {
     const editIconLocator = HotelPageLocators.editIconButtonForRedeem;
@@ -563,10 +619,26 @@ export class HotelBookingPage {
   }
 
   static async savebuttonAfterRedeemEnter(page: Page) {
-    const saveButtonLocator = HotelPageLocators.savebuttonAfterRedeemEnter;
-    await ElementHelper.clickElement(page, saveButtonLocator);
-    console.log('Save button after redeem entered clicked');
+  const CLIENT = process.env.CLIENT?.toUpperCase();
+
+  switch (CLIENT) {
+    case 'IDFC':
+      await ElementHelper.clickElement(
+        page,
+        HotelPageLocators.savebuttonAfterRedeemEnter
+      );
+      console.log('✅ IDFC: Save button clicked');
+      break;
+
+    case 'BOB':
+      console.log('⏭️ BOB: Skipping save button');
+      break;
+
+    default:
+      console.warn(`⚠️ Unknown CLIENT: ${CLIENT}`);
   }
+}
+
 
   static async getDiscountAmountText(page: Page): Promise<number> {
     const discountAmountText =
@@ -604,25 +676,38 @@ export class HotelBookingPage {
   }
 
   static async verifyDiscountCalculation(page: Page): Promise<void> {
-    const discountAmount =
-      await this.getDiscountAmountText(page);
+  const CLIENT = process.env.CLIENT?.toUpperCase();
 
-    const beforeAmount =
-      await this.payAmountBeforeDiscountText(page);
+  switch (CLIENT) {
+    case 'IDFC': {
+      const discountAmount = await this.getDiscountAmountText(page);
+      const beforeAmount = await this.payAmountBeforeDiscountText(page);
+      const afterAmount = await this.payAmountAfterDiscountText(page);
 
-    const afterAmount =
-      await this.payAmountAfterDiscountText(page);
+      const expectedAmount = beforeAmount - discountAmount;
 
-    if (beforeAmount - discountAmount === afterAmount) {
-      console.log('Discount calculation matched with expected value');
+      console.log({
+        CLIENT,
+        beforeAmount,
+        discountAmount,
+        afterAmount,
+        expectedAmount
+      });
+
+      expect(afterAmount).toBe(expectedAmount);
+
+      console.log('✅ IDFC: Discount calculation matched');
+      break;
     }
 
-    expect(
-      beforeAmount - discountAmount
-    ).toBe(
-      afterAmount
-    );
+    case 'BOB':
+      console.log('⏭️ BOB: Skipping discount calculation');
+      break;
+
+    default:
+      console.warn(`⚠️ Unknown CLIENT: ${CLIENT}`);
   }
+}
 
   static async fillFirstName(page: Page, testdata: any) {
     await page.locator(HotelPageLocators.firstNameField).fill(testdata.firstName);

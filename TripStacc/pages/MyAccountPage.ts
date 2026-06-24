@@ -174,17 +174,25 @@ static async verifyMyBookingSectionVisible(page: Page): Promise<void> {
     console.log(`⚠ Booking is not Confirmed: ${status}`);
   }
 }
-
 static async verifyHotelBookings(page: Page): Promise<void> {
-  await page.locator(MyAccountPageLocators.hotelTab).click();
   await page.waitForTimeout(6000);
+
+  const isMobile = page.viewportSize()?.width! < 768;
+
+  if (isMobile) {
+    await page.locator(MyAccountPageLocators.hoteltabmobile).click();
+  } else {
+    await page.locator(MyAccountPageLocators.hotelTab).click();
+  }
+
+  await page.waitForTimeout(6000);
+
   await expect(page.locator(MyAccountPageLocators.upcominghotelsTab)).toBeVisible();
   await expect(page.locator(MyAccountPageLocators.cancelledhotelsTab)).toBeVisible();
   await expect(page.locator(MyAccountPageLocators.completedhotelsTab)).toBeVisible();
 
   console.log('✅ Hotel booking tabs verified successfully');
 }
-
 
   static async clickHotelTab(page: Page): Promise<void> {
     await ElementHelper.clickElement(page, MyAccountPageLocators.hotelTab);

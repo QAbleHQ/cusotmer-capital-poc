@@ -82,9 +82,9 @@ test('SC:013: Booking Status on My Account Section', { tag: ['@IDFC','@BOB', '@M
   await test.step('Step 16: Handle Confirmed Booking Actions', async () => {
     await MyAccountPage.handleConfirmedBookingActions(page);
   });
-  // await test.step('Step 17: Verify Hotel Bookings', async () => {
-  //    await page.waitForTimeout(6000);
-  //   await MyAccountPage.verifyHotelBookings(page);
-  // });
+  await test.step('Step 17: Verify Hotel Bookings', async () => {
+     await page.waitForTimeout(6000);
+    await MyAccountPage.verifyHotelBookings(page);
+  });
 
 });

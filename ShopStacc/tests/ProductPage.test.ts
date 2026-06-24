@@ -13,6 +13,5 @@ test.beforeEach(async ({ browser }) => {
     await CommonHelper.navigateToHomePage(page);
     await LoginPage.LoginCredEnterBeforeEach(page);
     await LoginPage.RestrictionPageBeforeEach(page);
-    await page.pause();
   });
    
