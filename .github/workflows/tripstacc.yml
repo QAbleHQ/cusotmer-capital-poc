@@ -1,6 +1,6 @@
 name: TripStacc Tests
 
-run-name: "TripStacc ${{ github.event.inputs.client || 'BOB' }} ${{ github.event.inputs.environment || 'UAT' }}${{ github.event.inputs.feature && format(' @{0}', github.event.inputs.feature) || '' }}"
+run-name: "TripStacc ${{ github.event.inputs.client || 'BOB' }} ${{ github.event.inputs.environment || 'UAT' }} [${{ github.event.inputs.browser || 'Chrome' }}/${{ github.event.inputs.viewport || 'Web' }}]${{ github.event.inputs.feature && format(' @{0}', github.event.inputs.feature) || '' }}"
 
 # Triggers:
 #   1. push     → auto run on every push to main (UAT, all tests)
@@ -29,6 +29,18 @@ on:
         type: choice
         options: [QA, UAT, PROD]
         default: UAT
+      browser:
+        description: "Browser"
+        required: true
+        type: choice
+        options: [Chrome, Firefox, WebKit]
+        default: Chrome
+      viewport:
+        description: "Viewport (Web = desktop, or mobile device)"
+        required: true
+        type: choice
+        options: [Web, iPhone13, GalaxyS21]
+        default: Web
       feature:
         description: "Optional feature tag without @ (e.g. Loginpage, Homepageflight, Smoke, Sanity, Regression)"
         required: false
@@ -43,6 +55,8 @@ jobs:
       CI: true
       CLIENT: ${{ github.event.inputs.client || 'BOB' }}
       ENVIRONMENT: ${{ github.event.inputs.environment || 'UAT' }}
+      BROWSER: ${{ github.event.inputs.browser || 'Chrome' }}
+      VIEWPORT: ${{ github.event.inputs.viewport || 'Web' }}
       FEATURE_TAG: ${{ github.event.inputs.feature || '' }}
 
     steps:
@@ -59,22 +73,43 @@ jobs:
         run: npm ci
 
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
+        run: |
+          case "$BROWSER" in
+            Chrome)  npx playwright install --with-deps chrome ;;
+            Firefox) npx playwright install --with-deps firefox ;;
+            WebKit)  npx playwright install --with-deps webkit ;;
+            *)       npx playwright install --with-deps chromium ;;
+          esac
 
       - name: Run Playwright tests
         id: run-tests
         continue-on-error: true
         run: |
           mkdir -p reports
-          if [ -n "$FEATURE_TAG" ]; then
-            PROJECT_VAL="tripstacc-chrome-${ENVIRONMENT}-${FEATURE_TAG}"
+
+          # Map browser choice to PROJECT browser segment
+          case "$BROWSER" in
+            Firefox) BROWSER_PART="firefox" ;;
+            WebKit)  BROWSER_PART="webkit" ;;
+            *)       BROWSER_PART="chrome" ;;
+          esac
+
+          # Build PROJECT string including viewport and optional feature tag
+          if [ "$VIEWPORT" = "Web" ]; then
+            BASE="tripstacc-${BROWSER_PART}-${ENVIRONMENT}"
           else
-            PROJECT_VAL="tripstacc-chrome-${ENVIRONMENT}"
+            BASE="tripstacc-${BROWSER_PART}-${ENVIRONMENT}-${VIEWPORT}"
+          fi
+
+          if [ -n "$FEATURE_TAG" ]; then
+            PROJECT_VAL="${BASE}-${FEATURE_TAG}"
+          else
+            PROJECT_VAL="${BASE}"
           fi
 
           echo "PROJECT=$PROJECT_VAL"
           set +e
-          PROJECT="$PROJECT_VAL" npx playwright test TripStacc/tests \
+          CLIENT="$CLIENT" PROJECT="$PROJECT_VAL" npx playwright test TripStacc/tests \
             --config=playwright.config.ts \
             --workers=4 \
             --retries=2
