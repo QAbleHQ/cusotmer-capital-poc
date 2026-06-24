@@ -4,6 +4,7 @@ import { HotelBookingPage } from '../pages/HotelBookingPage';
 import idfcTestData from '../../testdata/tripStacc.json';
 import { Data } from '../../utils/dataProvider';
 import { BaseHelper } from '../pages/CommonMethods';
+import { HomePage } from '../pages/Homepage';
 let context: BrowserContext;
 let page: Page;
 
@@ -30,6 +31,7 @@ test('SC_015: Hotel Search', { tag: ['@IDFC','@BOB', '@Homepagehotel', '@Smoke',
     await HotelHomePage.verifyWhereToTextBoxDisplayed(page);
     await page.waitForTimeout(500);
     await HotelHomePage.searchValueInTestBox(page, Data.hotelPage.domestic);
+    
     await page.waitForTimeout(500);
     await HotelHomePage.selectFirstOptionFromDropdown(page);
     await page.waitForTimeout(500);
@@ -46,9 +48,9 @@ test('SC_015: Hotel Search', { tag: ['@IDFC','@BOB', '@Homepagehotel', '@Smoke',
     await page.waitForTimeout(7000); 
   });
 
-  await test.step('Step 4: Select guests and complete guest selection', async () => {
+  await test.step('Step 4: Select guests and complete guest selection', async () => { 
     await HotelHomePage.clickRoomsAndGuestsButton(page);
-    await page.waitForTimeout(500); 
+    await page.waitForTimeout(2000); 
     await HotelHomePage.selectAdultsAndChildrenWithAge(
       page,
       Data.hotelPage.hotelRoom1,
@@ -79,12 +81,14 @@ test('SC_015: Hotel Search', { tag: ['@IDFC','@BOB', '@Homepagehotel', '@Smoke',
 
 test('SC_015.01: Hotel Search - Domestic vs International Options', { tag: ['@IDFC','@BOB', '@Homepagehotel','@Regression'] }, async () => {
   await test.step('Step 1: Open Hotels Section', async () => {
+    await HotelHomePage.verifyHotelTabBtnDisplayed(page);
     await page.waitForTimeout(500);
     await HotelHomePage.clickHotelTabBTN(page);
     await page.waitForTimeout(500);
   });
 
   await test.step('Step 2: Search for Domestic location', async () => {
+    await HotelHomePage.verifyWhereToTextBoxDisplayed(page);
     await page.waitForTimeout(500);
     await HotelHomePage.searchValueInTestBox(page, Data.hotelPage.domestic);
     await page.waitForTimeout(500);
@@ -121,6 +125,11 @@ test('SC_015.01: Hotel Search - Domestic vs International Options', { tag: ['@ID
     await HotelHomePage.clickHotelTabBTN(page);
     await page.waitForTimeout(500);
   });
+
+      await test.step('Step 5: Handle post-login flow (IDFC / BOB)', async () => {
+        await page.waitForLoadState('domcontentloaded')
+        await HomePage.handlePostLoginFlow(page);
+      });
 
   await test.step('Step 7: Search for International location', async () => {
     await HotelHomePage.searchValueInTestBox(page, Data.hotelPage.international);
@@ -460,7 +469,7 @@ test('SC_016: Filter/Sorting and Room Selection', { tag: ['@IDFC','@BOB', '@Home
 
 });
 
-test('SC_016.01: Update Search', { tag: ['@IDFC','@BOB', '@Homepagehotel','@Regression'] }, async () => {
+test.only('SC_016.01: Update Search', { tag: ['@IDFC','@BOB', '@Homepagehotel','@Regression'] }, async () => {
   await page.waitForTimeout(500);
   await test.step('Step 1: Open Hotels Section', async () => {
     await page.waitForTimeout(500);
@@ -499,6 +508,7 @@ test('SC_016.01: Update Search', { tag: ['@IDFC','@BOB', '@Homepagehotel','@Regr
     );
     await page.waitForTimeout(500);
     await HotelHomePage.clickDoneButton(page);
+
     await page.waitForTimeout(500);
   });
 
@@ -733,6 +743,7 @@ test('SC_018: Domestic booking without PAN and international booking with PAN', 
 
   await test.step('Step 10: Click Add Guest button on Primary Guest Details section', async () => {
     await page.waitForTimeout(3000);
+    await page.pause();
     await HotelBookingPage.clickAddGuestButtonForIDFC(page);
     await page.waitForTimeout(1000);
   });
@@ -753,11 +764,11 @@ test('SC_018: Domestic booking without PAN and international booking with PAN', 
   await test.step('Step 13: Verify PAN card field does NOT appear', async () => {
     await page.waitForTimeout(3000);
     await HotelBookingPage.verifyPanCardNotVisible(page);
+
     await page.waitForTimeout(1000);
   });
 
   await test.step('Step 14: Go back until location search box is visible For Internation search', async () => {
-    await page.waitForTimeout(5000);
     await HotelBookingPage.goBackUntilLocationSearchBoxVisible(page);
     await page.waitForTimeout(1000);
   });

@@ -12,9 +12,9 @@
     "checkOutDate": "12"
     },
       "dateSelector": {
-    "fromDate": "9",
+    "fromDate": "8",
     "fromMonth": "Jul 2026",
-    "toDate": "21",
+    "toDate": "30",
     "toMonth": "Jul 2026"
   },
     "hotelBookingDataFill": {

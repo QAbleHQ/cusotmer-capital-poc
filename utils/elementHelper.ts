@@ -24,6 +24,7 @@ export class ElementHelper {
     await page.waitForLoadState('domcontentloaded');
     await this.scrollElementToCentre(page, selector);
     await page.waitForSelector(selector, { state: 'visible', timeout });
+    await page.waitForTimeout(500); 
     await page.click(selector, { force: true });
     console.log(`Clicked on element: ${selector}`);
   }
@@ -423,7 +424,7 @@ export class ElementHelper {
         ? page.locator(selector).first()
         : selector.first();
   
-    await element.waitFor({ state: 'visible', timeout });
+    // await element.waitFor({ state: 'visible', timeout });
   
     const text =
       (await element.inputValue().catch(() => null)) ??

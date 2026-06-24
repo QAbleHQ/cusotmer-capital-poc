@@ -51,12 +51,16 @@ static async selectCard(page: Page): Promise<void> {
 
   await firstCard.click();
 
-  await expect(continueButton).toBeEnabled();
-
+  await ElementHelper.waitForElementVisible(page, HomePageLocators.continueButton);
+  await expect(continueButton).toBeEnabled({ timeout: 10000 });
+  await continueButton.focus();
+  await page.waitForTimeout(200); // Wait for 2 seconds before clicking
   await continueButton.click();
-
+  await page.waitForTimeout(200);
+  await ElementHelper.waitForElementToDisappear(page, HomePageLocators.cardPopup);
   console.log('✅ Card selected and continue clicked');
 }
+
 static async verifyPopupClosed(page: Page): Promise<void> {
 
   const popup = page.locator(HomePageLocators.cardPopup);
