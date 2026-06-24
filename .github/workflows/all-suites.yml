@@ -1,0 +1,401 @@
+name: All Suites
+
+run-name: "${{ github.event.inputs.suite == 'all' && 'All Suites' || github.event.inputs.suite }} — ${{ github.event.inputs.environment || 'UAT' }} [${{ github.event.inputs.browser || 'Chrome' }}]${{ github.event.inputs.feature && format(' @{0}', github.event.inputs.feature) || '' }}"
+
+# Manual trigger only — pick a suite (or run all), environment, browser, and optional tag.
+# Mobile suites (iphone13 / galaxys21) always use Chrome regardless of the browser input.
+
+on:
+  workflow_dispatch:
+    inputs:
+      suite:
+        description: "Suite to run"
+        required: true
+        type: choice
+        options:
+          - all
+          - tripstacc-bob-uat
+          - tripstacc-idfc-uat
+          - shopstacc-bobcard-uat
+          - shopstacc-bobcard-iphone13-uat
+          - shopstacc-bobcard-galaxys21-uat
+          - tripstacc-bob-iphone13-uat
+          - tripstacc-bob-galaxys21-uat
+          - tripstacc-idfc-iphone13-uat
+          - tripstacc-idfc-galaxys21-uat
+        default: all
+      browser:
+        description: "Browser — desktop suites only; mobile always uses Chrome"
+        required: true
+        type: choice
+        options: [Chrome, Firefox, WebKit]
+        default: Chrome
+      environment:
+        description: "Environment"
+        required: true
+        type: choice
+        options: [QA, UAT, PROD]
+        default: UAT
+      feature:
+        description: "Feature tag without @ (e.g. Login, Smoke, Sanity, Regression)"
+        required: false
+        default: ""
+
+jobs:
+  # ── Step 1: Build matrix from selected suite ────────────────────────────────
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.build.outputs.matrix }}
+    steps:
+      - id: build
+        run: |
+          SUITE="${{ github.event.inputs.suite }}"
+          BROWSER="${{ github.event.inputs.browser || 'Chrome' }}"
+          ENV="${{ github.event.inputs.environment || 'UAT' }}"
+          FEATURE="${{ github.event.inputs.feature }}"
+
+          # Map browser label to PROJECT string segment
+          case "$BROWSER" in
+            Firefox) BP="firefox" ;;
+            WebKit)  BP="webkit" ;;
+            *)       BP="chrome" ;;
+          esac
+
+          # Optional tag suffix appended to PROJECT string
+          TAG=""
+          [ -n "$FEATURE" ] && TAG="-${FEATURE}"
+
+          # All 9 suite definitions
+          ALL=$(jq -n \
+            --arg bp  "$BP" \
+            --arg env "$ENV" \
+            --arg br  "$BROWSER" \
+            --arg tag "$TAG" \
+            '[
+              {
+                name:    "tripstacc-bob-uat",
+                client:  "BOB",
+                project: ("tripstacc-"+$bp+"-"+$env+$tag),
+                dir:     "TripStacc/tests",
+                browser: $br
+              },
+              {
+                name:    "tripstacc-idfc-uat",
+                client:  "IDFC",
+                project: ("tripstacc-"+$bp+"-"+$env+$tag),
+                dir:     "TripStacc/tests",
+                browser: $br
+              },
+              {
+                name:    "shopstacc-bobcard-uat",
+                client:  "BOBCARD",
+                project: ("shopstacc-"+$bp+"-"+$env+$tag),
+                dir:     "ShopStacc/tests",
+                browser: $br
+              },
+              {
+                name:    "shopstacc-bobcard-iphone13-uat",
+                client:  "BOBCARD",
+                project: ("shopstacc-chrome-"+$env+"-iPhone13"+$tag),
+                dir:     "ShopStacc/tests",
+                browser: "Chrome"
+              },
+              {
+                name:    "shopstacc-bobcard-galaxys21-uat",
+                client:  "BOBCARD",
+                project: ("shopstacc-chrome-"+$env+"-GalaxyS21"+$tag),
+                dir:     "ShopStacc/tests",
+                browser: "Chrome"
+              },
+              {
+                name:    "tripstacc-bob-iphone13-uat",
+                client:  "BOB",
+                project: ("tripstacc-chrome-"+$env+"-iPhone13"+$tag),
+                dir:     "TripStacc/tests",
+                browser: "Chrome"
+              },
+              {
+                name:    "tripstacc-bob-galaxys21-uat",
+                client:  "BOB",
+                project: ("tripstacc-chrome-"+$env+"-GalaxyS21"+$tag),
+                dir:     "TripStacc/tests",
+                browser: "Chrome"
+              },
+              {
+                name:    "tripstacc-idfc-iphone13-uat",
+                client:  "IDFC",
+                project: ("tripstacc-chrome-"+$env+"-iPhone13"+$tag),
+                dir:     "TripStacc/tests",
+                browser: "Chrome"
+              },
+              {
+                name:    "tripstacc-idfc-galaxys21-uat",
+                client:  "IDFC",
+                project: ("tripstacc-chrome-"+$env+"-GalaxyS21"+$tag),
+                dir:     "TripStacc/tests",
+                browser: "Chrome"
+              }
+            ]')
+
+          if [ "$SUITE" = "all" ]; then
+            FILTERED="$ALL"
+          else
+            FILTERED=$(echo "$ALL" | jq -c "[.[] | select(.name == \"${SUITE}\")]")
+          fi
+
+          echo "matrix=$(echo "$FILTERED" | jq -c '{include: .}')" >> "$GITHUB_OUTPUT"
+
+  # ── Step 2: Run each suite in parallel ──────────────────────────────────────
+  test:
+    needs: prepare
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.prepare.outputs.matrix) }}
+    name: ${{ matrix.name }}
+    env:
+      CI: true
+      CLIENT: ${{ matrix.client }}
+      ENVIRONMENT: ${{ github.event.inputs.environment || 'UAT' }}
+      FEATURE_TAG: ${{ github.event.inputs.feature || '' }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: |
+          case "${{ matrix.browser }}" in
+            Firefox) npx playwright install --with-deps firefox ;;
+            WebKit)  npx playwright install --with-deps webkit ;;
+            *)       npx playwright install --with-deps chrome ;;
+          esac
+
+      - name: Run Playwright tests
+        id: run-tests
+        continue-on-error: true
+        run: |
+          mkdir -p reports
+          echo "▶ PROJECT=${{ matrix.project }}  CLIENT=${{ matrix.client }}"
+          set +e
+          CLIENT="${{ matrix.client }}" PROJECT="${{ matrix.project }}" \
+            npx playwright test ${{ matrix.dir }} \
+              --config=playwright.config.ts \
+              --workers=4 \
+              --retries=2
+          EXIT_CODE=$?
+          set -e
+          echo "exit_code=$EXIT_CODE" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Calculate test stats
+        if: always()
+        id: stats
+        run: |
+          node -e "
+          const fs = require('fs');
+          const reportPath = 'reports/test-results.json';
+          let total = 0, passed = 0, failed = 0, skipped = 0, flaky = 0, durationMs = 0;
+          const failures = [];
+
+          if (fs.existsSync(reportPath)) {
+            const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
+            function collect(suite) {
+              for (const spec of suite.specs || []) {
+                for (const test of spec.tests || []) {
+                  total++;
+                  const result = test.results?.[test.results.length - 1];
+                  const status = result?.status || 'unknown';
+                  durationMs += result?.duration || 0;
+                  if (status === 'passed') passed++;
+                  else if (status === 'failed' || status === 'timedOut') {
+                    failed++;
+                    const msg = (result?.error?.message || 'No error').split('\n')[0].replace(/\x1B\[[0-9;]*m/g, '');
+                    failures.push({ title: spec.title + ' › ' + test.title, msg });
+                  } else if (status === 'skipped') skipped++;
+                  else if (status === 'flaky') flaky++;
+                }
+              }
+              for (const child of suite.suites || []) collect(child);
+            }
+            for (const suite of report.suites || []) collect(suite);
+          }
+
+          const s = Math.round(durationMs / 1000);
+          const duration = s < 60 ? s + 's' : Math.floor(s/60) + 'm ' + (s%60) + 's';
+          const out = process.env.GITHUB_OUTPUT;
+          fs.appendFileSync(out, 'total='    + total    + '\n');
+          fs.appendFileSync(out, 'passed='   + passed   + '\n');
+          fs.appendFileSync(out, 'failed='   + failed   + '\n');
+          fs.appendFileSync(out, 'skipped='  + skipped  + '\n');
+          fs.appendFileSync(out, 'flaky='    + flaky    + '\n');
+          fs.appendFileSync(out, 'duration=' + duration + '\n');
+          fs.appendFileSync(out, 'status='   + (failed > 0 ? 'FAILED' : 'PASSED') + '\n');
+
+          // Write failures JSON for summary
+          fs.writeFileSync('/tmp/failures.json', JSON.stringify(failures));
+          "
+
+      - name: Publish report to job summary
+        if: always()
+        run: |
+          node -e "
+          const fs = require('fs');
+          const status  = '${{ steps.stats.outputs.status }}';
+          const badge   = status === 'FAILED' ? '🔴' : '🟢';
+          const suite   = '${{ matrix.name }}';
+          const env     = process.env.ENVIRONMENT || 'UAT';
+          const feature = process.env.FEATURE_TAG ? ' @' + process.env.FEATURE_TAG : '';
+
+          let md = '## ' + badge + ' ' + suite + ' — ' + env + feature + '\n\n';
+          md += '| | |\n|---|---|\n';
+          md += '| **Status**   | ' + (status === 'FAILED' ? '❌ FAILED' : '✅ PASSED') + ' |\n';
+          md += '| **Total**    | ${{ steps.stats.outputs.total }}    |\n';
+          md += '| **Passed**   | ✅ ${{ steps.stats.outputs.passed }}  |\n';
+          md += '| **Failed**   | ' + (${{ steps.stats.outputs.failed }} > 0 ? '❌ ${{ steps.stats.outputs.failed }}' : '0') + ' |\n';
+          md += '| **Skipped**  | ⏭️ ${{ steps.stats.outputs.skipped }} |\n';
+          md += '| **Flaky**    | ⚠️ ${{ steps.stats.outputs.flaky }}   |\n';
+          md += '| **Duration** | ⏱️ ${{ steps.stats.outputs.duration }} |\n';
+          md += '| **Branch**   | \`${{ github.ref_name }}\` |\n';
+          md += '| **Commit**   | \`' + '${{ github.sha }}'.substring(0, 7) + '\` |\n\n';
+
+          const failPath = '/tmp/failures.json';
+          if (fs.existsSync(failPath)) {
+            const failures = JSON.parse(fs.readFileSync(failPath, 'utf8'));
+            if (failures.length > 0) {
+              md += '### ❌ Failed Tests\n\n| # | Test | Error |\n|---|---|---|\n';
+              failures.slice(0, 20).forEach((f, i) => {
+                md += '| ' + (i+1) + ' | ' + f.title.replace(/\|/g, '\\\|') + ' | ' + f.msg.substring(0, 120).replace(/\|/g, '\\\|') + ' |\n';
+              });
+            } else {
+              md += '### ✅ All tests passed\n\n';
+            }
+          }
+
+          fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, md);
+          "
+
+      - name: Upload Playwright HTML report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: report-${{ matrix.name }}-${{ github.run_id }}
+          path: |
+            playwright-report/
+            reports/test-results.json
+          retention-days: 30
+          if-no-files-found: warn
+
+      - name: Upload failure artifacts
+        if: steps.run-tests.outputs.exit_code != '0'
+        uses: actions/upload-artifact@v4
+        with:
+          name: failures-${{ matrix.name }}-${{ github.run_id }}
+          path: test-results/
+          retention-days: 30
+          if-no-files-found: ignore
+
+      - name: Send email report
+        if: always()
+        continue-on-error: true
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.office365.com
+          server_port: 587
+          username: ankitpatel@qable.io
+          password: zjwtgkflbwczqrpb
+          subject: "[${{ steps.stats.outputs.status }}] ${{ matrix.name }} ${{ github.event.inputs.environment || 'UAT' }}${{ github.event.inputs.feature && format(' @{0}', github.event.inputs.feature) || '' }} — Playwright Report"
+          to: aneri.patel@qable.io, nikunj.trivedi@qable.io, 1ee687f3.linearloop.io@in.teams.ms
+          from: ankitpatel@qable.io
+          html_body: |
+            <div style="font-family:Arial,sans-serif;max-width:600px;margin:auto">
+              <h2 style="background:${{ steps.stats.outputs.status == 'FAILED' && '#cc0000' || '#00b300' }};color:#fff;padding:12px 16px;border-radius:4px;margin:0">
+                ${{ steps.stats.outputs.status == 'FAILED' && '🔴' || '🟢' }} ${{ matrix.name }} ${{ github.event.inputs.environment || 'UAT' }}${{ github.event.inputs.feature && format(' @{0}', github.event.inputs.feature) || '' }}
+              </h2>
+              <table width="100%" cellpadding="8" cellspacing="0" style="border-collapse:collapse;margin-top:0;border:1px solid #ddd">
+                <tr><td style="background:#f5f5f5;font-weight:bold;width:140px">Status</td><td>${{ steps.stats.outputs.status == 'FAILED' && '❌ FAILED' || '✅ PASSED' }}</td></tr>
+                <tr><td style="font-weight:bold">Total</td><td>${{ steps.stats.outputs.total }}</td></tr>
+                <tr style="background:#f5f5f5"><td style="font-weight:bold">Passed</td><td>✅ ${{ steps.stats.outputs.passed }}</td></tr>
+                <tr><td style="font-weight:bold">Failed</td><td>❌ ${{ steps.stats.outputs.failed }}</td></tr>
+                <tr style="background:#f5f5f5"><td style="font-weight:bold">Skipped</td><td>⏭️ ${{ steps.stats.outputs.skipped }}</td></tr>
+                <tr><td style="font-weight:bold">Flaky</td><td>⚠️ ${{ steps.stats.outputs.flaky }}</td></tr>
+                <tr style="background:#f5f5f5"><td style="font-weight:bold">Duration</td><td>⏱️ ${{ steps.stats.outputs.duration }}</td></tr>
+                <tr><td style="font-weight:bold">Browser</td><td>${{ matrix.browser }}</td></tr>
+                <tr style="background:#f5f5f5"><td style="font-weight:bold">Trigger</td><td>${{ github.event_name }}</td></tr>
+                <tr><td style="font-weight:bold">Branch</td><td>${{ github.ref_name }}</td></tr>
+                <tr style="background:#f5f5f5"><td style="font-weight:bold">Triggered by</td><td>${{ github.actor }}</td></tr>
+                <tr><td style="font-weight:bold">Commit</td><td>${{ github.sha }}</td></tr>
+              </table>
+              <p style="margin-top:16px">
+                <a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" style="background:#0066cc;color:#fff;padding:10px 18px;border-radius:4px;text-decoration:none;font-weight:bold">🔗 View Run</a>
+              </p>
+            </div>
+
+      - name: Notify MS Teams
+        if: always()
+        continue-on-error: true
+        run: |
+          STATUS="${{ steps.stats.outputs.status }}"
+          COLOR=$([[ "$STATUS" == "FAILED" ]] && echo "cc0000" || echo "00b300")
+          EMOJI=$([[ "$STATUS" == "FAILED" ]] && echo "🔴" || echo "🟢")
+          FEATURE_LABEL="${FEATURE_TAG:+ @${FEATURE_TAG}}"
+          curl -s -X POST "${{ secrets.MS_TEAMS_WEBHOOK }}" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"type\": \"message\",
+              \"attachments\": [{
+                \"contentType\": \"application/vnd.microsoft.card.adaptive\",
+                \"content\": {
+                  \"\$schema\": \"http://adaptivecards.io/schemas/adaptive-card.json\",
+                  \"type\": \"AdaptiveCard\",
+                  \"version\": \"1.4\",
+                  \"body\": [
+                    {
+                      \"type\": \"TextBlock\",
+                      \"text\": \"${EMOJI} ${{ matrix.name }} ${ENVIRONMENT}${FEATURE_LABEL} — ${STATUS}\",
+                      \"weight\": \"Bolder\",
+                      \"size\": \"Medium\",
+                      \"wrap\": true
+                    },
+                    {
+                      \"type\": \"FactSet\",
+                      \"facts\": [
+                        { \"title\": \"Status\",       \"value\": \"${STATUS}\" },
+                        { \"title\": \"Total\",        \"value\": \"${{ steps.stats.outputs.total }}\" },
+                        { \"title\": \"Passed\",       \"value\": \"✅ ${{ steps.stats.outputs.passed }}\" },
+                        { \"title\": \"Failed\",       \"value\": \"❌ ${{ steps.stats.outputs.failed }}\" },
+                        { \"title\": \"Skipped\",      \"value\": \"⏭️ ${{ steps.stats.outputs.skipped }}\" },
+                        { \"title\": \"Flaky\",        \"value\": \"⚠️ ${{ steps.stats.outputs.flaky }}\" },
+                        { \"title\": \"Duration\",     \"value\": \"⏱️ ${{ steps.stats.outputs.duration }}\" },
+                        { \"title\": \"Browser\",      \"value\": \"${{ matrix.browser }}\" },
+                        { \"title\": \"Branch\",       \"value\": \"${{ github.ref_name }}\" },
+                        { \"title\": \"Triggered by\", \"value\": \"${{ github.actor }}\" }
+                      ]
+                    }
+                  ],
+                  \"actions\": [
+                    {
+                      \"type\": \"Action.OpenUrl\",
+                      \"title\": \"🔗 View Run\",
+                      \"url\": \"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"
+                    }
+                  ]
+                }
+              }]
+            }"
+
+      - name: Fail job when tests failed
+        if: steps.run-tests.outputs.exit_code != '0'
+        run: exit 1
