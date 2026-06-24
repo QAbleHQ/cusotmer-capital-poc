@@ -9,6 +9,7 @@ import { FlightPageLocators } from '../../TripStacc/locators/FlightPageLocators'
 import { HotelHomePage } from './HotelHomePage';
 import { Data } from '../../utils/dataProvider';
 import { CommonHelper } from '../../utils/commonHelper';
+import { VerificationHelpers } from '../../utils/verificationHelper';
 
 export class HotelBookingPage {
   static async clickFirstRoomSelectionButton(page: Page) {
@@ -285,6 +286,18 @@ export class HotelBookingPage {
     await ElementHelper.clickElement(page, checkboxLocator);
     console.log('Checkbox after redeem action clicked');
   }
+static async clickonaddguestbutton(page: Page) {
+  const CLIENT = process.env.CLIENT?.toUpperCase();
+
+  if (CLIENT === 'BOB') {
+    console.log('Skipping Add Guest button for BOB');
+    return;
+  }
+
+  const checkboxLocator = HotelPageLocators.addguestbutton;
+  await ElementHelper.clickElement(page, checkboxLocator);
+  console.log('Add Guest button clicked');
+}
 
   static async fillGuestDetailsInsideForm(page: any) {
   const CLIENT = process.env.CLIENT?.toUpperCase();
@@ -318,6 +331,8 @@ export class HotelBookingPage {
       break;
  
     case 'IDFC':
+      await ElementHelper.clickElement(page, HotelPageLocators.addGuestBtn);
+      await page.waitForTimeout(2000);
       await page.locator(HotelPageLocators.radioButtonMr).click();
       await page.waitForTimeout(2000);
       await page.locator(HotelPageLocators.firstNameField).fill(Data.hotelBookingDataFill.firstName);
@@ -325,6 +340,12 @@ export class HotelBookingPage {
       await page.locator(HotelPageLocators.lastNameField).fill(Data.hotelBookingDataFill.lastName);
       await page.waitForTimeout(2000);
       console.log('Guest details form inside fields filled');
+      await ElementHelper.clickElement(page, HotelPageLocators. assignGuestToRoomButton);
+      await page.waitForTimeout(2000);
+      console.log('Assign Guest to Room button clicked');
+      await this. nextButtonAfterAddingGuest(page);
+      await page.waitForTimeout(2000);
+      break;
     break;
   }
   }
@@ -544,17 +565,47 @@ export class HotelBookingPage {
   }
 
 
-  static async redeampointTogglebutton(page: Page) {
-    const toggleButtonLocator = HotelPageLocators.redeampointTogglebutton;
-    await ElementHelper.clickElement(page, toggleButtonLocator);
-    console.log('Redeem points toggle button clicked');
-  }
+ static async redeampointTogglebutton(page: Page) {
+  const CLIENT = process.env.CLIENT?.toUpperCase();
 
-  static async redeamPointInputField(page: Page) {
-    const inputFieldLocator = HotelPageLocators.redeamPointInputField;
-    await ElementHelper.clearAndEnterInTextField(page, inputFieldLocator, Data.redeemPointSection.enterRedeemPoint);
-    console.log('Redeem points input field filled');
+  switch (CLIENT) {
+    case 'IDFC':
+      await ElementHelper.clickElement(page, HotelPageLocators.redeampointTogglebutton);
+      console.log('✅ IDFC: Redeem points toggle button clicked');
+      break;
+
+    case 'BOB':
+      console.log('⏭️ BOB: Skipping redeem points toggle');
+      break;
+
+    default:
+      console.warn(`⚠️ Unknown CLIENT: ${CLIENT}`);
   }
+}
+
+
+static async redeamPointInputField(page: Page) {
+  const CLIENT = process.env.CLIENT?.toUpperCase();
+
+  switch (CLIENT) {
+    case 'IDFC':
+      await ElementHelper.clearAndEnterInTextField(
+        page,
+        HotelPageLocators.redeamPointInputField,
+        Data.redeemPointSection.enterRedeemPoint
+      );
+      console.log('✅ IDFC: Redeem points input field filled');
+      break;
+
+    case 'BOB':
+      console.log('⏭️ BOB: Skipping redeem points input');
+      break;
+
+    default:
+      console.warn(`⚠️ Unknown CLIENT: ${CLIENT}`);
+  }
+}
+
 
   static async editIconButtonForRedeem(page: Page) {
     const editIconLocator = HotelPageLocators.editIconButtonForRedeem;
@@ -563,10 +614,26 @@ export class HotelBookingPage {
   }
 
   static async savebuttonAfterRedeemEnter(page: Page) {
-    const saveButtonLocator = HotelPageLocators.savebuttonAfterRedeemEnter;
-    await ElementHelper.clickElement(page, saveButtonLocator);
-    console.log('Save button after redeem entered clicked');
+  const CLIENT = process.env.CLIENT?.toUpperCase();
+
+  switch (CLIENT) {
+    case 'IDFC':
+      await ElementHelper.clickElement(
+        page,
+        HotelPageLocators.savebuttonAfterRedeemEnter
+      );
+      console.log('✅ IDFC: Save button clicked');
+      break;
+
+    case 'BOB':
+      console.log('⏭️ BOB: Skipping save button');
+      break;
+
+    default:
+      console.warn(`⚠️ Unknown CLIENT: ${CLIENT}`);
   }
+}
+
 
   static async getDiscountAmountText(page: Page): Promise<number> {
     const discountAmountText =
@@ -604,25 +671,38 @@ export class HotelBookingPage {
   }
 
   static async verifyDiscountCalculation(page: Page): Promise<void> {
-    const discountAmount =
-      await this.getDiscountAmountText(page);
+  const CLIENT = process.env.CLIENT?.toUpperCase();
 
-    const beforeAmount =
-      await this.payAmountBeforeDiscountText(page);
+  switch (CLIENT) {
+    case 'IDFC': {
+      const discountAmount = await this.getDiscountAmountText(page);
+      const beforeAmount = await this.payAmountBeforeDiscountText(page);
+      const afterAmount = await this.payAmountAfterDiscountText(page);
 
-    const afterAmount =
-      await this.payAmountAfterDiscountText(page);
+      const expectedAmount = beforeAmount - discountAmount;
 
-    if (beforeAmount - discountAmount === afterAmount) {
-      console.log('Discount calculation matched with expected value');
+      console.log({
+        CLIENT,
+        beforeAmount,
+        discountAmount,
+        afterAmount,
+        expectedAmount
+      });
+
+      expect(afterAmount).toBe(expectedAmount);
+
+      console.log('✅ IDFC: Discount calculation matched');
+      break;
     }
 
-    expect(
-      beforeAmount - discountAmount
-    ).toBe(
-      afterAmount
-    );
+    case 'BOB':
+      console.log('⏭️ BOB: Skipping discount calculation');
+      break;
+
+    default:
+      console.warn(`⚠️ Unknown CLIENT: ${CLIENT}`);
   }
+}
 
   static async fillFirstName(page: Page, testdata: any) {
     await page.locator(HotelPageLocators.firstNameField).fill(testdata.firstName);

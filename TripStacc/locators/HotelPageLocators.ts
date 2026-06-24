@@ -115,4 +115,5 @@ export const HotelPageLocators = {
   sortAndFilterMobile: `//button[@id="sort_filtr"]`,
   popupImg: `(//a[@target="_blank"])//img`,
   outOfPopupImg: `//div[@class="wrapper-outer"]`,
+  addguestbutton: `//a[@id='addroombox_1']`,
 };
