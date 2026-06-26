@@ -12,6 +12,10 @@ export class PaymentPage {
     await ElementHelper.clickElement(page, PaymentPageLocators.checkoutPayButton);
   }
  
+  static async clickPayButton(page: Page) {
+    await VerificationHelpers.elementIsVisible(page, PaymentPageLocators.payButton);
+    await ElementHelper.clickElement(page, PaymentPageLocators. payButton);
+  }
   static async verifyCheckoutPayButton(page: Page) {
     await page.waitForSelector(PaymentPageLocators.checkoutPayButton, { state: 'visible' });
     const payableText = await page.textContent(PaymentPageLocators.checkoutPayButton);
@@ -76,16 +80,23 @@ static async clickCardOptionSelector(page: Page) {
     await ElementHelper.clearAndEnterInTextField(page, PaymentPageLocators.cardNumberField, Data.paymentDataFill.cardNumber);
   }
 
-  static async fillCardExpiry(page: Page) {
-    await ElementHelper.clearAndEnterInTextField(page, PaymentPageLocators.cardExpiryField, idfcTestData.paymentDataFill.cardExpiry);
-  }
+ 
+static async fillCardExpiry(page: Page) {
+  const value = Data.paymentDataFill.cardExpiry; 
+  const locator = page.locator(PaymentPageLocators.cardExpiryField);
+
+  await locator.click();
+  await locator.fill(''); // clear field
+  await locator.pressSequentially(value, { delay: 100 });
+}
+
 
   static async fillCardCvv(page: Page) {
-    await ElementHelper.clearAndEnterInTextField(page, PaymentPageLocators.cardCvvField, idfcTestData.paymentDataFill.cardCvv);
+    await ElementHelper.clearAndEnterInTextField(page, PaymentPageLocators.cardCvvField, Data.paymentDataFill.cardCvv);
   }
 
   static async fillCardName(page: Page) {
-    await ElementHelper.clearAndEnterInTextField(page, PaymentPageLocators.cardownername, idfcTestData.paymentDataFill.cardName);
+    await ElementHelper.clearAndEnterInTextField(page, PaymentPageLocators.cardownername, Data.paymentDataFill.cardName);
   }
 
   static async verifyCardDetailsPageVisible(page: Page) {
@@ -99,19 +110,19 @@ static async clickCardOptionSelector(page: Page) {
   const cvv = page.locator(PaymentPageLocators.cardCvvField);
   const name = page.locator(PaymentPageLocators.cardownername);
 
-  // ✅ wait first
+  // wait first
   await cardNumber.waitFor({ state: 'visible', timeout: 10000 });
   await expiry.waitFor({ state: 'visible', timeout: 10000 });
   await cvv.waitFor({ state: 'visible', timeout: 10000 });
   await name.waitFor({ state: 'visible', timeout: 10000 });
 
-  // ✅ then assert
+  // then assert
   await expect(cardNumber).toBeVisible();
   await expect(expiry).toBeVisible();
   await expect(cvv).toBeVisible();
   await expect(name).toBeVisible();
 
-  console.log('✅ Card fields are visible.');
+  console.log('Card fields are visible.');
 }
   static async acceptSaveCardConsent(page: Page) {
     await ElementHelper.clickElement(page, PaymentPageLocators.saveCardPopup);
@@ -145,15 +156,23 @@ static async clickCardOptionSelector(page: Page) {
   static async clickCancelPaymentDismiss(page: Page) {
     await ElementHelper.clickElement(page, PaymentPageLocators.nocancelbutton);
   }
+  
+  
+  static async clickContinueButton(page: Page) {
+    await page.waitForTimeout(5000);
+    await VerificationHelpers.elementIsVisible(page, PaymentPageLocators.continuebtnbeforepayment);
+    await ElementHelper.clickElement(page, PaymentPageLocators.continuebtnbeforepayment);
+  }
 
   static async verifyOtpPageVisibleandFillValue(page: Page) {
     await expect(page.locator(PaymentPageLocators.otpInputField)).toBeVisible();
     console.log('OTP page is visible.');
-    await ElementHelper.clearAndEnterInTextField(page, PaymentPageLocators.otpInputField, idfcTestData.paymentDataFill.otp)
+    await ElementHelper.clearAndEnterInTextField(page, PaymentPageLocators.otpInputField, Data.paymentDataFill.otp)
   }
   static async clickSubmitButton(page: Page) {
     await ElementHelper.clickElement(page, PaymentPageLocators.submitButton);
   }
+  
 
   static async verifyOtpErrorMessage(page: Page) {
     await expect(page.locator(PaymentPageLocators.otpErrorMessage)).toBeVisible();
@@ -187,7 +206,7 @@ static async clickCardOptionSelector(page: Page) {
       await page.waitForTimeout(3000); 
     break;
     case 'IDFC':  
-    console.log('⏭️ IDFC: Skipping ');
+    console.log('IDFC: Skipping ');
     break;
   }
   }
@@ -200,7 +219,7 @@ static async clickCardOptionSelector(page: Page) {
       await page.waitForTimeout(3000); 
     break;
     case 'IDFC':  
-    console.log('⏭️ IDFC: Skipping ');
+    console.log('IDFC: Skipping ');
     break;
   }
   }
@@ -213,7 +232,7 @@ static async clickCardOptionSelector(page: Page) {
       await page.waitForTimeout(3000);
     break;
     case 'IDFC':  
-    console.log('⏭️ IDFC: Skipping ');
+    console.log('IDFC: Skipping ');
     break;
   }
   }
@@ -221,14 +240,12 @@ static async clickCardOptionSelector(page: Page) {
     await ElementHelper.clickElement(page, PaymentPageLocators.termsConditionCheckboxBob);
     await ElementHelper.clickElement(page, PaymentPageLocators.payNowButtonBob);
     await ElementHelper.clickElement(page, PaymentPageLocators.continueTravellerButtonBob);
-    await ElementHelper.clickElement(page, PaymentPageLocators.continuebtn);
+    await ElementHelper.clickElement(page, PaymentPageLocators.continuebuttonbobpayment);
     await page.waitForTimeout(7000);
   //  await ElementHelper.clickElement(page, PaymentPageLocators. mobileNoField);
-  //  await ElementHelper.clearAndEnterInTextField(page, PaymentPageLocators. mobileNoField, '8140217872');
+  //  await ElementHelper.clearAndEnterInTextField(page, PaymentPageLocators. mobileinput, '8140217872');
   //  await ElementHelper.clickElement(page, PaymentPageLocators. continuebtnformobile);
-  //  await ElementHelper.clickElement(page, PaymentPageLocators. payviacard);
-  //   await PaymentPage.clickCardOptionSelector(page);
-  //   await page.waitForTimeout(2000);
+   await ElementHelper.clickElement(page, PaymentPageLocators. payviacard);
     await PaymentPage.verifyCardFieldsVisible(page);
     await page.waitForTimeout(2000);
     await PaymentPage.fillCardNumber(page);
@@ -236,8 +253,6 @@ static async clickCardOptionSelector(page: Page) {
     await PaymentPage.fillCardExpiry(page);
     await page.waitForTimeout(2000);
     await PaymentPage.fillCardCvv(page);
-    await page.waitForTimeout(2000);
-    await PaymentPage.fillCardName(page);
     await page.waitForTimeout(2000);
     await PaymentPage.verifySaveCardPopupVisible(page);
     await page.waitForTimeout(2000);
@@ -258,8 +273,9 @@ static async clickCardOptionSelector(page: Page) {
   }
 
   static async completeCardPaymentFlowIDFC(page: Page) {
-    await PaymentPage.verifyCardOptions(page);
     await page.waitForTimeout(2000);
+    await this.clickPayButton(page);
+    await page.waitForLoadState('domcontentloaded');
     await PaymentPage.clickCardOptionSelector(page);
     await page.waitForTimeout(2000);
     await PaymentPage.verifyCardFieldsVisible(page);

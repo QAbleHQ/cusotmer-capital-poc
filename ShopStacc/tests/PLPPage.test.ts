@@ -16,15 +16,15 @@ test.beforeEach(async ({ browser }) => {
 });
 
 test.afterEach(async () => {
-   await page.close();
-   await context.close();
- });
- 
+  await page.close();
+  await context.close();
+});
 
-test("SC_005,Gift Card PDP - Verify details and actions", { tag: ['@BOBCard', '@PLP','@Regression', '@Sanity'] },async ({ }) => {
+
+test("SC_005,Gift Card PDP - Verify details and actions", { tag: ['@BOBCard', '@PLP', '@Regression', '@Sanity'] }, async ({ }) => {
 
   await test.step("Click Gift Card option", async () => {
-    await page.waitForLoadState('domcontentloaded')
+    await page.waitForLoadState('domcontentloaded');
     await HomePage.clickGiftCardOption(page);
   });
 

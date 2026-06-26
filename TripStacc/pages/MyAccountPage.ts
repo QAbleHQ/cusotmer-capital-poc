@@ -116,7 +116,7 @@ static async verifyMyBookingSectionVisible(page: Page): Promise<void> {
     console.log(`⚠ Unknown status: ${status}`);
   }
 
-  console.log('✅ Button verification completed successfully');
+  console.log('Button verification completed successfully');
 }
 
   static async clickFlightsCompletedTab(page: Page): Promise<void> {
@@ -136,7 +136,7 @@ static async verifyMyBookingSectionVisible(page: Page): Promise<void> {
   console.log(`Booking Status: ${status}`);
 
   if (status.includes('Confirmed')) {
-    console.log('✅ Booking is Confirmed - Performing actions');
+    console.log('Booking is Confirmed - Performing actions');
     const [newPage] = await Promise.all([
       page.waitForEvent('popup'),
       page.locator("(//a[contains(text(),'View')])[1]").click()
@@ -146,7 +146,7 @@ static async verifyMyBookingSectionVisible(page: Page): Promise<void> {
     console.log('✔ View opened in new tab/page');
 
     await newPage.close(); // optional
-    // ✅ 2. CANCEL → Same page
+    // 2. CANCEL → Same page
     const cancelBtn = page.locator("(//a[contains(text(),'Cancel')])[2]");
     await expect(cancelBtn).toBeVisible();
 
@@ -159,7 +159,7 @@ static async verifyMyBookingSectionVisible(page: Page): Promise<void> {
     // Go back (if needed)
     await page.goBack();
 
-    // ✅ 3. MODIFY → Same page
+    // 3. MODIFY → Same page
     const modifyBtn = page.locator("(//a[contains(text(),'Modify')])[1]");
     await expect(modifyBtn).toBeVisible();
 
@@ -191,7 +191,7 @@ static async verifyHotelBookings(page: Page): Promise<void> {
   await expect(page.locator(MyAccountPageLocators.cancelledhotelsTab)).toBeVisible();
   await expect(page.locator(MyAccountPageLocators.completedhotelsTab)).toBeVisible();
 
-  console.log('✅ Hotel booking tabs verified successfully');
+  console.log('Hotel booking tabs verified successfully');
 }
 
   static async clickHotelTab(page: Page): Promise<void> {

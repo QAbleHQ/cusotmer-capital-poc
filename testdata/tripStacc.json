@@ -27,6 +27,7 @@
     "hotelPage": {
       "rooms": 1,
       "domestic": "ahmedabad",
+      "domesticlocation":"Mumbai",
        "international": "qatar",
        "searcHotelName": "Itc Narmada",
        "searcHotelNameInternational": "Souq Waqif Boutique Hotels by Tivoli",
@@ -48,11 +49,11 @@
     }  ,
     "travellername": {
       "firstName": "John",
-      "lastName": "Doe",
+      "lastName": "Test",
       "WrongfirstName": "J",
       "WronglastName": "D",
       "editedFirstName": "Test",
-      "editedLastName": "Demo",
+      "editedLastName": "Test",
       "email": "Test@demo.com",
       "phone": "9999999999",
       "gst": "MMM999MMM",
@@ -74,15 +75,25 @@
       "otp": "2248"
     },
     "paymentDataFill": {
-      "cardNumber": "4405-2350-2684-2471",
-      "expiryDate": " 05/30",
-      "cvv": "123"
+      "cardNumber": "5277-5300-5229-0153",
+      "cardExpiry": " 05 30",
+      "cardCvv": "123",
+      "cardName": "Test",
+      "otp": "123456"
     }
   },
   "IDFC": {
     "loginDataFill": {
       "mobileNumber": "8448661387",
       "otp": "2248"
+    },
+     "paymentDataFill": {
+      "cardNumber": "4405-2350-2684-2471",
+      "cardExpiry": " 05 30",
+      "cardCvv": "123",
+      "cardName": "Test",
+      "otp": "123456"
+
     }
   }
 }

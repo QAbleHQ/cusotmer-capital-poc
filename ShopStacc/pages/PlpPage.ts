@@ -36,8 +36,12 @@ export class PLPPage {
         const quantitySelector = PLPPageLocators.quantityIncreaseButton;
         await page.locator(quantitySelector).click();
         await page.waitForTimeout(2000);
-         await page.locator(quantitySelector).click();
+        await page.locator(quantitySelector).click();
         console.log("Clicked on quantity increase button.");
+    }
+    static async verifyBuyNowButtonVisible(page: Page) {
+        await expect(page.locator(PLPPageLocators.buyNowButton)).toBeVisible();
+        console.log('Buy Now button visible');
     }
 
     static async clickBuyNowButton(page: Page) {

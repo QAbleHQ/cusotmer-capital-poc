@@ -10,13 +10,13 @@ test.beforeEach(async ({ browser }) => {
   await BaseHelper.launchAndLogin(page);
 });
 
- test.afterEach(async () => {
-   await page.close();
-   await context.close();
- });
+test.afterEach(async () => {
+  await page.close();
+  await context.close();
+});
 
-test('SC:013: Booking Status on My Account Section', { tag: ['@IDFC','@BOB', '@Myaccount', '@Sanity', '@Regression'] }, async () => {
-  
+test('SC:013: Booking Status on My Account Section', { tag: ['@IDFC', '@BOB', '@Common', '@Myaccount', '@Sanity', '@Regression'] }, async () => {
+
   await test.step('Step 1: Click My Account', async () => {
     await page.waitForTimeout(6000);
     await MyAccountPage.clickMyAccount(page);
@@ -83,7 +83,7 @@ test('SC:013: Booking Status on My Account Section', { tag: ['@IDFC','@BOB', '@M
     await MyAccountPage.handleConfirmedBookingActions(page);
   });
   await test.step('Step 17: Verify Hotel Bookings', async () => {
-     await page.waitForTimeout(6000);
+    await page.waitForTimeout(6000);
     await MyAccountPage.verifyHotelBookings(page);
   });
 

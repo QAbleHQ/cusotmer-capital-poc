@@ -5,6 +5,7 @@ import { ElementHelper } from '../../utils/elementHelper';
 import bobTestData from '../../testdata/shopStacc.json';
 import { PLPPageLocators } from '../../ShopStacc/locators/PLPPageLocators';
 import { DeviceHelper } from '../../utils/deviceHelper';
+import { VerificationHelpers } from '../../utils/verificationHelper';
 
 export class HomePage {
 
@@ -12,6 +13,21 @@ export class HomePage {
     const banner = HomePageLocators.bannerSection;
     await ElementHelper.isElementDisplayed(page, banner);
     console.log('Banner section is displayed');
+  }
+
+  static async clickTrendingCategoryMobile(page: Page) {
+    await ElementHelper.clickElement(page, HomePageLocators.trendingcategoriesmobile);
+    console.log('Clicked on trending category');
+  }
+
+  static async verifyPLPPageLoaded(page: Page) {
+    await expect(page).toHaveURL(/electronics/);
+    console.log('PLP page from the trending category loaded successfully');
+  }
+
+  static async scrollToTrendingSection(page: Page) {
+    await page.locator(HomePageLocators.trendingSection).scrollIntoViewIfNeeded();
+    console.log('Scrolled to trending section');
   }
 
   static async imgInsideBannerIsVisible(page: Page) {
@@ -126,13 +142,22 @@ export class HomePage {
     console.log("Section title is visible.");
     await page.waitForTimeout(3000);
   }
+static async clickGiftCard(page: Page) {
+  const locator = page
+    .locator(HomePageLocators.productimagegiftcard)
+    .first();
 
-  static async clickGiftCard(page: Page) {
-    const giftCards = page.locator(HomePageLocators.productimage);
-    await giftCards.click();
-    console.log("Clicked on 1st Gift Card.");
-  }
+  await locator.waitFor({ state: 'visible' });
+  await locator.scrollIntoViewIfNeeded();
 
+  console.log("Clicking Gift Card...");
+
+  
+  await Promise.all([
+    page.waitForURL(/gift-card/, { timeout: 15000 }), // ✅ adjust pattern
+    locator.tap()
+  ]);
+}
   static async verifyProductCardsVisible(page: Page) {
     const productCards = HomePageLocators.giftCardSectionCards;
     const count = await page.locator(productCards).count();
@@ -203,10 +228,26 @@ export class HomePage {
   }
 
   static async verifyProductsVisible(page: Page) {
-    await page.locator(HomePageLocators.verifyProductImageDisplayed).isVisible();
-    await page.locator(HomePageLocators.verifyAndGetProductTitle).isVisible();
-    await page.locator(HomePageLocators.verifyAndGetProductPricing).isVisible();
-    console.log("Product image, title, and pricing are visible");
+
+    await expect(page.locator(HomePageLocators.verifyProductImageDisplayed)).toBeVisible();
+    await expect(page.locator(HomePageLocators.verifyAndGetProductTitle)).toBeVisible();
+    await expect(page.locator(HomePageLocators.verifyAndGetProductPricing)).toBeVisible();
+
+    console.log('Products are visible with image, title, and pricing');
+
+  }
+
+  static async verifyProductImagesVisible(page: Page) {
+    await expect(page.locator(HomePageLocators.productimagegiftcard)).toBeVisible();
+    console.log('Product images are visible');
+  }
+  static async verifyProductPricingDetails(page: Page) {
+    await expect(page.locator(HomePageLocators.pointsAndCashText)).toBeVisible();
+    console.log('Pricing details (points + cash / discount) visible');
+  }
+  static async verifyBrandOrModelVisible(page: Page) {
+    await expect(page.locator(HomePageLocators.giftCardTitle)).toBeVisible();
+    console.log('Brand / Model name visible');
   }
 
   static async clickProduct(page: Page) {

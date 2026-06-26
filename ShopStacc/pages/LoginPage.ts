@@ -6,7 +6,7 @@ import { Data } from '../../utils/dataProvider';
 
 export class LoginPage {
 
- static async verifyMobileNumberFieldDisplayed(page: Page) {
+  static async verifyMobileNumberFieldDisplayed(page: Page) {
     const verifyMobNo = LoginPageLocators.mobileNumberField;
     await ElementHelper.isElementDisplayed(page, verifyMobNo);
   }
@@ -39,12 +39,12 @@ export class LoginPage {
   static async waitUntilDialogBoxDisplayed(page: Page) {
     const dashboardLocator = LoginPageLocators.DialogBox;
     await ElementHelper.waitForElementVisibleWithoutReload(page, dashboardLocator);
-    console.log('✅ Dilog Box page is displayed');
+    console.log('Dilog Box page is displayed');
   }
   static async clickSkipButtonInsideDialogBox(page: Page) {
     const skipButton = LoginPageLocators.skipButtonInsideDialogBox;
     await ElementHelper.clickElement(page, skipButton);
-    console.log('✅ Skip button inside dialog box clicked');
+    console.log('Skip button inside dialog box clicked');
   }
   static async verifyUserIdDisplayed(page: Page) {
     const userID = LoginPageLocators.enterUserID;
@@ -74,11 +74,12 @@ export class LoginPage {
   static async clickEnterLoginButton(page: Page) {
     const enterLoginButton = LoginPageLocators.enterLoginBTN;
     await ElementHelper.clickElement(page, enterLoginButton);
-    console.log('✅ Enter Login button clicked');
+    console.log('Enter Login button clicked');
   }
   static async LoginCredEnterBeforeEach(page: Page) {
     await LoginPage.enterMobileNumber(page, Data.loginDataFill.mobileNumber);
     await LoginPage.clickGetOtpButton(page);
+    await LoginPage.verifyOtpPageVisible(page);
     await LoginPage.enterOtp(page, Data.loginDataFill.otp);
     await LoginPage.clickLoginButton(page);
   }
@@ -89,6 +90,23 @@ export class LoginPage {
     await LoginPage.waitUntilDialogBoxDisplayed(page);
     await LoginPage.clickSkipButtonInsideDialogBox(page);
   }
+  static async verifyLoginSuccess(page: Page) {
+    await expect(page).toHaveURL(/shopstacc\.com/);
+    console.log('Login successful and navigated to homepage');
+  }
+
+  static async verifyGetOtpButtonDisplayed(page: Page) {
+    await ElementHelper.isElementDisplayed(page, LoginPageLocators.getOtpButton);
+    console.log('Get OTP button displayed');
+  }
+
+  static async verifyOtpInputFieldsDisplayed(page: Page) {
+    await ElementHelper.isElementDisplayed(page, LoginPageLocators.otpInputField);
+    console.log('OTP input fields displayed');
+  }
+
+
+
 
 
 }
