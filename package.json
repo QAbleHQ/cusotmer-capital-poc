@@ -33,8 +33,8 @@
     "test:tripstacc:bob:uat:mobile:iphone13:headed": "cross-env PROJECT=tripstacc-chrome-UAT-mobile-iphone13 CLIENT=BOB HEADED=true npx playwright test TripStacc/tests/HotelPage.test.ts",
     "test:tripstacc:idfc:uat:mobile:iphone13:headed": "cross-env PROJECT=tripstacc-chrome-UAT-mobile-iphone13 CLIENT=IDFC HEADED=true npx playwright test TripStacc/tests/HotelPage.test.ts",
 
-  
 
+    
     "test:shopstacc:bobcard:qa": "cross-env CLIENT=BOBCARD PROJECT=shopstacc-chrome-QA npx playwright test ShopStacc/tests",
     "test:shopstacc:bobcard:uat": "cross-env CLIENT=BOBCARD PROJECT=shopstacc-chrome-UAT npx playwright test ShopStacc/tests",
     "test:shopstacc:bobcard:qa:headed": "cross-env CLIENT=BOBCARD PROJECT=shopstacc-chrome-QA HEADED=true npx playwright test ShopStacc/tests",
