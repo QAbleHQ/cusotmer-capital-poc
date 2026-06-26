@@ -282,13 +282,13 @@ jobs:
           server_port: 587
           username: ankitpatel@qable.io
           password: zjwtgkflbwczqrpb
-          subject: "[${{ steps.stats.outputs.status }}] ShopStacc ${{ env.ENVIRONMENT }}${{ env.FEATURE_TAG && format(' @{0}', env.FEATURE_TAG) || '' }} — Playwright Report"
+          subject: "[${{ steps.stats.outputs.status }}] ShopStacc ${{ env.CLIENT }} ${{ env.ENVIRONMENT }} [${{ env.BROWSER }}/${{ env.VIEWPORT }}]${{ env.FEATURE_TAG && format(' @{0}', env.FEATURE_TAG) || '' }} — Playwright Report"
           to: aneri.patel@qable.io, nikunj.trivedi@qable.io, 1ee687f3.linearloop.io@in.teams.ms
           from: ankitpatel@qable.io
           html_body: |
             <div style="font-family:Arial,sans-serif;max-width:600px;margin:auto">
               <h2 style="background:${{ steps.stats.outputs.status == 'FAILED' && '#cc0000' || '#00b300' }};color:#fff;padding:12px 16px;border-radius:4px;margin:0 0 0 0">
-                ${{ steps.stats.outputs.status == 'FAILED' && '🔴' || '🟢' }} ShopStacc ${{ env.ENVIRONMENT }}${{ env.FEATURE_TAG && format(' @{0}', env.FEATURE_TAG) || '' }}
+                ${{ steps.stats.outputs.status == 'FAILED' && '🔴' || '🟢' }} ShopStacc ${{ env.CLIENT }} ${{ env.ENVIRONMENT }} [${{ env.BROWSER }}/${{ env.VIEWPORT }}]${{ env.FEATURE_TAG && format(' @{0}', env.FEATURE_TAG) || '' }}
               </h2>
               <table width="100%" cellpadding="8" cellspacing="0" style="border-collapse:collapse;margin-top:0;border:1px solid #ddd">
                 <tr><td style="background:#f5f5f5;font-weight:bold;width:140px">Status</td><td>${{ steps.stats.outputs.status == 'FAILED' && '❌ FAILED' || '✅ PASSED' }}</td></tr>
