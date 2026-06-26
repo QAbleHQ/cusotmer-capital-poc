@@ -1,7 +1,7 @@
 import { expect, Page } from '@playwright/test';
 import { LoginPageLocators } from '../../TripStacc/locators/LoginPageLocators';
 import { ElementHelper } from '../../utils/elementHelper';
-import idfcTestData from '../../testdata/tripStacc.json';
+import idfcTestData from '../testData/tripStacc.json';
 import { Data } from '../../utils/dataProvider';
 
 export class LoginPage {

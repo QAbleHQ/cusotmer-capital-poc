@@ -5,7 +5,7 @@ import { VerificationHelpers } from '../../utils/verificationHelper';
 import { DeviceHelper } from '../../utils/deviceHelper';
 import { HotelBookingPage } from './HotelBookingPage';
 
-const idfcTestData = require('../../testdata/tripStacc.json');
+const idfcTestData = require('../testData/tripStacc.json');
 
 export class HotelHomePage {
 

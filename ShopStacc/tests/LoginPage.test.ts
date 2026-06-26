@@ -2,7 +2,7 @@ import { test, Page, BrowserContext } from '@playwright/test';
 import { CommonHelper } from '../../utils/commonHelper';
 import { VerificationHelpers } from '../../utils/verificationHelper';
 import { LoginPage } from '../../ShopStacc/pages/LoginPage';
-import bobTestData from '../../testdata/shopStacc.json';
+import bobTestData from '../testData/shopStacc.json';
 
 let context: BrowserContext;
 let page: Page;

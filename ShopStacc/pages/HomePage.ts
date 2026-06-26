@@ -2,7 +2,7 @@ import { expect, Page } from '@playwright/test';
 import { HomePageLocators } from '../../ShopStacc/locators/HomePageLocators';
 import { LoginPage } from './LoginPage';
 import { ElementHelper } from '../../utils/elementHelper';
-import bobTestData from '../../testdata/shopStacc.json';
+import bobTestData from '../testData/shopStacc.json';
 import { PLPPageLocators } from '../../ShopStacc/locators/PLPPageLocators';
 import { DeviceHelper } from '../../utils/deviceHelper';
 import { VerificationHelpers } from '../../utils/verificationHelper';

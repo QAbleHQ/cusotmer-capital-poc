@@ -1,6 +1,6 @@
 import { test, Page, BrowserContext } from '@playwright/test';
 import { FlightHomePage } from '../pages/FlightHomePage';
-const idfcTestData = require('../../testdata/tripStacc.json');
+const idfcTestData = require('../testData/tripStacc.json');
 import { BaseHelper } from '../pages/CommonMethods';
 import { Data } from '../../utils/dataProvider';
 let context: BrowserContext;

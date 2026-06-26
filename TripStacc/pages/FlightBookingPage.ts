@@ -2,7 +2,7 @@ import { expect, Page } from '@playwright/test';
 import { ElementHelper } from '../../utils/elementHelper';
 import { FlightPageLocators } from '../../TripStacc/locators/FlightPageLocators';
 import { PaymentPage } from './PaymentPage';
-const idfcTestData = require('../../testdata/tripStacc.json');
+const idfcTestData = require('../testData/tripStacc.json');
 
 
 export class FlightBookingPage {

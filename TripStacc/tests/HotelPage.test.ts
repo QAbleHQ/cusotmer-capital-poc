@@ -1,7 +1,7 @@
 import { test, Page, BrowserContext } from '@playwright/test';
 import { HotelHomePage } from '../pages/HotelHomePage';
 import { HotelBookingPage } from '../pages/HotelBookingPage';
-import idfcTestData from '../../testdata/tripStacc.json';
+import idfcTestData from '../testData/tripStacc.json';
 import { Data } from '../../utils/dataProvider';
 import { BaseHelper } from '../pages/CommonMethods';
 import { HomePage } from '../pages/Homepage';
