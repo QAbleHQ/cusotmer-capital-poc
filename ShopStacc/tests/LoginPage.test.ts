@@ -11,20 +11,20 @@ test.beforeEach(async ({ browser }) => {
   context = await browser.newContext();
   page = await context.newPage();
   await CommonHelper.navigateToHomePage(page);
-   
+
 });
 test.afterEach(async () => {
-   await page.close();
-   await context.close();
- });
- 
+  await page.close();
+  await context.close();
+});
 
-test('SC_001, Login with valid mobile number and OTP', { tag: ['@BOBCard','@Login', '@smoke', '@sanity'] }, async () => {
-  
+
+test('SC_001, Login with valid mobile number and OTP', { tag: ['@BOBCard', '@Login', '@smoke', '@sanity'] }, async () => {
+
   await test.step('If login button is displayed, then uncomment this', async () => {
     await LoginPage.LoginCredEnterBeforeEach(page);
   });
-  
+
   await test.step('Step 1: Verify and Enter User ID', async () => {
     await LoginPage.verifyUserIdDisplayed(page);
     await LoginPage.enterUserID(page);
@@ -44,5 +44,7 @@ test('SC_001, Login with valid mobile number and OTP', { tag: ['@BOBCard','@Logi
   });
   await test.step('Step 5: Click Skip Button Inside Dialog Box', async () => {
     await LoginPage.clickSkipButtonInsideDialogBox(page);
+    await page.waitForLoadState('domcontentloaded');
+    await LoginPage.verifyLoginSuccess(page);
   });
 }); 

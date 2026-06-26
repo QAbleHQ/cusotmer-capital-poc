@@ -19,10 +19,10 @@ test.afterEach(async () => {
   await context.close();
 });
 
-test('SC_015: Hotel Search', { tag: ['@IDFC','@BOB', '@Homepagehotel', '@Smoke', '@Sanity'] }, async () => {
+test('SC_015: Hotel Search', { tag: ['@IDFC', '@BOB', '@Common', '@Homepagehotel', '@Smoke', '@Sanity'] }, async () => {
   await test.step('Step 1: Open Hotels Section', async () => {
     await HotelHomePage.verifyHotelTabBtnDisplayed(page);
-    await page.waitForTimeout(500); 
+    await page.waitForTimeout(500);
     await HotelHomePage.clickHotelTabBTN(page);
     await page.waitForTimeout(500);
   });
@@ -41,11 +41,11 @@ test('SC_015: Hotel Search', { tag: ['@IDFC','@BOB', '@Homepagehotel', '@Smoke',
     await HotelHomePage.verifyDateButtonDisplayed(page);
     await page.waitForTimeout(500);
     await HotelHomePage.clickDateButton(page);
-    await page.waitForTimeout(500); 
+    await page.waitForTimeout(500);
     await HotelHomePage.selectMonthAndDateFROM(page, Data.dateSelector.fromMonth, Data.dateSelector.fromDate);
-    await page.waitForTimeout(500); 
+    await page.waitForTimeout(500);
     await HotelHomePage.selectMonthAndDateTO(page, Data.dateSelector.toMonth, Data.dateSelector.toDate);
-    await page.waitForTimeout(7000); 
+    await page.waitForTimeout(7000);
   });
 
   await test.step('Step 4: Select guests and complete guest selection', async () => { 
@@ -58,9 +58,9 @@ test('SC_015: Hotel Search', { tag: ['@IDFC','@BOB', '@Homepagehotel', '@Smoke',
       Data.hotelPage.hotelChildren1,
       Data.hotelPage.hotelChildrenAge1
     );
-    await page.waitForTimeout(500); 
+    await page.waitForTimeout(500);
     await HotelHomePage.clickDoneButton(page);
-    await page.waitForTimeout(500); 
+    await page.waitForTimeout(500);
   });
 
   await test.step('Step 5: Verify selection summary after choosing rooms & guests', async () => {
@@ -70,16 +70,16 @@ test('SC_015: Hotel Search', { tag: ['@IDFC','@BOB', '@Homepagehotel', '@Smoke',
 
   await test.step('Step 6: Click Search Hotels', async () => {
     await HotelHomePage.clickSearchHotelButton(page);
-    await page.waitForTimeout(500); 
+    await page.waitForTimeout(500);
   });
 
   await test.step('Step 7: Verify search results text', async () => {
     await HotelHomePage.getLocationNameActualandCompare(page);
-    await page.waitForTimeout(500); 
+    await page.waitForTimeout(500);
   });
 });
 
-test('SC_015.01: Hotel Search - Domestic vs International Options', { tag: ['@IDFC','@BOB', '@Homepagehotel','@Regression'] }, async () => {
+test('SC_015.01: Hotel Search - Domestic vs International Options', { tag: ['@IDFC', '@BOB', '@Common', '@Homepagehotel', '@Regression'] }, async () => {
   await test.step('Step 1: Open Hotels Section', async () => {
     await HotelHomePage.verifyHotelTabBtnDisplayed(page);
     await page.waitForTimeout(500);
@@ -153,7 +153,7 @@ test('SC_015.01: Hotel Search - Domestic vs International Options', { tag: ['@ID
   });
 });
 
-test('SC_015.02: Verify Room Pricing - Single vs Multiple Rooms', { tag: ['@IDFC','@BOB', '@Homepagehotel','@Regression'] }, async () => {
+test('SC_015.02: Verify Room Pricing - Single vs Multiple Rooms', { tag: ['@IDFC', '@BOB', '@Common', '@Homepagehotel', '@Regression'] }, async () => {
   await page.waitForTimeout(500);
   await test.step('Step 1: Open Hotels Section', async () => {
     await page.waitForTimeout(500);
@@ -224,7 +224,7 @@ test('SC_015.02: Verify Room Pricing - Single vs Multiple Rooms', { tag: ['@IDFC
   });
 });
 
-test('SC_015.03: Search with custom Adult & Child combinations', { tag: ['@IDFC','@BOB', '@Homepagehotel','@Regression'] }, async () => {
+test('SC_015.03: Search with custom Adult & Child combinations', { tag: ['@IDFC', '@BOB', '@Common', '@Homepagehotel', '@Regression'] }, async () => {
   await page.waitForTimeout(500);
   await test.step('Step 1: Open Hotels Section', async () => {
     await page.waitForTimeout(500);
@@ -283,14 +283,14 @@ test('SC_015.03: Search with custom Adult & Child combinations', { tag: ['@IDFC'
   });
 
   await test.step('Step 9: Open Room & Guest Selector for second room edit', async () => {
-    await page.waitForTimeout(500); 
+    await page.waitForTimeout(500);
     await HotelHomePage.clickRoomsAndGuestsButton(page);
     await page.waitForTimeout(500);
   });
 
   await test.step('Step 10: Update guest details for the Second Room', async () => {
     await page.waitForTimeout(500);
-    
+
     await HotelHomePage.selectAdultsAndChildrenWithAge(
       page,
       Data.hotelPage.hotelRoom2,
@@ -324,7 +324,7 @@ test('SC_015.03: Search with custom Adult & Child combinations', { tag: ['@IDFC'
   });
 });
 
-test('SC_016: Filter/Sorting and Room Selection', { tag: ['@IDFC','@BOB', '@Homepagehotel','@Regression'] }, async () => {
+test('SC_016: Filter/Sorting and Room Selection', { tag: ['@IDFC', '@BOB', '@Common', '@Homepagehotel', '@Regression'] }, async () => {
   await page.waitForTimeout(500);
   await test.step('Step 1: Open Hotels Section', async () => {
     await page.waitForTimeout(500);
@@ -458,7 +458,7 @@ test('SC_016: Filter/Sorting and Room Selection', { tag: ['@IDFC','@BOB', '@Home
 
 });
 
-test('SC_016.01: Update Search', { tag: ['@IDFC','@BOB', '@Homepagehotel','@Regression'] }, async () => {
+test('SC_016.01: Update Search', { tag: ['@IDFC', '@BOB', '@Common', '@Homepagehotel', '@Regression'] }, async () => {
   await page.waitForTimeout(500);
   await test.step('Step 1: Open Hotels Section', async () => {
     await page.waitForTimeout(500);
@@ -531,9 +531,9 @@ test('SC_016.01: Update Search', { tag: ['@IDFC','@BOB', '@Homepagehotel','@Regr
   });
 });
 
-test('SC_017: Add Guest Details and Update Guest Details', { tag: ['@IDFC','@BOB', '@Homepagehotel'] }, async () => {
+test('SC_017: Add Guest Details and Update Guest Details', { tag: ['@IDFC', '@BOB', '@Common', '@Homepagehotel', '@Regression'] }, async () => {
   await page.waitForTimeout(5000);
-await test.step('Step 1: Open Hotels Section', async () => {
+  await test.step('Step 1: Open Hotels Section', async () => {
     await page.waitForTimeout(5000);
     await HotelHomePage.clickHotelTabBTN(page);
     await page.waitForTimeout(1000);
@@ -674,7 +674,7 @@ await test.step('Step 1: Open Hotels Section', async () => {
   });
 });
 
-test('SC_018: Domestic booking without PAN and international booking with PAN', { tag: ['@IDFC','@BOB', '@Homepagehotel'] }, async () => {
+test('SC_018: Domestic booking without PAN and international booking with PAN', { tag: ['@IDFC', '@BOB', '@Common', '@Homepagehotel','@Regression'] }, async () => {
   await page.waitForTimeout(5000);
   await test.step('Step 1: Open Hotels Section', async () => {
     await page.waitForTimeout(5000);
@@ -793,7 +793,7 @@ test('SC_018: Domestic booking without PAN and international booking with PAN', 
 
   await test.step('Step 19: Search for Hotels (Single Room Default)', async () => {
     await page.waitForTimeout(5000);
-   await HotelHomePage.clickSearchHotelButton(page);
+    await HotelHomePage.clickSearchHotelButton(page);
     await page.waitForTimeout(5000);
     await HotelBookingPage.searchHotelNameInTestBox(page, Data.hotelPage.searcHotelNameInternational);
     await page.waitForTimeout(3000);

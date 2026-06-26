@@ -5,6 +5,8 @@ import { FlightHomePage } from '../pages/FlightHomePage';
 import { HotelBookingPage } from '../pages/HotelBookingPage';
 const idfcTestData = require('../../testdata/tripStacc.json');
 import { BaseHelper } from '../pages/CommonMethods';
+import { Data } from '../../utils/dataProvider';
+import { HotelHomePage } from '../pages/HotelHomePage';
 let context: BrowserContext;
 let page: Page;
 
@@ -19,162 +21,191 @@ test.afterEach(async () => {
   await context.close();
 });
 
-test('SC_012: Booking Confirmation Page (Confirmed/Pending/Failed)', { tag: ['@SC_012','@IDFC','@BOB', '@Bookingconfirmation', '@Regression'] }, async () => {
-    await test.step("Step 1: Enter City From Airport", async () => {
-      await page.waitForTimeout(8000);
-      await FlightHomePage.clickOnCityFromAirport(page);
-      await page.waitForTimeout(8000);
-      await FlightHomePage.EnterCityFromAirport(page, idfcTestData.flightPage.enterCityFrom);
-      await page.waitForTimeout(1000);
-    });
-    
-    await test.step("Step 2: Verify From Airport Dropdown Visible", async () => {
-      
-      await FlightHomePage.VerifyFromAirpotDropdownVisible(page);
-      await FlightHomePage.clickOnFirstSearchResultfromCityDropdown(page);
-      await page.waitForTimeout(1000);
-    });
-    
-    await test.step("Step 3: Enter City To Airport", async () => {
-      await FlightHomePage.clickOnToAirport(page);
-      await FlightHomePage.EnterCityToAirport(page, idfcTestData.flightPage.enterCityTo);
-      await page.waitForTimeout(1000);
-    });  
-    
-    await test.step("Step 4: Verify To Airport Dropdown Visible", async () => {
-      await FlightHomePage.VerifyToAirpotDropdownVisible(page);
-      await FlightHomePage.clickOnfirstSearchResultToCityDropdown(page);
-      await page.waitForTimeout(1000);
-    });
-    
-    await test.step("Step 5: Enter date of departure", async () => {
-      await FlightHomePage.clickOnDepartureDate(page);
-      await FlightHomePage.selectTomorrowDateForDeparture(page);
-      await page.waitForTimeout(1000);
-    });
-    
-    await test.step("Step 6: Click and verify travellers and cabin class dropdown", async () => {
-      await FlightHomePage.clickOntravellersAndCabinClass(page);
-      await FlightHomePage.VerifytravellersAndCabinClassDropdownVisible(page);
-      await FlightHomePage.clickOntravellersAndCabinClass(page);
-      await FlightHomePage.clickOnCloseTravellersAndCabinClassDropdown(page);
-      await page.waitForTimeout(3000);
-    });
-    
-    await test.step("Step 7: Click search flights button", async () => {
-      await FlightHomePage.clickOnSearchFlightsButton(page);
-      await page.waitForTimeout(7000);
-    });
-    
-    await test.step("Step 8: Verify first flight card visible", async () => {
-      // await FlightHomePage.reloadIfNoRecordFound(page);
-      await FlightHomePage.VerifyFirstFlightCardVisible(page);
-      await page.waitForTimeout(1000);
-    });
+test('SC_012: Booking Confirmation Page: Flight (Confirmed/Pending/Failed)', { tag: ['@IDFC', '@BOB', '@Common','@Flight', '@Bookingconfirmation', '@Regression'] }, async () => {
+  await test.step("Step 1: Enter City From Airport", async () => {
+    await page.waitForTimeout(5000);
+    await FlightHomePage.clickOnCityFromAirport(page);
+    await FlightHomePage.EnterCityFromAirport(page, Data.flightPage.enterCityFrom);
+  })
 
-    await test.step("Step 9: Click on Next Button On Flight Details Page", async () => {
-      await FlightHomePage.clickOnNextButtonOnFlightDetailsPage(page);
-      await page.waitForTimeout(1000);
-    });
+  await test.step("Step 2: Verify From Airport Dropdown Visible", async () => {
+    await FlightHomePage.VerifyFromAirpotDropdownVisible(page);
+    await FlightHomePage.clickOnFirstSearchResultfromCityDropdown(page);
+  })
 
-    await test.step("Step 10: Click on Book Button On Flight Details Page", async () => {
-      await FlightHomePage.clickOnBookButtonOnFlightDetailsPage(page);
-      await page.waitForTimeout(1000);
-    });
-    
-    await test.step("Step 11: Click on Continue Button On Flight Details Page", async () => {
-      await FlightHomePage.clickOnContinueButtonOnFlightDetailsPage(page);
-      await page.waitForTimeout(1000);
-    });
+  await test.step("Step 3: Enter City To Airport", async () => {
+    await page.waitForTimeout(5000);
+    await FlightHomePage.clickOnToAirport(page);
+    await FlightHomePage.EnterCityToAirport(page, Data.flightPage.enterCityTo);
+  })
 
-    await test.step("Step 12: Click on First Traveller Edit Button On Traveller Details Page", async () => {
-      await FlightHomePage.clickOnFirstOptionCheckbox(page);
-      await page.waitForTimeout(1000);
-    });
-     
-    await test.step("Step 13: Click on continue button On Traveller Details Page", async () => {
-      await page.waitForTimeout(5000); 
-      await FlightHomePage.clickOncontinueButtonOnTravellerPage(page);
-      await page.waitForTimeout(1000);
-    });
-    
-    await test.step("Step 14: Click on Skip Option", async () => {
-      await page.waitForTimeout(5000); 
-      await FlightHomePage.clickOnSkipButton(page);
-      await page.waitForTimeout(1000);
-    });
-    
-    await test.step("Step 15: Click on Travellers and Addons Continue Button", async () => {
-      await page.waitForTimeout(5000); 
-      await FlightHomePage.travellersAndAddonsContinueButton(page);
-      await page.waitForTimeout(1000);
-    });
+  await test.step("Step 4: Verify To Airport Dropdown Visible", async () => {
+    await FlightHomePage.VerifyToAirpotDropdownVisible(page);
+    await FlightHomePage.clickOnfirstSearchResultToCityDropdown(page);
+  })
 
-    await test.step('Step 16: Click Verify Checkout Pay Button displays correct amount', async () => {
-      await page.waitForTimeout(5000); 
-      await HotelBookingPage.payButtonAfterDiscount(page);
-      await page.waitForTimeout(3000);
-    });
+  await test.step("Step 5: Enter date of departure", async () => {
+    await page.waitForTimeout(5000);
+    await FlightHomePage.clickOnDepartureDate(page);
+    await FlightHomePage.selectTomorrowDateForDeparture(page);
+  })
 
-    await test.step('Step 17: Card Options visible and click selector', async () => {
-      await PaymentPage.verifyCardOptions(page);
-      await page.waitForTimeout(1000);
-      await PaymentPage.clickCardOptionSelector(page);
-      await page.waitForTimeout(1000);
-      await PaymentPage.verifyCardFieldsVisible(page);
-      await page.waitForTimeout(1000);
-    });
-
-    await test.step('Step 18: Fill Card Details', async () => {
-      await PaymentPage.fillCardNumber(page);
-      await page.waitForTimeout(1000);
-      await PaymentPage.fillCardExpiry(page);
-      await page.waitForTimeout(1000);
-      await PaymentPage.fillCardCvv(page);
-      await page.waitForTimeout(1000);
-      await PaymentPage.fillCardName(page);
-      await page.waitForTimeout(1000);
-    });
-
-    await test.step('Step 19: Proceed and handle Save Card Popup', async () => {
-      await PaymentPage.clickProceedButton(page);
-      await page.waitForTimeout(1000);
-      await PaymentPage.clickCloseWithoutSaveButton(page);
-      await page.waitForTimeout(1000);
-      await PaymentPage.verifyOtpPageVisibleandFillValue(page);
-      await page.waitForTimeout(1000);
-      await PaymentPage.clickSubmitButton(page);
-      await page.waitForTimeout(10000);
-    });
-  
-  await test.step('Verify after payment page content on booking confirmation', async () => {
-
-    await page.waitForTimeout(8000);
-    const isConfirmationVisible = await PaymentPage.verifyBookingConfirmationPageVisible(page);    
-    const isPendingVisible = await PaymentPage.verifyBookingPendingPageVisible(page);
-  
-  
-    if (isConfirmationVisible) {
-  
-      await FlightBookingPage.verifyBookingIdVisible(page);
-      await FlightBookingPage.verifyBookingDateVisible(page);
-      await FlightBookingPage.verifyFlightDetailsVisible(page);
-      await FlightBookingPage.verifyHotelDetailsVisible(page);
-      await FlightBookingPage.verifyFareSummaryVisible(page);
-      await FlightBookingPage.verifyTopHotelsSectionVisible(page);
-      await FlightBookingPage.verifyTopHotelCardsVisible(page);
-      await FlightBookingPage.verifyHotelRedirectLinkVisible(page);
-      await FlightBookingPage.expandFlightDetails(page);
-      await FlightBookingPage.expandFareSummary(page);
-  
-    } else if (isPendingVisible) {
-        await FlightBookingPage.verifyBookingIdVisible(page);
-        console.log('Booking Pending Is Displayed instead of Booking Confirmation')
-    } else {
-        throw new Error(
-          'Seems like Payment has failed'
-        );
-      }
-    });
-  
+  await test.step("Step 6: Click and verify travellers and cabin class dropdown", async () => {
+    await page.waitForTimeout(5000);
+    await FlightHomePage.clickOntravellersAndCabinClass(page);
+    await FlightHomePage.VerifytravellersAndCabinClassDropdownVisible(page);
+    await FlightHomePage.clickOntravellersAndCabinClass(page);
+    await FlightHomePage.clickOnCloseTravellersAndCabinClassDropdown(page);
+    await page.waitForTimeout(3000);
   });
+
+  await test.step("Step 7: Click search flights button", async () => {
+    await FlightHomePage.clickOnSearchFlightsButton(page);
+  });
+
+  await test.step("Step 8: Verify first flight card visible", async () => {
+    await FlightHomePage.VerifyFirstFlightCardVisible(page);
+  });
+
+  await test.step("Step 9: Click on Next Button On Flight Details Page", async () => {
+    await FlightHomePage.clickOnNextButtonOnFlightDetailsPage(page);
+  });
+  await test.step("Step 10: Click on Book Button On Flight Details Page", async () => {
+    await FlightHomePage.clickOnBookButtonOnFlightDetailsPage(page);
+  });
+
+  await test.step("Step 11: Click on Continue Button On Flight Details Page", async () => {
+    await FlightHomePage.clickOnContinueButtonOnFlightDetailsPage(page);
+  });
+  await test.step("Step 12: Click on First Traveller Edit Button On Traveller Details Page", async () => {
+    await FlightHomePage.clickOnFirstNameEditButton(page);
+  });
+  await test.step("Step 13: Enter First Name of Traveller", async () => {
+    await FlightHomePage.EnterRandomFirstName(page);
+  });
+
+  await test.step("Step 14: Enter Last Name of Traveller", async () => {
+    await FlightHomePage.EnterLastName(page, Data.travellername.lastName);
+    await FlightHomePage.enterMobileNo(page, Data.travellername.mobileNo);
+  });
+
+  await test.step("Step 15: Click on Add Traveller Button On Traveller Details Page", async () => {
+    const CLIENT = process.env.CLIENT?.toUpperCase();
+    if (CLIENT === 'BOB') {
+      await FlightHomePage.clickOnAddTravellerButton(page);
+    } else if (CLIENT === 'IDFC') {
+      await FlightHomePage.clickOnEditConfirmButtonPage(page);
+    }
+  });
+
+  await test.step("Step 16: Click on first Traveller Name On Traveller Details Page", async () => {
+    await FlightHomePage.clickOnFirstTravellerName(page);
+  });
+
+  await test.step("Step 17: Click on continue button On Traveller Details Page", async () => {
+    await FlightHomePage.clickOncontinueButtonOnTravellerPage(page);
+  });
+
+  await test.step("Step 18: verify Seat Selection Option Visible", async () => {
+    await FlightHomePage.verifySeatSelectionOptionVisible(page);
+  });
+
+  await test.step("Step 19: verify Baggage Selection Option Visible", async () => {
+    await FlightHomePage.verifyBaggageSelectionOptionVisible(page);
+  });
+  await test.step("Step 20: verify Selecting available seat increase price", async () => {
+    await FlightHomePage.verifyPriceIncreasesAfterSeatSelection(page);
+  });
+  await test.step("Step 21: Click on baggage Option", async () => {
+    await FlightHomePage.clickOnbaggageOption(page);
+  });
+  await test.step("Step 23: Click on Skip Option", async () => {
+    await FlightHomePage.clickOnSkipButton(page);
+  });
+  await test.step("Step 24: verify traveller and add one ", async () => {
+    await FlightHomePage.verifyTravellerAndAddOneHeadingVisible(page);
+  });
+  await test.step("Step 25: Click on Travellers and Addons Continue Button", async () => {
+    await page.waitForTimeout(5000);
+    await FlightHomePage.travellersAndAddonsContinueButton(page);
+    await page.waitForTimeout(1000);
+  });
+  await test.step("Step 29: Complete Card Payment Flow", async () => {
+    await PaymentPage.completeCardPaymentFlow(page);
+      await page.waitForTimeout(8000);
+        await FlightBookingPage.verifyBookingOutcome(page);
+  });
+ });
+
+  test('SC_012.01: Booking Confirmation for Hotel', { tag: ['@IDFC', '@BOB', '@Common', '@Payment','@Hotel', '@Regression'] }, async () => {
+   await test.step('Step 1: Open Hotels Section', async () => {
+      await page.waitForTimeout(5000);
+      await HotelHomePage.clickHotelTabBTN(page);
+      await page.waitForTimeout(5000);
+    });
+  
+    await test.step('Step 2: Enter Domestic Hotel Location', async () => {
+      await HotelHomePage.searchValueInTestBox(page, Data.hotelPage.domestic);
+      await page.waitForTimeout(5000);
+    });
+  
+    await test.step('Step 3: Choose First Domestic Hotel Option', async () => {
+      await HotelHomePage.selectFirstOptionFromDropdown(page);
+      await page.waitForTimeout(5000);
+    });
+  
+    await test.step('Step 4: Set Check-in and Check-out Dates', async () => {
+      await HotelHomePage.clickDateButton(page);
+      await page.waitForTimeout(5000);
+      await HotelHomePage.selectMonthAndDateFROM(page, Data.dateSelector.fromMonth, Data.dateSelector.fromDate);
+      await page.waitForTimeout(5000);
+      await HotelHomePage.selectMonthAndDateTO(page, Data.dateSelector.toMonth, Data.dateSelector.toDate);
+      await page.waitForTimeout(5000);
+    });
+  
+    await test.step('Step 5: Search for Hotels (Single Room Default)', async () => {
+      await HotelHomePage.clickSearchHotelButton(page);
+      await page.waitForTimeout(5000);
+    });
+  
+    await test.step('Step 6: Search Hotel Name in Search Box', async () => {
+      await HotelBookingPage.searchHotelNameInTestBox(page, Data.hotelPage.searcHotelName);
+      await page.waitForTimeout(5000);
+    });
+  
+    await test.step('Step 7: Click the first hotel result', async () => {
+      await HotelHomePage.clickFirstResult(page);
+      await page.waitForTimeout(5000);
+    });
+  
+    await test.step('Step 8: Click the First Room Selection Button', async () => {
+      await HotelBookingPage.clickFirstRoomSelectionButton(page);
+      await page.waitForTimeout(5000);
+    });
+  
+    await test.step('Step 9: Click Next button on first tab', async () => {
+      await HotelBookingPage.firstTabNextButton(page);
+      await page.waitForTimeout(5000);
+    });
+    await test.step('Step 12: Click Add New Guest Button', async () => {
+      await page.waitForTimeout(3000);
+      await HotelBookingPage.removePopupForIDFC(page);
+      await page.waitForTimeout(5000);
+      await HotelBookingPage.clickonaddguestbutton(page);
+      await page.waitForTimeout(1000);
+    });
+  
+  
+    await test.step('Step 13: Fill in Guest Details', async () => {
+      await page.waitForTimeout(5000);
+      await HotelBookingPage.removePopupForIDFC(page);
+      await page.waitForTimeout(5000);
+      await HotelBookingPage.fillGuestDetailsInsideForm(page);
+      await page.waitForTimeout(3000);
+    });
+    await test.step("Step 29: Complete Card Payment Flow", async () => {
+      await PaymentPage.completeCardPaymentFlow(page);
+      await page.waitForTimeout(9000);
+      await FlightBookingPage.verifyBookingOutcome(page);
+    });
+});

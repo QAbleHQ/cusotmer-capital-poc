@@ -20,7 +20,7 @@ export const FlightPageLocators = {
   travellersAndCabinClass: `//div[contains(@class,'mainSearchbox')]`,
   roomCountDropdown: `//div[contains(@class,"roomcountMob")] `,
   travellersAdultPlusButton: `//div[contains(@class,"adult_count_div")]//button[@data-type="plus"]`,
-  travellersAdultMinusButton:`//div[contains(@class,"adult_count_div")]//button[@data-type="minus"]`,
+  travellersAdultMinusButton: `//div[contains(@class,"adult_count_div")]//button[@data-type="minus"]`,
   travellersChildrenPlusButton: `//div[contains(@class,"child_count_div")]//button[@data-type="plus"]`,
   travellersInfantPlusButton: `//div[contains(@class,"infant_count_div")]//button[@data-type="plus"]`,
   travellersApplyButton: `//a[text()="Apply"] | //div[@class="inallsn"]//a[text()="Done"]`,
@@ -88,7 +88,7 @@ export const FlightPageLocators = {
   LastNameErrorMessage: `//p[text()="Please enter a valid last name"] | //i[contains(text(),"Please enter a valid last name")]`,
   firstNameInput: `//input[contains(@class,"first_name_input")] | //input[contains(@id,"passenger-first-name-1")]`,
   lastNameInput: `//input[contains(@class,"last_name_input")] | //input[contains(@id,"passenger-last-name-1")]`,
-  FirstTravellerNameOnSummary: `(//div[@class="flduserbox"])[1] | (//td[@class="seat_pax_name"])[1]`,
+  FirstTravellerNameOnSummary: `(//div[@class="flduserbox"])[2] | (//td[@class="seat_pax_name"])[1]`,
   addTravellerButton: `//span[text()="Add Traveller"]`,
   FirstTravellerNameEditButton: `(//button[@class="fld_travel_edit"])[1]`,
   FirstOptionCheckbox: `//div[@class="inputcheckbox"]//label[@for="pax401"]`,
@@ -98,7 +98,7 @@ export const FlightPageLocators = {
   defaultTavellerEmail: `//input[contains(@class,"email_text_input")] | //input[contains(@id,"billing-email")]`,
   defaultTravellerPhone: `//input[contains(@class,"phone_text_text")] | //input[contains(@id,"passenger-contact")]`,
   emailErrorMessage: `//p[text()="Email is required"] | //i[text()="* Please enter passenger’s email id"]`,
-  phoneErrorMessage: `//p[text()="Phone number is required"] | //i[text()="* Please enter passenger’s mobile number"]` ,
+  phoneErrorMessage: `//p[text()="Phone number is required"] | //i[text()="* Please enter passenger’s mobile number"]`,
   GSTHeader: `//h4[text()="GST Information (Optional)"] | //h4[text()="GST Information"]`,
   defaultGSTNumber: `//input[contains(@class,"booking_gst_number")]`,
   gstErrorMessage: `//p[text()="GST number is required"]`,
@@ -153,7 +153,7 @@ export const FlightPageLocators = {
   weightIncreasePlusButton: `//h3[text()="5 KG"]/parent::div/following-sibling::div//span[@class="coplus"]`,
   skipAndPayButton: '//a[@class="skipbtn skipToCheckout"]',
   travellerAndAddoneHeading: `//h4[text()="Travellers & Add-ons"]`,
-  travellersAndAddonsContinueButton: `//button[@class="bookcont continue_redm_button poptimemsg"]`,
+  travellersAndAddonsContinueButton: `//button[@class="bookcont continue_redm_button poptimemsg"] | //button[@class="flbookbtn extra_service_cont_btn"]`,
   noFlightsText: `//h5[@class="no_flts"]`,
   fromCityMobile: `//input[@id="from" and @placeholder="Select city or airport"]`,
   fromCitySearchMobile: `(//input[@id="from" and @placeholder="Search for city or airport"])[2]`,
@@ -169,10 +169,9 @@ export const FlightPageLocators = {
   closeTravellerAndCabinButtonMobile: `(//span[text()="×"]/parent::button)[1]`,
   filterIconMobile: `//a[@class="filterbtn"]`,
   passengerAlert: `//small[text()="Max 9 Passenger(Adult+Child) Allowed"] | //span[text()="Max 9 passengers (Adult+Child) allowed"]`,
-  passnagermobile:`//input[@name='passenger_contact']`,
+  passnagermobile: `//input[@name='passenger_contact']`,
   doneTravellerAndCabinButtonMobile: `//a[@class="done1 comnbtn_room1"]`,
   filterButtonMobileForBOB: `//li[@class="sortli filt_mob filter_tab"]`,
   exprieYear: `//select[@class="ui-datepicker-year"]`,
- 
+
 };
- 

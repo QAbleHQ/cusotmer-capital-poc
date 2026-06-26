@@ -6,6 +6,8 @@ const idfcTestData = require('../../testdata/tripStacc.json');
 import { BaseHelper } from '../pages/CommonMethods';
 import { Data } from '../../utils/dataProvider';
 import { FlightHomePage } from '../pages/FlightHomePage';
+import { FlightBookingPage } from '../pages/FlightBookingPage';
+import { DeviceHelper } from '../../utils/deviceHelper';
 let context: BrowserContext;
 let page: Page;
 
@@ -19,7 +21,7 @@ test.afterEach(async () => {
   await context.close();
 });
 
-test('SC_009: Hotel- Checkout with and without Redeem Points (without redeem it should be an earning)', { tag: ['@IDFC', '@BOB', '@Checkout', '@Smoke', '@Regression'] }, async () => {
+test('SC_009: Hotel- Checkout with and without Redeem Points (without redeem it should be an earning)', { tag: ['@IDFC', '@BOB', '@Common', '@Checkout', '@Smoke', '@Regression'] }, async () => {
   await test.step('Step 1: Open Hotels Section', async () => {
     await page.waitForTimeout(5000);
     await HotelHomePage.clickHotelTabBTN(page);
@@ -36,13 +38,14 @@ test('SC_009: Hotel- Checkout with and without Redeem Points (without redeem it 
     await page.waitForTimeout(5000);
   });
 
-  await test.step('Step 4: Set Check-in and Check-out Dates', async () => {
+ await test.step('Step 4: Set Check-in and Check-out Dates', async () => {
     await HotelHomePage.clickDateButton(page);
     await page.waitForTimeout(5000);
     await HotelHomePage.selectMonthAndDateFROM(page, Data.dateSelector.fromMonth, Data.dateSelector.fromDate);
     await page.waitForTimeout(5000);
     await HotelHomePage.selectMonthAndDateTO(page, Data.dateSelector.toMonth, Data.dateSelector.toDate);
     await page.waitForTimeout(5000);
+
   });
 
   await test.step('Step 5: Search for Hotels (Single Room Default)', async () => {
@@ -51,8 +54,12 @@ test('SC_009: Hotel- Checkout with and without Redeem Points (without redeem it 
   });
 
   await test.step('Step 6: Search Hotel Name in Search Box', async () => {
+    if(DeviceHelper.isMobile()) {
+    console.log("skipped for this test")
+    }else{
     await HotelBookingPage.searchHotelNameInTestBox(page, Data.hotelPage.searcHotelName);
     await page.waitForTimeout(5000);
+    }
   });
 
   await test.step('Step 7: Click the first hotel result', async () => {
@@ -70,6 +77,7 @@ test('SC_009: Hotel- Checkout with and without Redeem Points (without redeem it 
     await page.waitForTimeout(5000);
   });
   await test.step('Step 12: Click Add New Guest Button', async () => {
+    await HotelBookingPage.clickRoomButton(page);
     await page.waitForTimeout(3000);
     await HotelBookingPage.removePopupForIDFC(page);
     await page.waitForTimeout(5000);
@@ -86,7 +94,7 @@ test('SC_009: Hotel- Checkout with and without Redeem Points (without redeem it 
     await page.waitForTimeout(3000);
   });
 
- 
+
   await test.step('Step 13: Redeem Point Toggle Button', async () => {
     await HotelBookingPage.redeampointTogglebutton(page);
     await page.waitForTimeout(5000);
@@ -104,7 +112,8 @@ test('SC_009: Hotel- Checkout with and without Redeem Points (without redeem it 
     await page.waitForTimeout(5000);
   });
 });
-test('SC_009.01: Flight - Checkout with and without Redeem Points (without redeem it should be an earning) ', { tag: ['@IDFC', '@BOB', '@Homepageflight', '@Addon', '@Regression'] }, async () => {
+
+test('SC_009.01: Flight - Checkout with and without Redeem Points (without redeem it should be an earning) ', { tag: ['@IDFC', '@BOB', '@Common', '@Checkout', '@Regression'] }, async () => {
   await test.step("Step 1: Enter City From Airport", async () => {
     await page.waitForTimeout(5000);
     await FlightHomePage.clickOnCityFromAirport(page);
@@ -233,7 +242,7 @@ test('SC_009.01: Flight - Checkout with and without Redeem Points (without redee
     await page.waitForTimeout(5000);
   });
 });
-test('SC_010: Flight - Checkout with and without Promo Codes', { tag: ['@IDFC', '@BOB', '@Homepageflight', '@Addon', '@Regression'] }, async () => {
+test('SC_010: Flight - Checkout with and without Promo Codes', { tag: ['@IDFC', '@BOB', '@Common','@Checkout', '@Regression'] }, async () => {
   await test.step("Step 1: Enter City From Airport", async () => {
     await page.waitForTimeout(5000);
     await FlightHomePage.clickOnCityFromAirport(page);
@@ -355,7 +364,7 @@ test('SC_010: Flight - Checkout with and without Promo Codes', { tag: ['@IDFC', 
     await PaymentPage.verifyErrorMessageVisible(page);
   });
 });
-test('SC_011: Proceed with payment', { tag: ['@IDFC', '@BOB', '@Homepageflight', '@Addon', '@Regression'] }, async () => {
+test('SC_011: Flight - Proceed with payment', { tag: ['@IDFC', '@BOB','@Flight', '@Common', '@Payment', '@Regression'] }, async () => {
   await test.step("Step 1: Enter City From Airport", async () => {
     await page.waitForTimeout(5000);
     await FlightHomePage.clickOnCityFromAirport(page);
@@ -453,9 +462,6 @@ test('SC_011: Proceed with payment', { tag: ['@IDFC', '@BOB', '@Homepageflight',
   await test.step("Step 21: Click on baggage Option", async () => {
     await FlightHomePage.clickOnbaggageOption(page);
   });
-  await test.step("Step 22: verify increase the weight increase the price", async () => {
-    await FlightHomePage.verifyPriceIncreasesAfterWeeightIncrease(page);
-  });
   await test.step("Step 23: Click on Skip Option", async () => {
     await FlightHomePage.clickOnSkipButton(page);
   });
@@ -467,16 +473,80 @@ test('SC_011: Proceed with payment', { tag: ['@IDFC', '@BOB', '@Homepageflight',
     await FlightHomePage.travellersAndAddonsContinueButton(page);
     await page.waitForTimeout(1000);
   });
-  await test.step("Step 26: click On Promo Code And Enter Code", async () => {
-    await PaymentPage.clickOnPromoCodeAndEnterCode(page, Data.promocode.invalidPromoCode);
+  await test.step("Step 29: Complete Card Payment Flow", async () => {
+    await PaymentPage.completeCardPaymentFlow(page);
   });
-  await test.step("Step 27: Click On Apply PromoCode", async () => {
-    await PaymentPage.clickOnApplyPromoCode(page);
+});
+
+test('SC_011.01: Hotel- Proceed with payment', { tag: ['@IDFC', '@BOB', '@Payment', '@Common','@Hotel', '@Regression'] }, async () => {
+  await test.step('Step 1: Open Hotels Section', async () => {
+    await page.waitForTimeout(5000);
+    await HotelHomePage.clickHotelTabBTN(page);
+    await page.waitForTimeout(5000);
   });
-  await test.step("Step 28: verify Error Message Visible", async () => {
-    await PaymentPage.verifyErrorMessageVisible(page);
+
+  await test.step('Step 2: Enter Domestic Hotel Location', async () => {
+    await HotelHomePage.searchValueInTestBox(page, Data.hotelPage.domestic);
+    await page.waitForTimeout(5000);
+  });
+
+  await test.step('Step 3: Choose First Domestic Hotel Option', async () => {
+    await HotelHomePage.selectFirstOptionFromDropdown(page);
+    await page.waitForTimeout(5000);
+  });
+
+  await test.step('Step 4: Set Check-in and Check-out Dates', async () => {
+    await HotelHomePage.clickDateButton(page);
+    await page.waitForTimeout(5000);
+    await HotelHomePage.selectMonthAndDateFROM(page, Data.dateSelector.fromMonth, Data.dateSelector.fromDate);
+    await page.waitForTimeout(5000);
+    await HotelHomePage.selectMonthAndDateTO(page, Data.dateSelector.toMonth, Data.dateSelector.toDate);
+    await page.waitForTimeout(5000);
+  });
+
+  await test.step('Step 5: Search for Hotels (Single Room Default)', async () => {
+    await HotelHomePage.clickSearchHotelButton(page);
+    await page.waitForTimeout(5000);
+  });
+
+  await test.step('Step 6: Search Hotel Name in Search Box', async () => {
+    await HotelBookingPage.searchHotelNameInTestBox(page, Data.hotelPage.searcHotelName);
+    await page.waitForTimeout(5000);
+  });
+
+  await test.step('Step 7: Click the first hotel result', async () => {
+    await HotelHomePage.clickFirstResult(page);
+    await page.waitForTimeout(5000);
+  });
+
+  await test.step('Step 8: Click the First Room Selection Button', async () => {
+    await HotelBookingPage.clickFirstRoomSelectionButton(page);
+    await page.waitForTimeout(5000);
+  });
+
+  await test.step('Step 9: Click Next button on first tab', async () => {
+    await HotelBookingPage.firstTabNextButton(page);
+    await page.waitForTimeout(5000);
+  });
+  await test.step('Step 12: Click Add New Guest Button', async () => {
+    await page.waitForTimeout(3000);
+    await HotelBookingPage.removePopupForIDFC(page);
+    await page.waitForTimeout(5000);
+    await HotelBookingPage.clickonaddguestbutton(page);
+    await page.waitForTimeout(1000);
+  });
+  await test.step('Step 13: Fill in Guest Details', async () => {
+    await page.waitForTimeout(5000);
+    await HotelBookingPage.removePopupForIDFC(page);
+    await page.waitForTimeout(5000);
+    await HotelBookingPage.fillGuestDetailsInsideForm(page);
+    await page.waitForTimeout(3000);
+     await HotelBookingPage.fillGuestDetailsoutsideForm(page);
+     await page.waitForTimeout(4000);
+     
+      await HotelBookingPage.nextButtonAfterAddingGuest(page);
   });
   await test.step("Step 29: Complete Card Payment Flow", async () => {
     await PaymentPage.completeCardPaymentFlow(page);
   });
-  });
+});

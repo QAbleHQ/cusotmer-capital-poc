@@ -1,7 +1,7 @@
 import { expect, Page } from '@playwright/test';
-import { HotelPageLocators } from '../../TripStacc/locators/HotelPageLocators';
 import { ElementHelper } from '../../utils/elementHelper';
 import { FlightPageLocators } from '../../TripStacc/locators/FlightPageLocators';
+import { PaymentPage } from './PaymentPage';
 const idfcTestData = require('../../testdata/tripStacc.json');
 
 
@@ -70,7 +70,32 @@ export class FlightBookingPage {
   
     console.log("Hotel details are visible.");
   }
-  
+  static async verifyBookingOutcome(page: Page) {
+  const isConfirmationVisible = await PaymentPage.verifyBookingConfirmationPageVisible(page);
+  const isPendingVisible = await PaymentPage.verifyBookingPendingPageVisible(page);
+
+  if (isConfirmationVisible) {
+    await FlightBookingPage.verifyBookingIdVisible(page);
+    await FlightBookingPage.verifyBookingDateVisible(page);
+    await FlightBookingPage.verifyFlightDetailsVisible(page);
+    await FlightBookingPage.verifyHotelDetailsVisible(page);
+    await FlightBookingPage.verifyFareSummaryVisible(page);
+    await FlightBookingPage.verifyTopHotelsSectionVisible(page);
+    await FlightBookingPage.verifyTopHotelCardsVisible(page);
+    await FlightBookingPage.verifyHotelRedirectLinkVisible(page);
+    await FlightBookingPage.expandFlightDetails(page);
+    await FlightBookingPage.expandFareSummary(page);
+
+    console.log('Booking Confirmation page is displayed');
+
+  } else if (isPendingVisible) {
+    await FlightBookingPage.verifyBookingIdVisible(page);
+    console.log('Booking Pending is displayed instead of Booking Confirmation');
+
+  } else {
+    throw new Error('Seems like Payment has failed');
+  }
+}
   static async verifyFareSummaryVisible(page: Page) {
     const fareSummaryDropdown = FlightPageLocators.fareSummaryDropdown;
     const fareSummarySection = FlightPageLocators.fareSummarySection;

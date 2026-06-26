@@ -40,7 +40,7 @@ export class FlightHomePage {
 
   await expect(popup).toBeVisible();
 
-  console.log('✅ Card selection popup is visible');
+  console.log('Card selection popup is visible');
 }
 static async selectCard(page: Page): Promise<void> {
 
@@ -67,7 +67,7 @@ static async verifyPopupClosed(page: Page): Promise<void> {
 
   await expect(popup).not.toBeVisible();
 
-  console.log('✅ Card selection popup closed successfully');
+  console.log('Card selection popup closed successfully');
 }
   static async EnterCityFromAirport(page: any, data: any) {
     const CLIENT = process.env.CLIENT?.toUpperCase();
@@ -254,7 +254,7 @@ static async verifyFlightSearchFields(page: any) {
   await expect(page.locator(FlightPageLocators.returnDate)).toBeVisible();
   await expect(page.locator(FlightPageLocators.travellersAndCabinClass)).toBeVisible();
 
-  console.log('✅ All search fields visible');
+  console.log('All search fields visible');
 }
 
 
@@ -337,7 +337,7 @@ static async verifyTravellerOptions(page: Page) {
     const CLIENT = process.env.CLIENT?.toUpperCase();
   switch (CLIENT) {
     case 'BOB':
-      console.log('⏭️ BOB: Skipping Filter Apply Button verification.');
+      console.log('BOB: Skipping Filter Apply Button verification.');
       break;
     case 'IDFC':
     await page.waitForTimeout(3000);
@@ -364,7 +364,7 @@ static async verifyTravellerOptions(page: Page) {
   const CLIENT = process.env.CLIENT?.toUpperCase();
   switch (CLIENT) {
     case 'BOB':
-      console.log('⏭️ BOB: Skipping Filter Apply Button verification.');
+      console.log('BOB: Skipping Filter Apply Button verification.');
       break;
     case 'IDFC': 
     await page.waitForTimeout(3000);
@@ -423,7 +423,7 @@ static async select1StopFilter(page: Page): Promise<void> {
         expect(actual).toContain("stop: 1");
       }
    
-      break; // ✅ important
+      break; // important
     }
     }
  
@@ -442,7 +442,7 @@ static async select1StopFilter(page: Page): Promise<void> {
         expect(airlineName?.trim().toLowerCase())
           .toContain(FlightHomePage.selectedNonStop.toLowerCase());
       }
-      break; // ✅ important
+      break; // important
     }
   }
  
@@ -454,7 +454,7 @@ static async select1StopFilter(page: Page): Promise<void> {
     const CLIENT = process.env.CLIENT?.toUpperCase();
   switch (CLIENT) {
     case 'BOB':
-      console.log('⏭️ BOB: Skipping Filter Apply Button verification.');
+      console.log('BOB: Skipping Filter Apply Button verification.');
       break;
     case 'IDFC':
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.filterTabDepartureTime);
@@ -488,7 +488,7 @@ static async select1StopFilter(page: Page): Promise<void> {
     const CLIENT = process.env.CLIENT?.toUpperCase();
   switch (CLIENT) {
     case 'BOB':
-      console.log('⏭️ BOB: Skipping Filter Departure Time Early Morning Return verification.');
+      console.log('BOB: Skipping Filter Departure Time Early Morning Return verification.');
       break;
     case 'IDFC': 
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.FilterDepartureTimeEarlyMorningReturn);
@@ -501,7 +501,7 @@ static async select1StopFilter(page: Page): Promise<void> {
     const CLIENT = process.env.CLIENT?.toUpperCase();
   switch (CLIENT) {
     case 'BOB':
-      console.log('⏭️ BOB: Skipping Filter Departure Time Morning Return verification.');
+      console.log('BOB: Skipping Filter Departure Time Morning Return verification.');
       break;
     case 'IDFC': 
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.FilterDepartureTimeMorningReturn);
@@ -514,7 +514,7 @@ static async select1StopFilter(page: Page): Promise<void> {
     const CLIENT = process.env.CLIENT?.toUpperCase();
   switch (CLIENT) {
     case 'BOB':
-      console.log('⏭️ BOB: Skipping Filter Departure Time Afternoon Return verification.');
+      console.log('BOB: Skipping Filter Departure Time Afternoon Return verification.');
       break;
     case 'IDFC': 
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.FilterDepartureTimeAfternoonReturn);
@@ -527,7 +527,7 @@ static async select1StopFilter(page: Page): Promise<void> {
     const CLIENT = process.env.CLIENT?.toUpperCase();
   switch (CLIENT) {
     case 'BOB':
-      console.log('⏭️ BOB: Skipping Filter Departure Time Evening Return verification.');
+      console.log('BOB: Skipping Filter Departure Time Evening Return verification.');
       break;
     case 'IDFC': 
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.FilterDepartureTimeEveningReturn);
@@ -540,7 +540,7 @@ static async select1StopFilter(page: Page): Promise<void> {
     const CLIENT = process.env.CLIENT?.toUpperCase();
   switch (CLIENT) {
     case 'BOB':
-      console.log('⏭️ BOB: Skipping click On Arrival Tab Button.');
+      console.log('BOB: Skipping click On Arrival Tab Button.');
       break;
     case 'IDFC': 
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.filterTabArrivalTime);
@@ -574,7 +574,7 @@ static async select1StopFilter(page: Page): Promise<void> {
     const CLIENT = process.env.CLIENT?.toUpperCase();
   switch (CLIENT) {
     case 'BOB':
-      console.log('⏭️ BOB: Skipping Filter Arrival Time Early Morning Return verification.');
+      console.log('BOB: Skipping Filter Arrival Time Early Morning Return verification.');
       break;
     case 'IDFC': 
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.FilterArrivalTimeEarlyMorningReturn);
@@ -587,7 +587,7 @@ static async select1StopFilter(page: Page): Promise<void> {
     const CLIENT = process.env.CLIENT?.toUpperCase();
   switch (CLIENT) {
     case 'BOB':
-      console.log('⏭️ BOB: Skipping Filter Arrival TimeMorning Return verification.');
+      console.log('BOB: Skipping Filter Arrival TimeMorning Return verification.');
       break;
     case 'IDFC': 
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.FilterArrivalTimeMorningReturn);
@@ -600,7 +600,7 @@ static async select1StopFilter(page: Page): Promise<void> {
     const CLIENT = process.env.CLIENT?.toUpperCase();
   switch (CLIENT) {
     case 'BOB':
-      console.log('⏭️ BOB: Skipping Filter Arrival Time Afternoon Return verification.');
+      console.log('BOB: Skipping Filter Arrival Time Afternoon Return verification.');
       break;
     case 'IDFC': 
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.FilterArrivalTimeAfternoonReturn);
@@ -613,7 +613,7 @@ static async select1StopFilter(page: Page): Promise<void> {
     const CLIENT = process.env.CLIENT?.toUpperCase();
   switch (CLIENT) {
     case 'BOB':
-      console.log('⏭️ BOB: Skipping Filter Arrival Time Evening Return verification.');
+      console.log('BOB: Skipping Filter Arrival Time Evening Return verification.');
       break;
     case 'IDFC': 
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.FilterArrivalTimeEveningReturn);
@@ -626,7 +626,7 @@ static async select1StopFilter(page: Page): Promise<void> {
     const CLIENT = process.env.CLIENT?.toUpperCase();
   switch (CLIENT) {
     case 'BOB':
-      console.log('⏭️ BOB: Skipping click On filter Tab Fare Type Tab Button.');
+      console.log('BOB: Skipping click On filter Tab Fare Type Tab Button.');
       break;
     case 'IDFC': 
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.filterTabFareType);
@@ -689,7 +689,7 @@ static async select1StopFilter(page: Page): Promise<void> {
     const CLIENT = process.env.CLIENT?.toUpperCase();
   switch (CLIENT) {
     case 'BOB':
-      console.log('⏭️ BOB: Skipping Filter Apply Button verification.');
+      console.log('BOB: Skipping Filter Apply Button verification.');
       break;
     case 'IDFC':
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.filterTabAirlines);
@@ -750,7 +750,7 @@ static async select1StopFilter(page: Page): Promise<void> {
   const CLIENT = process.env.CLIENT?.toUpperCase();
   switch (CLIENT) {
     case 'BOB':
-      console.log('⏭️ BOB: Skipping click On Add New Traveller Button.');
+      console.log('BOB: Skipping click On Add New Traveller Button.');
       break;
 
     case 'IDFC':
@@ -764,7 +764,7 @@ static async select1StopFilter(page: Page): Promise<void> {
   const CLIENT = process.env.CLIENT?.toUpperCase();
   switch (CLIENT) {
     case 'BOB':
-      console.log('⏭️ BOB: Skipping click On MrGender Button.');
+      console.log('BOB: Skipping click On MrGender Button.');
       break;
 
     case 'IDFC':
@@ -789,7 +789,7 @@ static async select1StopFilter(page: Page): Promise<void> {
   const CLIENT = process.env.CLIENT?.toUpperCase();
   switch (CLIENT) {
     case 'BOB':
-      console.log('⏭️ BOB: Skipping Enter First Name.');
+      console.log('BOB: Skipping Enter First Name.');
       break;
 
     case 'IDFC':
@@ -831,7 +831,7 @@ static async select1StopFilter(page: Page): Promise<void> {
   const CLIENT = process.env.CLIENT?.toUpperCase();
   switch (CLIENT) {
     case 'BOB':
-      console.log('⏭️ BOB: Skipping Enter First Name.');
+      console.log('BOB: Skipping Enter First Name.');
       break;
 
     case 'IDFC':
@@ -847,7 +847,7 @@ static async select1StopFilter(page: Page): Promise<void> {
   const CLIENT = process.env.CLIENT?.toUpperCase();
   switch (CLIENT) {
     case 'BOB':
-      console.log('⏭️ BOB: Skipping Enter First Name.');
+      console.log('BOB: Skipping Enter First Name.');
       break;
 
     case 'IDFC':
@@ -863,7 +863,7 @@ static async select1StopFilter(page: Page): Promise<void> {
   const CLIENT = process.env.CLIENT?.toUpperCase();
   switch (CLIENT) {
     case 'BOB':
-      console.log('⏭️ BOB: Skipping Enter First Name.');
+      console.log('BOB: Skipping Enter First Name.');
       break;
 
     case 'IDFC':
@@ -903,7 +903,7 @@ static async enterMobileNo(page: any, data: any) {
       break;
 
     case 'IDFC':
-      console.log('⏭️ IDFC: Skipping mobile number entry');
+      console.log('IDFC: Skipping mobile number entry');
       break;
 
     default:
@@ -915,7 +915,7 @@ static async enterMobileNo(page: any, data: any) {
     const CLIENT = process.env.CLIENT?.toUpperCase();
   switch (CLIENT) {
     case 'BOB':
-      console.log('⏭️ BOB: Skipping Enter First Name.');
+      console.log('BOB: Skipping Enter First Name.');
       break;
 
     case 'IDFC':
@@ -931,7 +931,7 @@ static async enterMobileNo(page: any, data: any) {
     const CLIENT = process.env.CLIENT?.toUpperCase();
   switch (CLIENT) {
     case 'BOB':
-      console.log('⏭️ BOB: Skipping Enter First Name.');
+      console.log('BOB: Skipping Enter First Name.');
       break;
 
     case 'IDFC':
@@ -963,7 +963,7 @@ static async enterMobileNo(page: any, data: any) {
     const CLIENT = process.env.CLIENT?.toUpperCase();
   switch (CLIENT) {
     case 'BOB':
-      console.log('⏭️ BOB: Skipping click On Edit Button Page.');
+      console.log('BOB: Skipping click On Edit Button Page.');
       break;
 
     case 'IDFC':
@@ -983,7 +983,7 @@ static async enterMobileNo(page: any, data: any) {
       const CLIENT = process.env.CLIENT?.toUpperCase();
   switch (CLIENT) {
     case 'BOB':
-      console.log('⏭️ BOB: Skipping click On Edit Confirm Button Page.');
+      console.log('BOB: Skipping click On Edit Confirm Button Page.');
       break;
 
     case 'IDFC':
@@ -997,7 +997,7 @@ static async enterMobileNo(page: any, data: any) {
   const CLIENT = process.env.CLIENT?.toUpperCase();
   switch (CLIENT) {
     case 'BOB':
-      console.log('⏭️ BOB: Skipping traveller count verification.');
+      console.log('BOB: Skipping traveller count verification.');
       break;
 
     case 'IDFC':  
@@ -1011,7 +1011,7 @@ static async enterMobileNo(page: any, data: any) {
     const CLIENT = process.env.CLIENT?.toUpperCase();
   switch (CLIENT) {
     case 'BOB':
-      console.log('⏭️ BOB: Skipping traveller count verification.');
+      console.log('BOB: Skipping traveller count verification.');
       break;
 
     case 'IDFC':
@@ -1086,7 +1086,7 @@ static async enterMobileNo(page: any, data: any) {
     const CLIENT = process.env.CLIENT?.toUpperCase();
   switch (CLIENT) {
     case 'BOB':
-      console.log('⏭️ BOB: Skipping');
+      console.log('BOB: Skipping');
       break;
 
     case 'IDFC':
@@ -1100,7 +1100,7 @@ static async enterMobileNo(page: any, data: any) {
     const CLIENT = process.env.CLIENT?.toUpperCase();
   switch (CLIENT) {
     case 'BOB':
-      console.log('⏭️ BOB: Skipping ');
+      console.log('BOB: Skipping ');
       break;
 
     case 'IDFC':
@@ -1124,7 +1124,7 @@ static async enterMobileNo(page: any, data: any) {
       break;
 
     case 'IDFC':
-    console.log('⏭️ IDFC: Skipping ');
+    console.log('IDFC: Skipping ');
     break;
   }
   }
@@ -1138,7 +1138,7 @@ static async enterMobileNo(page: any, data: any) {
       break;
 
     case 'IDFC':
-    console.log('⏭️ IDFC: Skipping ');
+    console.log('IDFC: Skipping ');
     break;
   }
   }
@@ -1152,7 +1152,7 @@ static async enterMobileNo(page: any, data: any) {
     break;
 
     case 'IDFC':
-    console.log('⏭️ IDFC: Skipping ');
+    console.log('IDFC: Skipping ');
     break;
   }
   }
@@ -1193,7 +1193,7 @@ static async enterMobileNo(page: any, data: any) {
      const CLIENT = process.env.CLIENT?.toUpperCase();
   switch (CLIENT) {
     case 'BOB':
-    console.log('⏭️ BOB: Skipping ');
+    console.log('BOB: Skipping ');
     break;
     case 'IDFC':
       await ElementHelper.scrollToElement(page, FlightPageLocators.saveTravellInfo);
@@ -1219,7 +1219,7 @@ static async enterMobileNo(page: any, data: any) {
      const CLIENT = process.env.CLIENT?.toUpperCase();
   switch (CLIENT) {
     case 'BOB':
-    console.log('⏭️ BOB: Skipping ');
+    console.log('BOB: Skipping ');
     break;
     case 'IDFC':
     await ElementHelper.clickElement(page, FlightPageLocators.FirstTravellerCheckbox);
@@ -1232,7 +1232,7 @@ static async clickOncontinueButtonOnTravellerPage(page: any) {
    const CLIENT = process.env.CLIENT?.toUpperCase();
   switch (CLIENT) {
     case 'BOB':
-    console.log('⏭️ BOB: Skipping ');
+    console.log('BOB: Skipping ');
     break;
     case 'IDFC':
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators.travellerDetailsPageContinuebutton);
@@ -1321,7 +1321,7 @@ static async verifyTravellerAndAddOneHeadingVisible(page: any) {
   const CLIENT = process.env.CLIENT?.toUpperCase();
   switch (CLIENT) {
     case 'BOB':
-    console.log('⏭️ BOB: Skipping ');
+    console.log('BOB: Skipping ');
     break;
     case 'IDFC':
   if (await ElementHelper.isElementDisplayed(page, FlightPageLocators.travellerAndAddoneHeading)) {
@@ -1347,7 +1347,7 @@ static async verifyTravellerCount(page: Page,expectedTravellerCount: string): Pr
   const CLIENT = process.env.CLIENT?.toUpperCase();
   switch (CLIENT) {
     case 'BOB':
-      console.log('⏭️ BOB: Skipping traveller count verification.');
+      console.log('BOB: Skipping traveller count verification.');
       break;
 
     case 'IDFC':
@@ -1370,7 +1370,7 @@ static async VerifyOneWayRoundTripCalendarVisible(page: any) {
   const CLIENT = process.env.CLIENT?.toUpperCase();
   switch (CLIENT) {
     case 'BOB':
-      console.log('⏭️ BOB: Skipping Verify One Way Round Trip Calendar verification.');
+      console.log('BOB: Skipping Verify One Way Round Trip Calendar verification.');
       break;
     case 'IDFC':  
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.VerifyOneWayRoundTripCalendar);
@@ -1383,7 +1383,7 @@ static async verifyTravelClass(page: Page): Promise<void> {
   const CLIENT = process.env.CLIENT?.toUpperCase();
   switch (CLIENT) {
     case 'BOB':
-      console.log('⏭️ BOB: Skipping Verify Travel Class verification.');
+      console.log('BOB: Skipping Verify Travel Class verification.');
       break;
     case 'IDFC':  
     const summaryText = await page.locator(FlightPageLocators.travelsummaryCount).textContent();
@@ -1401,7 +1401,7 @@ static async clickOnFilterListButton(page: any) {
   } else if(DeviceHelper.isMobile() && CLIENT === 'BOB') {
     await ElementHelper.clickElement(page, FlightPageLocators.filterButtonMobileForBOB);
   } else if(CLIENT === 'BOB'){
-    console.log('⏭️ BOB: Skipping');
+    console.log('BOB: Skipping');
   }
   else{
     await ElementHelper.clickElement(page, FlightPageLocators.flightListFilterButton);
@@ -1412,7 +1412,7 @@ static async clickOnFilterListButton(page: any) {
   const CLIENT = process.env.CLIENT?.toUpperCase();
   switch (CLIENT) {
     case 'BOB':
-      console.log('⏭️ BOB: Skipping Filter Apply Button verification.');
+      console.log('BOB: Skipping Filter Apply Button verification.');
       break;
     case 'IDFC': 
     await ElementHelper.clickElement(page, FlightPageLocators.filterApplyButton);
@@ -1437,7 +1437,7 @@ static async verifyMaxPassengerLimit(page: Page): Promise<void> {
     /Max 9 passengers? ?\(Adult\+Child\) allowed/i
   );
 
-  console.log("✅ Max passenger error message is displayed.");
+  console.log("Max passenger error message is displayed.");
 
   // Click "-" once to reduce the count
   await adultMinusButton.click();
@@ -1445,7 +1445,7 @@ static async verifyMaxPassengerLimit(page: Page): Promise<void> {
   // Verify the error message is no longer visible
   await expect(maxPassengerError).toBeHidden();
 
-  console.log("✅ Max passenger error message is no longer visible.");
+  console.log("Max passenger error message is no longer visible.");
 }
 
 

@@ -1,7 +1,6 @@
 import { expect, Page } from '@playwright/test';
 import { LoginPageLocators } from '../../TripStacc/locators/LoginPageLocators';
 import { ElementHelper } from '../../utils/elementHelper';
-import idfcTestData from '../../testdata/tripStacc.json';
 import { Data } from '../../utils/dataProvider';
 import { DeviceHelper } from '../../utils/deviceHelper';
 import { HotelHomePage } from './HotelHomePage';
@@ -18,7 +17,7 @@ export class HomePage {
       await FlightHomePage.selectCard(page);
       await FlightHomePage.verifyPopupClosed(page);
       await HotelHomePage.verifyHotelHomePageLoaded(page);
-      console.log('✅ BOB: Card selected and homepage loaded');
+      console.log('BOB: Card selected and homepage loaded');
       break;
       
     default:

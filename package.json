@@ -2,20 +2,25 @@
   "name": "poc",
   "version": "1.0.0",
   "private": true,
+  "description": "",
+  "main": "env.js",
+  "type": "commonjs",
+
+  "directories": {
+    "test": "tests"
+  },
+
   "devDependencies": {
     "@playwright/test": "^1.60.0",
     "@types/node": "^25.9.1",
     "cross-env": "^7.0.3",
     "nodemailer": "^8.0.11"
   },
-  "description": "",
-  "main": "env.js",
-  "directories": {
-    "test": "tests"
-  },
+
   "dependencies": {
     "undici-types": "^7.24.6"
   },
+
   "scripts": {
     "test": "npx playwright test",
     "report": "npx playwright show-report",
@@ -23,30 +28,45 @@
     "mail": "node utils/send-report-email.js",
     "report:mail": "npm run report:generate && npm run mail",
 
-   
-    "test:tripstacc:bob:uat:headed": "cross-env PROJECT=tripstacc-chrome-UAT CLIENT=BOB HEADED=true npx playwright test TripStacc/tests/HotelPage.test.ts",
-    "test:tripstacc:idfc:uat:headed": "cross-env PROJECT=tripstacc-chrome-UAT CLIENT=IDFC HEADED=true npx playwright test TripStacc/tests/HotelPage.test.ts",
+    "test:tripstacc:bob:uat:headed": "cross-env PROJECT=tripstacc-chrome-UAT CLIENT=BOB HEADED=true npx playwright test TripStacc/tests",
+    "test:tripstacc:idfc:uat:headed": "cross-env PROJECT=tripstacc-chrome-UAT CLIENT=IDFC HEADED=true npx playwright test TripStacc/tests",
+
     "test:tripstacc:bob:qa": "cross-env PROJECT=tripstacc-chrome-QA CLIENT=BOB npx playwright test TripStacc/tests",
     "test:tripstacc:idfc:qa": "cross-env PROJECT=tripstacc-chrome-QA CLIENT=IDFC npx playwright test TripStacc/tests",
+
     "test:tripstacc:bob:uat": "cross-env PROJECT=tripstacc-chrome-UAT CLIENT=BOB npx playwright test TripStacc/tests",
     "test:tripstacc:idfc:uat": "cross-env PROJECT=tripstacc-chrome-UAT CLIENT=IDFC npx playwright test TripStacc/tests",
-    "test:tripstacc:bob:uat:mobile:iphone13:headed": "cross-env PROJECT=tripstacc-chrome-UAT-mobile-iphone13 CLIENT=BOB HEADED=true npx playwright test TripStacc/tests/HotelPage.test.ts",
-    "test:tripstacc:idfc:uat:mobile:iphone13:headed": "cross-env PROJECT=tripstacc-chrome-UAT-mobile-iphone13 CLIENT=IDFC HEADED=true npx playwright test TripStacc/tests/HotelPage.test.ts",
 
+    "test:tripstacc:bob:uat:mobile:iphone13:headed": "cross-env PROJECT=tripstacc-chrome-UAT-mobile-iphone13 CLIENT=BOB HEADED=true npx playwright test TripStacc/tests",
+    "test:tripstacc:idfc:uat:mobile:iphone13:headed": "cross-env PROJECT=tripstacc-chrome-UAT-mobile-iphone13 CLIENT=IDFC HEADED=true npx playwright test TripStacc/tests",
+
+    "test:tripstacc:bob:uat:firefox:headed": "cross-env PROJECT=tripstacc-firefox-UAT CLIENT=BOB HEADED=true npx playwright test TripStacc/tests",
+    "test:tripstacc:idfc:uat:firefox:headed": "cross-env PROJECT=tripstacc-firefox-UAT CLIENT=IDFC HEADED=true npx playwright test TripStacc/tests",
+
+    "test:tripstacc:bob:uat:webkit:headed": "cross-env PROJECT=tripstacc-webkit-UAT CLIENT=BOB HEADED=true npx playwright test TripStacc/tests",
+    "test:tripstacc:idfc:uat:webkit:headed": "cross-env PROJECT=tripstacc-webkit-UAT CLIENT=IDFC HEADED=true npx playwright test TripStacc/tests",
 
     
     "test:shopstacc:bobcard:qa": "cross-env CLIENT=BOBCARD PROJECT=shopstacc-chrome-QA npx playwright test ShopStacc/tests",
     "test:shopstacc:bobcard:uat": "cross-env CLIENT=BOBCARD PROJECT=shopstacc-chrome-UAT npx playwright test ShopStacc/tests",
+
     "test:shopstacc:bobcard:qa:headed": "cross-env CLIENT=BOBCARD PROJECT=shopstacc-chrome-QA HEADED=true npx playwright test ShopStacc/tests",
     "test:shopstacc:bobcard:uat:headed": "cross-env CLIENT=BOBCARD PROJECT=shopstacc-chrome-UAT HEADED=true npx playwright test ShopStacc/tests",
+
     "test:shopstacc:bobcard:uat:mobile:iphone13:headed": "cross-env CLIENT=BOBCARD PROJECT=shopstacc-chrome-UAT-mobile-iphone13 HEADED=true npx playwright test ShopStacc/tests",
     "test:shopstacc:bobcard:qa:mobile:iphone13:headed": "cross-env CLIENT=BOBCARD PROJECT=shopstacc-chrome-QA-mobile-iphone13 HEADED=true npx playwright test ShopStacc/tests",
-    "test:shopstacc:qa:mail": "npm run test:shopstacc:bobcard:qa && npm run report:mail",
-    "test:shopstacc:uat:mail": "npm run test:shopstacc:bobcard:uat && npm run report:mail",
-    "test:shopstacc:uat:headed:mail": "cross-env CLIENT=BOBCARD PROJECT=shopstacc-chrome-UAT HEADED=true npx playwright test ShopStacc/tests --workers=1 && npm run report:mail"
+
+    "test:shopstacc:bobcard:uat:mobile:iphone13": "cross-env CLIENT=BOBCARD PROJECT=shopstacc-chrome-UAT-mobile-iphone13 npx playwright test ShopStacc/tests",
+    "test:shopstacc:bobcard:qa:mobile:iphone13": "cross-env CLIENT=BOBCARD PROJECT=shopstacc-chrome-QA-mobile-iphone13 npx playwright test ShopStacc/tests",
+
+    "test:shopstacc:bobcard:uat:firefox:headed": "cross-env CLIENT=BOBCARD PROJECT=shopstacc-firefox-UAT HEADED=true npx playwright test ShopStacc/tests",
+    "test:shopstacc:bobcard:qa:firefox:headed": "cross-env CLIENT=BOBCARD PROJECT=shopstacc-firefox-QA HEADED=true npx playwright test ShopStacc/tests",
+    
+    "npm run test:tripstacc:idfc:uat:headed -- --grep IDFC": "Executes TripStacc IDFC UAT (headed mode) with IDFC tag",
+    "npm run test:tripstacc:idfc:uat:headed -- --last-failed": "Retries only failed TripStacc IDFC UAT (headed mode):"
   },
+
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "type": "commonjs"
+  "license": "ISC"
 }

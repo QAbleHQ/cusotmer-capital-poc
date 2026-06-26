@@ -5,6 +5,7 @@ export const HotelPageLocators = {
   whereToDropdownSelectFirstOption: `(//li[@class="custom-auto-complete ui-menu-item"])[1]`,
   dropdownOpened: `//div[@class="inputgroup location-group focused"]`,
   dateButton: `//input[@id="hotel_daterange"]`,
+  roomSection: `(//div[@class="topSec_back sticky-top checkoutSection"])[2]`,
   roomsAndGuestButton: `//label[contains(translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'rooms & guests')]/parent::div`,
   searchHotelButton: `//input[@value="Search Hotels"]//parent::div`,
   menuButton: `//div[@class="menuandall"]`,

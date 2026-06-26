@@ -6,7 +6,7 @@ export const MyAccountPageLocators = {
   flightsCompletedTab: `(//a[@class='fliterItem'])[2]`,
   flightsCancelledTab: `(//a[@class='fliterItem'])[3]`,
   hotelTab: `(//a[normalize-space()='Hotels'])[2]`,
-  hoteltabmobile:`(//a[normalize-space()='Hotels'])[3]`,
+  hoteltabmobile: `(//a[normalize-space()='Hotels'])[3]`,
   hotelsUpcomingTab: `//li[contains(@class,'upcoming')]//a`,
   hotelsCompletedTab: `//li[contains(@class,'completed')]//a`,
   hotelsCancelledTab: `//li[contains(@class,'cancelled')]//a`,

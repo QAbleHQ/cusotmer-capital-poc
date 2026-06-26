@@ -3,8 +3,6 @@ import { LoginPageLocators } from '../../TripStacc/locators/LoginPageLocators';
 import { ElementHelper } from '../../utils/elementHelper';
 import idfcTestData from '../../testdata/tripStacc.json';
 import { Data } from '../../utils/dataProvider';
-import { HotelHomePage } from './HotelHomePage';
-import { FlightHomePage } from './FlightHomePage';
 
 export class LoginPage {
 
@@ -24,7 +22,7 @@ const mobileField = page.locator(LoginPageLocators.mobileNumberField);
   await mobileField.fill(mobileNumber);
   await expect(mobileField).toHaveValue(mobileNumber);
 
-  console.log(`✅ Mobile: ${mobileNumber}`);
+  console.log(`Mobile: ${mobileNumber}`);
 
   }
   static async verifyOtpPageVisible(page: Page): Promise<void> {

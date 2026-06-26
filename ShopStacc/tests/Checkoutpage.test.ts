@@ -2,7 +2,6 @@ import { test, Page, BrowserContext } from '@playwright/test';
 import { HomePage } from '../pages/HomePage';
 import { PLPPage } from '../pages/PlpPage';
 import { Checkoutpage } from '../pages/Checkoutpage';
-import { BaseHelper } from '../../TripStacc/pages/CommonMethods';
 import { CommonHelper } from '../../utils/commonHelper';
 import { LoginPage } from '../pages/LoginPage';
 let context: BrowserContext;
@@ -17,11 +16,11 @@ test.beforeEach(async ({ browser }) => {
 });
 
 test.afterEach(async () => {
-   await page.close();
-   await context.close();
- });
- 
-test("SC_006, PDP — 'Buy Now' CTA redirects to Checkout page", { tag: ['@BOBCard', '@Checkout', '@Regression', '@Smoke'] },async ({ }) => {
+  await page.close();
+  await context.close();
+});
+
+test("SC_006, PDP — 'Buy Now' CTA redirects to Checkout page", { tag: ['@BOBCard', '@Checkout', '@Regression', '@Smoke'] }, async ({ }) => {
 
   await test.step("Click Gift Card option", async () => {
     await page.waitForLoadState('domcontentloaded');
@@ -33,7 +32,8 @@ test("SC_006, PDP — 'Buy Now' CTA redirects to Checkout page", { tag: ['@BOBCa
   });
 
   await test.step("Verify Gift Card Details", async () => {
-    await page.waitForLoadState('domcontentloaded')
+    await page.waitForLoadState('domcontentloaded');
+    await page.waitForTimeout(5000);
     await PLPPage.verifyGiftCardDetailsVisible(page);
   });
 
