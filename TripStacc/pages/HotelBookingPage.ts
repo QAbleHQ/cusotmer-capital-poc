@@ -55,26 +55,32 @@ export class HotelBookingPage {
     const CLIENT = process.env.CLIENT?.toUpperCase();
     switch (CLIENT) {
         case 'IDFC':
-            try {
+              await page.waitForTimeout(50000);
+                const iframe = page.locator('//iframe[contains(@title,"notification-frame")]');
+                    if (await iframe.isVisible({ timeout: 60000 }).catch(() => false)) {
+                        const frame = page.frameLocator('//iframe[contains(@title,"notification-frame")]');
+                        // Continue with popup handling...
+                    } else {
+                        console.log('Notification iframe not found within 1 minute');
+                    }
+
                 const frame = page.frameLocator('//iframe[contains(@title,"notification-frame")]');
                 const popupImg = frame.locator(HotelPageLocators.popupImg);
-                if (
-                    await popupImg.count() > 0 &&
-                    await popupImg.isVisible({ timeout: 30000 })
-                ) {
-                    await frame.locator(HotelPageLocators.outOfPopupImg).click({
-                        position: {
-                            x: 500,
-                            y: 5
-                        }
-                    });
+                if (await popupImg.isVisible({ timeout: 30000 })) {
+                    if (DeviceHelper.isMobile()) {
+                        await frame.locator(HotelPageLocators.outOfPopupImg).click({
+                          position: { x: 180, y: 10 }
+                        });
+                      } else {
+                        await frame.locator(HotelPageLocators.outOfPopupImg).click({
+                          position: { x: 500, y: 5 }
+                        });
+                      }
+
                     console.log('IDFC popup closed');
                 } else {
                     console.log('IDFC popup not displayed');
                 }
-            } catch (error) {
-                console.log('IDFC popup not found or already closed');
-            }
             break;
 
         case 'BOB':
@@ -169,8 +175,8 @@ export class HotelBookingPage {
               //       }
               //   }
 
-                await page.locator(HotelPageLocators.addGuestButton).click();
-                console.log('Add Guest button clicked');
+                // await page.locator(HotelPageLocators.addGuestButton).click();
+                // console.log('Add Guest button clicked');
 
                   await page.waitForTimeout(5000);
                   if(DeviceHelper.isMobile()) {
@@ -183,6 +189,7 @@ export class HotelBookingPage {
                     } catch (e) {
                       console.log('Bee popup did not appear, proceeding...');
                     }
+                    // this.removePopup(page);
                   }
                   if(await ElementHelper.isElementDisplayed(page, HotelPageLocators.addGuestButton)) {
                     await page.locator(HotelPageLocators.addGuestButton).click();
@@ -220,30 +227,8 @@ export class HotelBookingPage {
     switch (CLIENT) {
 
         case 'IDFC':
-
-            if (DeviceHelper.isMobile()) {
-                try {
-                    const popup = page.locator(HotelPageLocators.beePopupForMobile);
-
-                    await popup.waitFor({
-                        state: 'visible',
-                        timeout: 10000
-                    });
-
-                    await ElementHelper.clickElement(
-                        page,
-                        HotelPageLocators.clickOutsideOfBeePopupForMobile
-                    );
-
-                    console.log('Bee popup detected and closed');
-                } catch (e) {
-                    console.log('Bee popup did not appear, proceeding...');
-                }
-            }
-            this.removePopupForIDFC(page);
             await page.locator(HotelPageLocators.addGuestBtn).click();
             console.log('Add New Guest button clicked');
-
             break;
 
         case 'BOB':
@@ -542,7 +527,7 @@ static async goBackUntilLocationSearchBoxVisible(page: Page) {
 
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     const isVisible = await page
-      .locator(HotelPageLocators.searchHotelButton)
+      .locator(HotelPageLocators.menuButton)
       .isVisible()
       .catch(() => false);
 
