@@ -99,76 +99,60 @@ Product-specific base URLs are defined in `config/`:
 
 The framework uses a dynamic project setup driven by the `PROJECT` environment variable.
 
-**Format:** `{PRODUCT}-{BROWSER}-{ENVIRONMENT}[-{DEVICE}][-{TAG}]`
+**Format:** `{product}-{browser}-{environment}[-mobile-{device}][-{tag}]`
 
-| Segment | Values | Example |
-|---------|--------|---------|
-| Product | `BOB`, `IDFC` | `IDFC` |
-| Browser | `chrome`, `firefox`, `webkit`, `edge` | `chrome` |
-| Environment | `QA`, `UAT`, `PROD` | `UAT` |
-| Device (optional) | `iPhone13`, `GalaxyS21`, etc. | `iPhone13` |
-| Tag (optional) | Any `@tag` in test title | `FLIGHT` |
+#### PROJECT String Segment Reference
 
-**Examples:**
+```
+tripstacc - chrome - UAT - mobile - iphone13 - Loginpage
+   [0]       [1]    [2]     [3]       [4]        [5]
+```
+
+| Index | Segment | Values | Description |
+|-------|---------|--------|-------------|
+| `[0]` | Product | `tripstacc`, `shopstacc` | Which product to test |
+| `[1]` | Browser | `chrome`, `firefox`, `webkit` | Browser engine |
+| `[2]` | Environment | `QA`, `UAT`, `PROD` | Target environment |
+| `[3]` | Mobile keyword | `mobile` | Required prefix for mobile device runs |
+| `[4]` | Device (optional) | `iphone13`, `iphone13promax`, `galaxys21`, etc. | Mobile device from `mobileDevices.js` |
+| `[5]` | Tag (optional) | Any `@tag` defined in tests | Filters tests by tag (case-insensitive) |
+
+> **Note:** For desktop runs, `[3]` can be a tag directly (e.g. `tripstacc-chrome-UAT-Loginpage`).
+
+#### Examples
 
 | PROJECT Value | Description |
 |---------------|-------------|
-| `IDFC-chrome-UAT` | IDFC on Chrome, UAT, desktop |
-| `BOB-chrome-QA-TEST` | BOB on Chrome, QA, run only `@TEST` tagged tests |
-| `IDFC-chrome-UAT-iPhone13` | IDFC on Chrome, UAT, mobile (iPhone 13) |
-| `IDFC-chrome-UAT-iPhone13-FLIGHT` | Mobile run filtered to `@FLIGHT` tests |
+| `tripstacc-chrome-UAT` | TripStacc, Chrome, UAT, all tests, desktop |
+| `tripstacc-chrome-UAT-Loginpage` | Desktop, only `@Loginpage` tagged tests |
+| `tripstacc-chrome-UAT-mobile-iphone13` | Mobile (iPhone 13), all tests |
+| `tripstacc-chrome-UAT-mobile-iphone13-Loginpage` | Mobile (iPhone 13), only `@Loginpage` tests |
+| `shopstacc-chrome-UAT` | ShopStacc (BOBCard), Chrome, UAT, all tests |
+| `shopstacc-chrome-QA-mobile-iphone13-Login` | ShopStacc, QA, mobile, only `@Login` tests |
+
+#### Supported Mobile Devices
+
+| Device Name | Viewport |
+|-------------|----------|
+| `iphone12` | 390 × 844 |
+| `iphone13` | 390 × 700 |
+| `iphone13promax` | 428 × 926 |
+| `iphonese` | 375 × 667 |
+| `galaxys20` | 412 × 915 |
+| `galaxys21` | 412 × 915 |
+| `pixel4a` | 412 × 869 |
+| `pixel5` | 393 × 851 |
+| `oneplus8` | 412 × 915 |
+| `oneplus9` | 412 × 915 |
 
 ### Environment Variables
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `PROJECT` | **Required.** Selects product, browser, env, device, and tag filter | — |
+| `PROJECT` | **Required.** Full project string (see format above) | — |
+| `CLIENT` | Client name — `BOB`, `IDFC` for TripStacc; `BOBCARD` for ShopStacc | `BOB` |
 | `HEADED` | Set to `true` to run in headed (visible) browser mode | headless |
 | `CI` | When set, uses 4 parallel workers instead of 2 | — |
-
-project: Playwright Test Execution Guide
-
-description: >
-  This file contains commands to execute Playwright tests
-  for multiple environments and configurations using the PROJECT environment variable.
-
-prerequisites:
-  - Node.js installed
-  - Playwright installed (`npm install`)
-  - Tests configured in playwright.config.js
-
-commands:
-
-
-  loginpage_tests:
-    - name: IDFC Chrome UAT Login Page
-      run: '$env:PROJECT="IDFC-chrome-uat-Loginpage"; npx playwright test'
-
-    - name: BOB Chrome UAT Login Page
-      run: '$env:PROJECT="BOB-chrome-uat-Loginpage"; npx playwright test'
-
-    - name: IDFC Webkit UAT Login Page (headed)
-      run: '$env:PROJECT="IDFC-webkit-uat-Loginpage"; npx playwright test --headed'
-
-    - name: BOB Firefox UAT Login Page (headed)
-      run: '$env:PROJECT="BOB-firefox-uat-Loginpage"; npx playwright test --headed'
-
-  full_suite_tests:
-    - name: IDFC Chrome UAT
-      run: '$env:PROJECT="IDFC-chrome-uat"; npx playwright test'
-
-    - name: BOB Chrome UAT
-      run: '$env:PROJECT="BOB-chrome-uat"; npx playwright test'
-
-  mobile_tests:
-    - name: IDFC Mobile iPhone 13
-      run: '$env:PROJECT="IDFC-chrome-uat-mobile-iphone13"; npx playwright test'
-
-notes:
-  - Use PowerShell to execute the above commands.
-  - Ensure PROJECT names match those defined in your Playwright configuration.
-  - Use "--headed" flag to run tests in UI mode.
-``
 
 
 ### View HTML report

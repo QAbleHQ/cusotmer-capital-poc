@@ -19,6 +19,8 @@ export class HotelHomePage {
     await page.waitForTimeout(10000);
     if(DeviceHelper.isMobile()) {
       const hotelTabBTN = HotelPageLocators.hotelTabMobile;
+      await ElementHelper.scrollElementToCentre(page, hotelTabBTN);
+      await page.waitForTimeout(2000);
       await ElementHelper.clickElement(page, hotelTabBTN);
     } else {
       const hotelTabBTN = HotelPageLocators.hotelTab;
@@ -38,12 +40,25 @@ export class HotelHomePage {
   }
   static async searchValueInTestBox(page: Page, text: string) {
     if(DeviceHelper.isMobile()) {
-      const whereToTextBox = HotelPageLocators.whereToTextBox;
-      await VerificationHelpers.elementIsVisible(page, whereToTextBox);
-      await ElementHelper.clearAndEnterInTextField(page, whereToTextBox, text);
-      const whereToTextBoxMobile = HotelPageLocators.whereToTextBoxMobile;
-      await VerificationHelpers.elementIsVisible(page, whereToTextBoxMobile);
-      await ElementHelper.clearAndEnterInTextField(page, whereToTextBoxMobile, text);
+
+        const CLIENT = process.env.CLIENT?.toUpperCase();
+        const whereToTextBox = HotelPageLocators.whereToTextBox;
+        switch (CLIENT) {
+          
+          case 'BOB':
+            await VerificationHelpers.elementIsVisible(page, whereToTextBox);
+            await ElementHelper.clearAndEnterInTextField(page, whereToTextBox, text);
+            break;
+      
+          case 'IDFC':
+            await ElementHelper.clickElement(page, whereToTextBox);
+            await page.waitForTimeout(2000);
+            const whereToTextBoxMobile = HotelPageLocators.whereToTextBoxMobile;
+            await VerificationHelpers.elementIsVisible(page, whereToTextBoxMobile);
+            await page.waitForTimeout(2000);
+            await ElementHelper.clearAndEnterInTextField(page, whereToTextBoxMobile, text);
+          break;
+        }
     } else {
       await page.waitForTimeout(2500);
       const whereToTextBox = HotelPageLocators.whereToTextBox;
@@ -72,13 +87,23 @@ export class HotelHomePage {
 
   static async selectFirstOptionFromDropdown(page: Page) {
     if(DeviceHelper.isMobile()) {
-      const whereToDropdownSelectFirstOption = HotelPageLocators.whereToDropdownSelectFirstOptionMobile;
-      await VerificationHelpers.elementIsVisible(page, whereToDropdownSelectFirstOption);
-      await ElementHelper.clickElement(page, whereToDropdownSelectFirstOption);
+            const CLIENT = process.env.CLIENT?.toUpperCase();
+            switch (CLIENT) {
+              case 'BOB':
+                const whereToDropdownSelectFirstOption = HotelPageLocators.whereToDropdownSelectFirstOptionMobile;
+                await VerificationHelpers.elementIsVisible(page, whereToDropdownSelectFirstOption);
+                await ElementHelper.clickElement(page, whereToDropdownSelectFirstOption);
+                break;
+          
+              case 'IDFC':
+                    const whereToDropdownSelectFirstOptionMobileIDFC = HotelPageLocators.whereToDropdownSelectFirstOptionMobileIDFC;
+                await VerificationHelpers.elementIsVisible(page, whereToDropdownSelectFirstOptionMobileIDFC);
+                await ElementHelper.clickElement(page, whereToDropdownSelectFirstOptionMobileIDFC);
+              break;
+            }
     } else {
       await page.waitForTimeout(7000);
       const dropdownOpened = page.locator(HotelPageLocators.dropdownOpened);
-
     if (await dropdownOpened.isVisible()) {
         console.log('Dropdown opened');
     } else {
@@ -101,31 +126,76 @@ export class HotelHomePage {
   }
 
 static async clickDateButton(page: any) {
-    const dateButton = HotelPageLocators.dateButton;
-    const checkInDateBoxOpened = HotelPageLocators.checkInDateBoxOpened;
 
-    const dateBox = page.locator(checkInDateBoxOpened);
+  if(DeviceHelper.isMobile()) {
+          const CLIENT = process.env.CLIENT?.toUpperCase();
+      switch (CLIENT) {
+        case 'BOB':
+        console.log('⏭️ BOB: Skipping ');
+          break;
+    
+        case 'IDFC':
+            const dateButton = HotelPageLocators.dateButton;
+        const checkInDateBoxOpened = HotelPageLocators.checkInDateBoxOpened;
 
-    // First check without clicking
-    if (await dateBox.count() > 0 && await dateBox.isVisible()) {
-        console.log("Check-in date box opened");
-        return;
-    }
+        const dateBox = page.locator(checkInDateBoxOpened);
 
-    // Try clicking up to 2 times
-    for (let attempt = 1; attempt <= 3; attempt++) {
         await ElementHelper.clickElement(page, dateButton);
-        console.log(`Date button clicked - Attempt ${attempt}`);
-
         await page.waitForTimeout(1000); // optional
-
+        // First check without clicking
         if (await dateBox.count() > 0 && await dateBox.isVisible()) {
             console.log("Check-in date box opened");
             return;
+        }else{
+        // Try clicking up to 2 times
+        for (let attempt = 1; attempt <= 3; attempt++) {
+            await ElementHelper.clickElement(page, dateButton);
+            console.log(`Date button clicked - Attempt ${attempt}`);
+
+            await page.waitForTimeout(1000); // optional
+
+            if (await dateBox.count() > 0 && await dateBox.isVisible()) {
+                console.log("Check-in date box opened");
+                return;
+            }
         }
-    }
+
+        console.log("Check-in date box is still not opened after 3 attempts");
+        }
+        break;
+      }
+
+      
+      }else{
+
+        const dateButton = HotelPageLocators.dateButton;
+        const checkInDateBoxOpened = HotelPageLocators.checkInDateBoxOpened;
+
+        const dateBox = page.locator(checkInDateBoxOpened);
+
+        await ElementHelper.clickElement(page, dateButton);
+        await page.waitForTimeout(1000); // optional
+        // First check without clicking
+        if (await dateBox.count() > 0 && await dateBox.isVisible()) {
+            console.log("Check-in date box opened");
+            return;
+        }else{
+        // Try clicking up to 2 times
+        for (let attempt = 1; attempt <= 3; attempt++) {
+            await ElementHelper.clickElement(page, dateButton);
+            console.log(`Date button clicked - Attempt ${attempt}`);
+
+            await page.waitForTimeout(1000); // optional
+
+            if (await dateBox.count() > 0 && await dateBox.isVisible()) {
+                console.log("Check-in date box opened");
+                return;
+            }
+        }
 
     console.log("Check-in date box is still not opened after 3 attempts");
+    }
+  }
 }
 
   static async verifyDateButtonDisplayed(page: any) {
@@ -136,7 +206,11 @@ static async clickDateButton(page: any) {
 
   static async clickRoomsAndGuestsButton(page: any) {
     if(DeviceHelper.isMobile()) {
+      await page.waitForTimeout(2000); 
       const clickButton = HotelPageLocators.roomAndGuestButtonMobile;
+      await ElementHelper.scrollElementToCentre(page, clickButton);
+      await page.focus(clickButton);
+      await page.waitForTimeout(2000); 
       await ElementHelper.clickElement(page, clickButton);
     } else {
       await page.waitForTimeout(2000);      
@@ -162,16 +236,36 @@ static async clickDateButton(page: any) {
   static async clickSearchHotelButton(page: any) {
     const searchHotelButton = HotelPageLocators.searchHotelButton;
     await ElementHelper.scrollElementToCentre(page, searchHotelButton);
+    await page.focus(searchHotelButton);
+        await page.waitForTimeout(500); 
     await ElementHelper.clickElement(page, searchHotelButton);
     await page.waitForTimeout(5000); 
     console.log(" Search Hotel button clicked");
   }
 
   static async selectMonthAndDateFROM(page: any, monthYear: string, date: string) {
-    if(DeviceHelper.isMobile()) {
+   await page.waitForTimeout(5000);
+  const CLIENT = process.env.CLIENT?.toUpperCase();
+  if(DeviceHelper.isMobile() && CLIENT === 'IDFC') {
       await ElementHelper.clickElement(page, HotelPageLocators.doneCalendarButtonMobile);
       console.log(" Done calendar button clicked (Mobile)");
-    } else {
+    }
+    if(DeviceHelper.isMobile() && CLIENT === 'BOB') {
+       
+        await page.locator(HotelPageLocators.datepicker).click();
+        await page.locator(HotelPageLocators.nextvailablemonth).click();
+        await page.locator(HotelPageLocators.Hotelbookingfromdate).click();
+        await page.waitForTimeout(3000);
+        await page.locator(HotelPageLocators.Hotelbookingtodate).click();
+        await page.waitForTimeout(3000);
+ 
+    }else if(DeviceHelper.isMobile() && CLIENT === 'IDFC'){
+        console.log(
+          "Skipping "
+        )
+    }
+    
+      else {
       const monthLocator = HotelPageLocators.selectMonth.replace('{monthYear}', monthYear);
       while (!(await page.locator(monthLocator).isVisible())) {
         await ElementHelper.clickElement(page, HotelPageLocators.nextButton);
@@ -184,51 +278,60 @@ static async clickDateButton(page: any) {
     }
   }
 
-  static async selectMonthAndDateTO(page: any, monthYear: string, date: string) {
-    if(!DeviceHelper.isMobile()) {
-      const monthLocator = HotelPageLocators.selectMonth.replace('{monthYear}', monthYear);
-      while (!(await page.locator(monthLocator).isVisible())) {
-        await ElementHelper.clickElement(page, HotelPageLocators.nextButton);
-      }
-      const dateLocator = HotelPageLocators.selectDate
-        .replace('{monthYear}', monthYear)
-        .replace('{date}', date);
-      await ElementHelper.clickElement(page, dateLocator);
-      console.log(' Date selected in calendar');
-    }
-  }
+          static async selectMonthAndDateTO(
+            page: any,
+            monthYear: string,
+            date: string
+          ) {
+            if (DeviceHelper.isMobile()) {
+              console.log('Skipping calendar selection on mobile');
+              return;
+            }
+            const monthLocator = HotelPageLocators.selectMonth.replace('{monthYear}', monthYear);
+            while (!(await page.locator(monthLocator).isVisible())) {
+              await ElementHelper.clickElement(page, HotelPageLocators.nextButton);
+            }
+            const dateLocator = HotelPageLocators.selectDate
+              .replace('{monthYear}', monthYear)
+              .replace('{date}', date);
+            await ElementHelper.clickElement(page, dateLocator);
+            console.log('✅ Date selected in calendar');
+          }
+ 
 
-  static async selectAdultsAndChildrenWithAge(
-    page: any,
-    rooms: number,
-    adults: number,
-    children: number,
-    childAges: number[]
-  ) {
-    for (let roomNo = 1; roomNo <= rooms; roomNo++) {
-      const adultCount = HotelPageLocators.adultCount.replace('{roomNo}', roomNo.toString());
-      const adultPlus = HotelPageLocators.adultPlusButton.replace('{roomNo}', roomNo.toString());
-      while (parseInt(await page.locator(adultCount).inputValue()) < adults) {
-        await page.locator(adultPlus).click();
-      }
+      static async selectAdultsAndChildrenWithAge(
+        page: any,
+        rooms: number,
+        adults: number,
+        children: number,
+        childAges: number[]
+      ) {
+        for (let roomNo = 1; roomNo <= rooms; roomNo++) {
+          const adultCount = HotelPageLocators.adultCount.replace('{roomNo}', roomNo.toString());
+          const adultPlus = HotelPageLocators.adultPlusButton.replace('{roomNo}', roomNo.toString());
+          while (parseInt(await page.locator(adultCount).inputValue()) < adults) {
+            await page.locator(adultPlus).click();   
+          }
+              await page.waitForTimeout(2000); 
 
-      const childCount = HotelPageLocators.childrenCount.replace('{roomNo}', roomNo.toString());
-      const childPlus = HotelPageLocators.childrenPlusButton.replace('{roomNo}', roomNo.toString());
-      while (parseInt(await page.locator(childCount).inputValue()) < children) {
-        await page.locator(childPlus).click();
-      }
+          const childCount = HotelPageLocators.childrenCount.replace('{roomNo}', roomNo.toString());
+          const childPlus = HotelPageLocators.childrenPlusButton.replace('{roomNo}', roomNo.toString());
+          await page.waitForTimeout(2000);
+          while (parseInt(await page.locator(childCount).inputValue()) < children) {
+            await page.locator(childPlus).click();
+          }
 
-      for (let i = 1; i <= children; i++) {
-        const ageDropdown = HotelPageLocators.childrenAgeDropdown
-          .replace('{roomNo}', roomNo.toString())
-          .replace('{childIndex}', i.toString());
-        await page.locator(ageDropdown).selectOption({
-          value: childAges[i - 1].toString(),
-        });
+          for (let i = 1; i <= children; i++) {
+            const ageDropdown = HotelPageLocators.childrenAgeDropdown
+              .replace('{roomNo}', roomNo.toString())
+              .replace('{childIndex}', i.toString());
+            await page.locator(ageDropdown).selectOption({
+              value: childAges[i - 1].toString(),
+            });
+          }
+        }
+        console.log(' Room, adult, and children selection done');
       }
-    }
-    console.log(' Room, adult, and children selection done');
-  }
 
   static async clickAddRoomButton(page: any) {
     const addRoomButton = HotelPageLocators.addRoomButton;
@@ -656,8 +759,17 @@ static async clickDateButton(page: any) {
 
   static async clickOnDateInpoutEditFilterButton(page: any) {
     if(DeviceHelper.isMobile()) {
-      await ElementHelper.waitForElementVisible(page, HotelPageLocators.editFilterDateInputMobile);
-      await ElementHelper.clickElement(page, HotelPageLocators.editFilterDateInputMobile);
+        const CLIENT = process.env.CLIENT?.toUpperCase();
+        switch (CLIENT) {
+          case 'BOB':
+          console.log('⏭️ BOB: Skipping ');
+            break;
+      
+          case 'IDFC':
+                await ElementHelper.waitForElementVisible(page, HotelPageLocators.editFilterDateInputMobile);
+            await ElementHelper.clickElement(page, HotelPageLocators.editFilterDateInputMobile);
+          break;
+        }
     } else {
       const dateButton = HotelPageLocators.dateButton;
       await ElementHelper.clickElement(page, dateButton);
@@ -679,9 +791,20 @@ static async clickDateButton(page: any) {
       const whereToTextBox = HotelPageLocators.whereToTextBox;
       await VerificationHelpers.elementIsVisible(page, whereToTextBox);
       await ElementHelper.clickElement(page, HotelPageLocators.whereToTextBox);
-      const whereToTextBoxMobile = HotelPageLocators.whereToTextBoxMobile;
+
+        const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
+      await VerificationHelpers.elementIsVisible(page, whereToTextBox);
+      await ElementHelper.clearAndEnterInTextField(page, whereToTextBox, text);
+      break;
+ 
+    case 'IDFC':
+          const whereToTextBoxMobile = HotelPageLocators.whereToTextBoxMobile;
       await VerificationHelpers.elementIsVisible(page, whereToTextBoxMobile);
       await ElementHelper.clearAndEnterInTextField(page, whereToTextBoxMobile, text);
+    break;
+  }
     } else {
       const whereToTextBox = HotelPageLocators.whereToTextBox;
       await VerificationHelpers.elementIsVisible(page, whereToTextBox);

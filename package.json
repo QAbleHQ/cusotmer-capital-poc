@@ -46,6 +46,7 @@
     "test:tripstacc:bob:uat:webkit:headed": "cross-env PROJECT=tripstacc-webkit-UAT CLIENT=BOB HEADED=true npx playwright test TripStacc/tests",
     "test:tripstacc:idfc:uat:webkit:headed": "cross-env PROJECT=tripstacc-webkit-UAT CLIENT=IDFC HEADED=true npx playwright test TripStacc/tests",
 
+    
     "test:shopstacc:bobcard:qa": "cross-env CLIENT=BOBCARD PROJECT=shopstacc-chrome-QA npx playwright test ShopStacc/tests",
     "test:shopstacc:bobcard:uat": "cross-env CLIENT=BOBCARD PROJECT=shopstacc-chrome-UAT npx playwright test ShopStacc/tests",
 
