@@ -6,8 +6,8 @@
 
 # Test info
 
-- Name: ShopStacc/tests/Checkoutpage.test.ts >> SC_006, PDP — 'Buy Now' CTA redirects to Checkout page
-- Location: ShopStacc/tests/Checkoutpage.test.ts:24:5
+- Name: ShopStacc/tests/HomePage.test.ts >> SC_002, Home page — Trending Categories section visible and clickable
+- Location: ShopStacc/tests/HomePage.test.ts:22:5
 
 # Error details
 
