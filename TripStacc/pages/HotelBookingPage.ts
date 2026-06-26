@@ -16,7 +16,14 @@ export class HotelBookingPage {
     await page.locator(HotelPageLocators.firstRoomSelectButton).click();
     console.log('First room selection button clicked');
   }
-
+ static async clickRoomButton(page: any) {
+    const CLIENT = process.env.CLIENT?.toUpperCase();
+    if(DeviceHelper.isMobile() && CLIENT === 'IDFC'){
+    const roomSection = HotelPageLocators.roomSection;
+    await ElementHelper.clickElement(page, roomSection);
+    await page.waitForTimeout(5000);
+    }
+  }
   static async confirmRoomSelection(page: Page) {
     await page.locator(HotelPageLocators.roomSelectionConfirmationButton).click();
     console.log('Room selection confirmation button clicked');
