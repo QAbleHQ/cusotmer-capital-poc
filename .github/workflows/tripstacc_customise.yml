@@ -263,6 +263,8 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./playwright-report
+          destination_dir: tripstacc/${{ env.CLIENT }}-${{ env.ENVIRONMENT }}
+          keep_files: true
           user_name: github-actions[bot]
           user_email: github-actions[bot]@users.noreply.github.com
 
@@ -273,7 +275,7 @@ jobs:
           REPO="${{ github.repository }}"
           ORG=$(echo "$REPO" | cut -d'/' -f1)
           REPO_NAME=$(echo "$REPO" | cut -d'/' -f2)
-          URL="https://${ORG}.github.io/${REPO_NAME}/"
+          URL="https://${ORG}.github.io/${REPO_NAME}/tripstacc/${{ env.CLIENT }}-${{ env.ENVIRONMENT }}/"
           echo "url=$URL" >> "$GITHUB_OUTPUT"
           echo "### 📊 [View Playwright Report]($URL)" >> "$GITHUB_STEP_SUMMARY"
 
