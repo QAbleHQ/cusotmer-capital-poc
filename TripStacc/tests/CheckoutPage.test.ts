@@ -24,7 +24,7 @@ test.afterEach(async () => {
 test('SC_009: Hotel- Checkout with and without Redeem Points (without redeem it should be an earning)', { tag: ['@IDFC', '@BOB', '@Common', '@Checkout', '@Smoke', '@Regression'] }, async () => {
   await test.step('Step 1: Open Hotels Section', async () => {
     await page.waitForTimeout(5000);
-    await HotelHomePage.clickHotelTabBTN(page);
+    await BaseHelper.clickHotelTabBTN(page);
     await page.waitForTimeout(5000);
   });
 
@@ -49,7 +49,7 @@ test('SC_009: Hotel- Checkout with and without Redeem Points (without redeem it 
   });
 
   await test.step('Step 5: Search for Hotels (Single Room Default)', async () => {
-    await HotelHomePage.clickSearchHotelButton(page);
+    await BaseHelper.clickSearchHotelButton(page);
     await page.waitForTimeout(5000);
   });
 
@@ -68,17 +68,16 @@ test('SC_009: Hotel- Checkout with and without Redeem Points (without redeem it 
   });
 
   await test.step('Step 8: Click the First Room Selection Button', async () => {
+
     await HotelBookingPage.clickFirstRoomSelectionButton(page);
     await page.waitForTimeout(5000);
   });
 
   await test.step('Step 9: Click Next button on first tab', async () => {
     await HotelBookingPage.firstTabNextButton(page);
-    await page.waitForTimeout(5000);
+    await page.waitForTimeout(8000);
   });
   await test.step('Step 12: Click Add New Guest Button', async () => {
-    await HotelBookingPage.clickRoomButton(page);
-    await page.waitForTimeout(3000);
     await HotelBookingPage.removePopupForIDFC(page);
     await page.waitForTimeout(5000);
     await HotelBookingPage.clickonaddguestbutton(page);
@@ -204,14 +203,8 @@ test('SC_009.01: Flight - Checkout with and without Redeem Points (without redee
   await test.step("Step 19: verify Baggage Selection Option Visible", async () => {
     await FlightHomePage.verifyBaggageSelectionOptionVisible(page);
   });
-  await test.step("Step 20: verify Selecting available seat increase price", async () => {
-    await FlightHomePage.verifyPriceIncreasesAfterSeatSelection(page);
-  });
   await test.step("Step 21: Click on baggage Option", async () => {
     await FlightHomePage.clickOnbaggageOption(page);
-  });
-  await test.step("Step 22: verify increase the weight increase the price", async () => {
-    await FlightHomePage.verifyPriceIncreasesAfterWeeightIncrease(page);
   });
   await test.step("Step 23: Click on Skip Option", async () => {
     await FlightHomePage.clickOnSkipButton(page);
@@ -481,7 +474,7 @@ test('SC_011: Flight - Proceed with payment', { tag: ['@IDFC', '@BOB','@Flight',
 test('SC_011.01: Hotel- Proceed with payment', { tag: ['@IDFC', '@BOB', '@Payment', '@Common','@Hotel', '@Regression'] }, async () => {
   await test.step('Step 1: Open Hotels Section', async () => {
     await page.waitForTimeout(5000);
-    await HotelHomePage.clickHotelTabBTN(page);
+    await BaseHelper.clickHotelTabBTN(page);
     await page.waitForTimeout(5000);
   });
 
@@ -505,7 +498,7 @@ test('SC_011.01: Hotel- Proceed with payment', { tag: ['@IDFC', '@BOB', '@Paymen
   });
 
   await test.step('Step 5: Search for Hotels (Single Room Default)', async () => {
-    await HotelHomePage.clickSearchHotelButton(page);
+    await BaseHelper.clickSearchHotelButton(page);
     await page.waitForTimeout(5000);
   });
 

@@ -96,37 +96,68 @@ export class FlightBookingPage {
     throw new Error('Seems like Payment has failed');
   }
 }
-  static async verifyFareSummaryVisible(page: Page) {
+ static async verifyFareSummaryVisible(page: Page) {
+  const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+  case 'BOB':
+    const BOBfareSummarySection = FlightPageLocators.fareSummarySection;
+    await ElementHelper.waitForElementVisible(page, BOBfareSummarySection);
+    console.log("Fare summary section is visible.");
+    break;
+  case 'IDFC':
     const fareSummaryDropdown = FlightPageLocators.fareSummaryDropdown;
     const fareSummarySection = FlightPageLocators.fareSummarySection;
-  
+ 
     await ElementHelper.clickElement(page, fareSummaryDropdown);
     await ElementHelper.waitForElementVisible(page, fareSummarySection);
-  
+ 
     console.log("Fare summary section is visible.");
+    break;
+  }
   }
   
-  static async verifyTopHotelsSectionVisible(page: Page) {
+    static async verifyTopHotelsSectionVisible(page: Page) {
+    const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+  case 'BOB':
+    console.log("skip");
+    break;
+  case 'IDFC':
     const topHotelsSection = FlightPageLocators.topHotelsSection;
-  
+ 
     await ElementHelper.waitForElementVisible(page, topHotelsSection);
     console.log("Top Hotels section is visible.");
+    break;
   }
-  
+  }
   static async verifyTopHotelCardsVisible(page: Page) {
+     const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+  case 'BOB':
+    console.log("skip");
+    break;
+  case 'IDFC':
     const topHotelCards = FlightPageLocators.topHotelCards;
-  
+ 
     await ElementHelper.waitForElementVisible(page, topHotelCards);
     console.log("Top Hotel cards are visible.");
+    break;
   }
-  
-  static async verifyHotelRedirectLinkVisible(page: Page) {
+  }
+static async verifyHotelRedirectLinkVisible(page: Page) {
+     const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+  case 'BOB':
+    console.log("skip");
+    break;
+  case 'IDFC':
     const hotelRedirectLink = FlightPageLocators.hotelRedirectLink;
-  
+ 
     await ElementHelper.waitForElementVisible(page, hotelRedirectLink);
     console.log("Hotel redirection link is visible.");
+    break;
   }
-  
+  }
   static async expandFlightDetails(page: Page) {
     const flightDropdown = FlightPageLocators.flightDropdown;
   

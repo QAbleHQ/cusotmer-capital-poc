@@ -13,6 +13,8 @@ export const FlightPageLocators = {
   currentMonth: `//span[@class='ui-datepicker-month']`,
   currentYear: `//span[@class='ui-datepicker-year']`,
   nextMonthButton: `//a[@data-handler='next']`,
+  fareSummaryDropdown: `//ul[@class='text-list']`,
+  hotelName: `xpath=(//div[@class='hotl_detls']//h4)[1] | //div[@class="hotel_title"]//h5`,
   prevButton: `//a[@title='Prev']`,
   dateCell: (day: string) => `//td[@data-handler='selectDay']//a[text()='${day}']`,
   VerifyOneWayRoundTripCalendar: `//div[@id="fare_calendar_wrapper"]`,
@@ -130,10 +132,8 @@ export const FlightPageLocators = {
   arrivalCity: `(//p[@class='flt_cityname'])[2]`,
   departureTime: `(//p[@class='flt_time'])[1]`,
   arrivalTime: `(//p[@class='flt_time'])[2]`,
-  hotelName: `( //div[@class='hotl_detls']//h4)[1]`,
-  hotelAddress: `(//div[@class='hotl_detls']//p)[1]`,
-  fareSummaryDropdown: `//ul[@class='text-list']`,
-  fareSummarySection: `//div[contains(@class,'expand-box')]`,
+  hotelAddress: `(//div[@class='hotl_detls']//p)[1] | //div[@class="hotel_title"]//p`,
+  fareSummarySection: `//div[contains(@class,'expand-box')] | //div[contains(@id,"collapseExample")]`,
   fareSummaryItems: `//ul[@class='text-list']//li`,
   topHotelsSection: `//a[@class='book_hotel_click']`,
   topHotelCards: `//div[@class='hotal_crd_sec']`,
@@ -173,5 +173,6 @@ export const FlightPageLocators = {
   doneTravellerAndCabinButtonMobile: `//a[@class="done1 comnbtn_room1"]`,
   filterButtonMobileForBOB: `//li[@class="sortli filt_mob filter_tab"]`,
   exprieYear: `//select[@class="ui-datepicker-year"]`,
+  
 
 };

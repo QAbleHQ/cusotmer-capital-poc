@@ -14,20 +14,6 @@ export class HotelHomePage {
     await expect(page.locator(HotelPageLocators.profileIconButton)).toBeVisible();
     console.log("User redirected to homepage successfully");
   }
-
-  static async clickHotelTabBTN(page: Page) {
-    await page.waitForTimeout(10000);
-    if(DeviceHelper.isMobile()) {
-      const hotelTabBTN = HotelPageLocators.hotelTabMobile;
-      await ElementHelper.scrollElementToCentre(page, hotelTabBTN);
-      await page.waitForTimeout(2000);
-      await ElementHelper.clickElement(page, hotelTabBTN);
-    } else {
-      const hotelTabBTN = HotelPageLocators.hotelTab;
-      await ElementHelper.clickElement(page, hotelTabBTN);
-    }
-  }
-
   static async verifyHotelTabBtnDisplayed(page: Page) {
     if(DeviceHelper.isMobile()) {
       const hotelTabBTN = HotelPageLocators.hotelTabMobile;
@@ -231,16 +217,6 @@ static async clickDateButton(page: any) {
       await ElementHelper.isElementDisplayed(page, clickButton);
     }
     console.log(" Rooms and Guests button displayed");
-  }
-
-  static async clickSearchHotelButton(page: any) {
-    const searchHotelButton = HotelPageLocators.searchHotelButton;
-    await ElementHelper.scrollElementToCentre(page, searchHotelButton);
-    await page.focus(searchHotelButton);
-        await page.waitForTimeout(500); 
-    await ElementHelper.clickElement(page, searchHotelButton);
-    await page.waitForTimeout(5000); 
-    console.log(" Search Hotel button clicked");
   }
 
   static async selectMonthAndDateFROM(page: any, monthYear: string, date: string) {

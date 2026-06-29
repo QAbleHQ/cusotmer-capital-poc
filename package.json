@@ -63,7 +63,10 @@
     "test:shopstacc:bobcard:qa:firefox:headed": "cross-env CLIENT=BOBCARD PROJECT=shopstacc-firefox-QA HEADED=true npx playwright test ShopStacc/tests",
     
     "npm run test:tripstacc:idfc:uat:headed -- --grep IDFC": "Executes TripStacc IDFC UAT (headed mode) with IDFC tag",
-    "npm run test:tripstacc:idfc:uat:headed -- --last-failed": "Retries only failed TripStacc IDFC UAT (headed mode):"
+    "npm run test:tripstacc:idfc:uat:headed -- --last-failed": "Retries only failed TripStacc IDFC UAT (headed mode):",
+
+    "test:tripstacc:bob:uat:loginpage:headed": "cross-env PROJECT=tripstacc-chrome-UAT-loginpage CLIENT=BOB HEADED=true npx playwright test"
+    
   },
 
   "keywords": [],

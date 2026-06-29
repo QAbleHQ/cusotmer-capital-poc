@@ -23,7 +23,7 @@ test('SC_015: Hotel Search', { tag: ['@IDFC', '@BOB', '@Common', '@Homepagehotel
   await test.step('Step 1: Open Hotels Section', async () => {
     await HotelHomePage.verifyHotelTabBtnDisplayed(page);
     await page.waitForTimeout(500);
-    await HotelHomePage.clickHotelTabBTN(page);
+    await BaseHelper.clickHotelTabBTN(page);
     await page.waitForTimeout(500);
   });
 
@@ -69,7 +69,7 @@ test('SC_015: Hotel Search', { tag: ['@IDFC', '@BOB', '@Common', '@Homepagehotel
   });
 
   await test.step('Step 6: Click Search Hotels', async () => {
-    await HotelHomePage.clickSearchHotelButton(page);
+    await BaseHelper.clickSearchHotelButton(page);
     await page.waitForTimeout(500);
   });
 
@@ -83,7 +83,7 @@ test('SC_015.01: Hotel Search - Domestic vs International Options', { tag: ['@ID
   await test.step('Step 1: Open Hotels Section', async () => {
     await HotelHomePage.verifyHotelTabBtnDisplayed(page);
     await page.waitForTimeout(500);
-    await HotelHomePage.clickHotelTabBTN(page);
+    await BaseHelper.clickHotelTabBTN(page);
     await page.waitForTimeout(500);
   });
 
@@ -102,7 +102,7 @@ test('SC_015.01: Hotel Search - Domestic vs International Options', { tag: ['@ID
 
   await test.step('Step 4: Search with Selected Domestic Hotel', async () => {
     await page.waitForTimeout(500);
-    await HotelHomePage.clickSearchHotelButton(page);
+    await BaseHelper.clickSearchHotelButton(page);
     await page.waitForTimeout(500);
   });
 
@@ -122,7 +122,7 @@ test('SC_015.01: Hotel Search - Domestic vs International Options', { tag: ['@ID
 
     await test.step('Step 7: Open Hotels Section', async () => {
     await page.waitForTimeout(500);
-    await HotelHomePage.clickHotelTabBTN(page);
+   await BaseHelper.clickHotelTabBTN(page);
     await page.waitForTimeout(500);
     await page.waitForLoadState('domcontentloaded')
   });
@@ -140,7 +140,7 @@ test('SC_015.01: Hotel Search - Domestic vs International Options', { tag: ['@ID
 
   await test.step('Step 10: Search with Selected International Hotel', async () => {
     await page.waitForTimeout(500);
-    await HotelHomePage.clickSearchHotelButton(page);
+    await BaseHelper.clickSearchHotelButton(page);
     await page.waitForTimeout(500);
   });
 
@@ -157,7 +157,7 @@ test('SC_015.02: Verify Room Pricing - Single vs Multiple Rooms', { tag: ['@IDFC
   await page.waitForTimeout(500);
   await test.step('Step 1: Open Hotels Section', async () => {
     await page.waitForTimeout(500);
-    await HotelHomePage.clickHotelTabBTN(page);
+   await BaseHelper.clickHotelTabBTN(page);
     await page.waitForTimeout(500);
   });
 
@@ -175,7 +175,7 @@ test('SC_015.02: Verify Room Pricing - Single vs Multiple Rooms', { tag: ['@IDFC
 
   await test.step('Step 4: Search for Hotels after selecting valid date range (Single Room Default)', async () => {
     await page.waitForTimeout(500);
-    await HotelHomePage.clickSearchHotelButton(page);
+    await BaseHelper.clickSearchHotelButton(page);
     await page.waitForTimeout(5000);
     await HotelHomePage.clickOnEditFilterButton(page);
     await page.waitForTimeout(500);
@@ -228,7 +228,7 @@ test('SC_015.03: Search with custom Adult & Child combinations', { tag: ['@IDFC'
   await page.waitForTimeout(500);
   await test.step('Step 1: Open Hotels Section', async () => {
     await page.waitForTimeout(500);
-    await HotelHomePage.clickHotelTabBTN(page);
+   await BaseHelper.clickHotelTabBTN(page);
     await page.waitForTimeout(500);
   });
 
@@ -270,7 +270,7 @@ test('SC_015.03: Search with custom Adult & Child combinations', { tag: ['@IDFC'
 
   await test.step('Step 7: Search for Hotels with selected guest configuration', async () => {
     await page.waitForTimeout(500);
-    await HotelHomePage.clickSearchHotelButton(page);
+    await BaseHelper.clickSearchHotelButton(page);
     await page.waitForTimeout(500);
   });
 
@@ -328,7 +328,7 @@ test('SC_016: Filter/Sorting and Room Selection', { tag: ['@IDFC', '@BOB', '@Com
   await page.waitForTimeout(500);
   await test.step('Step 1: Open Hotels Section', async () => {
     await page.waitForTimeout(500);
-    await HotelHomePage.clickHotelTabBTN(page);
+   await BaseHelper.clickHotelTabBTN(page);
     await page.waitForTimeout(500);
   });
 
@@ -368,7 +368,7 @@ test('SC_016: Filter/Sorting and Room Selection', { tag: ['@IDFC', '@BOB', '@Com
 
   await test.step('Step 5: Click Search Hotels', async () => {
     await page.waitForTimeout(500);
-    await HotelHomePage.clickSearchHotelButton(page);
+    await BaseHelper.clickSearchHotelButton(page);
     await page.waitForTimeout(500);
   });
 
@@ -462,7 +462,7 @@ test('SC_016.01: Update Search', { tag: ['@IDFC', '@BOB', '@Common', '@Homepageh
   await page.waitForTimeout(500);
   await test.step('Step 1: Open Hotels Section', async () => {
     await page.waitForTimeout(500);
-    await HotelHomePage.clickHotelTabBTN(page);
+    await BaseHelper.clickHotelTabBTN(page);
     await page.waitForTimeout(500);
   });
 
@@ -502,7 +502,7 @@ test('SC_016.01: Update Search', { tag: ['@IDFC', '@BOB', '@Common', '@Homepageh
 
   await test.step('Step 5: Click Search Hotels', async () => {
     await page.waitForTimeout(500);
-    await HotelHomePage.clickSearchHotelButton(page);
+    await BaseHelper.clickSearchHotelButton(page);
     await page.waitForTimeout(500);
   });
 
@@ -535,7 +535,7 @@ test('SC_017: Add Guest Details and Update Guest Details', { tag: ['@IDFC', '@BO
   await page.waitForTimeout(5000);
   await test.step('Step 1: Open Hotels Section', async () => {
     await page.waitForTimeout(5000);
-    await HotelHomePage.clickHotelTabBTN(page);
+   await BaseHelper.clickHotelTabBTN(page);
     await page.waitForTimeout(1000);
   });
 
@@ -563,7 +563,7 @@ test('SC_017: Add Guest Details and Update Guest Details', { tag: ['@IDFC', '@BO
 
   await test.step('Step 5: Search for Hotels (Single Room Default)', async () => {
     await page.waitForTimeout(5000);
-    await HotelHomePage.clickSearchHotelButton(page);
+    await BaseHelper.clickSearchHotelButton(page);
     await page.waitForTimeout(1000);
   });
 
@@ -678,7 +678,7 @@ test('SC_018: Domestic booking without PAN and international booking with PAN', 
   await page.waitForTimeout(5000);
   await test.step('Step 1: Open Hotels Section', async () => {
     await page.waitForTimeout(5000);
-    await HotelHomePage.clickHotelTabBTN(page);
+    await BaseHelper.clickHotelTabBTN(page);
     await page.waitForTimeout(1000);
   });
 
@@ -706,7 +706,7 @@ test('SC_018: Domestic booking without PAN and international booking with PAN', 
 
   await test.step('Step 5: Search for Hotels (Single Room Default)', async () => {
     await page.waitForTimeout(5000);
-    await HotelHomePage.clickSearchHotelButton(page);
+    await BaseHelper.clickSearchHotelButton(page);
     await page.waitForTimeout(1000);
   });
 
@@ -765,7 +765,7 @@ test('SC_018: Domestic booking without PAN and international booking with PAN', 
   await test.step('Step 15: Open Hotels Section', async () => {
     await page.waitForLoadState('domcontentloaded')
     await page.waitForTimeout(2000);
-    await HotelHomePage.clickHotelTabBTN(page);
+   await BaseHelper.clickHotelTabBTN(page);
     await page.waitForTimeout(500);
   });
 
@@ -793,7 +793,7 @@ test('SC_018: Domestic booking without PAN and international booking with PAN', 
 
   await test.step('Step 19: Search for Hotels (Single Room Default)', async () => {
     await page.waitForTimeout(5000);
-    await HotelHomePage.clickSearchHotelButton(page);
+    await BaseHelper.clickSearchHotelButton(page);
     await page.waitForTimeout(5000);
     await HotelBookingPage.searchHotelNameInTestBox(page, Data.hotelPage.searcHotelNameInternational);
     await page.waitForTimeout(3000);
