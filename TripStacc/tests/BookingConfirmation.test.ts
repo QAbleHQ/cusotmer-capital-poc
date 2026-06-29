@@ -140,7 +140,7 @@ test('SC_012: Booking Confirmation Page: Flight (Confirmed/Pending/Failed)', { t
   test('SC_012.01: Booking Confirmation for Hotel', { tag: ['@IDFC', '@BOB', '@Common', '@Payment','@Hotel', '@Regression'] }, async () => {
    await test.step('Step 1: Open Hotels Section', async () => {
       await page.waitForTimeout(5000);
-      await HotelHomePage.clickHotelTabBTN(page);
+      await BaseHelper.clickHotelTabBTN(page);
       await page.waitForTimeout(5000);
     });
   
@@ -164,7 +164,7 @@ test('SC_012: Booking Confirmation Page: Flight (Confirmed/Pending/Failed)', { t
     });
   
     await test.step('Step 5: Search for Hotels (Single Room Default)', async () => {
-      await HotelHomePage.clickSearchHotelButton(page);
+      await BaseHelper.clickSearchHotelButton(page);
       await page.waitForTimeout(5000);
     });
   

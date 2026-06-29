@@ -12,10 +12,20 @@ import { CommonHelper } from '../../utils/commonHelper';
 import { VerificationHelpers } from '../../utils/verificationHelper';
 
 export class HotelBookingPage {
-  static async clickFirstRoomSelectionButton(page: Page) {
-    await page.locator(HotelPageLocators.firstRoomSelectButton).click();
-    console.log('First room selection button clicked');
+ static async clickFirstRoomSelectionButton(page: Page) {
+  const CLIENT = process.env.CLIENT?.toUpperCase();
+
+  switch (CLIENT) {
+    case 'IDFC':
+      await page.locator(HotelPageLocators.firstRoomSelectButton).click();
+      console.log('First room selection button clicked');
+      break;
+
+    default:
+      console.warn(`No need to handle for this client`);
+      break;
   }
+}
  static async clickRoomButton(page: any) {
     const CLIENT = process.env.CLIENT?.toUpperCase();
     if(DeviceHelper.isMobile() && CLIENT === 'IDFC'){
@@ -279,11 +289,13 @@ export class HotelBookingPage {
     await ElementHelper.clickElement(page, checkboxLocator);
     console.log('Checkbox after redeem action clicked');
   }
+
 static async clickonaddguestbutton(page: Page) {
   const CLIENT = process.env.CLIENT?.toUpperCase();
 
+ 
   if (CLIENT === 'BOB') {
-    console.log('Skipping Add Guest button for BOB');
+    console.log('Skipping Add Guest button for BOB / IDFC');
     return;
   }
 
@@ -291,6 +303,7 @@ static async clickonaddguestbutton(page: Page) {
   await ElementHelper.clickElement(page, checkboxLocator);
   console.log('Add Guest button clicked');
 }
+
 
   static async fillGuestDetailsInsideForm(page: any) {
   const CLIENT = process.env.CLIENT?.toUpperCase();
