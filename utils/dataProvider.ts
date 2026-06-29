@@ -2,16 +2,17 @@ const PRODUCT =
   process.env.PROJECT?.split('-')[0]?.toLowerCase() || 'tripstacc';
 
 // Map lowercase product name to actual camelCase filename
-const FILE_MAP: Record<string, string> = {
-  tripstacc: 'tripStacc',
-  shopstacc: 'shopStacc',
+const PATH_MAP: Record<string, string> = {
+  tripstacc: '../TripStacc/testData/tripStacc.json',
+  shopstacc: '../ShopStacc/testData/shopStacc.json',
 };
-const filename = FILE_MAP[PRODUCT] ?? PRODUCT;
 
 let testData: any;
 
 try {
-  testData = require(`../testdata/${filename}.json`);
+  const dataPath = PATH_MAP[PRODUCT];
+  if (!dataPath) throw new Error();
+  testData = require(dataPath);
 } catch {
   throw new Error(`❌ JSON not found for product: ${PRODUCT}`);
 }

@@ -1,7 +1,7 @@
 import { expect, Page } from '@playwright/test';
 import { PaymentPageLocators } from '../../TripStacc/locators/PaymentPageLocators';
 import { ElementHelper } from '../../utils/elementHelper';
-const idfcTestData = require('../../testdata/tripStacc.json');
+const idfcTestData = require('../testData/tripStacc.json');
 import { DeviceHelper } from '../../utils/deviceHelper';
 import { VerificationHelpers } from '../../utils/verificationHelper';
 import { Data } from '../../utils/dataProvider';

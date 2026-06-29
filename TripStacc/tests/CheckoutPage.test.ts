@@ -2,7 +2,7 @@ import { test, Page, BrowserContext } from '@playwright/test';
 import { HotelHomePage } from '../pages/HotelHomePage';
 import { HotelBookingPage } from '../pages/HotelBookingPage';
 import { PaymentPage } from '../pages/PaymentPage';
-const idfcTestData = require('../../testdata/tripStacc.json');
+const idfcTestData = require('../testData/tripStacc.json');
 import { BaseHelper } from '../pages/CommonMethods';
 import { Data } from '../../utils/dataProvider';
 import { FlightHomePage } from '../pages/FlightHomePage';

@@ -167,6 +167,36 @@ jobs:
           retention-days: 30
           if-no-files-found: ignore
 
+      - name: Ensure playwright-report exists
+        if: always()
+        run: |
+          if [ ! -f "playwright-report/index.html" ]; then
+            mkdir -p playwright-report
+            echo "<html><body><h2>No report generated for run ${{ github.run_id }}</h2></body></html>" > playwright-report/index.html
+          fi
+
+      - name: Deploy report to GitHub Pages
+        if: always()
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./playwright-report
+          destination_dir: shopstacc/BOBCARD-${{ env.ENVIRONMENT }}
+          keep_files: true
+          user_name: github-actions[bot]
+          user_email: github-actions[bot]@users.noreply.github.com
+
+      - name: Set report URL
+        if: always()
+        id: report-url
+        run: |
+          REPO="${{ github.repository }}"
+          ORG=$(echo "$REPO" | cut -d'/' -f1)
+          REPO_NAME=$(echo "$REPO" | cut -d'/' -f2)
+          URL="https://${ORG}.github.io/${REPO_NAME}/shopstacc/BOBCARD-${{ env.ENVIRONMENT }}/"
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
+          echo "### 📊 [View Playwright Report]($URL)" >> "$GITHUB_STEP_SUMMARY"
+
       - name: Send email report
         if: always()
         continue-on-error: true
@@ -176,13 +206,13 @@ jobs:
           server_port: 587
           username: ankitpatel@qable.io
           password: zjwtgkflbwczqrpb
-          subject: "[${{ steps.stats.outputs.status }}] ShopStacc BOBCard ${{ env.ENVIRONMENT }}${{ env.FEATURE_TAG && format(' @{0}', env.FEATURE_TAG) || '' }} — Playwright Report"
+          subject: "[${{ steps.stats.outputs.status }}] ShopStacc BOBCard ${{ env.ENVIRONMENT }} [${{ env.BROWSER }}/Web]${{ env.FEATURE_TAG && format(' @{0}', env.FEATURE_TAG) || '' }} — Playwright Report"
           to: aneri.patel@qable.io, nikunj.trivedi@qable.io, 1ee687f3.linearloop.io@in.teams.ms
           from: ankitpatel@qable.io
           html_body: |
             <div style="font-family:Arial,sans-serif;max-width:600px;margin:auto">
               <h2 style="background:${{ steps.stats.outputs.status == 'FAILED' && '#cc0000' || '#00b300' }};color:#fff;padding:12px 16px;border-radius:4px;margin:0">
-                ${{ steps.stats.outputs.status == 'FAILED' && '🔴' || '🟢' }} ShopStacc BOBCard ${{ env.ENVIRONMENT }}${{ env.FEATURE_TAG && format(' @{0}', env.FEATURE_TAG) || '' }}
+                ${{ steps.stats.outputs.status == 'FAILED' && '🔴' || '🟢' }} ShopStacc BOBCard ${{ env.ENVIRONMENT }} [${{ env.BROWSER }}/Web]${{ env.FEATURE_TAG && format(' @{0}', env.FEATURE_TAG) || '' }}
               </h2>
               <table width="100%" cellpadding="8" cellspacing="0" style="border-collapse:collapse;border:1px solid #ddd">
                 <tr><td style="background:#f5f5f5;font-weight:bold;width:140px">Status</td><td>${{ steps.stats.outputs.status == 'FAILED' && '❌ FAILED' || '✅ PASSED' }}</td></tr>
@@ -197,7 +227,9 @@ jobs:
                 <tr><td style="font-weight:bold">Triggered by</td><td>${{ github.actor }}</td></tr>
               </table>
               <p style="margin-top:16px">
-                <a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" style="background:#0066cc;color:#fff;padding:10px 18px;border-radius:4px;text-decoration:none;font-weight:bold">🔗 View Run</a>
+                <a href="${{ steps.report-url.outputs.url }}" style="background:#0066cc;color:#fff;padding:10px 18px;border-radius:4px;text-decoration:none;font-weight:bold">📊 View Playwright Report</a>
+                &nbsp;
+                <a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" style="background:#555;color:#fff;padding:10px 18px;border-radius:4px;text-decoration:none;font-weight:bold">🔗 View Run</a>
               </p>
             </div>
 

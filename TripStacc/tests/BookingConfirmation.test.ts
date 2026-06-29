@@ -3,7 +3,7 @@ import { FlightBookingPage } from '../pages/FlightBookingPage';
 import { PaymentPage } from '../pages/PaymentPage';
 import { FlightHomePage } from '../pages/FlightHomePage';
 import { HotelBookingPage } from '../pages/HotelBookingPage';
-const idfcTestData = require('../../testdata/tripStacc.json');
+const idfcTestData = require('../testData/tripStacc.json');
 import { BaseHelper } from '../pages/CommonMethods';
 import { Data } from '../../utils/dataProvider';
 import { HotelHomePage } from '../pages/HotelHomePage';

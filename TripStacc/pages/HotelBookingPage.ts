@@ -2,7 +2,7 @@ import { expect, Page } from '@playwright/test';
 import { HotelPageLocators } from '../../TripStacc/locators/HotelPageLocators';
 import { ElementHelper } from '../../utils/elementHelper';
 import { PaymentPageLocators } from '../../TripStacc/locators/PaymentPageLocators';
-const idfcTestData = require('../../testdata/tripStacc.json');
+const idfcTestData = require('../testData/tripStacc.json');
 import { DeviceHelper } from '../../utils/deviceHelper';
 import { FlightHomePage } from './FlightHomePage';
 import { FlightPageLocators } from '../../TripStacc/locators/FlightPageLocators';

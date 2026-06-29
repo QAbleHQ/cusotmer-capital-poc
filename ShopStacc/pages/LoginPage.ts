@@ -1,7 +1,7 @@
 import { expect, Page } from '@playwright/test';
 import { LoginPageLocators } from '../locators/LoginPageLocators';
 import { ElementHelper } from '../../utils/elementHelper';
-import bobTestData from '../../testdata/shopStacc.json';
+import bobTestData from '../testData/shopStacc.json';
 import { Data } from '../../utils/dataProvider';
 
 export class LoginPage {
