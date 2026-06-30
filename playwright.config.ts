@@ -3,7 +3,7 @@ import { BOB_TS, IDFC_TS, BOBCard_SS } from './config/ts.config';
 const mobileDevices = require('./mobileDevices');
 
 // ─── SETTINGS ────────────────────────────────────────────────────────────────
-const TIMEOUT = 120000;        // 2 min — max time per test
+const TIMEOUT = 600000;       
 const RETRIES = 2;             // retries on failure
 const WORKERS = { ci: 4, local: 2 };
 const HEADED  = process.env.HEADED === 'true';

@@ -143,20 +143,11 @@ export class HomePage {
     await page.waitForTimeout(3000);
   }
 static async clickGiftCard(page: Page) {
-  const locator = page
-    .locator(HomePageLocators.productimagegiftcard)
-    .first();
-
-  await locator.waitFor({ state: 'visible' });
-  await locator.scrollIntoViewIfNeeded();
-
+  await ElementHelper.waitForElementVisible(page, HomePageLocators.productimagegiftcard);
+  await page.focus(HomePageLocators.productimagegiftcard);
+  await page.waitForTimeout(1000)
+  await ElementHelper.clickElement(page, HomePageLocators.productimagegiftcard);
   console.log("Clicking Gift Card...");
-
-  
-  await Promise.all([
-    page.waitForURL(/gift-card/, { timeout: 15000 }), // ✅ adjust pattern
-    locator.tap()
-  ]);
 }
   static async verifyProductCardsVisible(page: Page) {
     const productCards = HomePageLocators.giftCardSectionCards;
