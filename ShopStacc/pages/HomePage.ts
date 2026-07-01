@@ -149,6 +149,17 @@ static async clickGiftCard(page: Page) {
   await ElementHelper.clickElement(page, HomePageLocators.productimagegiftcard);
   console.log("Clicking Gift Card...");
 }
+static async waitForHeader(page:Page) {
+  const header = page.locator(HomePageLocators.navigationheader);
+
+  if (await header.isVisible({ timeout: 10000 }).catch(() => false)) {
+    console.log("✅ Navigation Header visible");
+    return header;
+  } else {
+    console.log("❌ Header not visible - homepage not loaded");
+    throw new Error("Header not found");
+  }
+}
   static async verifyProductCardsVisible(page: Page) {
     const productCards = HomePageLocators.giftCardSectionCards;
     const count = await page.locator(productCards).count();
