@@ -37,5 +37,5 @@ export const HomePageLocators = {
     getPricingAndCompareMobile: `//div[@id="ctl00_ContentPlaceHolder1_repspecialv2_ctl00_mrp"]//p`,
     bugerMenuMobile: `//div[@id="burger"]`,
     giftCardOptionMobile: `(//li[@class="menu-item menu-dropdown"]//a//img)[2]`,
-    navigationheader: "//div[contains(@class, 'd-flex justify-content-between top-menu')"
+    navigationheader: `//div[contains(@class, "d-flex justify-content-between top-menu")]`
 };
