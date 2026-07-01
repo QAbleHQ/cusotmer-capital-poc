@@ -153,10 +153,18 @@ static async clickGiftCard(page: Page) {
 static async waitForHeader(page: Page) {
   const header = page.locator(HomePageLocators.navigationheader);
 
-  await header.waitFor({ state: 'visible', timeout: 0 });
+  try {
+    await header.waitFor({ state: 'visible', timeout: 30000 });
+  } catch {
+    console.log("⚠️ Header not visible, refreshing page...");
+    await page.reload();
+
+    // try again (wait indefinitely after refresh)
+    await header.waitFor({ state: 'visible', timeout: 0 });
+  }
 
   console.log("✅ Navigation Header visible");
- 
+  return header;
 }
   static async verifyProductCardsVisible(page: Page) {
     const productCards = HomePageLocators.giftCardSectionCards;
