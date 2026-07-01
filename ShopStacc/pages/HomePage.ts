@@ -151,20 +151,35 @@ static async clickGiftCard(page: Page) {
 }
 
 static async waitForHeader(page: Page) {
-  const header = page.locator(HomePageLocators.navigationheader);
+    const header = page.locator(HomePageLocators.navigationheader);
 
-  try {
-    await header.waitFor({ state: 'visible', timeout: 30000 });
-  } catch {
-    console.log("⚠️ Header not visible, refreshing page...");
-    await page.reload();
+    const maxAttempts = 6;
 
-    // try again (wait indefinitely after refresh)
-    await header.waitFor({ state: 'visible', timeout: 0 });
-  }
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+        try {
+            await page.waitForLoadState('domcontentloaded');
 
-  console.log("✅ Navigation Header visible");
-  return header;
+            await expect(header).toBeVisible({
+                timeout: 5000
+            });
+
+            console.log(`✅ Navigation Header visible on attempt ${attempt}`);
+            return header;
+
+        } catch (error) {
+            console.log(
+                `⚠️ Header not visible on attempt ${attempt}/${maxAttempts}`
+            );
+
+            if (attempt < maxAttempts) {
+                await page.waitForTimeout(2000);
+            }
+        }
+    }
+
+    throw new Error(
+        `Navigation Header was not visible after ${maxAttempts} attempts`
+    );
 }
   static async verifyProductCardsVisible(page: Page) {
     const productCards = HomePageLocators.giftCardSectionCards;
