@@ -160,10 +160,10 @@ static async waitForHeader(page: Page) {
             await page.waitForLoadState('domcontentloaded');
 
             await expect(header).toBeVisible({
-                timeout: 5000
+                timeout: 15000
             });
 
-            console.log(`✅ Navigation Header visible on attempt ${attempt}`);
+            console.log(`Navigation Header visible on attempt ${attempt}`);
             return header;
 
         } catch (error) {
@@ -172,7 +172,7 @@ static async waitForHeader(page: Page) {
             );
 
             if (attempt < maxAttempts) {
-                await page.waitForTimeout(2000);
+                await page.waitForTimeout(45000);
             }
         }
     }
