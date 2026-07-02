@@ -13,7 +13,6 @@ test.beforeEach(async ({ browser }) => {
   await LoginPage.LoginCredEnterBeforeEach(page);
   await LoginPage.RestrictionPageBeforeEach(page);
   await page.waitForLoadState('domcontentloaded');
-  await HomePage.waitForHeader(page);
 });
 
 test.afterEach(async () => {
@@ -24,6 +23,7 @@ test.afterEach(async () => {
 test('SC_002, Home page — Trending Categories section visible and clickable', { tag: ['@BOBCard', '@Homepage', '@Smoke', '@Sanity'] }, async () => {
 
   await test.step('Verify All homepage sections is visible: banner, categories, trending section Displayed', async () => {
+    await page.pause();
     await HomePage.verifyBannerSectionDisplayed(page);
     await HomePage.imgInsideBannerIsVisible(page);
     await HomePage.verifyCategorySectionDisplayed(page);
@@ -49,8 +49,8 @@ test("SC_004, Gift Card PLP — product card details and layout", { tag: ['@BOBC
 
   await test.step("Click Gift Card option", async () => {
     await page.waitForLoadState('domcontentloaded');
+    await HomePage.waitForHeader(page);
     await HomePage.clickGiftCardOption(page);
-
   });
 
   await test.step("Verify Gift Card PLP page is visible", async () => {

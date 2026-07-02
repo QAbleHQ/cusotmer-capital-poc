@@ -36,6 +36,7 @@ export const HomePageLocators = {
     getTitleAndCompareMobile: `//h1[@class="pro-name heading-desknone"]`,
     getPricingAndCompareMobile: `//div[@id="ctl00_ContentPlaceHolder1_repspecialv2_ctl00_mrp"]//p`,
     bugerMenuMobile: `//div[@id="burger"]`,
-    giftCardOptionMobile: `(//li[@class="menu-item menu-dropdown"]//a//img)[2]`,
-    navigationheader: `//div[contains(@class, "d-flex justify-content-between top-menu")]`
+    giftCardOptionMobile: `//img[contains(@onclick,'Gift Cards')]`,
+    navigationheader: `//div[contains(@class, "d-flex justify-content-between top-menu")]`,
+    navigationheaderMobile: `//ul[@id='menu']`,
 };

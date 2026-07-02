@@ -150,37 +150,67 @@ static async clickGiftCard(page: Page) {
   console.log("Clicking Gift Card...");
 }
 
-static async waitForHeader(page: Page) {
-    const header = page.locator(HomePageLocators.navigationheader);
+  static async waitForHeader(page: Page) {
+    if (DeviceHelper.isMobile()) {
+      await ElementHelper.waitForElementVisible(
+        page,
+        HomePageLocators.bugerMenuMobile
+      );
 
-    const maxAttempts = 6;
+      await ElementHelper.clickElement(
+        page,
+        HomePageLocators.bugerMenuMobile
+      );
 
-    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+      const header = page.locator(
+        HomePageLocators.navigationheaderMobile
+      );
+
+      await expect(header).toBeVisible({
+        timeout: 15000,
+      });
+
+      console.log('✅ Navigation Header is visible on mobile.');
+      return header;
+    } else {
+
+      // Desktop/Web flow
+      const header = page.locator(
+        HomePageLocators.navigationheader
+      );
+
+      const maxAttempts = 6;
+
+      for (let attempt = 1; attempt <= maxAttempts; attempt++) {
         try {
-            await page.waitForLoadState('domcontentloaded');
+          await page.waitForLoadState('domcontentloaded');
 
-            await expect(header).toBeVisible({
-                timeout: 15000
-            });
+          await expect(header).toBeVisible({
+            timeout: 15000,
+          });
 
-            console.log(`Navigation Header visible on attempt ${attempt}`);
-            return header;
+          console.log(
+            `✅ Navigation Header visible on attempt ${attempt}`
+          );
+
+          return header;
 
         } catch (error) {
-            console.log(
-                `⚠️ Header not visible on attempt ${attempt}/${maxAttempts}`
-            );
+          console.log(
+            `⚠️ Header not visible on attempt ${attempt}/${maxAttempts}`
+          );
 
-            if (attempt < maxAttempts) {
-                await page.waitForTimeout(45000);
-            }
+          if (attempt < maxAttempts) {
+            await page.waitForTimeout(45000);
+          }
         }
-    }
+      }
 
-    throw new Error(
+      throw new Error(
         `Navigation Header was not visible after ${maxAttempts} attempts`
-    );
-}
+      );
+    }
+  }
   static async verifyProductCardsVisible(page: Page) {
     const productCards = HomePageLocators.giftCardSectionCards;
     const count = await page.locator(productCards).count();
@@ -194,6 +224,7 @@ static async waitForHeader(page: Page) {
       await ElementHelper.clickElement(page, HomePageLocators.bugerMenuMobile);
       const giftCardOption = HomePageLocators.giftCardOptionMobile;
       await ElementHelper.waitForElementVisible(page, giftCardOption);
+      await page.waitForTimeout(2000);
       await page.locator(giftCardOption).click();
     } else {
       const giftCardOption = HomePageLocators.giftcardoption;
