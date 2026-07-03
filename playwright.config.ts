@@ -130,10 +130,16 @@ if (deviceName) {
           : undefined,
 
       headless: !HEADED,
-      viewport: null,
+      viewport: HEADED
+    ? null
+    : {
+       width: 1920,
+       height: 1080,
+},
 
       screenshot: 'only-on-failure',
       video: 'off',
+      trace: "only-on-failure",
 
       launchOptions:
         mappedBrowser === 'chromium'

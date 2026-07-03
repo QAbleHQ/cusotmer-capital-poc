@@ -13,6 +13,7 @@ test.beforeEach(async ({ browser }) => {
   await CommonHelper.navigateToHomePage(page);
   await LoginPage.LoginCredEnterBeforeEach(page);
   await LoginPage.RestrictionPageBeforeEach(page);
+  await page.waitForLoadState('domcontentloaded');
 });
 
 test.afterEach(async () => {
@@ -24,6 +25,7 @@ test("SC_006, PDP — 'Buy Now' CTA redirects to Checkout page", { tag: ['@BOBCa
 
   await test.step("Click Gift Card option", async () => {
     await page.waitForLoadState('domcontentloaded');
+    await HomePage.waitForHeader(page);
     await HomePage.clickGiftCardOption(page);
   });
 

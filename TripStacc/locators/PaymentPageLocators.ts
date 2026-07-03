@@ -8,7 +8,7 @@ export const PaymentPageLocators = {
   cardNumberField: "(//input[@id='cardNumber' or @name='card.number'])[1]",
   continuebtn:`//button[@class='flbookbtn extra_service_cont_btn']`,
   cardExpiryField: "(//input[@id='cardExpiry' or @name='card.expiry'])[1]",
-  continuebuttonbobpayment: `//button[@id="trigger_submit_form"]`,
+  continuebuttonbobpayment: `//button[@class="btn btn-success make-payment-btn"]`,
   cardCvvField: "(//input[@id='cardCvv' or @name='card.cvv'])[1]",
   cardownername: `//input[@id='cardOwnerName']`,
   payotp: `//input[@id='password']`,
@@ -29,7 +29,7 @@ export const PaymentPageLocators = {
   submitButton: `//input[@id='submitBtn']`,
   backIconButtonMobile: `//i[@class='back-btn']`,
   payNowButtonBob: `//a[@id='pay_btn_new'] | //button[@id='mobile_pay']`,
-  termsConditionCheckboxBob: `//label[@for='terms_cond1'] | //input[@id='terms_cond1']`,
+  termsConditionCheckboxBob: `//label[@for='terms_cond1']`,
   continueTravellerButtonBob: `//button[@id='redeem_pt_new']`,
   continueButtonBob: `(//button[contains(@class,'btn-primary')])[1]`,
   continuebtnbeforepayment: `(//button[@class='btn btn-primarycontinue'])[1]`,
@@ -50,5 +50,7 @@ export const PaymentPageLocators = {
   continueButton: `//button[contains(text(),'Continue')]`,
   maybeLaterButton: `//button[text()="Maybe later"]`,
   successButton: `//button[text()="Success"]`,
-  okButton: `//a[text()="OK"]`
+  okButton: `//a[text()="OK"]`,
+  contactmobileno:`//button[@data-testid='contact-sidebar-widget']`,
+  mobileNoInput: `(//span[@class='relative z-[5] ml-auto flex cursor-text items-center'])[1]`
 };

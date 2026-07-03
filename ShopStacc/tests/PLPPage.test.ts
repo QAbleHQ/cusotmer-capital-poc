@@ -13,6 +13,7 @@ test.beforeEach(async ({ browser }) => {
   await CommonHelper.navigateToHomePage(page);
   await LoginPage.LoginCredEnterBeforeEach(page);
   await LoginPage.RestrictionPageBeforeEach(page);
+  await page.waitForLoadState('domcontentloaded');
 });
 
 test.afterEach(async () => {
@@ -25,6 +26,7 @@ test("SC_005,Gift Card PDP - Verify details and actions", { tag: ['@BOBCard', '@
 
   await test.step("Click Gift Card option", async () => {
     await page.waitForLoadState('domcontentloaded');
+    await HomePage.waitForHeader(page);
     await HomePage.clickGiftCardOption(page);
   });
 

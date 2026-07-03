@@ -81,6 +81,7 @@ export const FlightPageLocators = {
   filterFirstAirlineInList: `(//div[@class="airline_filter_class"]//label)[2] | (//div[@id="allairlines"]//li//label)[2]`,
   filterFirstAirlineCheckboxInList: `(//div[@class="airline_filter_class"]//label)[1] | (//div[@id="allairlines"]//li//label)[1]`,
   nextButtonOnFlightDetailsPage: `//button[text()="Next"]`,
+  airlinenameOnFlightDetailsPage: `(//div[@class='a-n airlinename'])[1]`,
   bookNowButtonOnFlightDetailsPage: `(//div[@id="flight_search_result"]//button[text()="Book Now"])[2]`,
   bookButtonOnFairDetailsPage: `//div[@class="trip_body trip0  "]//button[text()="Book"] | (//div[@class="flightInforMain"]//a[contains(text(),"Book Now")])[1]`,
   continueButtonOnFlightDetailsPage: `//button[@id="move_to_pax_details_section"] | //button[@class="bookcont contin_servc_btn"]`,

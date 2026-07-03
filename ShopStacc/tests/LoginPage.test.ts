@@ -11,6 +11,7 @@ test.beforeEach(async ({ browser }) => {
   context = await browser.newContext();
   page = await context.newPage();
   await CommonHelper.navigateToHomePage(page);
+  
 
 });
 test.afterEach(async () => {
