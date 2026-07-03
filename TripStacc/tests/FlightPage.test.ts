@@ -10,6 +10,7 @@ test.beforeEach(async ({ browser }) => {
   context = await browser.newContext();
   page = await context.newPage();
   await BaseHelper.launchAndLogin(page);
+  await page.waitForLoadState('domcontentloaded');
 });
 
 test.afterEach(async () => {
@@ -20,7 +21,7 @@ test.afterEach(async () => {
 test('SC_003: Search ', { tag: ['@IDFC', '@BOB','@Test' ,'@Common', '@Homepageflight', '@Smoke', '@Sanity', '@Regression'] }, async () => {
   await test.step("Step 1: Enter City From Airport", async () => {
     await FlightHomePage.clickOnCityFromAirport(page);
-    //await FlightHomePage.EnterCityFromAirport(page, Data.flightPage.enterCityFrom);
+    await FlightHomePage.EnterCityFromAirport(page, Data.flightPage.enterCityFrom);
   })
 
   await test.step("Step 2: Verify From Airport Dropdown Visible", async () => {
@@ -722,7 +723,7 @@ test('SC_004: Filter/Sorting and Flight Selection with Fare Type ', { tag: ['@ID
   });
 
   await test.step("Step 53: Verify Filtered Airlines", async () => {
-    await FlightHomePage.verifyFilteredAirlines(page);
+     await FlightHomePage.verifyFilteredAirlines(page);
   });
 
 });

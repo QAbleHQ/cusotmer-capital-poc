@@ -23,7 +23,6 @@ test.afterEach(async () => {
 test('SC_002, Home page — Trending Categories section visible and clickable', { tag: ['@BOBCard', '@Homepage', '@Smoke', '@Sanity'] }, async () => {
 
   await test.step('Verify All homepage sections is visible: banner, categories, trending section Displayed', async () => {
-    await page.pause();
     await HomePage.verifyBannerSectionDisplayed(page);
     await HomePage.imgInsideBannerIsVisible(page);
     await HomePage.verifyCategorySectionDisplayed(page);
