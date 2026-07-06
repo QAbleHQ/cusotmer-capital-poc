@@ -341,8 +341,8 @@ static async clickonaddguestbutton(page: Page) {
       await ElementHelper.clickElement(page, HotelPageLocators. assignGuestToRoomButton);
       await page.waitForTimeout(2000);
       console.log('Assign Guest to Room button clicked');
-      // await this. nextButtonAfterAddingGuest(page);
-      // await page.waitForTimeout(2000);
+      await this. nextButtonAfterAddingGuest(page);
+      await page.waitForTimeout(2000);
       break;
     break;
   }
@@ -395,7 +395,7 @@ static async clickonaddguestbutton(page: Page) {
       switch (CLIENT) {
         case 'BOB':
         await page.locator(HotelPageLocators.contactNumberField).fill(Data.hotelBookingDataFill.contactNumber);
-        await page.waitForTimeout(2000);
+        await page.waitForTimeout(2000)
         console.log('Guest details form contact information filled');
           break;
     
@@ -442,7 +442,51 @@ static async clickonaddguestbutton(page: Page) {
     await page.locator(HotelPageLocators.firstNameField).fill(firstName);
     console.log('First name field updated');
   }
+ static async verifyBookingIdVisible(page: Page) {
+    const bookingId = HotelPageLocators.bookingId;
+  
+    await ElementHelper.waitForElementVisible(page, bookingId);
+    console.log("Booking ID is visible.");
+  }
+  
+  static async verifyBookingDateVisible(page: Page) {
+    const bookingDate = HotelPageLocators.bookingDate;
+  
+    await ElementHelper.waitForElementVisible(page, bookingDate);
+    console.log("Booking date is visible.");
+  }
+  static async verifyBookingLinksVisible(page: Page) {
+    await ElementHelper.waitForElementVisible(
+      page,
+      HotelPageLocators.Downloadlogobooking
+    );
+    console.log("✅ Download Booking link is visible.");
 
+    await ElementHelper.waitForElementVisible(
+      page,
+      HotelPageLocators.bookflightlogobooking
+    );
+  console.log("✅ Book Flight link is visible.");
+}
+  static async verifyFareSummaryVisible(page: Page) {
+  const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+  case 'BOB':
+    const BOBfareSummarySection = HotelPageLocators.fareSummarySection;
+    await ElementHelper.waitForElementVisible(page, BOBfareSummarySection);
+    console.log("Fare summary section is visible.");
+    break;
+  case 'IDFC':
+    const fareSummaryDropdown = HotelPageLocators.fareSummaryDropdown;
+    const fareSummarySection = HotelPageLocators.fareSummarySection;
+ 
+    await ElementHelper.clickElement(page, fareSummaryDropdown);
+    await ElementHelper.waitForElementVisible(page, fareSummarySection);
+ 
+    console.log("Fare summary section is visible.");
+    break;
+  }
+  }
   static async verifyGuestDetailsFormVisible(page: Page) {
       const CLIENT = process.env.CLIENT?.toUpperCase();
   switch (CLIENT) {
