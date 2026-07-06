@@ -29,7 +29,7 @@ export const PaymentPageLocators = {
   submitButton: `//input[@id='submitBtn']`,
   backIconButtonMobile: `//i[@class='back-btn']`,
   payNowButtonBob: `//a[@id='pay_btn_new'] | //button[@id='mobile_pay']`,
-  termsConditionCheckboxBob: `//label[@for='terms_cond1'] | //input[@id='terms_cond1']`,
+  termsConditionCheckboxBob: `//input[@id="terms_cond1"]`,
   continueTravellerButtonBob: `//button[@id='redeem_pt_new']`,
   continueButtonBob: `(//button[contains(@class,'btn-primary')])[1]`,
   continuebtnbeforepayment: `(//button[@class='btn btn-primarycontinue'])[1]`,

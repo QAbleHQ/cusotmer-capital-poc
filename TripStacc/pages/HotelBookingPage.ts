@@ -362,15 +362,16 @@ static async clickonaddguestbutton(page: Page) {
       const CLIENT = process.env.CLIENT?.toUpperCase();
       switch (CLIENT) {
         case 'BOB':
-        console.log('⏭️ BOB: Skipping ');
+            await page.locator(HotelPageLocators.contactNumberField).fill(Data.hotelBookingDataFill.contactNumber);
+        await page.waitForTimeout(2000);
           break;
     
         case 'IDFC':
-            await page.locator(HotelPageLocators.contactNumberField).fill(Data.hotelBookingDataFill.contactNumber);
-        await page.waitForTimeout(2000);
-        await page.locator(HotelPageLocators.emailField).fill(Data.hotelBookingDataFill.email);
-        await page.waitForTimeout(2000);
-        console.log('Guest details form contact information filled');
+        //     await page.locator(HotelPageLocators.contactNumberField).fill(Data.hotelBookingDataFill.contactNumber);
+        // await page.waitForTimeout(2000);
+        // await page.locator(HotelPageLocators.emailField).fill(Data.hotelBookingDataFill.email);
+        // await page.waitForTimeout(2000);
+        // console.log('Guest details form contact information filled');
         break;
       }
   }
