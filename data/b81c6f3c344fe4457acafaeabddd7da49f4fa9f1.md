@@ -6,8 +6,8 @@
 
 # Test info
 
-- Name: TripStacc/tests/HotelPage.test.ts >> SC_018: Domestic booking without PAN and international booking with PAN
-- Location: TripStacc/tests/HotelPage.test.ts:659:5
+- Name: TripStacc/tests/CheckoutPage.test.ts >> SC_011.01: Hotel- Proceed with payment
+- Location: TripStacc/tests/CheckoutPage.test.ts:474:5
 
 # Error details
 
@@ -19,7 +19,7 @@ Test timeout of 600000ms exceeded.
 Error: locator.waitFor: Target page, context or browser has been closed
 Call log:
   - waiting for locator('//button[@class="btn btn-default rounded-25"]') to be visible
-    977 × locator resolved to hidden <button type="button" class="btn btn-default rounded-25" onclick="confirmedRoomOption(this)">Continue</button>
+    975 × locator resolved to hidden <button type="button" class="btn btn-default rounded-25" onclick="confirmedRoomOption(this)">Continue</button>
 
 ```
 
