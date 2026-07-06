@@ -87,7 +87,7 @@ export const HotelPageLocators = {
   guestDetailsForm: `//div[@id='user-information']`,
   firstNameField: `//input[contains(@id,'first_name')]`,
   lastNameField: `//input[contains(@id,'last_name')]`,
-  saveGuestLocator: `//span[contains(text(),"Save Guest")]//parent::div//input[@type="checkbox"]`,
+  saveGuestLocator: `//input[@class='form-check-input mt-0 save-guest-checkbox']`,
   travellerSavedSuccessfully: `//div[contains(text(),"Traveller saved successfully")]`,
   travellerUserAlreadyExists: `//div[contains(text(),"Traveller user already exists")]`,
   contactNumberField: `//input[@id='floatphone']`,
@@ -125,4 +125,5 @@ export const HotelPageLocators = {
   popupImg: `(//a[@target="_blank"])//img`,
   outOfPopupImg: `//div[@class="wrapper-outer"]`,
   addguestbutton: `//a[@id='addroombox_1']`,
+  addtravellerbutton:`//button[@class='fldsavebtn add_traveller_btn enable_add_save']`
 };

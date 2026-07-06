@@ -31,6 +31,8 @@
     "test:tripstacc:bob:uat:headed": "cross-env PROJECT=tripstacc-chrome-UAT CLIENT=BOB HEADED=true npx playwright test TripStacc/tests",
     "test:tripstacc:idfc:uat:headed": "cross-env PROJECT=tripstacc-chrome-UAT CLIENT=IDFC HEADED=true npx playwright test TripStacc/tests",
 
+    "test:tripstacc:idfc:prod:headed": "cross-env PROJECT=tripstacc-chrome-PROD CLIENT=IDFC HEADED=true npx playwright test TripStacc/tests",
+
     "test:tripstacc:bob:qa": "cross-env PROJECT=tripstacc-chrome-QA CLIENT=BOB npx playwright test TripStacc/tests",
     "test:tripstacc:idfc:qa": "cross-env PROJECT=tripstacc-chrome-QA CLIENT=IDFC npx playwright test TripStacc/tests",
 

@@ -532,7 +532,7 @@ test('SC_016.01: Update Search', { tag: ['@IDFC', '@BOB', '@Common', '@Homepageh
 });
 
 test('SC_017: Add Guest Details and Update Guest Details', { tag: ['@IDFC', '@BOB', '@Common', '@Homepagehotel', '@Regression'] }, async () => {
-  await page.waitForTimeout(5000);
+
   await test.step('Step 1: Open Hotels Section', async () => {
     await page.waitForTimeout(5000);
    await BaseHelper.clickHotelTabBTN(page);
@@ -599,16 +599,14 @@ test('SC_017: Add Guest Details and Update Guest Details', { tag: ['@IDFC', '@BO
 
   await test.step('Step 11: Click Add Guest button on Primary Guest Details section', async () => {
     await page.waitForTimeout(3000);
-    await HotelBookingPage.clickAddGuestButtonForIDFC(page);
+    await HotelBookingPage.clickonaddguestbutton(page);
     await page.waitForTimeout(1000);
   });
 
     await test.step('Step 12: Remove Popup', async () => {
-    await page.waitForTimeout(5000);
     await HotelBookingPage.removePopupForIDFC(page);
     await page.waitForTimeout(3000);
   });
-
 
   await test.step('Step 13: Click Add New Guest Button', async () => {
     await page.waitForTimeout(5000);
@@ -616,57 +614,41 @@ test('SC_017: Add Guest Details and Update Guest Details', { tag: ['@IDFC', '@BO
     await page.waitForTimeout(1000);
   });
 
-
   await test.step('Step 14: Fill in Guest Details', async () => {
     await page.waitForTimeout(5000);
-    await HotelBookingPage.fillGuestDetailsInsideForm(page);
+    await HotelBookingPage.fillGuestDetailsInside(page);
     await page.waitForTimeout(3000);
   });
-
-  await test.step('Step 15: Click Add Button', async () => {
-    await page.waitForTimeout(5000);
-    await HotelBookingPage.addButtonAfterAddingGuestForIdfc(page);
-    await HotelBookingPage.fillGuestDetailsoutsideForm(page);
-    await page.waitForTimeout(3000);
-  });
-
   await test.step('Step 16: Verify Guest Details Form Visible', async () => {
     await page.waitForTimeout(5000);
     await HotelBookingPage.verifyGuestDetailsFormVisible(page);
     await page.waitForTimeout(3000);
   });
-
   await test.step('Step 17: Click Add Guest Button', async () => {
     await page.waitForTimeout(5000);
     await HotelBookingPage.clickEditGuestButton(page);
     await page.waitForTimeout(3000);
   });
-
-
   await test.step('Step 18: Verify Saved Guest Text Visible', async () => {
     await page.waitForTimeout(5000);
     await HotelBookingPage.verifySavedGuestTextVisible(page);
     await page.waitForTimeout(3000);
   });
-
   await test.step('Step 19: Print Saved Guest List', async () => {
     await page.waitForTimeout(5000);
     await HotelBookingPage.printSavedGuestList(page);
     await page.waitForTimeout(500);
   });
-
   await test.step('Step 20: Get Saved Guest Name', async () => {
     await page.waitForTimeout(5000);
     await HotelBookingPage.getSavedGuestName(page);
     await page.waitForTimeout(500);
   });
-
   await test.step('Step 21: Click Edit Traveler', async () => {
     await page.waitForTimeout(5000);
     await HotelBookingPage.clickEditTraveler(page);
     await page.waitForTimeout(500);
   });
-
   await test.step('Step 22: Update First Name', async () => {
     await page.waitForTimeout(5000);
     await HotelBookingPage.updateFirstName(page, 'NameUpdated');
