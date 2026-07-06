@@ -362,16 +362,27 @@ static async clickonaddguestbutton(page: Page) {
       const CLIENT = process.env.CLIENT?.toUpperCase();
       switch (CLIENT) {
         case 'BOB':
+          break;
+    
+        case 'IDFC':
             await page.locator(HotelPageLocators.contactNumberField).fill(Data.hotelBookingDataFill.contactNumber);
+        await page.waitForTimeout(2000);
+        await page.locator(HotelPageLocators.emailField).fill(Data.hotelBookingDataFill.email);
+        await page.waitForTimeout(2000);
+        console.log('Guest details form contact information filled');
+        break;
+      }
+  }
+
+    static async fillGuestDetailsoutsideFormForBOB(page: Page) {
+      const CLIENT = process.env.CLIENT?.toUpperCase();
+      switch (CLIENT) {
+        case 'BOB':
+        await page.locator(HotelPageLocators.contactNumberField).fill(Data.hotelBookingDataFill.contactNumber);
         await page.waitForTimeout(2000);
           break;
     
         case 'IDFC':
-        //     await page.locator(HotelPageLocators.contactNumberField).fill(Data.hotelBookingDataFill.contactNumber);
-        // await page.waitForTimeout(2000);
-        // await page.locator(HotelPageLocators.emailField).fill(Data.hotelBookingDataFill.email);
-        // await page.waitForTimeout(2000);
-        // console.log('Guest details form contact information filled');
         break;
       }
   }
