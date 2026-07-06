@@ -534,7 +534,7 @@ test('SC_011.01: Hotel- Proceed with payment', { tag: ['@IDFC', '@BOB', '@Paymen
     await page.waitForTimeout(5000);
     await HotelBookingPage.fillGuestDetailsInsideForm(page);
     await page.waitForTimeout(3000);
-     await HotelBookingPage.fillGuestDetailsoutsideForm(page);
+     await HotelBookingPage.fillGuestDetailsoutsideFormForBOB(page);
      await page.waitForTimeout(4000);
      
       await HotelBookingPage.nextButtonAfterAddingGuest(page);
