@@ -9,33 +9,71 @@ Any AI assistant or developer must follow these rules when creating or editing f
 
 ```
 cusotmer-capital-poc/
-├── locators/
-│   ├── bob/          ← lowercase client name
-│   └── idfc/
-├── pages/
-│   ├── BOB/          ← UPPERCASE client name
-│   ├── IDFC/
-│   └── Common/
-├── tests/
-│   ├── BOB/          ← UPPERCASE client name
-│   └── IDFC/
-├── utils/
+├── TripStacc/                    ← Travel product (BOB + IDFC clients)
+│   ├── locators/
+│   │   ├── FlightPageLocators.ts
+│   │   ├── HomePageLocators.ts
+│   │   ├── HotelPageLocators.ts
+│   │   ├── LoginPageLocators.ts
+│   │   ├── MyAccountPageLocators.ts
+│   │   └── PaymentPageLocators.ts
+│   ├── pages/
+│   │   ├── CommonMethods.ts      ← TripStacc-specific shared helpers
+│   │   ├── FlightBookingPage.ts
+│   │   ├── FlightHomePage.ts
+│   │   ├── Homepage.ts
+│   │   ├── HotelBookingPage.ts
+│   │   ├── HotelHomePage.ts
+│   │   ├── LoginPage.ts
+│   │   ├── MyAccountPage.ts
+│   │   └── PaymentPage.ts
+│   ├── tests/
+│   │   ├── BookingConfirmation.test.ts
+│   │   ├── CheckoutPage.test.ts
+│   │   ├── FlightPage.test.ts
+│   │   ├── HotelPage.test.ts
+│   │   ├── LoginPage.test.ts
+│   │   └── MyAccountPage.test.ts
+│   └── testData/
+│       └── tripStacc.json        ← BOB + IDFC + common test data
+│
+├── ShopStacc/                    ← E-commerce product (BOBCARD client)
+│   ├── locators/
+│   │   ├── CheckoutPageLocators.ts
+│   │   ├── HomePageLocators.ts
+│   │   ├── LoginPageLocators.ts
+│   │   └── PLPPageLocators.ts
+│   ├── pages/
+│   │   ├── Checkoutpage.ts
+│   │   ├── HomePage.ts
+│   │   ├── LoginPage.ts
+│   │   └── PlpPage.ts
+│   ├── tests/
+│   │   ├── Checkoutpage.test.ts
+│   │   ├── HomePage.test.ts
+│   │   ├── LoginPage.test.ts
+│   │   └── PLPPage.test.ts
+│   └── testData/
+│       └── shopStacc.json        ← BOBCARD test data
+│
+├── utils/                        ← Shared across all products and clients
 │   ├── elementHelper.ts
 │   ├── verificationHelper.ts
 │   ├── commonHelper.ts
 │   ├── browserHelper.ts
-│   └── deviceHelper.ts
-├── testdata/
-│   ├── bobtestdata.json
-│   └── idfctestdata.json
-└── config/
-    ├── BOB.config.ts
-    └── IDFC.config.ts
+│   ├── deviceHelper.ts
+│   ├── dataProvider.ts           ← Dynamic test data loader
+│   └── send-report-email.js
+│
+├── config/
+│   └── ts.config.ts
+├── playwright.config.ts
+├── package.json
+└── .github/
+    └── workflows/                ← CI/CD pipelines (see Section 8)
 ```
 
-**Folder name casing rule:**
-- `locators/` subfolders → **lowercase** (`bob/`, `idfc/`)
-- `pages/` and `tests/` subfolders → **UPPERCASE** (`BOB/`, `IDFC/`)
+**Key rule:** Every product (`TripStacc`, `ShopStacc`) is a self-contained folder with its own `locators/`, `pages/`, `tests/`, and `testData/`. There is no shared root-level `locators/`, `pages/`, or `testdata/` folder.
 
 ---
 
@@ -43,44 +81,40 @@ cusotmer-capital-poc/
 
 ### File naming
 - Pattern: `{PageName}Locators.ts`
-- Examples: `LoginPageLocators.ts`, `HomePageLocators.ts`, `CheckoutPageLocators.ts`
-- Location: `locators/{client}/` where client is **lowercase** (`bob`, `idfc`)
+- Examples: `LoginPageLocators.ts`, `HotelPageLocators.ts`, `PLPPageLocators.ts`
+- Location: `TripStacc/locators/` or `ShopStacc/locators/` depending on the product
 
 ### File structure
 ```typescript
 export const {PageName}Locators = {
-  keyName: `xpath_or_selector`,
   keyName: `xpath_or_selector`,
 };
 ```
 
 ### Key naming
 - **camelCase** only
-- Names must describe what the element IS, not what it does
+- Names describe what the element IS, not what it does
 - Good: `mobileNumberField`, `getOtpButton`, `skipButtonInsideDialogBox`
 - Bad: `clickOtp`, `btn1`, `elem`
 
 ### Selector rules
 - **Prefer XPath** over CSS selectors
-- Use template literals (backticks) for most selectors
-- Use double-quoted strings `"..."` only for XPath that contains single quotes inside
-- For indexed elements use `(//xpath)[n]` — example: `(//span[@class='price'])[1]`
-- Prefer `[@id='...']` and `[@class='...']` attributes for stability
+- Use template literals (backticks) for all selectors
+- Use double-quoted strings `"..."` only for XPath containing single quotes inside
+- For indexed elements use `(//xpath)[n]` — e.g. `(//span[@class='price'])[1]`
 - Never hardcode dynamic values (prices, counts, user data) into locators
 
 ```typescript
-// Correct
 export const LoginPageLocators = {
   mobileNumberField: `//input[@id='txtMobileNo']`,
   getOtpButton:      `//button[@id='btnLogin']`,
   otpInputField:     `//div[@class='otp-warpper']//input`,
-  DialogBox:         `//dialog[@aria-describedby="tour_step_0-description"]`,
+  skipButtonInsideDialogBox: `//dialog[@aria-describedby="tour_step_0-description"]//button[text()='Skip']`,
 };
 ```
 
 ### One file per page
-Each page in the application gets exactly one locator file.
-Do not mix BOB and IDFC locators in the same file.
+Each page gets exactly one locator file. Both BOB and IDFC locators for the same page go in the same file — use client branching in the page class, not in the locator file.
 
 ---
 
@@ -88,17 +122,17 @@ Do not mix BOB and IDFC locators in the same file.
 
 ### File naming
 - Pattern: `{PageName}.ts`
-- Examples: `LoginPage.ts`, `HomePage.ts`, `Checkoutpage.ts`
-- Location: `pages/{CLIENT}/` where CLIENT is **UPPERCASE** (`BOB`, `IDFC`)
-- Shared helpers go in `pages/Common/`
+- Location: `TripStacc/pages/` or `ShopStacc/pages/`
 
 ### Class structure
 ```typescript
-import { Page } from '@playwright/test';
-import { {PageName}Locators } from '../../locators/{client}/{PageName}Locators';
+import { expect, Page } from '@playwright/test';
+import { {PageName}Locators } from '../../TripStacc/locators/{PageName}Locators';
 import { ElementHelper } from '../../utils/elementHelper';
 import { VerificationHelpers } from '../../utils/verificationHelper';
-import {client}TestData from '../../testdata/{client}testdata.json';
+import { Data } from '../../utils/dataProvider';           // for TripStacc (multi-client)
+// OR
+import bobTestData from '../testData/shopStacc.json';     // for ShopStacc (single client)
 
 export class {PageName} {
   static async methodName(page: Page): Promise<void> {
@@ -112,12 +146,12 @@ export class {PageName} {
 **All methods must be:**
 - `static async`
 - First parameter is always `page: Page`
-- Return type is `Promise<void>` unless returning data
+- Return type is `Promise<void>` unless returning a value
 
 **Method naming:**
 | Prefix | Use for |
 |--------|---------|
-| `verify…` | Assert something is visible / has a value |
+| `verify…` | Assert something is visible / correct |
 | `click…` | Click an element |
 | `enter…` | Type into a field |
 | `navigate…` | Go to a URL or page |
@@ -125,6 +159,7 @@ export class {PageName} {
 | `get…` | Return a value from the page |
 | `wait…` | Wait for a condition |
 | `select…` | Choose a dropdown option |
+| `fill…` | Fill a form field (used in booking forms) |
 
 **Locator assignment:**
 Always assign the locator to a named `const` before passing to a helper — do not inline the locator call.
@@ -134,6 +169,7 @@ Always assign the locator to a named `const` before passing to a helper — do n
 static async clickGetOtpButton(page: Page): Promise<void> {
   const otpButton = LoginPageLocators.getOtpButton;
   await ElementHelper.clickElement(page, otpButton);
+  console.log('Get OTP button clicked');
 }
 
 // Wrong — do not inline
@@ -143,34 +179,10 @@ static async clickGetOtpButton(page: Page): Promise<void> {
 ```
 
 **Logging:**
-Every method must have a `console.log()` that describes what happened.
-
-```typescript
-static async enterMobileNumber(page: Page, mobileNumber: string): Promise<void> {
-  const field = LoginPageLocators.mobileNumberField;
-  await ElementHelper.clearAndEnterInTextField(page, field, mobileNumber);
-  console.log('Mobile number entered');
-}
-```
-
-**Composite methods (BeforeEach helpers):**
-Group related login / setup steps into a single composite method so tests can call one line in `beforeEach`.
-
-```typescript
-static async LoginCredEnterBeforeEach(page: Page): Promise<void> {
-  await LoginPage.enterMobileNumber(page, bobTestData.loginDataFill.mobileNumber);
-  await LoginPage.clickGetOtpButton(page);
-  await LoginPage.enterOtp(page, bobTestData.loginDataFill.otp);
-  await LoginPage.clickLoginButton(page);
-}
-```
-
-**Use helpers, not raw Playwright:**
-Always go through `ElementHelper` or `VerificationHelpers` for interactions and assertions.
-Use raw `page.locator()` only when the helper does not cover the use case (e.g., iterating a list, `nth()`, `count()`).
+Every method must end with a `console.log()` describing what happened.
 
 **Mobile vs desktop branching:**
-Use `DeviceHelper.isMobile()` from `utils/deviceHelper.ts` when behaviour differs between viewports.
+Use `DeviceHelper.isMobile()` when behaviour differs between viewports.
 
 ```typescript
 import { DeviceHelper } from '../../utils/deviceHelper';
@@ -182,21 +194,49 @@ if (DeviceHelper.isMobile()) {
 }
 ```
 
+**Client branching (TripStacc):**
+Use `process.env.CLIENT?.toUpperCase()` with a `switch` when behaviour differs between BOB and IDFC.
+
+```typescript
+const CLIENT = process.env.CLIENT?.toUpperCase();
+switch (CLIENT) {
+  case 'BOB':
+    await ElementHelper.clickElement(page, HotelPageLocators.whereToTextBox);
+    break;
+  case 'IDFC':
+    await ElementHelper.clickElement(page, HotelPageLocators.whereToTextBoxMobile);
+    break;
+}
+```
+
+**Use helpers, not raw Playwright:**
+Always go through `ElementHelper` or `VerificationHelpers`. Use raw `page.locator()` only when helpers don't cover it (e.g. `nth()`, `count()`, iterating lists).
+
+**Composite methods (BeforeEach helpers):**
+Group related login/setup steps into a single composite method called from `beforeEach`.
+
+```typescript
+static async loginWithOtp(page: Page): Promise<void> {
+  await LoginPage.verifyMobileNumberFieldAcceptsInput(page);
+  await LoginPage.clickGetOtpButton(page);
+  await LoginPage.verifyOtpFieldAcceptsInput(page);
+  await LoginPage.verifyLoginButtonWorks(page);
+}
+```
+
 ---
 
 ## 3. Tests
 
 ### File naming
 - Pattern: `{PageName}.test.ts`
-- Examples: `LoginPage.test.ts`, `HomePage.test.ts`, `CheckoutPage.test.ts`
-- Location: `tests/{CLIENT}/` where CLIENT is **UPPERCASE**
+- Location: `TripStacc/tests/` or `ShopStacc/tests/`
 
 ### File structure
 ```typescript
 import { test, Page, BrowserContext } from '@playwright/test';
 import { CommonHelper } from '../../utils/commonHelper';
-import { {PageName} } from '../../pages/{CLIENT}/{PageName}';
-import {client}TestData from '../../testdata/{client}testdata.json';
+import { {PageName} } from '../pages/{PageName}';
 
 let context: BrowserContext;
 let page: Page;
@@ -205,34 +245,70 @@ test.beforeEach(async ({ browser }) => {
   context = await browser.newContext();
   page = await context.newPage();
   await CommonHelper.navigateToHomePage(page);
-  // add login call here if the test requires authentication
+  // add login steps here if the test requires authentication
+});
+
+test.afterEach(async () => {
+  await page.close();
+  await context.close();
 });
 ```
 
 ### Test naming
-Pattern: `'SC_NNN, Short description of what is being verified'`
+Pattern: `'SC_NNN: Short description of what is being verified'`
 
 ```typescript
-test('SC_001, Login with valid mobile number and OTP', ...)
+test('SC_001: Verify user can Login with mobile number and OTP', ...)
+test('SC_015: Hotel Search', ...)
 test('SC_004, Gift Card PLP — product card details and layout', ...)
 ```
 
 ### Tags
-Every test **must** include a `tag` array in the options object.
+Every test **must** include a `tag` array.
 
 ```typescript
-test('SC_001, Login with valid mobile number and OTP', {
-  tag: ['@BOB', '@Login', '@Smoke', '@Sanity']
+test('SC_001: Verify user can Login with mobile number and OTP', {
+  tag: ['@IDFC', '@BOB', '@Common', '@Loginpage', '@Smoke', '@Sanity']
 }, async () => { ... });
 ```
 
-**Mandatory tags:**
-| Tag | Meaning |
-|-----|---------|
-| `@BOB` / `@IDFC` | Client this test belongs to |
-| `@{PageArea}` | Page or feature (`@Login`, `@Homepage`, `@Checkout`, `@Payment`, etc.) |
+**Client tags:**
 
-**Optional tags (add as appropriate):**
+| Tag | Product | Meaning |
+|-----|---------|---------|
+| `@BOB` | TripStacc | Test runs for BOB client |
+| `@IDFC` | TripStacc | Test runs for IDFC client |
+| `@Common` | TripStacc | Test applies to both BOB and IDFC |
+| `@BOBCard` | ShopStacc | Test runs for BOBCard client |
+
+**Feature tags (TripStacc):**
+
+| Tag | Area |
+|-----|------|
+| `@Loginpage` | Login / OTP flow |
+| `@Homepageflight` | Flight search home page |
+| `@Homepagehotel` | Hotel search home page |
+| `@Flight` | Flight booking flow |
+| `@Hotel` | Hotel booking flow |
+| `@Checkout` | Checkout / redeem points / promo |
+| `@Payment` | Payment page |
+| `@Bookingconfirmation` | Booking confirmation page |
+| `@Myaccount` | My account section |
+| `@Passport` | Passport details (international flights) |
+| `@Addon` | Add-ons (seat, baggage, meal) |
+
+**Feature tags (ShopStacc):**
+
+| Tag | Area |
+|-----|------|
+| `@Login` | Login flow |
+| `@Homepage` | Home page |
+| `@Giftcard` | Gift card section |
+| `@PLP` | Product listing page |
+| `@Checkout` | Checkout flow |
+
+**Suite tags (optional, add as appropriate):**
+
 | Tag | Meaning |
 |-----|---------|
 | `@Smoke` | Fast, high-value check |
@@ -240,49 +316,30 @@ test('SC_001, Login with valid mobile number and OTP', {
 | `@Regression` | Full regression suite |
 
 ### Steps
-Every test must use `test.step()` to describe each logical action.
-Step descriptions must be written in plain English from the user's perspective.
+Every test must use `test.step()` with plain-English descriptions from the user's perspective.
 
 ```typescript
-test('SC_002, Home page — Trending Categories section visible and clickable', {
-  tag: ['@BOB', '@Homepage', '@Smoke', '@Sanity']
+test('SC_015: Hotel Search', {
+  tag: ['@IDFC', '@BOB', '@Common', '@Homepagehotel', '@Smoke', '@Sanity']
 }, async () => {
 
-  await test.step('Verify banner, categories, and trending sections are displayed', async () => {
-    await HomePage.verifyBannerSectionDisplayed(page);
-    await HomePage.verifyCategorySectionDisplayed(page);
-    await HomePage.verifyTrendingSectionDisplayed(page);
+  await test.step('Step 1: Verify Hotel tab is displayed', async () => {
+    await HotelHomePage.verifyHotelTabBtnDisplayed(page);
   });
 
-  await test.step('Verify category cards show images and labels', async () => {
-    await HomePage.verifyCategoryImagesAndTextsDisplayed(page);
+  await test.step('Step 2: Enter destination city', async () => {
+    await HotelHomePage.searchValueInTestBox(page, 'Mumbai');
+    await HotelHomePage.selectFirstOptionFromDropdown(page);
   });
 
-  await test.step('Clicking a category navigates to the correct PLP', async () => {
-    await HomePage.verifyCategoryNavigationToProductPage(page);
-  });
-});
-```
-
-### Shared variables between steps
-Declare shared variables before the first step at the test body level.
-
-```typescript
-test('SC_003, Earn More Deals — PDP Verification', { tag: [...] }, async () => {
-  let productData: any;
-
-  await test.step('Get product details from homepage', async () => {
-    productData = await HomePage.getProductDetails(page);
-  });
-
-  await test.step('Verify product details on PDP match', async () => {
-    await HomePage.verifyPDP(page, productData);
+  await test.step('Step 3: Select dates and search', async () => {
+    await HotelHomePage.clickDateButton(page);
   });
 });
 ```
 
 ### What tests must NOT do
-- Do not put XPath selectors or locator strings directly inside test files
+- Do not put XPath selectors or locator strings directly in test files
 - Do not call `page.click()`, `page.fill()`, `page.locator()` directly — always go through a Page class method
 - Do not import `ElementHelper` or `VerificationHelpers` directly in tests
 - Do not add `console.log()` in test files — logs belong in Page methods
@@ -291,7 +348,7 @@ test('SC_003, Earn More Deals — PDP Verification', { tag: [...] }, async () =>
 
 ## 4. Utils
 
-All utility classes are in `utils/`. They are **shared across all clients (BOB, IDFC)** — do not add client-specific logic to utils.
+All utility classes are in `utils/`. They are **shared across all products and clients** — do not add product-specific or client-specific logic to utils.
 
 ### `ElementHelper` — `utils/elementHelper.ts`
 DOM interactions. Use for all element actions.
@@ -300,12 +357,14 @@ DOM interactions. Use for all element actions.
 |--------|----------|
 | `clickElement(page, locator)` | Click any element |
 | `clearAndEnterInTextField(page, locator, text)` | Type into an input field |
+| `clearAndTypeInTextField(page, locator, text)` | Clear and type (slower, character-by-character) |
 | `clearTextField(page, locator)` | Clear a field only |
 | `waitForElementVisible(page, locator)` | Wait until element appears (retries once after 50s) |
 | `waitForElementVisibleWithoutReload(page, locator)` | Poll until element appears — no page reload |
 | `waitForElementClickable(page, locator)` | Wait until element is visible AND enabled |
 | `waitForElementToDisappear(page, locator)` | Wait until element hides |
 | `scrollToElement(page, locator)` | Scroll element into view |
+| `scrollElementToCentre(page, locator)` | Scroll element to centre of viewport |
 | `scrollByAmount(page, x, y)` | Scroll by pixel amount |
 | `isElementDisplayed(page, locator)` | Returns `boolean` — element visible? |
 | `isElementEnabled(page, locator)` | Returns `boolean` — element enabled? |
@@ -318,8 +377,6 @@ DOM interactions. Use for all element actions.
 | `hoverOverMenu(page, locator)` | Hover with retry |
 | `clickElementWithRetry(page, locator)` | Click with retry |
 | `doubleClickElement(page, locator)` | Double-click |
-| `getExpectedTextFromLocator / getActualTextFromLocator` | Store text for later comparison |
-| `compareBothResultAndAddedInConsole()` | Compare stored expected vs actual text |
 
 ### `VerificationHelpers` — `utils/verificationHelper.ts`
 Assertions only. Every method has a **hard assert** version and a `SoftAssert` version.
@@ -339,32 +396,23 @@ Assertions only. Every method has a **hard assert** version and a `SoftAssert` v
 | `elementHasValue(page, locator, value)` | Input value equals |
 | `checkUrlContainsKeyword(page, keyword)` | URL contains string |
 | `validatePlaceholder(page, locator, text)` | Placeholder text |
-| `validateHrefAttribute / validateSrcAttribute / validateAltText` | Link/image attributes |
 
 **Hard assert** — fails the test immediately on mismatch.
-**SoftAssert** (`…SoftAssert`) — logs the failure and continues the test.
-
-Use hard asserts for critical checks. Use soft asserts when you want to continue collecting all failures before the test ends.
+**SoftAssert** (`…SoftAssert`) — logs the failure and continues. Use for collecting all failures before the test ends.
 
 ### `CommonHelper` — `utils/commonHelper.ts`
 Navigation and general utilities.
 
 | Method | Use |
 |--------|-----|
-| `navigateToHomePage(page)` | Navigate to baseURL (reads from Playwright project config) |
+| `navigateToHomePage(page)` | Navigate to `baseURL` (from Playwright project config) |
 | `navigateToPage(page, url)` | Navigate to a specific path |
 | `verifyUrl(page, expectedUrl)` | Assert current URL |
 | `scrollAndClickElement(page, selector)` | Scroll to then click |
 | `performKeyboardAction(page, key)` | Press a keyboard key |
-| `generateRandomPassword(length?)` | Random password string |
-| `generateRandomString(length?)` | Random alphabetic string |
-| `generateRandomNumber(min?, max?)` | Random number in range |
-| `generateTimestamp()` | ISO timestamp string |
-| `generateUniqueIdentifier()` | string + number + timestamp combo |
 | `pressEnterKey(page, selector)` | Focus element then press Enter |
-
-> Window/tab/iframe methods exist in `CommonHelper` for legacy reasons.
-> **Prefer `BrowserHelper` for all new window, tab, and iframe work.**
+| `generateRandomPassword / String / Number` | Random data generators |
+| `generateTimestamp()` | ISO timestamp string |
 
 ### `BrowserHelper` — `utils/browserHelper.ts`
 Browser-level operations.
@@ -376,17 +424,29 @@ Browser-level operations.
 | `switchToIframe(page, iframeSelector)` | Return iframe context |
 | `clickButtonInsideIframe(iframe, selector)` | Click inside an iframe |
 | `setGeolocation(page, lat, lng)` | Set browser geolocation |
-| `getWindowWidth / getWindowHeight` | Viewport size |
 | `takeScreenshot` | Capture screenshot |
 | `getCookies / setCookie / clearCookies` | Cookie management |
 | `refreshPage` | Reload page |
 
 ### `DeviceHelper` — `utils/deviceHelper.ts`
-Detect device context.
 
 | Method | Returns |
 |--------|---------|
 | `DeviceHelper.isMobile()` | `boolean` — `true` if running on a mobile viewport |
+
+### `dataProvider.ts` — `utils/dataProvider.ts`
+Dynamically loads test data for TripStacc based on the `PROJECT` env var. It reads the product from `PROJECT` (e.g. `tripstacc-chrome-UAT` → product = `tripstacc`), loads the corresponding JSON, then merges `common` with the active client section (`BOB` or `IDFC`).
+
+```typescript
+import { Data } from '../../utils/dataProvider';
+
+// Access merged common + client data:
+Data.loginDataFill.mobileNumber
+Data.hotelPage.domestic
+Data.paymentDataFill.cardNumber
+```
+
+Use `Data` from `dataProvider` in TripStacc page files that need multi-client data. For ShopStacc, import `shopStacc.json` directly.
 
 ---
 
@@ -394,149 +454,189 @@ Detect device context.
 
 ### Files
 
-| File | Used by | Purpose |
-|------|---------|---------|
-| `testdata/bobtestdata.json` | BOB pages and tests | BOB login credentials and user data |
-| `testdata/idfctestdata.json` | IDFC pages and tests | IDFC login, flight, hotel, payment, traveller data |
-| `testdata/commontestdata.json` | Any client | Shared data that is not client-specific |
+| File | Product | Client(s) | Location |
+|------|---------|-----------|----------|
+| `tripStacc.json` | TripStacc | BOB, IDFC, common | `TripStacc/testData/tripStacc.json` |
+| `shopStacc.json` | ShopStacc | BOBCARD | `ShopStacc/testData/shopStacc.json` |
 
----
-
-### `bobtestdata.json` — structure
+### `tripStacc.json` — structure
 
 ```json
 {
-  "loginDataFill": {
-    "regularEmail":    "...",
-    "regularPassword": "...",
-    "mobileNumber":    "...",
-    "otp":             "...",
-    "userId":          "...",
-    "userPassword":    "..."
+  "common": {
+    "loginDataFill":       { "mobileNumber", "otp", "city", "checkInDate", "checkOutDate", ... },
+    "dateSelector":        { "fromDate", "fromMonth", "toDate", "toMonth" },
+    "hotelBookingDataFill": { "firstName", "lastName", "panNumber", "contactNumber", "email" },
+    "hotelPage":           { "domestic", "domesticlocation", "international", "rooms", "adults", "children" },
+    "flightPage":          { "enterCityFrom", "enterCityTo", "enterInternationalCityTo" },
+    "travellername":       { "firstName", "lastName", "email", "phone", "gst", "passport", "country" },
+    "redeemPointSection":  { "enterRedeemPoint" },
+    "paymentDataFill":     { "cardNumber", "cardExpiry", "cardCvv", "cardName", "otp" }
+  },
+  "BOB": {
+    // BOB-specific overrides of any common section
+  },
+  "IDFC": {
+    // IDFC-specific overrides of any common section
   }
 }
 ```
 
-| Section | Key | Use |
-|---------|-----|-----|
-| `loginDataFill` | `mobileNumber` | OTP login flow — mobile number field |
-| `loginDataFill` | `otp` | OTP login flow — OTP digits |
-| `loginDataFill` | `userId` | Restriction/admin page — username |
-| `loginDataFill` | `userPassword` | Restriction/admin page — password |
-| `loginDataFill` | `regularEmail` / `regularPassword` | Standard email login (if applicable) |
+`dataProvider.ts` deep-merges `common` with the active client section. Client-specific values override common values for the same key.
 
----
-
-### `idfctestdata.json` — structure
+### `shopStacc.json` — structure
 
 ```json
 {
-  "loginDataFill":      { "mobileNumber", "otp", "city", "checkInDate", "checkOutDate", ... },
-  "hotelPage":          { "domestic", "international", "searcHotelName", "rooms", "adults", "children", ... },
-  "dateSelector":       { "fromDate", "fromMonth", "toDate", "toMonth" },
-  "hotelBookingDataFill": { "firstName", "lastName", "panNumber", "contactNumber", "email" },
-  "flightPage":         { "enterCityFrom", "enterCityTo", "enterInternationalCityTo" },
-  "travellername":      { "firstName", "lastName", "editedFirstName", "editedLastName", "email", "phone", "gst", "passport", "country" },
-  "redeemPointSection": { "enterRedeemPoint" },
-  "paymentDataFill":    { "cardNumber", "cardExpiry", "cardCvv", "cardName", "otp" }
+  "BOBCARD": {
+    "loginDataFill": {
+      "mobileNumber": "...",
+      "otp": "...",
+      "userId": "...",
+      "userPassword": "..."
+    }
+  }
 }
 ```
 
-| Section | Use |
-|---------|-----|
-| `loginDataFill` | IDFC OTP login — mobile, OTP, and search city pre-fill |
-| `hotelPage` | Hotel search — city names, room/adult/child counts, multi-room scenarios |
-| `dateSelector` | Date picker — from/to date and month values |
-| `hotelBookingDataFill` | Hotel booking form — guest name, PAN, contact |
-| `flightPage` | Flight search — origin and destination city partial names for autocomplete |
-| `travellername` | Traveller profile — names, email, phone, GST, passport |
-| `redeemPointSection` | Loyalty/redeem points — points value to enter |
-| `paymentDataFill` | Payment form — card number, expiry, CVV, name, OTP |
-
----
-
-### `commontestdata.json`
-
-Currently empty — reserved for data that is reused across both BOB and IDFC clients.
-Add shared values here (e.g. common city names, generic user details) instead of duplicating them in both client files.
-
----
-
 ### Import rules
 
-Always use `import`, never `require`:
-
+**TripStacc pages and tests** — use `dataProvider` for dynamic multi-client data:
 ```typescript
-// In BOB pages or tests
-import bobTestData from '../../testdata/bobtestdata.json';
-
-// In IDFC pages or tests
-import idfcTestData from '../../testdata/idfctestdata.json';
-
-// For shared data
-import commonTestData from '../../testdata/commontestdata.json';
+import { Data } from '../../utils/dataProvider';
+// Access: Data.loginDataFill.mobileNumber
 ```
 
-Access by section then key:
+**ShopStacc pages and tests** — import JSON directly:
 ```typescript
-bobTestData.loginDataFill.mobileNumber
-idfcTestData.hotelPage.domestic
-idfcTestData.paymentDataFill.cardNumber
+import bobTestData from '../testData/shopStacc.json';
+// Access: bobTestData.BOBCARD.loginDataFill.mobileNumber
 ```
-
----
 
 ### Rules
 
-- **Never hardcode** credentials, OTPs, mobile numbers, card numbers, names, or city names directly in page files or test files — always read from testdata JSON
-- **Add new test data** in the correct section of the right file; if a section does not exist yet, create a new named section in the JSON
-- **BOB data stays in `bobtestdata.json`**, IDFC data stays in `idfctestdata.json`, truly shared data goes in `commontestdata.json`
-- When adding a new page for an existing client, add its test data as a new section in that client's file — do not create separate JSON files per page
+- **Never hardcode** credentials, OTPs, mobile numbers, card numbers, names, or city names in page or test files — always read from testData JSON
+- **BOB/IDFC overrides** go in the `"BOB"` or `"IDFC"` section of `tripStacc.json`; data shared between both goes in `"common"`
+- **ShopStacc data** goes in the `"BOBCARD"` section of `shopStacc.json`
+- When adding a new page, add its test data as a new named section in the JSON — do not create separate JSON files
 
 ---
 
-## 6. Imports — Correct Paths
+## 6. Import Paths
 
-| From inside... | To reach utils | To reach locators | To reach testdata |
-|----------------|----------------|-------------------|-------------------|
-| `pages/BOB/` | `../../utils/` | `../../locators/bob/` | `../../testdata/` |
-| `pages/IDFC/` | `../../utils/` | `../../locators/idfc/` | `../../testdata/` |
-| `pages/Common/` | `../../utils/` | N/A | `../../testdata/` |
-| `tests/BOB/` | `../../utils/` | N/A | `../../testdata/` |
-| `tests/IDFC/` | `../../utils/` | N/A | `../../testdata/` |
+| Writing from… | To utils | To locators | To testData | To pages |
+|---------------|----------|-------------|-------------|----------|
+| `TripStacc/pages/` | `../../utils/` | `../../TripStacc/locators/` | `../testData/` | `./` |
+| `TripStacc/tests/` | `../../utils/` | — | `../testData/` | `../pages/` |
+| `ShopStacc/pages/` | `../../utils/` | `../../ShopStacc/locators/` | `../testData/` | `./` |
+| `ShopStacc/tests/` | `../../utils/` | — | `../testData/` | `../pages/` |
+| `utils/` | — | — | `../TripStacc/testData/` or `../ShopStacc/testData/` | — |
 
-Tests import from **pages** only — not from locators or utils directly.
+Tests import from **pages only** — not from locators or utils directly.
 
 ---
 
-## 7. Quick Checklist for AI
+## 7. Running Tests Locally
+
+```bash
+# TripStacc — IDFC UAT (headed)
+npm run test:tripstacc:idfc:uat:headed
+
+# TripStacc — BOB UAT (headed)
+npm run test:tripstacc:bob:uat:headed
+
+# ShopStacc — BOBCard UAT (headed)
+npm run test:shopstacc:bobcard:uat:headed
+
+# Run with a specific feature tag
+npm run test:tripstacc:idfc:uat:headed -- --grep @Loginpage
+npm run test:tripstacc:bob:uat:headed -- --grep @Homepageflight
+
+# Only last-failed tests
+npm run test:tripstacc:idfc:uat:headed -- --last-failed
+```
+
+The `PROJECT` and `CLIENT` env vars drive which config and which client data section is loaded. They are set by each `npm run` script via `cross-env`.
+
+---
+
+## 8. CI / CD Workflows
+
+All workflows are in `.github/workflows/`. They all:
+- Install dependencies (`npm ci`)
+- Install Playwright browsers
+- Run tests
+- Generate a GitHub Pages HTML report (deployed to a unique subdirectory per workflow)
+- Send an email report with **📊 View Playwright Report** and **🔗 View Run** links
+- Post an MS Teams notification
+
+| Workflow | Trigger | What it runs |
+|----------|---------|--------------|
+| `bob-uat.yml` | Push to `main`, daily 2:00 AM IST, manual | BOB or IDFC UAT (Chrome) |
+| `tripstacc-bob-uat.yml` | Manual | TripStacc BOB — any browser |
+| `tripstacc-idfc-uat.yml` | Manual | TripStacc IDFC — any browser |
+| `tripstacc-bob-iphone13-uat.yml` | Manual | TripStacc BOB — iPhone13 viewport |
+| `tripstacc-bob-galaxys21-uat.yml` | Manual | TripStacc BOB — GalaxyS21 viewport |
+| `tripstacc-idfc-iphone13-uat.yml` | Manual | TripStacc IDFC — iPhone13 viewport |
+| `tripstacc-idfc-galaxys21-uat.yml` | Manual | TripStacc IDFC — GalaxyS21 viewport |
+| `tripstacc_customise.yml` | Push to `main`, daily, manual | TripStacc — any client/env/browser/viewport/tag |
+| `shopstacc-bobcard-uat.yml` | Manual | ShopStacc BOBCARD — any browser |
+| `shopstacc-bobcard-iphone13-uat.yml` | Manual | ShopStacc BOBCARD — iPhone13 viewport |
+| `shopstacc-bobcard-galaxys21-uat.yml` | Manual | ShopStacc BOBCARD — GalaxyS21 viewport |
+| `shopstacc_customise.yml` | Push to `main`, daily, manual | ShopStacc — any env/browser/viewport/tag |
+
+**Email subject format:**
+```
+[PASSED] TripStacc IDFC UAT [Chrome/Web] — Playwright Report
+[FAILED] ShopStacc BOBCARD UAT [Firefox/iPhone13] @Loginpage — Playwright Report
+```
+
+**GitHub Pages report URL format:**
+```
+https://{org}.github.io/{repo}/tripstacc/IDFC-UAT/
+https://{org}.github.io/{repo}/tripstacc/BOB-UAT/
+https://{org}.github.io/{repo}/shopstacc/BOBCARD-UAT/
+```
+GitHub Pages must be enabled in the repo: **Settings → Pages → Source: Deploy from branch → `gh-pages` → `/(root)`**
+
+---
+
+## 9. Quick Checklist for AI
 
 When creating or editing any file, verify:
 
 **Locator file**
 - [ ] Named `{PageName}Locators.ts`
-- [ ] In `locators/{lowercase-client}/`
+- [ ] In `TripStacc/locators/` or `ShopStacc/locators/`
 - [ ] Exported as `export const {Name}Locators = { ... }`
-- [ ] All keys camelCase, all values XPath strings
+- [ ] All keys camelCase, all values XPath/CSS strings in backticks
 
 **Page file**
-- [ ] Named `{PageName}.ts` in `pages/{UPPERCASE-CLIENT}/`
+- [ ] Named `{PageName}.ts` in `TripStacc/pages/` or `ShopStacc/pages/`
 - [ ] Class name matches filename exactly
 - [ ] All methods are `static async`
-- [ ] Locator assigned to `const` before use
-- [ ] Every method has a `console.log()`
+- [ ] Locator assigned to `const` before use — never inlined
+- [ ] Every method has a `console.log()` describing what happened
 - [ ] Uses `ElementHelper` / `VerificationHelpers` — no raw `page.click()`
+- [ ] Client branching via `process.env.CLIENT?.toUpperCase()` + `switch`
+- [ ] Viewport branching via `DeviceHelper.isMobile()`
 
 **Test file**
-- [ ] Named `{PageName}.test.ts` in `tests/{UPPERCASE-CLIENT}/`
+- [ ] Named `{PageName}.test.ts` in `TripStacc/tests/` or `ShopStacc/tests/`
 - [ ] Module-level `let context: BrowserContext; let page: Page;`
-- [ ] `beforeEach` creates context, opens page, navigates
-- [ ] Test name starts with `SC_NNN,`
-- [ ] Tags include client tag + feature tag + at least one suite tag
+- [ ] `beforeEach` creates context, opens page, navigates (+ login if needed)
+- [ ] `afterEach` closes page and context
+- [ ] Test name starts with `SC_NNN:`
+- [ ] Tags include correct client tag(s) + feature tag + at least one suite tag
 - [ ] Every test uses `test.step()`
-- [ ] No locators or `ElementHelper` calls directly in test file
+- [ ] No locators, `ElementHelper`, or `VerificationHelpers` calls directly in test file
+
+**Test data**
+- [ ] No hardcoded credentials, OTPs, or personal data in page/test files
+- [ ] New data added to the correct section and file (`tripStacc.json` or `shopStacc.json`)
+- [ ] TripStacc shared data in `"common"`, client-specific overrides in `"BOB"` or `"IDFC"`
 
 **Utils**
-- [ ] No client-specific logic inside utils
-- [ ] New helper methods added to the correct class (`ElementHelper` for DOM, `VerificationHelpers` for assertions, `BrowserHelper` for browser/tab/window)
+- [ ] No product-specific or client-specific logic inside utils
+- [ ] New helper methods in the correct class
 - [ ] Every new verification method has both a hard and a `SoftAssert` variant
