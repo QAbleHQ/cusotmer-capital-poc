@@ -21,7 +21,7 @@ export const PaymentPageLocators = {
   nocancelbutton: `//button[@data-testid='cancel']`,
   otpInputField: `//input[@id="password"]`,
   paybutton: `//input[@id='submitBtn']`,
-  bookingConfirmationPage: `//h4[text()='Booking Confirmed'] | //div[@class="booking_confirm_div"]`,
+  bookingConfirmationPage: `//h4[text()='Booking Confirmed']`,
   bookingPendingPage: `//h4[text()='Booking Pending']`,
   bookingreferenceNumber: `//p[@class='book_ref_no']`,
   invalidOtpError: `//p[@id='OTPStatus']`,

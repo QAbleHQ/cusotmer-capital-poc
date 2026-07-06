@@ -125,5 +125,11 @@ export const HotelPageLocators = {
   popupImg: `(//a[@target="_blank"])//img`,
   outOfPopupImg: `//div[@class="wrapper-outer"]`,
   addguestbutton: `//a[@id='addroombox_1']`,
-  addtravellerbutton:`//button[@class='fldsavebtn add_traveller_btn enable_add_save']`
+  addtravellerbutton:`//button[@class='fldsavebtn add_traveller_btn enable_add_save']`,
+  Downloadlogobooking: `//div[@class='donld_links']//a[1]`,
+  bookflightlogobooking: `//div[@class='donld_links']//a[2]`,
+  bookingId: `//span[@id='copy_ref']`,
+  bookingDate: `//div[@class='travell_info']//p`,
+  fareSummaryDropdown: `//ul[@class='text-list']`,
+  fareSummarySection: `//div[contains(@class,'expand-box')] | //div[contains(@id,"collapseExample")]`,
 };
