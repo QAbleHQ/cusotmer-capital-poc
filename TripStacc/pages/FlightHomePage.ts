@@ -1084,7 +1084,7 @@ static async enterMobileNo(page: any, data: any) {
       break;
 
     case 'IDFC':
-    await ElementHelper.clearAndEnterInTextField(page, FlightPageLocators.defaultGSTNumber, '');
+    await ElementHelper.clearAndEnterInTextField(page, FlightPageLocators.defaultGSTNumber, `123456789012345`);
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators.gstErrorMessage);
     break;
   }

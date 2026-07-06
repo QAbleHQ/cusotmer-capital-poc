@@ -104,7 +104,7 @@ export const FlightPageLocators = {
   phoneErrorMessage: `//p[text()="Phone number is required"] | //i[text()="* Please enter passenger’s mobile number"]`,
   GSTHeader: `//h4[text()="GST Information (Optional)"] | //h4[text()="GST Information"]`,
   defaultGSTNumber: `//input[contains(@class,"booking_gst_number")]`,
-  gstErrorMessage: `//p[text()="GST number is required"]`,
+  gstErrorMessage: `//p[text()="Please enter a valid GST number"]`,
   passportDetailHeading: `//h4[text()="Passport information"] | //span[text()="Passport Number "]`,
   passportErrorMessage: `//i[text()="* Please enter passenger’s passport number"]`,
   passportCountryErrorMessage: `//i[text()="* Please enter passport’s issuing country"]`,

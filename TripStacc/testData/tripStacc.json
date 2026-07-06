@@ -1,52 +1,52 @@
 {
   "common": {
     "loginDataFill": {
-    "regularEmail": "user@example.com",
-    "regularPassword": "password123",
-    "mobileNumber": "8448661387",
-    "otp": "2248",
-    "restrictedAccessUsername": "temp",
-    "restrictedAccessPassword": "Tp@123#1",
-    "city": "Dubai",
-    "checkInDate": "10",
-    "checkOutDate": "12"
+      "regularEmail": "user@example.com",
+      "regularPassword": "password123",
+      "mobileNumber": "8448661387",
+      "otp": "2248",
+      "restrictedAccessUsername": "temp",
+      "restrictedAccessPassword": "Tp@123#1",
+      "city": "Dubai",
+      "checkInDate": "10",
+      "checkOutDate": "12"
     },
-      "dateSelector": {
-    "fromDate": "8",
-    "fromMonth": "Aug 2026",
-    "toDate": "30",
-    "toMonth": "Aug 2026"
-  },
+    "dateSelector": {
+      "fromDate": "8",
+      "fromMonth": "Jul 2026",
+      "toDate": "30",
+      "toMonth": "Jul 2026"
+    },
     "hotelBookingDataFill": {
-    "firstName": "John",
-    "lastName": "Doe",
-    "panNumber": "ABCDE1234F",
-    "contactNumber": "9876543210",
-    "email": "john.doe@example.com"
-  },
+      "firstName": "John",
+      "lastName": "Doe",
+      "panNumber": "ABCDE1234F",
+      "contactNumber": "9876543210",
+      "email": "john.doe@example.com"
+    },
     "hotelPage": {
       "rooms": 1,
       "domestic": "ahmedabad",
-      "domesticlocation":"Mumbai",
-       "international": "qatar",
-       "searcHotelName": "Itc Narmada",
-       "searcHotelNameInternational": "Souq Waqif Boutique Hotels by Tivoli",
-       "adults": 2,
-       "children": 0,
-       "hotelRoom1": 1,
-       "hotelAdult1": 2,
-       "hotelChildren1": 1,
-       "hotelChildrenAge1": [5],
-       "hotelRoom2": 1,
-       "hotelAdult2": 3,
-       "hotelChildren2": 2,
-       "hotelChildrenAge2": [5, 10]
+      "domesticlocation": "Mumbai",
+      "international": "qatar",
+      "searcHotelName": "Itc Narmada",
+      "searcHotelNameInternational": "Souq Waqif Boutique Hotels by Tivoli",
+      "adults": 2,
+      "children": 0,
+      "hotelRoom1": 1,
+      "hotelAdult1": 2,
+      "hotelChildren1": 1,
+      "hotelChildrenAge1": [5],
+      "hotelRoom2": 1,
+      "hotelAdult2": 3,
+      "hotelChildren2": 2,
+      "hotelChildrenAge2": [5, 10]
     },
     "flightPage": {
       "enterCityFrom": "Mumb",
       "enterCityTo": "Banga",
       "enterInternationalCityTo": "Dub"
-    }  ,
+    },
     "travellername": {
       "firstName": "John",
       "lastName": "Test",
@@ -68,32 +68,61 @@
       "enterRedeemPoint": "100"
     }
   },
- 
+
   "BOB": {
-    "loginDataFill": {
-      "mobileNumber": "9999999999",
-      "otp": "2248"
+    "UAT": {
+      "loginDataFill": {
+        "mobileNumber": "9999999999",
+        "otp": "2248"
+      },
+      "paymentDataFill": {
+        "cardNumber": "5277-5300-5229-0153",
+        "cardExpiry": " 05 30",
+        "cardCvv": "123",
+        "cardName": "Test",
+        "otp": "123456"
+      }
     },
-    "paymentDataFill": {
-      "cardNumber": "5277-5300-5229-0153",
-      "cardExpiry": " 05 30",
-      "cardCvv": "123",
-      "cardName": "Test",
-      "otp": "123456"
+    "PROD": {
+      "loginDataFill": {
+        "mobileNumber": "1234567890",
+        "otp": "2248"
+      },
+      "paymentDataFill": {
+        "cardNumber": "",
+        "cardExpiry": "",
+        "cardCvv": "",
+        "cardName": "",
+        "otp": ""
+      }
     }
   },
   "IDFC": {
-    "loginDataFill": {
-      "mobileNumber": "8448661387",
-      "otp": "2248"
+    "UAT": {
+      "loginDataFill": {
+        "mobileNumber": "8448661387",
+        "otp": "2248"
+      },
+      "paymentDataFill": {
+        "cardNumber": "4405-2350-2684-2471",
+        "cardExpiry": " 05 30",
+        "cardCvv": "123",
+        "cardName": "Test",
+        "otp": "123456"
+      }
     },
-     "paymentDataFill": {
-      "cardNumber": "4405-2350-2684-2471",
-      "cardExpiry": " 05 30",
-      "cardCvv": "123",
-      "cardName": "Test",
-      "otp": "123456"
-
+    "PROD": {
+      "loginDataFill": {
+        "mobileNumber": "8140217492",
+        "otp": "2248"
+      },
+      "paymentDataFill": {
+        "cardNumber": "",
+        "cardExpiry": "",
+        "cardCvv": "",
+        "cardName": "",
+        "otp": ""
+      }
     }
   }
 }

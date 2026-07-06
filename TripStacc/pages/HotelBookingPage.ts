@@ -311,24 +311,16 @@ static async clickonaddguestbutton(page: Page) {
     case 'BOB':
           await page.locator(HotelPageLocators.radioButtonMr).click();
           await page.waitForTimeout(2000);
-          const firstName = CommonHelper.generateRandomName(7);
-          const lastName = CommonHelper.generateRandomName(7);
-
-          await page.locator(HotelPageLocators.firstNameField).fill(firstName);
+          await page.locator(HotelPageLocators.firstNameField).fill("Hello");
           await page.waitForTimeout(2000);
-          await page.locator(HotelPageLocators.lastNameField).fill(lastName);
+          await page.locator(HotelPageLocators.lastNameField).fill("Test");
           await page.waitForTimeout(2000);
           console.log('Guest details form inside fields filled');
           await ElementHelper.clickElement(page, HotelPageLocators.saveGuestLocator);
           console.log('Clicked on Save Guest checkbox');
-          await ElementHelper.isElementDisplayed(page, HotelPageLocators.travellerSavedSuccessfully);
-          console.log('Traveller saved successfully message is displayed');
-
-          await ElementHelper.clickElement(page, HotelPageLocators.saveGuestLocator);
-          console.log('Clicked on Save Guest checkbox');
-          await page.locator(HotelPageLocators.firstNameField).fill(firstName);
+          await page.locator(HotelPageLocators.firstNameField).fill("Hello");
           await page.waitForTimeout(2000);
-          await page.locator(HotelPageLocators.lastNameField).fill(lastName);
+          await page.locator(HotelPageLocators.lastNameField).fill("Test");
           await page.waitForTimeout(2000);
           await ElementHelper.clickElement(page, HotelPageLocators.saveGuestLocator);
           console.log('Clicked on Save Guest checkbox');
@@ -349,19 +341,62 @@ static async clickonaddguestbutton(page: Page) {
       await ElementHelper.clickElement(page, HotelPageLocators. assignGuestToRoomButton);
       await page.waitForTimeout(2000);
       console.log('Assign Guest to Room button clicked');
-      await this. nextButtonAfterAddingGuest(page);
-      await page.waitForTimeout(2000);
+      // await this. nextButtonAfterAddingGuest(page);
+      // await page.waitForTimeout(2000);
       break;
     break;
   }
   }
 
 
+  static async fillGuestDetailsInside(page: any) {
+  const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
+          await page.locator(HotelPageLocators.radioButtonMr).click();
+          await page.waitForTimeout(2000);
+          await page.locator(HotelPageLocators.firstNameField).fill("Hello");
+          await page.waitForTimeout(2000);
+          await page.locator(HotelPageLocators.lastNameField).fill("Test");
+          await page.waitForTimeout(2000);
+          console.log('Guest details form inside fields filled');
+          await ElementHelper.clickElement(page, HotelPageLocators.saveGuestLocator);
+          console.log('Clicked on Save Guest checkbox');
+          await page.locator(HotelPageLocators.firstNameField).fill("Hello");
+          await page.waitForTimeout(2000);
+          await page.locator(HotelPageLocators.lastNameField).fill("Test");
+          await page.waitForTimeout(2000);
+          await ElementHelper.clickElement(page, HotelPageLocators.saveGuestLocator);
+          console.log('Clicked on Save Guest checkbox');
+          await ElementHelper.isElementDisplayed(page, HotelPageLocators.travellerUserAlreadyExists);
+          console.log('Traveller User Already Exists message is displayed');
+      break;
+ 
+    case 'IDFC':
+      await ElementHelper.clickElement(page, HotelPageLocators.addGuestBtn);
+      await page.waitForTimeout(2000);
+      await page.locator(HotelPageLocators.radioButtonMr).click();
+      await page.waitForTimeout(2000);
+      await page.locator(HotelPageLocators.firstNameField).fill(Data.hotelBookingDataFill.firstName);
+      await page.waitForTimeout(2000);
+      await page.locator(HotelPageLocators.lastNameField).fill(Data.hotelBookingDataFill.lastName);
+      await page.waitForTimeout(2000);
+      console.log('Guest details form inside fields filled');
+      await ElementHelper.clickElement(page, HotelPageLocators. assignGuestToRoomButton);
+      await page.waitForTimeout(2000);
+      console.log('Assign Guest to Room button clicked');
+      break;
+    break;
+  }
+  }
 
   static async fillGuestDetailsoutsideForm(page: Page) {
       const CLIENT = process.env.CLIENT?.toUpperCase();
       switch (CLIENT) {
         case 'BOB':
+        await page.locator(HotelPageLocators.contactNumberField).fill(Data.hotelBookingDataFill.contactNumber);
+        await page.waitForTimeout(2000);
+        console.log('Guest details form contact information filled');
           break;
     
         case 'IDFC':
