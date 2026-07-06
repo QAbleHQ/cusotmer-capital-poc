@@ -13,9 +13,9 @@
     },
     "dateSelector": {
       "fromDate": "8",
-      "fromMonth": "Jul 2026",
+      "fromMonth": "Aug 2026",
       "toDate": "30",
-      "toMonth": "Jul 2026"
+      "toMonth": "Aug 2026"
     },
     "hotelBookingDataFill": {
       "firstName": "John",
