@@ -416,7 +416,7 @@ static async select1StopFilter(page: Page): Promise<void> {
  
         console.log(`Flight ${i + 1}: ${actual}`);
  
-        expect(actual).toContain("non-stop");
+        expect(actual).toContain("stop: 1");
       }
    
       break; // important
