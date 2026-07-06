@@ -23,7 +23,7 @@ export const HomePageLocators = {
     earnPointsBadge: "//a[@class='prodiscounternewdesign3 ']",
     giftCardSectionCards: "//div[@class='col-xl-3 col-sm-4 col-6 mb-4 cstmpd ']",
     pointsAndCashText: "//p[@class='start-point']",
-    productimagegiftcard: "(//p[@class='card-gift'])[2]",
+    productimagegiftcard: "(//a[text()='Barbeque Nation E-Gift Card - Store'])[3]",
     earnMoreExclusiveVisible: `//section[@id="spcl656"]`,
     verifyProductImageDisplayed: `(//section[@id="spcl656"]//div[@class="proimage1"]//img)[6]`,
     verifyAndGetProductTitle: `(//section[@id="spcl656"]//h6//a)[6]`,
@@ -36,5 +36,7 @@ export const HomePageLocators = {
     getTitleAndCompareMobile: `//h1[@class="pro-name heading-desknone"]`,
     getPricingAndCompareMobile: `//div[@id="ctl00_ContentPlaceHolder1_repspecialv2_ctl00_mrp"]//p`,
     bugerMenuMobile: `//div[@id="burger"]`,
-    giftCardOptionMobile: `(//li[@class="menu-item menu-dropdown"]//a//img)[2]`,
+    giftCardOptionMobile: `//img[contains(@onclick,'Gift Cards')]`,
+    navigationheader: `//div[contains(@class, "d-flex justify-content-between top-menu")]`,
+    navigationheaderMobile: `//ul[@id='menu']`,
 };

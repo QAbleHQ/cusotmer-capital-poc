@@ -22,7 +22,7 @@ export class HotelBookingPage {
       break;
 
     default:
-      console.warn(`No need to handle for this client`);
+      console.warn(`No need to handle for client`);
       break;
   }
 }

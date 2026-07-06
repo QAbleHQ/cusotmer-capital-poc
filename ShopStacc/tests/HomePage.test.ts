@@ -12,6 +12,7 @@ test.beforeEach(async ({ browser }) => {
   await CommonHelper.navigateToHomePage(page);
   await LoginPage.LoginCredEnterBeforeEach(page);
   await LoginPage.RestrictionPageBeforeEach(page);
+  await page.waitForLoadState('domcontentloaded');
 });
 
 test.afterEach(async () => {
@@ -47,8 +48,8 @@ test("SC_004, Gift Card PLP — product card details and layout", { tag: ['@BOBC
 
   await test.step("Click Gift Card option", async () => {
     await page.waitForLoadState('domcontentloaded');
+    await HomePage.waitForHeader(page);
     await HomePage.clickGiftCardOption(page);
-
   });
 
   await test.step("Verify Gift Card PLP page is visible", async () => {

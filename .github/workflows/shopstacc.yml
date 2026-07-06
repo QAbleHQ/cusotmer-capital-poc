@@ -105,7 +105,7 @@ jobs:
           set +e
           PROJECT="$PROJECT_VAL" npx playwright test ShopStacc/tests \
             --config=playwright.config.ts \
-            --workers=4 \
+            --workers=2 \
             --retries=2
           EXIT_CODE=$?
           set -e

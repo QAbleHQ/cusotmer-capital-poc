@@ -234,11 +234,11 @@ static async fillCardExpiry(page: Page) {
     await ElementHelper.clickElement(page, PaymentPageLocators.termsConditionCheckboxBob);
     await ElementHelper.clickElement(page, PaymentPageLocators.payNowButtonBob);
     await ElementHelper.clickElement(page, PaymentPageLocators.continuebuttonbobpayment);
-    await page.waitForTimeout(7000);
-   const frame = page.frameLocator('//iframe[@class="razorpay-checkout-frame"]');
-   await frame.locator(PaymentPageLocators.mobileinput).fill('8140217872');
-   await frame.locator(PaymentPageLocators. continuebtnformobile).click();
-   await frame.locator(PaymentPageLocators. payviacard).click();
+    await ElementHelper.clickElement(page,`(//button[@class="btn btn-primarycontinue"])[1]`);
+    //await ElementHelper.clickElement(page, PaymentPageLocators.contactmobileno);
+   await page.locator(PaymentPageLocators.mobileNoInput).fill('8140217872');
+   await page.locator(PaymentPageLocators. continuebtnformobile).click();
+   await page.locator(PaymentPageLocators. payviacard).click();
     await PaymentPage.verifyCardFieldsVisible(page);
     await page.waitForTimeout(2000);
     await PaymentPage.fillCardNumber(page);
@@ -249,7 +249,6 @@ static async fillCardExpiry(page: Page) {
     await page.waitForTimeout(2000);
     await PaymentPage.verifySaveCardPopupVisible(page);
     await page.waitForTimeout(2000);
- 
     await PaymentPage.clickProceedButton(page);
     await page.waitForTimeout(2000);
     await PaymentPage.clickMaybeLaterButton(page);
