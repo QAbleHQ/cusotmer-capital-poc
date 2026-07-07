@@ -1,0 +1,230 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: TripStacc/tests/CheckoutPage.test.ts >> SC_011.01: Hotel- Proceed with payment
+- Location: TripStacc/tests/CheckoutPage.test.ts:474:5
+
+# Error details
+
+```
+Test timeout of 600000ms exceeded.
+```
+
+```
+Error: locator.click: Target page, context or browser has been closed
+Call log:
+  - waiting for locator('//label[@class="radio-custom-label" and @for="radio-1"]')
+
+```
+
+# Test source
+
+```ts
+  212 |                     await page.locator(HotelPageLocators.addGuestButton).click();
+  213 |                     console.log('Add Guest button clicked');
+  214 |                   }
+  215 |       break;
+  216 |  
+  217 |     case 'BOB':
+  218 |     console.log('⏭️ BOB: Skipping ');
+  219 |     break;
+  220 |   }
+  221 | 
+  222 |   }
+  223 | 
+  224 |   static async clickAddNewGuestButton(page: Page) {
+  225 |     if(DeviceHelper.isMobile()) {
+  226 |       try {
+  227 |         const popup = page.locator(HotelPageLocators.beePopupForMobile);
+  228 |         await popup.waitFor({ state: 'visible', timeout: 10000 });
+  229 |       
+  230 |         await ElementHelper.clickElement(page, HotelPageLocators.clickOutsideOfBeePopupForMobile);
+  231 |         console.log('Bee popup detected and closed');
+  232 |       } catch (e) {
+  233 |         console.log('Bee popup did not appear, proceeding...');
+  234 |       }
+  235 |     }
+  236 |     await page.locator(HotelPageLocators.addGuestBtn).click();
+  237 |     console.log('Add New Guest button clicked');
+  238 |   }
+  239 | 
+  240 |   static async clickAddNewGuestButtonForIdfc(page: Page): Promise<void> {
+  241 | 
+  242 |     const CLIENT = process.env.CLIENT?.toUpperCase();
+  243 | 
+  244 |     switch (CLIENT) {
+  245 | 
+  246 |         case 'IDFC':
+  247 |             await page.locator(HotelPageLocators.addGuestBtn).click();
+  248 |             console.log('Add New Guest button clicked');
+  249 |             break;
+  250 | 
+  251 |         case 'BOB':
+  252 |               console.log('⏭️ BOB: Skipping ');
+  253 |             break;
+  254 | 
+  255 |         default:
+  256 | 
+  257 |             await page.locator(HotelPageLocators.addGuestBtn).click();
+  258 |             console.log('Add New Guest button clicked');
+  259 | 
+  260 |             break;
+  261 |     }
+  262 | }
+  263 | 
+  264 |   static async clickEditTraveler(page: Page) {
+  265 |       const CLIENT = process.env.CLIENT?.toUpperCase();
+  266 |   switch (CLIENT) {
+  267 |     case 'BOB':
+  268 | 		console.log('⏭️ BOB: Skipping ');
+  269 |       break;
+  270 |  
+  271 |     case 'IDFC':
+  272 |         await page.locator(HotelPageLocators.editTravelerButton).click();
+  273 |         console.log('Edit traveler button clicked');
+  274 |     break;
+  275 |   }
+  276 | 
+  277 |   }
+  278 | 
+  279 |   static async verifyCannotProceedWithoutConditions(page: Page) {
+  280 |     await page.locator(HotelPageLocators.assignGuestToRoomButton).click();
+  281 |     const isErrorVisible = await page.locator(HotelPageLocators.conditionsErrorMessage).isVisible();
+  282 |     if (isErrorVisible) {
+  283 |       console.log('User cannot proceed without accepting mandatory conditions');
+  284 |     }
+  285 |   }
+  286 | 
+  287 |   static async clickCheckboxAfterRedeam(page: Page) {
+  288 |     const checkboxLocator = HotelPageLocators.clickCheckboxAfterRedeam;
+  289 |     await ElementHelper.clickElement(page, checkboxLocator);
+  290 |     console.log('Checkbox after redeem action clicked');
+  291 |   }
+  292 | 
+  293 | static async clickonaddguestbutton(page: Page) {
+  294 |   const CLIENT = process.env.CLIENT?.toUpperCase();
+  295 | 
+  296 |  
+  297 |   if (CLIENT === 'BOB') {
+  298 |     console.log('Skipping Add Guest button for BOB / IDFC');
+  299 |     return;
+  300 |   }
+  301 | 
+  302 |   const checkboxLocator = HotelPageLocators.addguestbutton;
+  303 |   await ElementHelper.clickElement(page, checkboxLocator);
+  304 |   console.log('Add Guest button clicked');
+  305 | }
+  306 | 
+  307 | 
+  308 |   static async fillGuestDetailsInsideForm(page: any) {
+  309 |   const CLIENT = process.env.CLIENT?.toUpperCase();
+  310 |   switch (CLIENT) {
+  311 |     case 'BOB':
+> 312 |           await page.locator(HotelPageLocators.radioButtonMr).click();
+      |                                                               ^ Error: locator.click: Target page, context or browser has been closed
+  313 |           await page.waitForTimeout(2000);
+  314 |           await page.locator(HotelPageLocators.firstNameField).fill("Hello");
+  315 |           await page.waitForTimeout(2000);
+  316 |           await page.locator(HotelPageLocators.lastNameField).fill("Test");
+  317 |           await page.waitForTimeout(2000);
+  318 |           console.log('Guest details form inside fields filled');
+  319 |           await ElementHelper.clickElement(page, HotelPageLocators.saveGuestLocator);
+  320 |           console.log('Clicked on Save Guest checkbox');
+  321 |           await page.locator(HotelPageLocators.firstNameField).fill("Hello");
+  322 |           await page.waitForTimeout(2000);
+  323 |           await page.locator(HotelPageLocators.lastNameField).fill("Test");
+  324 |           await page.waitForTimeout(2000);
+  325 |           await ElementHelper.clickElement(page, HotelPageLocators.saveGuestLocator);
+  326 |           console.log('Clicked on Save Guest checkbox');
+  327 |           await ElementHelper.isElementDisplayed(page, HotelPageLocators.travellerUserAlreadyExists);
+  328 |           console.log('Traveller User Already Exists message is displayed');
+  329 |       break;
+  330 |  
+  331 |     case 'IDFC':
+  332 |       await ElementHelper.clickElement(page, HotelPageLocators.addGuestBtn);
+  333 |       await page.waitForTimeout(2000);
+  334 |       await page.locator(HotelPageLocators.radioButtonMr).click();
+  335 |       await page.waitForTimeout(2000);
+  336 |       await page.locator(HotelPageLocators.firstNameField).fill(Data.hotelBookingDataFill.firstName);
+  337 |       await page.waitForTimeout(2000);
+  338 |       await page.locator(HotelPageLocators.lastNameField).fill(Data.hotelBookingDataFill.lastName);
+  339 |       await page.waitForTimeout(2000);
+  340 |       console.log('Guest details form inside fields filled');
+  341 |       await ElementHelper.clickElement(page, HotelPageLocators. assignGuestToRoomButton);
+  342 |       await page.waitForTimeout(2000);
+  343 |       console.log('Assign Guest to Room button clicked');
+  344 |       await this. nextButtonAfterAddingGuest(page);
+  345 |       await page.waitForTimeout(2000);
+  346 |       break;
+  347 |     break;
+  348 |   }
+  349 |   }
+  350 | 
+  351 | 
+  352 |   static async fillGuestDetailsInside(page: any) {
+  353 |   const CLIENT = process.env.CLIENT?.toUpperCase();
+  354 |   switch (CLIENT) {
+  355 |     case 'BOB':
+  356 |           await page.locator(HotelPageLocators.radioButtonMr).click();
+  357 |           await page.waitForTimeout(2000);
+  358 |           await page.locator(HotelPageLocators.firstNameField).fill("Hello");
+  359 |           await page.waitForTimeout(2000);
+  360 |           await page.locator(HotelPageLocators.lastNameField).fill("Test");
+  361 |           await page.waitForTimeout(2000);
+  362 |           console.log('Guest details form inside fields filled');
+  363 |           await ElementHelper.clickElement(page, HotelPageLocators.saveGuestLocator);
+  364 |           console.log('Clicked on Save Guest checkbox');
+  365 |           await page.locator(HotelPageLocators.firstNameField).fill("Hello");
+  366 |           await page.waitForTimeout(2000);
+  367 |           await page.locator(HotelPageLocators.lastNameField).fill("Test");
+  368 |           await page.waitForTimeout(2000);
+  369 |           await ElementHelper.clickElement(page, HotelPageLocators.saveGuestLocator);
+  370 |           console.log('Clicked on Save Guest checkbox');
+  371 |           await ElementHelper.isElementDisplayed(page, HotelPageLocators.travellerUserAlreadyExists);
+  372 |           console.log('Traveller User Already Exists message is displayed');
+  373 |       break;
+  374 |  
+  375 |     case 'IDFC':
+  376 |       await ElementHelper.clickElement(page, HotelPageLocators.addGuestBtn);
+  377 |       await page.waitForTimeout(2000);
+  378 |       await page.locator(HotelPageLocators.radioButtonMr).click();
+  379 |       await page.waitForTimeout(2000);
+  380 |       await page.locator(HotelPageLocators.firstNameField).fill(Data.hotelBookingDataFill.firstName);
+  381 |       await page.waitForTimeout(2000);
+  382 |       await page.locator(HotelPageLocators.lastNameField).fill(Data.hotelBookingDataFill.lastName);
+  383 |       await page.waitForTimeout(2000);
+  384 |       console.log('Guest details form inside fields filled');
+  385 |       await ElementHelper.clickElement(page, HotelPageLocators. assignGuestToRoomButton);
+  386 |       await page.waitForTimeout(2000);
+  387 |       console.log('Assign Guest to Room button clicked');
+  388 |       break;
+  389 |     break;
+  390 |   }
+  391 |   }
+  392 | 
+  393 |   static async fillGuestDetailsoutsideForm(page: Page) {
+  394 |       const CLIENT = process.env.CLIENT?.toUpperCase();
+  395 |       switch (CLIENT) {
+  396 |         case 'BOB':
+  397 |         await page.locator(HotelPageLocators.contactNumberField).fill(Data.hotelBookingDataFill.contactNumber);
+  398 |         await page.waitForTimeout(2000)
+  399 |         console.log('Guest details form contact information filled');
+  400 |           break;
+  401 |     
+  402 |         case 'IDFC':
+  403 |             await page.locator(HotelPageLocators.contactNumberField).fill(Data.hotelBookingDataFill.contactNumber);
+  404 |         await page.waitForTimeout(2000);
+  405 |         await page.locator(HotelPageLocators.emailField).fill(Data.hotelBookingDataFill.email);
+  406 |         await page.waitForTimeout(2000);
+  407 |         console.log('Guest details form contact information filled');
+  408 |         break;
+  409 |       }
+  410 |   }
+  411 | 
+  412 |     static async fillGuestDetailsoutsideFormForBOB(page: Page) {
+```
