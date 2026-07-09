@@ -1,4 +1,4 @@
-import { test, Page, BrowserContext } from '@playwright/test';
+import { test, Page, BrowserContext } from '../../utils/testBase';
 import { HomePage } from '../pages/HomePage';
 import { PLPPage } from '../pages/PlpPage';
 import { Checkoutpage } from '../pages/Checkoutpage';

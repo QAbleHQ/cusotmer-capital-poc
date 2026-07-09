@@ -1,4 +1,4 @@
-import { test, Page, BrowserContext } from '@playwright/test';
+import { test, Page, BrowserContext } from '../../utils/testBase';
 import { CommonHelper } from '../../utils/commonHelper';
 import { VerificationHelpers } from '../../utils/verificationHelper';
 import { LoginPage } from '../../ShopStacc/pages/LoginPage';

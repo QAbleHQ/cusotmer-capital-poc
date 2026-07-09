@@ -1,4 +1,4 @@
-import { test, Page, BrowserContext } from '@playwright/test';
+import { test, Page, BrowserContext } from '../../utils/testBase';
 import { MyAccountPage } from '../pages/MyAccountPage';
 import { BaseHelper } from '../pages/CommonMethods';
 let context: BrowserContext;
