@@ -1,4 +1,4 @@
-import { test, Page, BrowserContext, expect } from '@playwright/test';
+import { test, Page, BrowserContext, expect } from '../../utils/testBase';
 import { HomePage } from '../pages/HomePage';
 import { BaseHelper } from '../../TripStacc/pages/CommonMethods';
 import { LoginPage } from '../pages/LoginPage';

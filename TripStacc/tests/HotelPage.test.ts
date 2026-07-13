@@ -1,4 +1,4 @@
-import { test, Page, BrowserContext } from '@playwright/test';
+import { test, Page, BrowserContext } from '../../utils/testBase';
 import { HotelHomePage } from '../pages/HotelHomePage';
 import { HotelBookingPage } from '../pages/HotelBookingPage';
 import idfcTestData from '../testData/tripStacc.json';

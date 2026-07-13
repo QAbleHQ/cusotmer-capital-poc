@@ -6,3 +6,11 @@ node_modules/
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
+/reports/
+
+# Local secrets
+.env
+
+# OS / local tooling
+.DS_Store
+.claude/settings.local.json

@@ -1,11 +1,13 @@
+import 'dotenv/config';
 import { defineConfig } from '@playwright/test';
 import { BOB_TS, IDFC_TS, BOBCard_SS } from './config/ts.config';
+import { GRID, getLambdaTestWsEndpoint } from './utils/lambdaGrid';
 const mobileDevices = require('./mobileDevices');
 
 // ─── SETTINGS ────────────────────────────────────────────────────────────────
-const TIMEOUT = 600000;       
+const TIMEOUT = 600000;
 const RETRIES = 2;             // retries on failure
-const WORKERS = { ci: 4, local: 2 };
+const WORKERS = { ci: 1, local: 1 };
 const HEADED  = process.env.HEADED === 'true';
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -52,6 +54,14 @@ const mappedBrowser: BrowserName =
     ? 'webkit'
     : 'chromium';
 
+// ✅ LambdaTest browserName mapping (LT expects its own browser identifiers)
+const lambdaBrowserName =
+  mappedBrowser === 'firefox'
+    ? 'pw-firefox'
+    : mappedBrowser === 'webkit'
+    ? 'pw-webkit'
+    : 'Chrome';
+
 // ✅ Test directory
 const testDir =
   product === 'tripstacc' ? './TripStacc/tests'
@@ -90,28 +100,46 @@ if (deviceName) {
   );
 
   if (selectedDevice) {
+    const projectName = `${product}-${browserEnv}-${environment}-${CLIENT}-mobile-${selectedDevice.name.toLowerCase()}`;
+    const useRealDevice = GRID.isGrid && GRID.realDevice;
+
     projects.push({
-      name: `${product}-${browserEnv}-${environment}-${CLIENT}-mobile-${selectedDevice.name.toLowerCase()}`,
+      name: projectName,
       testDir,
-      use: {
-        baseURL,
-        browserName: mappedBrowser,
-        channel:
-          browserEnv === 'chrome'
-            ? 'chrome'
-            : browserEnv === 'edge'
-            ? 'msedge'
-            : undefined,
-        headless: !HEADED,
+      // Real hardware dictates its own browser/viewport/UA, and connects via
+      // Playwright's native `_android` API rather than `browserType.connect()`
+      // (see utils/testBase.ts for why) — so `connectOptions` doesn't apply
+      // here. `context`/`page` fixtures are fully overridden in testBase.ts
+      // for real-device runs; this `use` block only needs to supply baseURL.
+      use: useRealDevice
+        ? {
+            baseURL,
+          }
+        : {
+            baseURL,
+            browserName: mappedBrowser,
+            channel:
+              browserEnv === 'chrome'
+                ? 'chrome'
+                : browserEnv === 'edge'
+                ? 'msedge'
+                : undefined,
+            headless: !HEADED,
 
-        viewport: selectedDevice.viewport,
-        isMobile: selectedDevice.isMobile,
-        hasTouch: selectedDevice.hasTouch,
-        userAgent: selectedDevice.userAgent,
+            viewport: selectedDevice.viewport,
+            isMobile: selectedDevice.isMobile,
+            hasTouch: selectedDevice.hasTouch,
+            userAgent: selectedDevice.userAgent,
 
-        screenshot: 'only-on-failure',
-        video: 'off',
-      },
+            screenshot: 'only-on-failure',
+            video: 'off',
+
+            connectOptions: GRID.isGrid
+              ? {
+                  wsEndpoint: getLambdaTestWsEndpoint(lambdaBrowserName, projectName),
+                }
+              : undefined,
+          },
     });
   }
 } else {
@@ -145,6 +173,15 @@ if (deviceName) {
         mappedBrowser === 'chromium'
           ? { args: ['--start-maximized'] }
           : undefined,
+
+      connectOptions: GRID.isGrid
+        ? {
+            wsEndpoint: getLambdaTestWsEndpoint(
+              lambdaBrowserName,
+              `${product}-${browserEnv}-${environment}-${CLIENT}`
+            ),
+          }
+        : undefined,
     },
   });
 }
