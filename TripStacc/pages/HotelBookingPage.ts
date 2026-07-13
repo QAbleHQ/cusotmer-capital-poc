@@ -341,7 +341,9 @@ static async clickonaddguestbutton(page: Page) {
       await ElementHelper.clickElement(page, HotelPageLocators. assignGuestToRoomButton);
       await page.waitForTimeout(2000);
       console.log('Assign Guest to Room button clicked');
-      await this. nextButtonAfterAddingGuest(page);
+       const nextButtonLocator = HotelPageLocators.nextButtonAfterAddingGuest;
+        await ElementHelper.clickElement(page, nextButtonLocator);
+        console.log('Next button after adding guest clicked');
       await page.waitForTimeout(2000);
       break;
     break;

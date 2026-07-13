@@ -525,7 +525,6 @@ test('SC_011.01: Hotel- Proceed with payment', { tag: ['@IDFC', '@BOB', '@Paymen
     await page.waitForTimeout(5000);
     await HotelBookingPage.clickonaddguestbutton(page);
     await page.waitForTimeout(1000);
-    await page.pause();
   });
   await test.step('Step 13: Fill in Guest Details', async () => {
     await page.waitForTimeout(5000);
