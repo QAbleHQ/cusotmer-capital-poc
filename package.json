@@ -67,8 +67,13 @@
     "npm run test:tripstacc:idfc:uat:headed -- --grep IDFC": "Executes TripStacc IDFC UAT (headed mode) with IDFC tag",
     "npm run test:tripstacc:idfc:uat:headed -- --last-failed": "Retries only failed TripStacc IDFC UAT (headed mode):",
 
-    "test:tripstacc:bob:uat:loginpage:headed": "cross-env PROJECT=tripstacc-chrome-UAT-loginpage CLIENT=BOB HEADED=true npx playwright test"
+    "test:tripstacc:bob:uat:loginpage:headed": "cross-env PROJECT=tripstacc-chrome-UAT-loginpage CLIENT=BOB HEADED=true npx playwright test",
+    "test:tripstacc:bob:uat:grid": "cross-env IS_GRID=true PROJECT=tripstacc-chrome-UAT CLIENT=BOB npx playwright test TripStacc/tests",
+    "test:tripstacc:bob:uat:local": "cross-env IS_GRID=false PROJECT=tripstacc-chrome-UAT CLIENT=BOB npx playwright test TripStacc/tests",
+    "test:tripstacc:bob:uat:grid:loginpage": "cross-env IS_GRID=true PROJECT=tripstacc-chrome-UAT-loginpage CLIENT=BOB npx playwright test TripStacc/tests",
+    "test:tripstacc:bob:uat:grid:multitag": "cross-env IS_GRID=true PROJECT=tripstacc-chrome-UAT CLIENT=BOB npx playwright test TripStacc/tests --grep \"@Loginpage|@Hotel\"",
     
+    "test:tripstacc:bob:uat:grid:android:real": "cross-env IS_GRID=true LAMBDA_REAL_DEVICE=true LAMBDA_PLATFORM_NAME=android PROJECT=tripstacc-chrome-UAT-mobile-GalaxyS21-loginpage CLIENT=BOB npx playwright test TripStacc/tests"
   },
 
   "keywords": [],
