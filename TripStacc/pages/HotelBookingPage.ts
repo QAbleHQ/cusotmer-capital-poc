@@ -524,9 +524,18 @@ static async clickonaddguestbutton(page: Page) {
   }
 
   static async nextButtonAfterAddingGuest(page: Page) {
-    const nextButtonLocator = HotelPageLocators.nextButtonAfterAddingGuest;
-    await ElementHelper.clickElement(page, nextButtonLocator);
-    console.log('Next button after adding guest clicked');
+    const CLIENT = process.env.CLIENT?.toUpperCase();
+    switch (CLIENT) {
+      case 'BOB':
+        const nextButtonLocator = HotelPageLocators.nextButtonAfterAddingGuest;
+        await ElementHelper.clickElement(page, nextButtonLocator);
+        console.log('Next button after adding guest clicked');
+        break;
+
+      case 'IDFC':
+        console.log('⏭️ IDFC: Skipping ');
+        break;
+    }
   }
 
   static async verifyPanCardNotVisible(page: Page) {
