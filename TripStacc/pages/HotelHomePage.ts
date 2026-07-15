@@ -218,7 +218,66 @@ static async clickDateButton(page: any) {
     }
     console.log(" Rooms and Guests button displayed");
   }
+static async selectNextMonthDateFROM1(page: any) {
+  await page.waitForTimeout(5000);
 
+  const targetDate = new Date();
+  targetDate.setMonth(targetDate.getMonth() + 1);
+
+  const monthYear = targetDate.toLocaleString('en-US', {
+    month: 'long',
+    year: 'numeric',
+  });
+
+  const date = targetDate.getDate().toString();
+
+  const monthLocator = HotelPageLocators.selectMonth.replace(
+    '{monthYear}',
+    monthYear
+  );
+
+  while (!(await page.locator(monthLocator).isVisible())) {
+    await ElementHelper.clickElement(page, HotelPageLocators.nextButton);
+  }
+
+  const dateLocator = HotelPageLocators.selectDate
+    .replace('{monthYear}', monthYear)
+    .replace('{date}', date);
+
+  await ElementHelper.clickElement(page, dateLocator);
+
+  console.log(`✅ Selected date: ${date} ${monthYear}`);
+}
+static async selectNextMonthDateTO1(page: any) {
+  const targetDate = new Date();
+
+  targetDate.setMonth(targetDate.getMonth() + 1);
+  targetDate.setDate(targetDate.getDate() + 2);
+
+  const monthYear = targetDate.toLocaleString('en-US', {
+    month: 'long',
+    year: 'numeric',
+  });
+
+  const date = targetDate.getDate().toString();
+
+  const monthLocator = HotelPageLocators.selectMonth.replace(
+    '{monthYear}',
+    monthYear
+  );
+
+  while (!(await page.locator(monthLocator).isVisible())) {
+    await ElementHelper.clickElement(page, HotelPageLocators.nextButton);
+  }
+
+  const dateLocator = HotelPageLocators.selectDate
+    .replace('{monthYear}', monthYear)
+    .replace('{date}', date);
+
+  await ElementHelper.clickElement(page, dateLocator);
+
+  console.log(`✅ Selected checkout date: ${date} ${monthYear}`);
+}
   static async selectMonthAndDateFROM(page: any, monthYear: string, date: string) {
    await page.waitForTimeout(5000);
   const CLIENT = process.env.CLIENT?.toUpperCase();

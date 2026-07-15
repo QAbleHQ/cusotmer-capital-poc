@@ -7,6 +7,8 @@ const idfcTestData = require('../testData/tripStacc.json');
 import { BaseHelper } from '../pages/CommonMethods';
 import { Data } from '../../utils/dataProvider';
 import { HotelHomePage } from '../pages/HotelHomePage';
+import { FlightPageLocators } from '../locators/FlightPageLocators';
+import { BookingConfirmationPage } from '../pages/BookingConfirmationPage';
 let context: BrowserContext;
 let page: Page;
 
@@ -21,7 +23,7 @@ test.afterEach(async () => {
   await context.close();
 });
 
-test('SC_012: Booking Confirmation Page: Flight (Confirmed/Pending/Failed)', { tag: ['@IDFC', '@BOB', '@Common','@Flight', '@Bookingconfirmation', '@Regression'] }, async () => {
+test('SC_012: Booking Confirmation Page: Flight (Confirmed/Pending/Failed)', { tag: ['@IDFC', '@BOB', '@Common', '@Flight', '@Bookingconfirmation', '@Regression'] }, async () => {
   await test.step("Step 1: Enter City From Airport", async () => {
     await page.waitForTimeout(5000);
     await FlightHomePage.clickOnCityFromAirport(page);
@@ -132,80 +134,70 @@ test('SC_012: Booking Confirmation Page: Flight (Confirmed/Pending/Failed)', { t
   });
   await test.step("Step 29: Complete Card Payment Flow", async () => {
     await PaymentPage.completeCardPaymentFlow(page);
-      await page.waitForTimeout(8000);
-        await FlightBookingPage.verifyBookingOutcome(page);
+    await page.waitForTimeout(12000);
+    await page.waitForSelector(FlightPageLocators.bookingId);
+    await BookingConfirmationPage.verifyBookingOutcomeFlight(page);
   });
- });
+});
 
-  test('SC_012.01: Booking Confirmation for Hotel', { tag: ['@IDFC', '@BOB', '@Common', '@Payment','@Hotel', '@Regression'] }, async () => {
-   await test.step('Step 1: Open Hotels Section', async () => {
-      await page.waitForTimeout(5000);
-      await BaseHelper.clickHotelTabBTN(page);
-      await page.waitForTimeout(5000);
-    });
-  
-    await test.step('Step 2: Enter Domestic Hotel Location', async () => {
-      await HotelHomePage.searchValueInTestBox(page, Data.hotelPage.domestic);
-      await page.waitForTimeout(5000);
-    });
-  
-    await test.step('Step 3: Choose First Domestic Hotel Option', async () => {
-      await HotelHomePage.selectFirstOptionFromDropdown(page);
-      await page.waitForTimeout(5000);
-    });
-  
-    await test.step('Step 4: Set Check-in and Check-out Dates', async () => {
-      await HotelHomePage.clickDateButton(page);
-      await page.waitForTimeout(5000);
-      await HotelHomePage.selectMonthAndDateFROM(page, Data.dateSelector.fromMonth, Data.dateSelector.fromDate);
-      await page.waitForTimeout(5000);
-      await HotelHomePage.selectMonthAndDateTO(page, Data.dateSelector.toMonth, Data.dateSelector.toDate);
-      await page.waitForTimeout(5000);
-    });
-  
-    await test.step('Step 5: Search for Hotels (Single Room Default)', async () => {
-      await BaseHelper.clickSearchHotelButton(page);
-      await page.waitForTimeout(5000);
-    });
-  
-    await test.step('Step 6: Search Hotel Name in Search Box', async () => {
-      await HotelBookingPage.searchHotelNameInTestBox(page, Data.hotelPage.searcHotelName);
-      await page.waitForTimeout(5000);
-    });
-  
-    await test.step('Step 7: Click the first hotel result', async () => {
-      await HotelHomePage.clickFirstResult(page);
-      await page.waitForTimeout(5000);
-    });
-  
-    await test.step('Step 8: Click the First Room Selection Button', async () => {
-      await HotelBookingPage.clickFirstRoomSelectionButton(page);
-      await page.waitForTimeout(5000);
-    });
-  
-    await test.step('Step 9: Click Next button on first tab', async () => {
-      await HotelBookingPage.firstTabNextButton(page);
-      await page.waitForTimeout(5000);
-    });
-    await test.step('Step 12: Click Add New Guest Button', async () => {
-      await page.waitForTimeout(3000);
-      await HotelBookingPage.removePopupForIDFC(page);
-      await page.waitForTimeout(5000);
-      await HotelBookingPage.clickonaddguestbutton(page);
-      await page.waitForTimeout(1000);
-    });
-  
-  
-    await test.step('Step 13: Fill in Guest Details', async () => {
-      await page.waitForTimeout(5000);
-      await HotelBookingPage.removePopupForIDFC(page);
-      await page.waitForTimeout(5000);
-      await HotelBookingPage.fillGuestDetailsInsideForm(page);
-      await page.waitForTimeout(3000);
-    });
-    await test.step("Step 29: Complete Card Payment Flow", async () => {
-      await PaymentPage.completeCardPaymentFlow(page);
-      await page.waitForTimeout(9000);
-      await FlightBookingPage.verifyBookingOutcome(page);
-    });
+test('SC_012.01: Booking Confirmation for Hotel', { tag: ['@IDFC', '@BOB', '@Common', '@Payment', '@Hotel', '@Regression'] }, async () => {
+  await test.step('Step 1: Open Hotels Section', async () => {
+    await page.waitForTimeout(5000);
+    await BaseHelper.clickHotelTabBTN(page);
+    await page.waitForTimeout(5000);
+  });
+  await test.step('Step 2: Enter Domestic Hotel Location', async () => {
+    await HotelHomePage.searchValueInTestBox(page, Data.hotelPage.domestic);
+    await page.waitForTimeout(5000);
+  });
+  await test.step('Step 3: Choose First Domestic Hotel Option', async () => {
+    await HotelHomePage.selectFirstOptionFromDropdown(page);
+    await page.waitForTimeout(5000);
+  });
+  await test.step('Step 4: Set Check-in and Check-out Dates', async () => {
+    await HotelHomePage.clickDateButton(page);
+    await page.waitForTimeout(5000);
+    await HotelHomePage.selectMonthAndDateFROM(page, Data.dateSelector.fromMonth, Data.dateSelector.fromDate);
+    await page.waitForTimeout(5000);
+    await HotelHomePage.selectMonthAndDateTO(page, Data.dateSelector.toMonth, Data.dateSelector.toDate);
+    await page.waitForTimeout(5000);
+  });
+  await test.step('Step 5: Search for Hotels (Single Room Default)', async () => {
+    await BaseHelper.clickSearchHotelButton(page);
+    await page.waitForTimeout(5000);
+  });
+  await test.step('Step 6: Search Hotel Name in Search Box', async () => {
+    await HotelBookingPage.searchHotelNameInTestBox(page, Data.hotelPage.searcHotelName);
+    await page.waitForTimeout(5000);
+  });
+  await test.step('Step 7: Click the first hotel result', async () => {
+    await HotelHomePage.clickFirstResult(page);
+    await page.waitForTimeout(5000);
+  });
+  await test.step('Step 8: Click the First Room Selection Button', async () => {
+    await HotelBookingPage.clickFirstRoomSelectionButton(page);
+    await page.waitForTimeout(5000);
+  });
+  await test.step('Step 9: Click Next button on first tab', async () => {
+    await HotelBookingPage.firstTabNextButton(page);
+    await page.waitForTimeout(5000);
+  });
+  await test.step('Step 12: Click Add New Guest Button', async () => {
+    await HotelBookingPage.removePopupForIDFC(page);
+    await page.waitForTimeout(5000);
+    await HotelBookingPage.clickonaddguestbutton(page);
+    await page.waitForTimeout(1000);
+  });
+  await test.step('Step 13: Fill in Guest Details', async () => {
+    await page.waitForTimeout(5000);
+    await HotelBookingPage.removePopupForIDFC(page);
+    await page.waitForTimeout(5000);
+    await HotelBookingPage.fillGuestDetailsInsideForm(page);
+    await page.waitForTimeout(3000);
+  });
+  await test.step("Step 29: Complete Card Payment Flow", async () => {
+    await PaymentPage.completeCardPaymentFlow(page);
+    await page.waitForTimeout(12000);
+    await BookingConfirmationPage.verifyBookingOutcomeHotel(page);
+  });
 });

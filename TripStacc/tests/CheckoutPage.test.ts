@@ -87,8 +87,6 @@ test('SC_009: Hotel- Checkout with and without Redeem Points (without redeem it 
 
   await test.step('Step 13: Fill in Guest Details', async () => {
     await page.waitForTimeout(5000);
-    await HotelBookingPage.removePopupForIDFC(page);
-    await page.waitForTimeout(5000);
     await HotelBookingPage.fillGuestDetailsInsideForm(page);
     await page.waitForTimeout(3000);
   });
@@ -534,10 +532,9 @@ test('SC_011.01: Hotel- Proceed with payment', { tag: ['@IDFC', '@BOB', '@Paymen
     await page.waitForTimeout(5000);
     await HotelBookingPage.fillGuestDetailsInsideForm(page);
     await page.waitForTimeout(3000);
-     await HotelBookingPage.fillGuestDetailsoutsideForm(page);
+     await HotelBookingPage.fillGuestDetailsoutsideFormForBOB(page);
      await page.waitForTimeout(4000);
-     
-      await HotelBookingPage.nextButtonAfterAddingGuest(page);
+     await HotelBookingPage.nextButtonAfterAddingGuest(page);
   });
   await test.step("Step 29: Complete Card Payment Flow", async () => {
     await PaymentPage.completeCardPaymentFlow(page);

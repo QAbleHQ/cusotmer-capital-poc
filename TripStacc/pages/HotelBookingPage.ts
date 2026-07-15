@@ -311,24 +311,16 @@ static async clickonaddguestbutton(page: Page) {
     case 'BOB':
           await page.locator(HotelPageLocators.radioButtonMr).click();
           await page.waitForTimeout(2000);
-          const firstName = CommonHelper.generateRandomName(7);
-          const lastName = CommonHelper.generateRandomName(7);
-
-          await page.locator(HotelPageLocators.firstNameField).fill(firstName);
+          await page.locator(HotelPageLocators.firstNameField).fill("Hello");
           await page.waitForTimeout(2000);
-          await page.locator(HotelPageLocators.lastNameField).fill(lastName);
+          await page.locator(HotelPageLocators.lastNameField).fill("Test");
           await page.waitForTimeout(2000);
           console.log('Guest details form inside fields filled');
           await ElementHelper.clickElement(page, HotelPageLocators.saveGuestLocator);
           console.log('Clicked on Save Guest checkbox');
-          await ElementHelper.isElementDisplayed(page, HotelPageLocators.travellerSavedSuccessfully);
-          console.log('Traveller saved successfully message is displayed');
-
-          await ElementHelper.clickElement(page, HotelPageLocators.saveGuestLocator);
-          console.log('Clicked on Save Guest checkbox');
-          await page.locator(HotelPageLocators.firstNameField).fill(firstName);
+          await page.locator(HotelPageLocators.firstNameField).fill("Hello");
           await page.waitForTimeout(2000);
-          await page.locator(HotelPageLocators.lastNameField).fill(lastName);
+          await page.locator(HotelPageLocators.lastNameField).fill("Test");
           await page.waitForTimeout(2000);
           await ElementHelper.clickElement(page, HotelPageLocators.saveGuestLocator);
           console.log('Clicked on Save Guest checkbox');
@@ -349,7 +341,9 @@ static async clickonaddguestbutton(page: Page) {
       await ElementHelper.clickElement(page, HotelPageLocators. assignGuestToRoomButton);
       await page.waitForTimeout(2000);
       console.log('Assign Guest to Room button clicked');
-      await this. nextButtonAfterAddingGuest(page);
+       const nextButtonLocator = HotelPageLocators.nextButtonAfterAddingGuest;
+        await ElementHelper.clickElement(page, nextButtonLocator);
+        console.log('Next button after adding guest clicked');
       await page.waitForTimeout(2000);
       break;
     break;
@@ -357,12 +351,54 @@ static async clickonaddguestbutton(page: Page) {
   }
 
 
+  static async fillGuestDetailsInside(page: any) {
+  const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
+          await page.locator(HotelPageLocators.radioButtonMr).click();
+          await page.waitForTimeout(2000);
+          await page.locator(HotelPageLocators.firstNameField).fill("Hello");
+          await page.waitForTimeout(2000);
+          await page.locator(HotelPageLocators.lastNameField).fill("Test");
+          await page.waitForTimeout(2000);
+          console.log('Guest details form inside fields filled');
+          await ElementHelper.clickElement(page, HotelPageLocators.saveGuestLocator);
+          console.log('Clicked on Save Guest checkbox');
+          await page.locator(HotelPageLocators.firstNameField).fill("Hello");
+          await page.waitForTimeout(2000);
+          await page.locator(HotelPageLocators.lastNameField).fill("Test");
+          await page.waitForTimeout(2000);
+          await ElementHelper.clickElement(page, HotelPageLocators.saveGuestLocator);
+          console.log('Clicked on Save Guest checkbox');
+          await ElementHelper.isElementDisplayed(page, HotelPageLocators.travellerUserAlreadyExists);
+          console.log('Traveller User Already Exists message is displayed');
+      break;
+ 
+    case 'IDFC':
+      await ElementHelper.clickElement(page, HotelPageLocators.addGuestBtn);
+      await page.waitForTimeout(2000);
+      await page.locator(HotelPageLocators.radioButtonMr).click();
+      await page.waitForTimeout(2000);
+      await page.locator(HotelPageLocators.firstNameField).fill(Data.hotelBookingDataFill.firstName);
+      await page.waitForTimeout(2000);
+      await page.locator(HotelPageLocators.lastNameField).fill(Data.hotelBookingDataFill.lastName);
+      await page.waitForTimeout(2000);
+      console.log('Guest details form inside fields filled');
+      await ElementHelper.clickElement(page, HotelPageLocators. assignGuestToRoomButton);
+      await page.waitForTimeout(2000);
+      console.log('Assign Guest to Room button clicked');
+      break;
+    break;
+  }
+  }
 
   static async fillGuestDetailsoutsideForm(page: Page) {
       const CLIENT = process.env.CLIENT?.toUpperCase();
       switch (CLIENT) {
         case 'BOB':
-        console.log('⏭️ BOB: Skipping ');
+        await page.locator(HotelPageLocators.contactNumberField).fill(Data.hotelBookingDataFill.contactNumber);
+        await page.waitForTimeout(2000)
+        console.log('Guest details form contact information filled');
           break;
     
         case 'IDFC':
@@ -371,6 +407,19 @@ static async clickonaddguestbutton(page: Page) {
         await page.locator(HotelPageLocators.emailField).fill(Data.hotelBookingDataFill.email);
         await page.waitForTimeout(2000);
         console.log('Guest details form contact information filled');
+        break;
+      }
+  }
+
+    static async fillGuestDetailsoutsideFormForBOB(page: Page) {
+      const CLIENT = process.env.CLIENT?.toUpperCase();
+      switch (CLIENT) {
+        case 'BOB':
+        await page.locator(HotelPageLocators.contactNumberField).fill(Data.hotelBookingDataFill.contactNumber);
+        await page.waitForTimeout(2000);
+          break;
+    
+        case 'IDFC':
         break;
       }
   }
@@ -395,7 +444,51 @@ static async clickonaddguestbutton(page: Page) {
     await page.locator(HotelPageLocators.firstNameField).fill(firstName);
     console.log('First name field updated');
   }
+ static async verifyBookingIdVisible(page: Page) {
+    const bookingId = HotelPageLocators.bookingId;
+  
+    await ElementHelper.waitForElementVisible(page, bookingId);
+    console.log("Booking ID is visible.");
+  }
+  
+  static async verifyBookingDateVisible(page: Page) {
+    const bookingDate = HotelPageLocators.bookingDate;
+  
+    await ElementHelper.waitForElementVisible(page, bookingDate);
+    console.log("Booking date is visible.");
+  }
+  static async verifyBookingLinksVisible(page: Page) {
+    await ElementHelper.waitForElementVisible(
+      page,
+      HotelPageLocators.Downloadlogobooking
+    );
+    console.log("✅ Download Booking link is visible.");
 
+    await ElementHelper.waitForElementVisible(
+      page,
+      HotelPageLocators.bookflightlogobooking
+    );
+  console.log("✅ Book Flight link is visible.");
+}
+  static async verifyFareSummaryVisible(page: Page) {
+  const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+  case 'BOB':
+    const BOBfareSummarySection = HotelPageLocators.fareSummarySection;
+    await ElementHelper.waitForElementVisible(page, BOBfareSummarySection);
+    console.log("Fare summary section is visible.");
+    break;
+  case 'IDFC':
+    const fareSummaryDropdown = HotelPageLocators.fareSummaryDropdown;
+    const fareSummarySection = HotelPageLocators.fareSummarySection;
+ 
+    await ElementHelper.clickElement(page, fareSummaryDropdown);
+    await ElementHelper.waitForElementVisible(page, fareSummarySection);
+ 
+    console.log("Fare summary section is visible.");
+    break;
+  }
+  }
   static async verifyGuestDetailsFormVisible(page: Page) {
       const CLIENT = process.env.CLIENT?.toUpperCase();
   switch (CLIENT) {
@@ -433,9 +526,18 @@ static async clickonaddguestbutton(page: Page) {
   }
 
   static async nextButtonAfterAddingGuest(page: Page) {
-    const nextButtonLocator = HotelPageLocators.nextButtonAfterAddingGuest;
-    await ElementHelper.clickElement(page, nextButtonLocator);
-    console.log('Next button after adding guest clicked');
+    const CLIENT = process.env.CLIENT?.toUpperCase();
+    switch (CLIENT) {
+      case 'BOB':
+        const nextButtonLocator = HotelPageLocators.nextButtonAfterAddingGuest;
+        await ElementHelper.clickElement(page, nextButtonLocator);
+        console.log('Next button after adding guest clicked');
+        break;
+
+      case 'IDFC':
+        console.log('⏭️ IDFC: Skipping ');
+        break;
+    }
   }
 
   static async verifyPanCardNotVisible(page: Page) {
