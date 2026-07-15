@@ -21,7 +21,7 @@ test.afterEach(async () => {
   await context.close();
 });
 
-test('SC_009: Hotel- Checkout with and without Redeem Points (without redeem it should be an earning)', { tag: ['@IDFC', '@BOB', '@Common', '@Checkout', '@Smoke', '@Regression'] }, async () => {
+test('SC_009: Hotel- Checkout with and without Redeem Points (without redeem it should be an earning)', { tag: ['@IDFC', '@BOB', '@Common', '@Checkout', '@Smoke', '@Regression','@earn'] }, async () => {
   await test.step('Step 1: Open Hotels Section', async () => {
     await page.waitForTimeout(5000);
     await BaseHelper.clickHotelTabBTN(page);
