@@ -12,7 +12,7 @@ on:
         options: [QA, UAT, PROD]
         default: UAT
       feature:
-        description: "Feature tag without @ (e.g. Login, Smoke, Sanity)"
+        description: "Feature tag without @ (e.g. Loginpage, Smoke, Sanity)"
         required: false
         default: ""
 
