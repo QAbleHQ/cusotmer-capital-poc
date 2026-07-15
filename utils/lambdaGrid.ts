@@ -3,23 +3,69 @@
 // runs, which need to build the same capabilities but connect via a
 // different Playwright API — see testBase.ts for why).
 
+import * as fs from 'fs';
+import * as path from 'path';
+import * as YAML from 'yaml';
+
+type GridProfile = {
+  isGrid?: boolean;
+  realDevice?: boolean;
+  platform?: string;
+  resolution?: string;
+  projectName?: string;
+  buildName?: string;
+  realDeviceOptions?: {
+    platformName?: string;
+    deviceName?: string;
+    platformVersion?: string;
+  };
+};
+
+// Profiles live under the "grid" key in cc.config.yaml (project root) so
+// platform/device targets can be edited without touching package.json.
+// GRID_PROFILE picks one; grid.defaultProfile in the YAML is used otherwise.
+// Any LAMBDA_*/IS_GRID env var set via cross-env still overrides the profile
+// value below, so existing npm scripts keep behaving exactly as before.
+function loadProfile(): GridProfile {
+  const configPath = path.resolve(__dirname, '../cc.config.yaml');
+  if (!fs.existsSync(configPath)) return {};
+
+  const parsed = YAML.parse(fs.readFileSync(configPath, 'utf8')) || {};
+  const grid = parsed.grid || {};
+  const profiles = grid.profiles || {};
+  const profileName = process.env.GRID_PROFILE || grid.defaultProfile;
+  return profiles[profileName] || {};
+}
+
+function bool(envVal: string | undefined, profileVal: boolean | undefined, fallback: boolean): boolean {
+  if (envVal !== undefined) return envVal === 'true';
+  if (profileVal !== undefined) return profileVal;
+  return fallback;
+}
+
+function str(envVal: string | undefined, profileVal: string | undefined, fallback: string): string {
+  return envVal || profileVal || fallback;
+}
+
+const profile = loadProfile();
+
 export const GRID = {
-  isGrid: process.env.IS_GRID === 'true',
+  isGrid: bool(process.env.IS_GRID, profile.isGrid, false),
   // Real physical Android/iOS hardware instead of desktop-browser emulation.
-  realDevice: process.env.LAMBDA_REAL_DEVICE === 'true',
+  realDevice: bool(process.env.LAMBDA_REAL_DEVICE, profile.realDevice, false),
   provider: 'lambdatest',
 
   lambdatest: {
     user: process.env.LAMBDA_USER,
     key: process.env.LAMBDA_KEY,
     capabilities: {
-      platform: process.env.LAMBDA_PLATFORM || 'Windows 10',
-      resolution: '1920x1080',
+      platform: str(process.env.LAMBDA_PLATFORM, profile.platform, 'Windows 10'),
+      resolution: str(undefined, profile.resolution, '1920x1080'),
       // Groups dashboard sessions — defaults to the PROJECT env var so runs
       // are identifiable (was hardcoded to 'Login Test' before, which made
       // every run land under the same generic, hard-to-find build).
-      build: process.env.LAMBDA_BUILD_NAME || process.env.PROJECT || 'Playwright Grid Run',
-      projectName: 'Web Framework',
+      build: process.env.LAMBDA_BUILD_NAME || process.env.PROJECT || profile.buildName || 'Playwright Grid Run',
+      projectName: str(undefined, profile.projectName, 'Web Framework'),
       console: true,
       network: true,
       visual: true,
@@ -27,9 +73,9 @@ export const GRID = {
     },
     // '.*' lets LambdaTest pick any available match for device/version.
     realDeviceOptions: {
-      platformName: process.env.LAMBDA_PLATFORM_NAME || 'android', // 'android' | 'ios'
-      deviceName: process.env.LAMBDA_DEVICE_NAME || '.*',
-      platformVersion: process.env.LAMBDA_PLATFORM_VERSION || '.*',
+      platformName: str(process.env.LAMBDA_PLATFORM_NAME, profile.realDeviceOptions?.platformName, 'android'), // 'android' | 'ios'
+      deviceName: str(process.env.LAMBDA_DEVICE_NAME, profile.realDeviceOptions?.deviceName, '.*'),
+      platformVersion: str(process.env.LAMBDA_PLATFORM_VERSION, profile.realDeviceOptions?.platformVersion, '.*'),
     },
   },
 };

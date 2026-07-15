@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import { defineConfig } from '@playwright/test';
-import { BOB_TS, IDFC_TS, BOBCard_SS } from './config/ts.config';
+import { getProjectConfig, getBaseUrl } from './utils/projectsConfig';
 import { GRID, getLambdaTestWsEndpoint } from './utils/lambdaGrid';
 const mobileDevices = require('./mobileDevices');
 
@@ -62,32 +62,11 @@ const lambdaBrowserName =
     ? 'pw-webkit'
     : 'Chrome';
 
-// ✅ Test directory
-const testDir =
-  product === 'tripstacc' ? './TripStacc/tests'
-  : product === 'shopstacc' ? './ShopStacc/tests'
-  : './tests';
+// ✅ Test directory + base URL — both sourced from cc.config.yaml so new
+// clients/environments/products only require a yaml edit, no code changes.
+const testDir = getProjectConfig(product).testDir;
 
-// ✅ ✅ FINAL BASE URL LOGIC (KEY PART)
-let baseURL: string;
-
-if (product === 'tripstacc') {
-  if (CLIENT === 'BOB') {
-    baseURL = BOB_TS[environment as keyof typeof BOB_TS] || BOB_TS.QA;
-  } else if (CLIENT === 'IDFC') {
-    baseURL = IDFC_TS[environment as keyof typeof IDFC_TS] || IDFC_TS.QA;
-  } else {
-    throw new Error(`Invalid CLIENT: ${CLIENT}`);
-  }
-
-} else if (product === 'shopstacc') {
-
-  // ✅ FIX: Force BOBCard for ShopStacc (ignore CLIENT)
-  baseURL = BOBCard_SS[environment as keyof typeof BOBCard_SS] || BOBCard_SS.QA;
-
-} else {
-  baseURL = BOB_TS[environment as keyof typeof BOB_TS] || BOB_TS.QA;
-}
+const baseURL = getBaseUrl(product, CLIENT, environment);
 
 
 // ✅ Projects
