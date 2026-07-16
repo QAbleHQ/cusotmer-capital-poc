@@ -311,7 +311,7 @@ jobs:
           username: ankitpatel@qable.io
           password: zjwtgkflbwczqrpb
           subject: "[${{ steps.stats.outputs.status }}] ${{ matrix.client }} ${{ matrix.environment }} [Chrome/Web] — Playwright Report"
-          to: aneri.patel@qable.io, nikunj.trivedi@qable.io, 1ee687f3.linearloop.io@in.teams.ms
+          to: dharm.vrat@customer-capital.com, urvashi.saraswat@customer-capital.com, 1ee687f3.linearloop.io@in.teams.ms
           from: ankitpatel@qable.io
           html_body: |
             <div style="font-family:Arial,sans-serif;max-width:600px;margin:auto">
