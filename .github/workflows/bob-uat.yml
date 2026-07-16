@@ -3,7 +3,7 @@ name: UAT Tests
 run-name: ${{ github.event.inputs.client || 'BOB' }} UAT Tests
 
 # Triggers:
-#   1. push     → auto run on every push to main (BOB UAT)
+#   1. push     → auto run  on every push to main (BOB UAT)
 #   2. schedule → daily at 2:00 AM IST (BOB UAT)
 #   3. workflow_dispatch → manual run with client / environment / feature options
 
