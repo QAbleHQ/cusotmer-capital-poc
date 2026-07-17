@@ -1,4 +1,5 @@
 import { Page, test } from '@playwright/test';
+import { getBaseUrl } from './projectsConfig';
 
 
 export class CommonHelper {
@@ -9,7 +10,29 @@ export class CommonHelper {
         `Navigating to Home Page of :${projectName}`
       );
 
-      await page.goto('', { waitUntil: 'domcontentloaded' });
+      // Resolve the full base URL (may include a login path) from cc.config.yaml
+      // and navigate to it directly. Using '/' relative resolution drops any
+      // path that is part of the baseURL (e.g. '/Login/...'), so explicitly
+      // navigating to the resolved base URL avoids that truncation.
+      const projectEnv = process.env.PROJECT || '';
+      const parts = projectEnv.split('-');
+      const product = parts[0]?.toLowerCase();
+      const CLIENT = process.env.CLIENT?.toUpperCase() || 'BOB';
+      const environment = parts[2]?.toUpperCase();
+
+      const resolvedBaseUrl = getBaseUrl(product, CLIENT, environment);
+
+      const maxAttempts = 2;
+      for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+        try {
+          await page.goto(resolvedBaseUrl, { waitUntil: 'domcontentloaded', timeout: 60000 });
+          break;
+        } catch (navErr) {
+          console.warn(`Navigation attempt ${attempt} failed: ${(navErr as Error).message}`);
+          if (attempt === maxAttempts) throw navErr;
+          await page.waitForTimeout(2000);
+        }
+      }
     } catch (error) {
       const projectName = test.info().project.name;
       const testTitle = test.info().title;

@@ -40,7 +40,17 @@ export class ElementHelper {
   static async clearAndEnterInTextField(page: Page, locatorValue: string, textToEnter: string): Promise<void> {
     console.log(`Clear value from "${locatorValue}" text field and enter text "${textToEnter}"`);
     await page.waitForLoadState('domcontentloaded');
-    const element = await page.waitForSelector(locatorValue);
+    let element;
+    try {
+      element = await page.waitForSelector(locatorValue, { state: 'visible', timeout: 60000 });
+    } catch (err) {
+      const msg = (err as Error).message || '';
+      if (msg.includes('Target page, context or browser has been closed')) {
+        throw err; // preserve original error for upstream handling
+      }
+      throw new Error(`Element '${locatorValue}' not found or not visible: ${msg}`);
+    }
+
     await this.scrollElementToCentre(page, locatorValue);
     await element.fill(''); // Clears the text field.
     await element.fill(textToEnter); // Enters the specified text.
@@ -152,33 +162,21 @@ export class ElementHelper {
     try {
       await element.waitFor({ state: 'visible', timeout });
       console.log(`Element '${locator}' is visible on first attempt`);
+      return;
     } catch (firstError) {
-      console.warn(`Element '${locator}' not visible on first attempt. Refreshing the page...`);
+      console.warn(`Element '${locator}' not visible on first attempt. Retrying once briefly...`);
+      await page.waitForTimeout(2000);
 
-      // await page.reload();
-      await page.waitForTimeout(50000);
-
-      console.log(`Attempt 2: Waiting for element '${locator}' after refresh...`);
+      console.log(`Attempt 2: Waiting for element '${locator}' after brief retry...`);
       try {
         await element.waitFor({ state: 'visible', timeout });
-        console.log(`Element '${locator}' is visible after page refresh`);
+        console.log(`Element '${locator}' is visible after retry`);
+        return;
       } catch (secondError) {
-        console.error(`Element '${locator}' still not visible`);
+        console.error(`Element '${locator}' still not visible after retry.`);
         throw new Error(`Element '${locator}' not found after 2 attempts`);
       }
     }
-  }
-
-  static async waitForElementVisibleWithoutReload(page: Page, locator: string): Promise<void> {
-    const element = page.locator(locator);
-  
-    console.log(`⏳ Waiting indefinitely for element '${locator}' to become visible...`);
-  
-    while (!(await element.isVisible())) {
-      await page.waitForTimeout(1000);
-    }
-  
-    console.log(`✅ Element '${locator}' is now visible`);
   }
 
   static async waitForElementClickable(page: Page, locator: string): Promise<void> {

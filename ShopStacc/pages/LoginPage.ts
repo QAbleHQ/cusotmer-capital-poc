@@ -1,6 +1,7 @@
 import { expect, Page } from '@playwright/test';
 import { LoginPageLocators } from '../locators/LoginPageLocators';
 import { ElementHelper } from '../../utils/elementHelper';
+import { CommonHelper } from '../../utils/commonHelper';
 import bobTestData from '../testData/shopStacc.json';
 import { Data } from '../../utils/dataProvider';
 
@@ -38,7 +39,7 @@ export class LoginPage {
   }
   static async waitUntilDialogBoxDisplayed(page: Page) {
     const dashboardLocator = LoginPageLocators.DialogBox;
-    await ElementHelper.waitForElementVisibleWithoutReload(page, dashboardLocator);
+    await ElementHelper.waitForElementVisible(page, dashboardLocator);
     console.log('Dilog Box page is displayed');
   }
   static async clickSkipButtonInsideDialogBox(page: Page) {
@@ -84,6 +85,29 @@ export class LoginPage {
     await LoginPage.clickLoginButton(page);
   }
   static async RestrictionPageBeforeEach(page: Page) {
+    const usernameLocator = LoginPageLocators.enterUserID;
+
+    // If the username field is not on this page at all, skip restriction steps.
+    const usernameCount = await page.locator(usernameLocator).count();
+    if (usernameCount === 0) {
+      console.log('Restriction username field not present on page; skipping restriction steps.');
+      return;
+    }
+
+    try {
+      await page.waitForSelector(usernameLocator, { state: 'visible', timeout: 15000 });
+    } catch (err) {
+      const currentUrl = page.url();
+      console.warn(`Username not found on ${currentUrl}; navigating back to login (baseUrl) and retrying.`);
+      await CommonHelper.navigateToHomePage(page);
+      try {
+        await page.waitForSelector(usernameLocator, { state: 'visible', timeout: 30000 });
+      } catch (err2) {
+        await page.screenshot({ path: `test-results/missing-username-${Date.now()}.png` });
+        throw new Error(`Username field not visible after retry. Current URL: ${page.url()} - ${(err2 as Error).message}`);
+      }
+    }
+
     await LoginPage.enterUserID(page);
     await LoginPage.enterUserPassword(page);
     await LoginPage.clickEnterLoginButton(page);

@@ -19,7 +19,7 @@ projects:
     testDir: ShopStacc/tests
     clients:
       BOBCARD:
-        QA:   { baseUrl: "https://qa-sso.ai-loyalty.com/Login/BOBQASSQA13012026" }
+        QA:   { baseUrl: "https://qa-sso.ai-loyalty.com/Login/uqaIfShopU97DfGwHdsfv" }
         UAT:  { baseUrl: "https://uat-sso.ai-loyalty.com/Login/UYTC-IIU8D-FJHK89C-SH87AASRC-U20230306T" }
         PROD: { baseUrl: "" }
 

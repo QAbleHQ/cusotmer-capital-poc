@@ -137,21 +137,25 @@ if (deviceName) {
           : undefined,
 
       headless: !HEADED,
-      viewport: HEADED
-    ? null
-    : {
-       width: 1920,
-       height: 1080,
-},
+      // Use an explicit large viewport in headed mode to avoid OS window
+      // snapping producing a half-screen browser. For non-headed runs keep
+      // the existing 1920x1080 viewport.
+      viewport: {
+        width: 1920,
+        height: 1080,
+      },
 
       screenshot: 'only-on-failure',
       video: 'off',
       trace: "only-on-failure",
 
-      launchOptions:
-        mappedBrowser === 'chromium'
-          ? { args: ['--start-maximized'] }
-          : undefined,
+      // When running headed, force a large window to avoid OS snap/half-screen
+      // behavior. Use window-size and start-maximized where supported.
+      launchOptions: HEADED
+        ? { args: ['--start-maximized', '--window-size=1920,1080'] }
+        : mappedBrowser === 'chromium'
+        ? { args: ['--start-maximized'] }
+        : undefined,
 
       connectOptions: GRID.isGrid
         ? {

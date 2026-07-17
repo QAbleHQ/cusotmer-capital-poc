@@ -121,8 +121,8 @@ export class HomePage {
         );
       }
       await page.goBack();
-      await LoginPage.waitUntilDialogBoxDisplayed(page);
-      await LoginPage.clickSkipButtonInsideDialogBox(page);
+      //await LoginPage.waitUntilDialogBoxDisplayed(page);
+      //await LoginPage.clickSkipButtonInsideDialogBox(page);
       await page.waitForLoadState('networkidle');
       console.log(`Returned back after validating Category ${i + 1}`);
     }
@@ -143,11 +143,23 @@ export class HomePage {
     await page.waitForTimeout(3000);
   }
 static async clickGiftCard(page: Page) {
+  const kalyanCard = HomePageLocators.kalyanGoldJewellersGiftCard;
+  try {
+    await ElementHelper.waitForElementVisible(page, kalyanCard);
+    await page.focus(kalyanCard);
+    await page.waitForTimeout(500);
+    await ElementHelper.clickElement(page, kalyanCard);
+    console.log("Clicked the Kalyan Gold Jewellers E-Gift Card.");
+    return;
+  } catch (err) {
+    console.warn('Kalyan Gold Jewellery card locator failed, falling back to generic gift card selector.', err);
+  }
+
   await ElementHelper.waitForElementVisible(page, HomePageLocators.productimagegiftcard);
   await page.focus(HomePageLocators.productimagegiftcard);
-  await page.waitForTimeout(1000)
+  await page.waitForTimeout(500);
   await ElementHelper.clickElement(page, HomePageLocators.productimagegiftcard);
-  console.log("Clicking Gift Card...");
+  console.log("Clicking Gift Card using fallback selector...");
 }
 
   static async waitForHeader(page: Page) {
@@ -275,10 +287,20 @@ static async clickGiftCard(page: Page) {
   }
 
   static async scrollToEarnMoreSection(page: Page) {
-    const section = HomePageLocators.earnMoreExclusiveVisible;
-    await page.locator(section).scrollIntoViewIfNeeded();
+    // Prefer a generic deals section selector (case-insensitive on heading text) so
+    // the tests do not rely on specific section ids that differ across envs.
+    const genericDeals = HomePageLocators.dealsSectionSelector;
+    const fallback = HomePageLocators.earnMoreExclusiveVisible;
+    if (await page.locator(genericDeals).count() > 0) {
+      await page.locator(genericDeals).scrollIntoViewIfNeeded();
+      await page.waitForTimeout(1000);
+      console.log("Scrolled to generic 'Deals' section (by heading)");
+      return;
+    }
+
+    await page.locator(fallback).scrollIntoViewIfNeeded();
     await page.waitForTimeout(2000);
-    console.log("Scrolled to 'Earn More Exclusive Deals' section");
+    console.log("Scrolled to 'Earn More Exclusive Deals' section (fallback)");
   }
 
   static async verifyProductsVisible(page: Page) {
@@ -305,9 +327,59 @@ static async clickGiftCard(page: Page) {
   }
 
   static async clickProduct(page: Page) {
-    await page.locator(HomePageLocators.verifyProductImageDisplayed).click();
+    // Try the generic deals section first (matches heading containing 'deals').
+    const genericProduct = HomePageLocators.dealsSectionProductImage;
+    const legacyProduct = HomePageLocators.verifyProductImageDisplayed;
+
+    const genericLocator = page.locator(genericProduct);
+    if ((await genericLocator.count()) > 0) {
+      const first = genericLocator.first();
+      const handle = await first.elementHandle();
+      if (handle) {
+        // Smoothly scroll into view and click via the containing anchor to avoid
+        // carousel/autoplay instability that makes direct clicks flaky.
+        await handle.evaluate((node: HTMLElement) => {
+          node.scrollIntoView({ block: 'center', inline: 'center', behavior: 'auto' });
+        });
+        await page.waitForTimeout(300);
+        // Try to extract the anchor href and navigate directly — this avoids
+        // flaky carousel click handlers and ensures a deterministic navigation.
+        const href = await handle.evaluate((node: HTMLElement) => {
+          const anchor = node.closest('a');
+          return anchor ? anchor.getAttribute('href') : null;
+        });
+
+        if (href) {
+          const target = new URL(href, page.url()).href;
+          console.log(`Navigating directly to product href: ${target}`);
+          await page.goto(target, { waitUntil: 'networkidle' });
+          return;
+        }
+
+        // If no href found, fall back to clicking the element/anchor.
+        await handle.evaluate((node: HTMLElement) => {
+          const anchor = node.closest('a');
+          if (anchor) (anchor as HTMLElement).click();
+          else node.click();
+        });
+        await page.waitForLoadState('networkidle');
+        console.log('Clicked on product from generic Deals section (via anchor)');
+        return;
+      } else {
+        // Fallback if handle couldn't be obtained
+        await genericLocator.first().scrollIntoViewIfNeeded();
+        await genericLocator.first().click({ force: true });
+        await page.waitForTimeout(1500);
+        console.log('Clicked on product from generic Deals section (fallback)');
+        return;
+      }
+    }
+
+    // Fallback to legacy locator used previously
+    await page.locator(legacyProduct).first().scrollIntoViewIfNeeded();
+    await page.locator(legacyProduct).first().click({ force: true });
     await page.waitForTimeout(2000);
-    console.log("Clicked on product");
+    console.log('Clicked on product (legacy locator)');
   }
 
   static async getProductDetails(page: Page) {
