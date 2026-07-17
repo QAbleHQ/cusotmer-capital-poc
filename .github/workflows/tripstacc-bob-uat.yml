@@ -181,7 +181,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./playwright-report
-          destination_dir: tripstacc/BOB-${{ env.ENVIRONMENT }}
+          destination_dir: tripstacc/BOB-${{ env.ENVIRONMENT }}/${{ github.run_id }}
           keep_files: true
           user_name: github-actions[bot]
           user_email: github-actions[bot]@users.noreply.github.com
@@ -193,7 +193,7 @@ jobs:
           REPO="${{ github.repository }}"
           ORG=$(echo "$REPO" | cut -d'/' -f1)
           REPO_NAME=$(echo "$REPO" | cut -d'/' -f2)
-          URL="https://${ORG}.github.io/${REPO_NAME}/tripstacc/BOB-${{ env.ENVIRONMENT }}/"
+          URL="https://${ORG}.github.io/${REPO_NAME}/tripstacc/BOB-${{ env.ENVIRONMENT }}/${{ github.run_id }}/"
           echo "url=$URL" >> "$GITHUB_OUTPUT"
           echo "### 📊 [View Playwright Report]($URL)" >> "$GITHUB_STEP_SUMMARY"
 
@@ -207,7 +207,7 @@ jobs:
           username: ankitpatel@qable.io
           password: zjwtgkflbwczqrpb
           subject: "[${{ steps.stats.outputs.status }}] TripStacc BOB ${{ env.ENVIRONMENT }} [${{ env.BROWSER }}/Web]${{ env.FEATURE_TAG && format(' @{0}', env.FEATURE_TAG) || '' }} — Playwright Report"
-          to: dharm.vrat@customer-capital.com, urvashi.saraswat@customer-capital.com, 1ee687f3.linearloop.io@in.teams.ms
+          to: dharm.vrat@customer-capital.com, urvashi.saraswat@customer-capital.com, nikunj.trivedi@qable.io, 1ee687f3.linearloop.io@in.teams.ms
           from: ankitpatel@qable.io
           html_body: |
             <div style="font-family:Arial,sans-serif;max-width:600px;margin:auto">
