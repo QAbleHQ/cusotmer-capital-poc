@@ -972,7 +972,7 @@ static async enterMobileNo(page: any, data: any) {
     await ElementHelper.clickElement(page, FlightPageLocators.FirstOptionCheckbox);
   }
 
-  static async clickOnEditConfirmButtonPage(page: any) {
+ static async clickOnEditConfirmButtonPage(page: any) {
       const CLIENT = process.env.CLIENT?.toUpperCase();
   switch (CLIENT) {
     case 'BOB':
@@ -983,6 +983,9 @@ static async enterMobileNo(page: any, data: any) {
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators.firstTravellerNameEditConfirmButton);
     await ElementHelper.clickElement(page, FlightPageLocators.firstTravellerNameEditConfirmButton);
     await page.waitForTimeout(3000);
+    await VerificationHelpers.elementIsVisible(page, FlightPageLocators.reviewtravllerbutton);
+    await ElementHelper.clickElement(page, FlightPageLocators.reviewtravllerbutton);
+
     break;
   }
   }
@@ -1215,8 +1218,7 @@ static async enterMobileNo(page: any, data: any) {
     console.log('BOB: Skipping ');
     break;
     case 'IDFC':
-    await ElementHelper.clickElement(page, FlightPageLocators.FirstTravellerCheckbox);
-    await page.waitForTimeout(3000);
+   console.log('BOB: Skipping ');
     break;
   }
 }
