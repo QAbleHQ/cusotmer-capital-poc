@@ -43,7 +43,7 @@ export const FlightPageLocators = {
   FlightNonRefundableText: `(//span[@class="_nonrefundable"])[1]`,
   FlightAirlineName: `(//h4[@class="_airline_name"])[1] | (//div[contains(@class,"airlinename")])[1]`,
   filterErrorMessage: `//div[@id="fliter_error_box"]`,
-  flightListFilterButton: `//span[text()="Sort & Filter"]`,
+  flightListFilterButton: `//a[@class='filterbtn']`,
   filterTabStops: `(//a[text()="Stops "])[1] | //button[contains(text(),"Stops")]`,
   filterTabDepartureTime: `(//a[text()="Departure "])[1] | //button[contains(text(),"Departure Time")]`,
   filterTabArrivalTime: `(//a[text()="Arrival "])[1] | //button[contains(text(),"Arrival Time")]`,
@@ -174,7 +174,7 @@ export const FlightPageLocators = {
   doneTravellerAndCabinButtonMobile: `//a[@class="done1 comnbtn_room1"]`,
   filterButtonMobileForBOB: `//li[@class="sortli filt_mob filter_tab"]`,
   exprieYear: `//select[@class="ui-datepicker-year"]`,
-  reviewtravllerbutton: `(//button[@class='confirm_traveller_btn add_fav'])[2]`,
+  reviewtravllerbutton: `//button[@class='flbookbtn traveller_details_continue']`,
   
 
 };

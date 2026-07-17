@@ -989,6 +989,7 @@ static async enterMobileNo(page: any, data: any) {
     break;
   }
   }
+  
   static async VerifyEmailHeaderVisible(page: any) {
   const CLIENT = process.env.CLIENT?.toUpperCase();
   switch (CLIENT) {
@@ -1219,6 +1220,17 @@ static async enterMobileNo(page: any, data: any) {
     break;
     case 'IDFC':
    console.log('BOB: Skipping ');
+    break;
+  }
+}
+static async clickOnFirstTraveller(page: any) {
+     const CLIENT = process.env.CLIENT?.toUpperCase();
+  switch (CLIENT) {
+    case 'BOB':
+    console.log('BOB: Skipping ');
+    break;
+    case 'IDFC':
+  await page.click(`//label[@for='pax609']`)
     break;
   }
 }

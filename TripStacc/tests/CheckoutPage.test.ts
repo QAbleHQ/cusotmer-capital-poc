@@ -166,28 +166,9 @@ test('SC_009.01: Flight - Checkout with and without Redeem Points (without redee
   await test.step("Step 11: Click on Continue Button On Flight Details Page", async () => {
     await FlightHomePage.clickOnContinueButtonOnFlightDetailsPage(page);
   });
-  await test.step("Step 12: Click on First Traveller Edit Button On Traveller Details Page", async () => {
-    await FlightHomePage.clickOnFirstNameEditButton(page);
-  });
-  await test.step("Step 13: Enter First Name of Traveller", async () => {
-    await FlightHomePage.EnterFirstName(page, Data.travellername.firstName);
-  });
-
-  await test.step("Step 14: Enter Last Name of Traveller", async () => {
-    await FlightHomePage.EnterLastName(page, Data.travellername.lastName);
-  });
-
-  await test.step("Step 15: Click on Add Traveller Button On Traveller Details Page", async () => {
-    const CLIENT = process.env.CLIENT?.toUpperCase();
-    if (CLIENT === 'BOB') {
-      await FlightHomePage.clickOnAddTravellerButton(page);
-    } else if (CLIENT === 'IDFC') {
-      await FlightHomePage.clickOnEditConfirmButtonPage(page);
-    }
-  });
 
   await test.step("Step 16: Click on first Traveller Name On Traveller Details Page", async () => {
-    await FlightHomePage.clickOnFirstTravellerName(page);
+    await FlightHomePage.clickOnFirstTraveller(page);
   });
 
   await test.step("Step 17: Click on continue button On Traveller Details Page", async () => {
