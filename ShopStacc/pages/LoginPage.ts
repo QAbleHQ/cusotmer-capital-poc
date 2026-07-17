@@ -36,7 +36,7 @@ export class LoginPage {
     const clickLoginButton = LoginPageLocators.validateAndLoginButton;
     await ElementHelper.clickElement(page, clickLoginButton);
   }
-  static async waitUntilDialogBoxDisplayed(page: Page) {
+  /*static async waitUntilDialogBoxDisplayed(page: Page) {
     const dashboardLocator = LoginPageLocators.DialogBox;
     await ElementHelper.waitForElementVisibleWithoutReload(page, dashboardLocator);
     console.log('Dilog Box page is displayed');
@@ -45,7 +45,7 @@ export class LoginPage {
     const skipButton = LoginPageLocators.skipButtonInsideDialogBox;
     await ElementHelper.clickElement(page, skipButton);
     console.log('Skip button inside dialog box clicked');
-  }
+  }*/
   static async verifyUserIdDisplayed(page: Page) {
     const userID = LoginPageLocators.enterUserID;
     await ElementHelper.isElementDisplayed(page, userID);
@@ -87,8 +87,8 @@ export class LoginPage {
     await LoginPage.enterUserID(page);
     await LoginPage.enterUserPassword(page);
     await LoginPage.clickEnterLoginButton(page);
-    await LoginPage.waitUntilDialogBoxDisplayed(page);
-    await LoginPage.clickSkipButtonInsideDialogBox(page);
+    //await LoginPage.waitUntilDialogBoxDisplayed(page);
+    //await LoginPage.clickSkipButtonInsideDialogBox(page);
   }
   static async verifyLoginSuccess(page: Page) {
     await expect(page).toHaveURL(/shopstacc\.com/);

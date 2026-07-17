@@ -12,6 +12,6 @@ export const LoginPageLocators = {
   enterUserID: `//input[@id="username"]`,
   enterUserPass: `//input[@id="password"]`,
   enterLoginBTN: `//button[@onclick="login()"]`,
-  DialogBox: `//dialog[@aria-describedby="tour_step_0-description"]`,
-  skipButtonInsideDialogBox: `//button[text()="Skip"]`
+  //DialogBox: `//dialog[@aria-describedby="tour_step_0-description"]`,
+  //skipButtonInsideDialogBox: `//button[text()="Skip"]`
 };

@@ -121,8 +121,8 @@ export class HomePage {
         );
       }
       await page.goBack();
-      await LoginPage.waitUntilDialogBoxDisplayed(page);
-      await LoginPage.clickSkipButtonInsideDialogBox(page);
+      //await LoginPage.waitUntilDialogBoxDisplayed(page);
+      //await LoginPage.clickSkipButtonInsideDialogBox(page);
       await page.waitForLoadState('networkidle');
       console.log(`Returned back after validating Category ${i + 1}`);
     }
