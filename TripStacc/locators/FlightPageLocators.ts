@@ -174,7 +174,7 @@ export const FlightPageLocators = {
   doneTravellerAndCabinButtonMobile: `//a[@class="done1 comnbtn_room1"]`,
   filterButtonMobileForBOB: `//li[@class="sortli filt_mob filter_tab"]`,
   exprieYear: `//select[@class="ui-datepicker-year"]`,
-  reviewtravllerbutton: `//button[@class='flbookbtn traveller_details_continue']`,
+  reviewtravllerbutton: `//button[text()='Confirm & Save']`,
   
 
 };
