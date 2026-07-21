@@ -22,7 +22,7 @@ test.afterEach(async () => {
 });
 
 
-test("SC_005,Gift Card PDP - Verify details and actions", { tag: ['@BOBCard', '@PLP', '@Regression', '@Sanity'] }, async ({ }) => {
+test("SC_005,Gift Card PDP - Verify details and actions", { tag: ['@bobcard', '@plp', '@regression', '@sanity'] }, async ({ }) => {
 
   await test.step("Click Gift Card option", async () => {
     await page.waitForLoadState('domcontentloaded');

@@ -21,7 +21,7 @@ test.afterEach(async () => {
   await context.close();
 });
 
-test('SC_009: Hotel- Checkout with and without Redeem Points (without redeem it should be an earning)', { tag: ['@IDFC', '@BOB', '@Common', '@Checkout', '@Smoke', '@Regression','@earn'] }, async () => {
+test('SC_009: Hotel- Checkout with and without Redeem Points (without redeem it should be an earning)', { tag: ['@idfc', '@bob', '@common', '@checkout', '@smoke', '@regression','@earn'] }, async () => {
   await test.step('Step 1: Open Hotels Section', async () => {
     await page.waitForTimeout(5000);
     await BaseHelper.clickHotelTabBTN(page);
@@ -110,7 +110,7 @@ test('SC_009: Hotel- Checkout with and without Redeem Points (without redeem it 
   });
 });
 
-test('SC_009.01: Flight - Checkout with and without Redeem Points (without redeem it should be an earning) ', { tag: ['@IDFC', '@BOB', '@Common', '@Checkout', '@Regression'] }, async () => {
+test('SC_009.01: Flight - Checkout with and without Redeem Points (without redeem it should be an earning) ', { tag: ['@idfc', '@bob', '@common', '@checkout', '@regression'] }, async () => {
   await test.step("Step 1: Enter City From Airport", async () => {
     await page.waitForTimeout(5000);
     await FlightHomePage.clickOnCityFromAirport(page);
@@ -214,7 +214,7 @@ test('SC_009.01: Flight - Checkout with and without Redeem Points (without redee
     await page.waitForTimeout(5000);
   });
 });
-test('SC_010: Flight - Checkout with and without Promo Codes', { tag: ['@IDFC', '@BOB', '@Common','@Checkout', '@Regression'] }, async () => {
+test('SC_010: Flight - Checkout with and without Promo Codes', { tag: ['@idfc', '@bob', '@common','@checkout', '@regression'] }, async () => {
   await test.step("Step 1: Enter City From Airport", async () => {
     await page.waitForTimeout(5000);
     await FlightHomePage.clickOnCityFromAirport(page);
@@ -336,7 +336,7 @@ test('SC_010: Flight - Checkout with and without Promo Codes', { tag: ['@IDFC', 
     await PaymentPage.verifyErrorMessageVisible(page);
   });
 });
-test('SC_011: Flight - Proceed with payment', { tag: ['@IDFC', '@BOB','@Flight', '@Common', '@Payment', '@Regression'] }, async () => {
+test('SC_011: Flight - Proceed with payment', { tag: ['@idfc', '@bob','@flight', '@common', '@payment', '@regression'] }, async () => {
   await test.step("Step 1: Enter City From Airport", async () => {
     await page.waitForTimeout(5000);
     await FlightHomePage.clickOnCityFromAirport(page);
@@ -450,7 +450,7 @@ test('SC_011: Flight - Proceed with payment', { tag: ['@IDFC', '@BOB','@Flight',
   });
 });
 
-test('SC_011.01: Hotel- Proceed with payment', { tag: ['@IDFC', '@BOB', '@Payment', '@Common','@Hotel', '@Regression'] }, async () => {
+test('SC_011.01: Hotel- Proceed with payment', { tag: ['@idfc', '@bob', '@payment', '@common','@hotel', '@regression'] }, async () => {
   await test.step('Step 1: Open Hotels Section', async () => {
     await page.waitForTimeout(5000);
     await BaseHelper.clickHotelTabBTN(page);

@@ -20,7 +20,7 @@ test.afterEach(async () => {
 });
 
 
-test('SC_001, Login with valid mobile number and OTP', { tag: ['@BOBCard', '@Login', '@smoke', '@sanity'] }, async () => {
+test('SC_001, Login with valid mobile number and OTP', { tag: ['@bobcard', '@login', '@smoke', '@sanity'] }, async () => {
 
   await test.step('If login button is displayed, then uncomment this', async () => {
     await LoginPage.LoginCredEnterBeforeEach(page);

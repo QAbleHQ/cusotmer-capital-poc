@@ -20,7 +20,7 @@ test.afterEach(async () => {
   await context.close();
 });
 
-test('SC_002, Home page — Trending Categories section visible and clickable', { tag: ['@BOBCard', '@Homepage', '@Smoke', '@Sanity','@earn'] }, async () => {
+test('SC_002, Home page — Trending Categories section visible and clickable', { tag: ['@bobcard', '@homepage', '@smoke', '@sanity','@earn'] }, async () => {
 
   await test.step('Verify All homepage sections is visible: banner, categories, trending section Displayed', async () => {
     await HomePage.verifyBannerSectionDisplayed(page);
@@ -44,7 +44,7 @@ await test.step('Click on trending category', async () => {
 
 });
 
-test("SC_004, Gift Card PLP — product card details and layout", { tag: ['@BOBCard', '@Homepage', '@Giftcard', '@Regression','@earn'] }, async ({ }) => {
+test("SC_004, Gift Card PLP — product card details and layout", { tag: ['@bobcard', '@homepage', '@giftcard', '@regression','@earn'] }, async ({ }) => {
 
   await test.step("Click Gift Card option", async () => {
     await page.waitForLoadState('domcontentloaded');
@@ -90,7 +90,7 @@ test("SC_004, Gift Card PLP — product card details and layout", { tag: ['@BOBC
 
 });
 
-test("SC_003 - Earn More Deals → PDP Verification", { tag: ['@BOBCard', '@Homepage', '@Regression', '@Smoke','@earn'] }, async ({ }) => {
+test("SC_003 - Earn More Deals → PDP Verification", { tag: ['@bobcard', '@homepage', '@regression', '@smoke','@earn'] }, async ({ }) => {
   let productData: any;
 
   await test.step("Step 2: Scroll to section", async () => {

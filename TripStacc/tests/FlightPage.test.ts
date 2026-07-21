@@ -18,7 +18,7 @@ test.afterEach(async () => {
   await context.close();
 });
 
-test('SC_003: Search ', { tag: ['@IDFC', '@BOB','@Test' ,'@Common', '@Homepageflight', '@Smoke', '@Sanity', '@Regression'] }, async () => {
+test('SC_003: Search ', { tag: ['@idfc', '@bob','@common', '@homepageflight', '@smoke', '@sanity', '@regression'] }, async () => {
   await test.step("Step 1: Enter City From Airport", async () => {
     await FlightHomePage.clickOnCityFromAirport(page);
     await FlightHomePage.EnterCityFromAirport(page, Data.flightPage.enterCityFrom);
@@ -72,7 +72,7 @@ test('SC_003: Search ', { tag: ['@IDFC', '@BOB','@Test' ,'@Common', '@Homepagefl
   });
 });
 
-test('SC_003.01: Search (1 Passenger and Multiple Passengers) ', { tag: ['@IDFC', '@BOB', '@Common', '@Homepageflight', '@Regression'] }, async () => {
+test('SC_003.01: Search (1 Passenger and Multiple Passengers) ', { tag: ['@idfc', '@bob', '@common', '@homepageflight', '@regression'] }, async () => {
   let expectedTravellerCount: string;
   await test.step("Step 1: Enter City From Airport", async () => {
     await page.waitForTimeout(5000);
@@ -143,7 +143,7 @@ test('SC_003.01: Search (1 Passenger and Multiple Passengers) ', { tag: ['@IDFC'
   });
 });
 
-test('SC_003.02: Search (One Way and Round Trip) ', { tag: ['@IDFC', '@BOB', '@Common', '@Homepageflight', '@Regression'] }, async () => {
+test('SC_003.02: Search (One Way and Round Trip) ', { tag: ['@idfc', '@bob', '@common', '@homepageflight', '@regression'] }, async () => {
   await test.step('Step 1: Enter City From Airport', async () => {
     await page.waitForTimeout(5000);
     await FlightHomePage.clickOnCityFromAirport(page);
@@ -258,7 +258,7 @@ test('SC_003.02: Search (One Way and Round Trip) ', { tag: ['@IDFC', '@BOB', '@C
   });
 });
 
-test('SC_003.03: Search (with multiple classes) - Economy, Premium Economy, Business, First ', { tag: ['@IDFC', '@Common', '@BOB', '@Homepageflight', '@Regression'] }, async () => {
+test('SC_003.03: Search (with multiple classes) - Economy, Premium Economy, Business, First ', { tag: ['@idfc', '@common', '@bob', '@homepageflight', '@regression'] }, async () => {
 
   await test.step('Step 1: Enter City From Airport', async () => {
     await page.waitForTimeout(5000);
@@ -403,7 +403,7 @@ test('SC_003.03: Search (with multiple classes) - Economy, Premium Economy, Busi
   });
 });
 
-test('SC_003.04: Search (With International and Domestic) ', { tag: ['@IDFC', '@BOB', '@Common', '@Homepageflight', '@Regression'] }, async () => {
+test('SC_003.04: Search (With International and Domestic) ', { tag: ['@idfc', '@bob', '@common', '@homepageflight', '@regression'] }, async () => {
   await test.step("Step 1: Enter City From Airport", async () => {
     await page.waitForTimeout(5000);
     await FlightHomePage.clickOnCityFromAirport(page);
@@ -502,7 +502,7 @@ test('SC_003.04: Search (With International and Domestic) ', { tag: ['@IDFC', '@
   });
 });
 
-test('SC_004: Filter/Sorting and Flight Selection with Fare Type ', { tag: ['@IDFC', '@BOB', '@Common', '@Homepageflight', '@Regression'] }, async () => {
+test('SC_004: Filter/Sorting and Flight Selection with Fare Type ', { tag: ['@idfc', '@bob', '@common', '@homepageflight', '@regression'] }, async () => {
   await test.step("Step 1: Enter City From Airport", async () => {
     await page.waitForTimeout(5000);
     await FlightHomePage.clickOnCityFromAirport(page);
@@ -728,7 +728,7 @@ test('SC_004: Filter/Sorting and Flight Selection with Fare Type ', { tag: ['@ID
 
 });
 
-test('SC_004.01: Update Search ', { tag: ['@IDFC', '@BOB', '@Common','@Homepageflight', '@Regression'] }, async () => {
+test('SC_004.01: Update Search ', { tag: ['@idfc', '@bob', '@common','@homepageflight', '@regression'] }, async () => {
   await test.step("Step 1: Enter City From Airport", async () => {
     await page.waitForTimeout(5000);
     await FlightHomePage.clickOnCityFromAirport(page);
@@ -773,7 +773,7 @@ test('SC_004.01: Update Search ', { tag: ['@IDFC', '@BOB', '@Common','@Homepagef
   });
 })
 
-test('SC_005: Add Traveller Details and Update Traveller Details ', { tag: ['@IDFC', '@BOB', '@Common', '@Homepageflight', '@Regression'] }, async () => {
+test('SC_005: Add Traveller Details and Update Traveller Details ', { tag: ['@idfc', '@bob', '@common', '@homepageflight', '@regression'] }, async () => {
   await test.step("Step 1: Enter City From Airport", async () => {
     await page.waitForTimeout(5000);
     await FlightHomePage.clickOnCityFromAirport(page);
@@ -897,7 +897,7 @@ test('SC_005: Add Traveller Details and Update Traveller Details ', { tag: ['@ID
 
 });
 
-test('SC_006: Check and update user information (Mobile number/Email Address) and GST information ', { tag: ['@IDFC', '@BOB', '@Common','@Homepageflight', '@Sanity'] }, async () => {
+test('SC_006: Check and update user information (Mobile number/Email Address) and GST information ', { tag: ['@idfc', '@bob', '@common','@homepageflight', '@sanity'] }, async () => {
   await test.step("Step 1: Enter City From Airport", async () => {
     await page.waitForTimeout(5000);
     await FlightHomePage.clickOnCityFromAirport(page);
@@ -997,7 +997,7 @@ test('SC_006: Check and update user information (Mobile number/Email Address) an
   });
 });
 
-test('SC_007: With Passport and without Passport Details (for international) ', { tag: ['@IDFC', '@BOB', '@Common', '@Homepageflight', '@Passport', '@Regression'] }, async () => {
+test('SC_007: With Passport and without Passport Details (for international) ', { tag: ['@idfc', '@bob', '@common', '@homepageflight', '@passport', '@regression'] }, async () => {
   await test.step("Step 1: Enter City From Airport", async () => {
     await page.waitForTimeout(5000);
     await FlightHomePage.clickOnCityFromAirport(page);
@@ -1083,7 +1083,7 @@ test('SC_007: With Passport and without Passport Details (for international) ', 
   });
 });
 
-test('SC_008: With and without Add-Ons Selection (Seat/Baggage/Meal) ', { tag: ['@IDFC', '@BOB', '@Homepageflight','@Common', '@Addon', '@Regression'] }, async () => {
+test('SC_008: With and without Add-Ons Selection (Seat/Baggage/Meal) ', { tag: ['@idfc', '@bob', '@homepageflight','@common', '@addon', '@regression'] }, async () => {
   await test.step("Step 1: Enter City From Airport", async () => {
     await page.waitForTimeout(5000);
     await FlightHomePage.clickOnCityFromAirport(page);

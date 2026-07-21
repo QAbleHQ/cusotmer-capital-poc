@@ -17,7 +17,7 @@ test.afterEach(async () => {
   await context.close();
 });
 
-test('SC_001: Verify user can Login with mobile number and OTP', { tag: ['@Common', '@Loginpage', '@Smoke', '@Sanity'] }, async () => {
+test('SC_001: Verify user can Login with mobile number and OTP', { tag: ['@common', '@loginpage', '@smoke', '@sanity'] }, async () => {
   await test.step('Step 1: Enter valid mobile number', async () => {
     await LoginPage.verifyMobileNumberFieldAcceptsInput(page);
   });
@@ -41,7 +41,7 @@ test('SC_001: Verify user can Login with mobile number and OTP', { tag: ['@Commo
   });
 });
 
-test('SC_002: Home page with multiple card and without multiple cards selection', { tag: ['@BOB', '@Loginpage','@Smoke', '@Sanity'] }, async ({ }) => {
+test('SC_002: Home page with multiple card and without multiple cards selection', { tag: ['@bob', '@loginpage','@smoke', '@sanity'] }, async ({ }) => {
 const CLIENT = process.env.CLIENT?.toUpperCase();
 test.skip(CLIENT === 'IDFC', 'Skipping this test for IDFC');
 

@@ -21,7 +21,7 @@ test.afterEach(async () => {
   await context.close();
 });
 
-test("SC_006, PDP — 'Buy Now' CTA redirects to Checkout page", { tag: ['@BOBCard', '@Checkout', '@Regression', '@Smoke'] }, async ({ }) => {
+test("SC_006, PDP — 'Buy Now' CTA redirects to Checkout page", { tag: ['@bobcard', '@checkout', '@regression', '@smoke'] }, async ({ }) => {
 
   await test.step("Click Gift Card option", async () => {
     await page.waitForLoadState('domcontentloaded');
