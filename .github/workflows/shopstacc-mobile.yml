@@ -33,11 +33,6 @@ jobs:
       ENVIRONMENT: ${{ github.event.inputs.environment || 'UAT' }}
       FEATURE_TAG: ${{ github.event.inputs.feature || '' }}
       DEVICE: ${{ github.event.inputs.device || 'GalaxyS21' }}
-      IS_GRID: true
-      LAMBDA_REAL_DEVICE: ${{ github.event.inputs.device == 'GalaxyS21' && 'true' || 'false' }}
-      LAMBDA_PLATFORM_NAME: ${{ github.event.inputs.device == 'GalaxyS21' && 'android' || 'web' }}
-      LAMBDA_USER: ${{ secrets.LAMBDA_USER }}
-      LAMBDA_KEY: ${{ secrets.LAMBDA_KEY }}
 
     steps:
       - name: Checkout repository
@@ -59,16 +54,13 @@ jobs:
           if [ "$DEVICE" = "iPhone13" ]; then
             echo "PROJECT_SUFFIX=iPhone13" >> "$GITHUB_ENV"
             echo "DEVICE_LABEL=iPhone13 (Chrome)" >> "$GITHUB_ENV"
-            echo "INSTALL_BROWSERS=true" >> "$GITHUB_ENV"
-            echo "WORKERS=4" >> "$GITHUB_ENV"
-            echo "RETRIES=2" >> "$GITHUB_ENV"
           else
             echo "PROJECT_SUFFIX=GalaxyS21" >> "$GITHUB_ENV"
-            echo "DEVICE_LABEL=GalaxyS21 (Real Android Device)" >> "$GITHUB_ENV"
-            echo "INSTALL_BROWSERS=false" >> "$GITHUB_ENV"
-            echo "WORKERS=1" >> "$GITHUB_ENV"
-            echo "RETRIES=1" >> "$GITHUB_ENV"
+            echo "DEVICE_LABEL=GalaxyS21 (Chrome)" >> "$GITHUB_ENV"
           fi
+          echo "INSTALL_BROWSERS=true" >> "$GITHUB_ENV"
+          echo "WORKERS=4" >> "$GITHUB_ENV"
+          echo "RETRIES=2" >> "$GITHUB_ENV"
 
       - name: Install Playwright browsers
         if: env.INSTALL_BROWSERS == 'true'
