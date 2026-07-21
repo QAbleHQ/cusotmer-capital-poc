@@ -1,4 +1,4 @@
-name: ShopStacc Tests
+name: Shopstacc Web flow
 
 run-name: "ShopStacc ${{ github.event.inputs.environment || 'UAT' }} [${{ github.event.inputs.browser || 'Chrome' }}/${{ github.event.inputs.viewport || 'Web' }}]${{ github.event.inputs.feature && format(' @{0}', github.event.inputs.feature) || '' }}"
 
@@ -9,7 +9,6 @@ run-name: "ShopStacc ${{ github.event.inputs.environment || 'UAT' }} [${{ github
 
 on:
   push:
-    branches: [main]
 
   schedule:
     # 2:30 AM IST = 21:00 UTC (previous calendar day)
@@ -283,7 +282,7 @@ jobs:
           username: ankitpatel@qable.io
           password: zjwtgkflbwczqrpb
           subject: "[${{ steps.stats.outputs.status }}] ShopStacc ${{ env.CLIENT }} ${{ env.ENVIRONMENT }} [${{ env.BROWSER }}/${{ env.VIEWPORT }}]${{ env.FEATURE_TAG && format(' @{0}', env.FEATURE_TAG) || '' }} — Playwright Report"
-          to: dharm.vrat@customer-capital.com, urvashi.saraswat@customer-capital.com, 1ee687f3.linearloop.io@in.teams.ms
+          to: dharm.vrat@customer-capital.com, urvashi.saraswat@customer-capital.com, nikunj.trivedi@qable.io, aneri.patel@qable.io, 1ee687f3.linearloop.io@in.teams.ms
           from: ankitpatel@qable.io
           html_body: |
             <div style="font-family:Arial,sans-serif;max-width:600px;margin:auto">

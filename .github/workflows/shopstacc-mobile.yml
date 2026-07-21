@@ -1,6 +1,6 @@
-name: TripStacc BOB GalaxyS21 UAT
+﻿name: ShopStacc Mobile flow
 
-run-name: "TripStacc BOB GalaxyS21 ${{ github.event.inputs.environment || 'UAT' }}${{ github.event.inputs.feature && format(' @{0}', github.event.inputs.feature) || '' }}"
+run-name: "ShopStacc BOBCard ${{ github.event.inputs.device || 'GalaxyS21' }} ${{ github.event.inputs.environment || 'UAT' }}${{ github.event.inputs.feature && format(' @{0}', github.event.inputs.feature) || '' }}"
 
 on:
   workflow_dispatch:
@@ -12,9 +12,15 @@ on:
         options: [QA, UAT, PROD]
         default: UAT
       feature:
-        description: "Feature tag without @ (e.g. Loginpage, Smoke, Sanity)"
+        description: "Feature tag without @ (e.g. Login, Smoke, Sanity)"
         required: false
         default: ""
+      device:
+        description: "Device"
+        required: true
+        type: choice
+        options: [GalaxyS21, iPhone13]
+        default: GalaxyS21
 
 jobs:
   test:
@@ -23,9 +29,15 @@ jobs:
       contents: write
     env:
       CI: true
-      CLIENT: BOB
+      CLIENT: BOBCARD
       ENVIRONMENT: ${{ github.event.inputs.environment || 'UAT' }}
       FEATURE_TAG: ${{ github.event.inputs.feature || '' }}
+      DEVICE: ${{ github.event.inputs.device || 'GalaxyS21' }}
+      IS_GRID: true
+      LAMBDA_REAL_DEVICE: ${{ github.event.inputs.device == 'GalaxyS21' && 'true' || 'false' }}
+      LAMBDA_PLATFORM_NAME: ${{ github.event.inputs.device == 'GalaxyS21' && 'android' || 'web' }}
+      LAMBDA_USER: ${{ secrets.LAMBDA_USER }}
+      LAMBDA_KEY: ${{ secrets.LAMBDA_KEY }}
 
     steps:
       - name: Checkout repository
@@ -40,7 +52,26 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Set device config
+        shell: bash
+        run: |
+          DEVICE="${{ github.event.inputs.device || 'GalaxyS21' }}"
+          if [ "$DEVICE" = "iPhone13" ]; then
+            echo "PROJECT_SUFFIX=iPhone13" >> "$GITHUB_ENV"
+            echo "DEVICE_LABEL=iPhone13 (Chrome)" >> "$GITHUB_ENV"
+            echo "INSTALL_BROWSERS=true" >> "$GITHUB_ENV"
+            echo "WORKERS=4" >> "$GITHUB_ENV"
+            echo "RETRIES=2" >> "$GITHUB_ENV"
+          else
+            echo "PROJECT_SUFFIX=GalaxyS21" >> "$GITHUB_ENV"
+            echo "DEVICE_LABEL=GalaxyS21 (Real Android Device)" >> "$GITHUB_ENV"
+            echo "INSTALL_BROWSERS=false" >> "$GITHUB_ENV"
+            echo "WORKERS=1" >> "$GITHUB_ENV"
+            echo "RETRIES=1" >> "$GITHUB_ENV"
+          fi
+
       - name: Install Playwright browsers
+        if: env.INSTALL_BROWSERS == 'true'
         run: npx playwright install --with-deps chrome
 
       - name: Run Playwright tests
@@ -48,11 +79,11 @@ jobs:
         continue-on-error: true
         run: |
           mkdir -p reports
-          PROJECT_VAL="tripstacc-chrome-${ENVIRONMENT}-GalaxyS21${FEATURE_TAG:+-${FEATURE_TAG}}"
+          PROJECT_VAL="shopstacc-chrome-${ENVIRONMENT}-${PROJECT_SUFFIX}${FEATURE_TAG:+-${FEATURE_TAG}}"
           echo "PROJECT=$PROJECT_VAL"
           set +e
-          CLIENT="$CLIENT" PROJECT="$PROJECT_VAL" npx playwright test TripStacc/tests \
-            --config=playwright.config.ts --workers=4 --retries=2
+          CLIENT="$CLIENT" PROJECT="$PROJECT_VAL" npx playwright test ShopStacc/tests \
+            --config=playwright.config.ts --workers="$WORKERS" --retries="$RETRIES"
           EXIT_CODE=$?
           set -e
           echo "exit_code=$EXIT_CODE" >> "$GITHUB_OUTPUT"
@@ -107,7 +138,7 @@ jobs:
           const status = '${{ steps.stats.outputs.status }}';
           const badge = status === 'FAILED' ? '🔴' : '🟢';
           const feature = process.env.FEATURE_TAG ? ' @' + process.env.FEATURE_TAG : '';
-          let md = '## ' + badge + ' TripStacc BOB GalaxyS21 ' + process.env.ENVIRONMENT + feature + '\n\n';
+          let md = '## ' + badge + ' ShopStacc BOBCard ' + process.env.DEVICE + ' ' + process.env.ENVIRONMENT + feature + '\n\n';
           md += '| | |\n|---|---|\n';
           md += '| **Status** | ' + (status === 'FAILED' ? '❌ FAILED' : '✅ PASSED') + ' |\n';
           md += '| **Total** | ${{ steps.stats.outputs.total }} |\n';
@@ -116,7 +147,7 @@ jobs:
           md += '| **Skipped** | ⏭️ ${{ steps.stats.outputs.skipped }} |\n';
           md += '| **Flaky** | ⚠️ ${{ steps.stats.outputs.flaky }} |\n';
           md += '| **Duration** | ⏱️ ${{ steps.stats.outputs.duration }} |\n';
-          md += '| **Device** | GalaxyS21 (Chrome) |\n';
+          md += '| **Device** | ' + process.env.DEVICE_LABEL + ' |\n';
           md += '| **Branch** | \`${{ github.ref_name }}\` |\n';
           md += '| **Commit** | \`' + '${{ github.sha }}'.substring(0, 7) + '\` |\n\n';
           const failPath = '/tmp/failures.json';
@@ -134,7 +165,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: tripstacc-bob-galaxys21-${{ env.ENVIRONMENT }}-${{ github.run_id }}
+          name: shopstacc-bobcard-${{ env.DEVICE }}-${{ env.ENVIRONMENT }}-${{ github.run_id }}
           path: |
             playwright-report/
             reports/test-results.json
@@ -145,7 +176,7 @@ jobs:
         if: steps.run-tests.outputs.exit_code != '0'
         uses: actions/upload-artifact@v4
         with:
-          name: tripstacc-bob-galaxys21-failures-${{ env.ENVIRONMENT }}-${{ github.run_id }}
+          name: shopstacc-bobcard-${{ env.DEVICE }}-failures-${{ env.ENVIRONMENT }}-${{ github.run_id }}
           path: test-results/
           retention-days: 30
           if-no-files-found: ignore
@@ -159,13 +190,13 @@ jobs:
           server_port: 587
           username: ankitpatel@qable.io
           password: zjwtgkflbwczqrpb
-          subject: "[${{ steps.stats.outputs.status }}] TripStacc BOB GalaxyS21 ${{ env.ENVIRONMENT }}${{ env.FEATURE_TAG && format(' @{0}', env.FEATURE_TAG) || '' }} — Playwright Report"
-          to: dharm.vrat@customer-capital.com, urvashi.saraswat@customer-capital.com, 1ee687f3.linearloop.io@in.teams.ms
+          subject: "[${{ steps.stats.outputs.status }}] ShopStacc BOBCard ${{ env.DEVICE }} ${{ env.ENVIRONMENT }}${{ env.FEATURE_TAG && format(' @{0}', env.FEATURE_TAG) || '' }} — Playwright Report"
+          to: dharm.vrat@customer-capital.com, urvashi.saraswat@customer-capital.com, nikunj.trivedi@qable.io, aneri.patel@qable.io, 1ee687f3.linearloop.io@in.teams.ms
           from: ankitpatel@qable.io
           html_body: |
             <div style="font-family:Arial,sans-serif;max-width:600px;margin:auto">
               <h2 style="background:${{ steps.stats.outputs.status == 'FAILED' && '#cc0000' || '#00b300' }};color:#fff;padding:12px 16px;border-radius:4px;margin:0">
-                ${{ steps.stats.outputs.status == 'FAILED' && '🔴' || '🟢' }} TripStacc BOB GalaxyS21 ${{ env.ENVIRONMENT }}${{ env.FEATURE_TAG && format(' @{0}', env.FEATURE_TAG) || '' }}
+                ${{ steps.stats.outputs.status == 'FAILED' && '🔴' || '🟢' }} ShopStacc BOBCard ${{ env.DEVICE }} ${{ env.ENVIRONMENT }}${{ env.FEATURE_TAG && format(' @{0}', env.FEATURE_TAG) || '' }}
               </h2>
               <table width="100%" cellpadding="8" cellspacing="0" style="border-collapse:collapse;border:1px solid #ddd">
                 <tr><td style="background:#f5f5f5;font-weight:bold;width:140px">Status</td><td>${{ steps.stats.outputs.status == 'FAILED' && '❌ FAILED' || '✅ PASSED' }}</td></tr>
@@ -175,7 +206,7 @@ jobs:
                 <tr style="background:#f5f5f5"><td style="font-weight:bold">Skipped</td><td>⏭️ ${{ steps.stats.outputs.skipped }}</td></tr>
                 <tr><td style="font-weight:bold">Flaky</td><td>⚠️ ${{ steps.stats.outputs.flaky }}</td></tr>
                 <tr style="background:#f5f5f5"><td style="font-weight:bold">Duration</td><td>⏱️ ${{ steps.stats.outputs.duration }}</td></tr>
-                <tr><td style="font-weight:bold">Device</td><td>GalaxyS21 (Chrome)</td></tr>
+                <tr><td style="font-weight:bold">Device</td><td>${{ env.DEVICE_LABEL }}</td></tr>
                 <tr style="background:#f5f5f5"><td style="font-weight:bold">Branch</td><td>${{ github.ref_name }}</td></tr>
                 <tr><td style="font-weight:bold">Triggered by</td><td>${{ github.actor }}</td></tr>
               </table>
@@ -191,7 +222,7 @@ jobs:
           STATUS="${{ steps.stats.outputs.status }}"
           EMOJI=$([[ "$STATUS" == "FAILED" ]] && echo "🔴" || echo "🟢")
           FEATURE_LABEL="${FEATURE_TAG:+ @${FEATURE_TAG}}"
-          curl -s -X POST "${{ secrets.MS_TEAMS_WEBHOOK }}" -H "Content-Type: application/json" -d "{\"type\":\"message\",\"attachments\":[{\"contentType\":\"application/vnd.microsoft.card.adaptive\",\"content\":{\"\$schema\":\"http://adaptivecards.io/schemas/adaptive-card.json\",\"type\":\"AdaptiveCard\",\"version\":\"1.4\",\"body\":[{\"type\":\"TextBlock\",\"text\":\"${EMOJI} TripStacc BOB GalaxyS21 ${ENVIRONMENT}${FEATURE_LABEL} — ${STATUS}\",\"weight\":\"Bolder\",\"size\":\"Medium\",\"wrap\":true},{\"type\":\"FactSet\",\"facts\":[{\"title\":\"Status\",\"value\":\"${STATUS}\"},{\"title\":\"Total\",\"value\":\"${{ steps.stats.outputs.total }}\"},{\"title\":\"Passed\",\"value\":\"✅ ${{ steps.stats.outputs.passed }}\"},{\"title\":\"Failed\",\"value\":\"❌ ${{ steps.stats.outputs.failed }}\"},{\"title\":\"Duration\",\"value\":\"⏱️ ${{ steps.stats.outputs.duration }}\"},{\"title\":\"Device\",\"value\":\"GalaxyS21 (Chrome)\"}]}],\"actions\":[{\"type\":\"Action.OpenUrl\",\"title\":\"🔗 View Run\",\"url\":\"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}]}}]}"
+          curl -s -X POST "${{ secrets.MS_TEAMS_WEBHOOK }}" -H "Content-Type: application/json" -d "{\"type\":\"message\",\"attachments\":[{\"contentType\":\"application/vnd.microsoft.card.adaptive\",\"content\":{\"$schema\":\"http://adaptivecards.io/schemas/adaptive-card.json\",\"type\":\"AdaptiveCard\",\"version\":\"1.4\",\"body\":[{\"type\":\"TextBlock\",\"text\":\"${EMOJI} ShopStacc BOBCard ${DEVICE} ${ENVIRONMENT}${FEATURE_LABEL} — ${STATUS}\",\"weight\":\"Bolder\",\"size\":\"Medium\",\"wrap\":true},{\"type\":\"FactSet\",\"facts\":[{\"title\":\"Status\",\"value\":\"${STATUS}\"},{\"title\":\"Total\",\"value\":\"${{ steps.stats.outputs.total }}\"},{\"title\":\"Passed\",\"value\":\"✅ ${{ steps.stats.outputs.passed }}\"},{\"title\":\"Failed\",\"value\":\"❌ ${{ steps.stats.outputs.failed }}\"},{\"title\":\"Duration\",\"value\":\"⏱️ ${{ steps.stats.outputs.duration }}\"},{\"title\":\"Device\",\"value\":\"${DEVICE_LABEL}\"}]}],\"actions\":[{\"type\":\"Action.OpenUrl\",\"title\":\"🔗 View Run\",\"url\":\"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}]}]}"
 
       - name: Fail job when tests failed
         if: steps.run-tests.outputs.exit_code != '0'

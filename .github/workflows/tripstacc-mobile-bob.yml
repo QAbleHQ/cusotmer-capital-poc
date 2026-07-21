@@ -1,6 +1,6 @@
-name: TripStacc BOB iPhone13 UAT
+name: TripStacc Mobile BOB flow
 
-run-name: "TripStacc BOB iPhone13 ${{ github.event.inputs.environment || 'UAT' }}${{ github.event.inputs.feature && format(' @{0}', github.event.inputs.feature) || '' }}"
+run-name: "TripStacc BOB ${{ github.event.inputs.mobile == 'iphone13' && 'iPhone13' || 'GalaxyS21' }} ${{ github.event.inputs.environment || 'UAT' }}${{ github.event.inputs.feature && format(' @{0}', github.event.inputs.feature) || '' }}"
 
 on:
   workflow_dispatch:
@@ -11,8 +11,14 @@ on:
         type: choice
         options: [QA, UAT, PROD]
         default: UAT
+      mobile:
+        description: "Mobile device"
+        required: true
+        type: choice
+        options: [galaxys21, iphone13]
+        default: galaxys21
       feature:
-        description: "Feature tag without @ (e.g. Login, Smoke, Sanity)"
+        description: "Feature tag without @ (e.g. Loginpage, Smoke, Sanity)"
         required: false
         default: ""
 
@@ -25,11 +31,20 @@ jobs:
       CI: true
       CLIENT: BOB
       ENVIRONMENT: ${{ github.event.inputs.environment || 'UAT' }}
+      MOBILE: ${{ github.event.inputs.mobile || 'galaxys21' }}
       FEATURE_TAG: ${{ github.event.inputs.feature || '' }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Resolve device label
+        run: |
+          if [ "$MOBILE" = "iphone13" ]; then
+            echo "DEVICE=iPhone13" >> "$GITHUB_ENV"
+          else
+            echo "DEVICE=GalaxyS21" >> "$GITHUB_ENV"
+          fi
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -48,7 +63,7 @@ jobs:
         continue-on-error: true
         run: |
           mkdir -p reports
-          PROJECT_VAL="tripstacc-chrome-${ENVIRONMENT}-iPhone13${FEATURE_TAG:+-${FEATURE_TAG}}"
+          PROJECT_VAL="tripstacc-chrome-${ENVIRONMENT}-${DEVICE}${FEATURE_TAG:+-${FEATURE_TAG}}"
           echo "PROJECT=$PROJECT_VAL"
           set +e
           CLIENT="$CLIENT" PROJECT="$PROJECT_VAL" npx playwright test TripStacc/tests \
@@ -107,7 +122,7 @@ jobs:
           const status = '${{ steps.stats.outputs.status }}';
           const badge = status === 'FAILED' ? '🔴' : '🟢';
           const feature = process.env.FEATURE_TAG ? ' @' + process.env.FEATURE_TAG : '';
-          let md = '## ' + badge + ' TripStacc BOB iPhone13 ' + process.env.ENVIRONMENT + feature + '\n\n';
+          let md = '## ' + badge + ' TripStacc BOB ' + process.env.DEVICE + ' ' + process.env.ENVIRONMENT + feature + '\n\n';
           md += '| | |\n|---|---|\n';
           md += '| **Status** | ' + (status === 'FAILED' ? '❌ FAILED' : '✅ PASSED') + ' |\n';
           md += '| **Total** | ${{ steps.stats.outputs.total }} |\n';
@@ -116,7 +131,7 @@ jobs:
           md += '| **Skipped** | ⏭️ ${{ steps.stats.outputs.skipped }} |\n';
           md += '| **Flaky** | ⚠️ ${{ steps.stats.outputs.flaky }} |\n';
           md += '| **Duration** | ⏱️ ${{ steps.stats.outputs.duration }} |\n';
-          md += '| **Device** | iPhone13 (Chrome) |\n';
+          md += '| **Device** | ' + process.env.DEVICE + ' (Chrome) |\n';
           md += '| **Branch** | \`${{ github.ref_name }}\` |\n';
           md += '| **Commit** | \`' + '${{ github.sha }}'.substring(0, 7) + '\` |\n\n';
           const failPath = '/tmp/failures.json';
@@ -134,7 +149,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: tripstacc-bob-iphone13-${{ env.ENVIRONMENT }}-${{ github.run_id }}
+          name: tripstacc-bob-${{ env.MOBILE }}-${{ env.ENVIRONMENT }}-${{ github.run_id }}
           path: |
             playwright-report/
             reports/test-results.json
@@ -145,7 +160,7 @@ jobs:
         if: steps.run-tests.outputs.exit_code != '0'
         uses: actions/upload-artifact@v4
         with:
-          name: tripstacc-bob-iphone13-failures-${{ env.ENVIRONMENT }}-${{ github.run_id }}
+          name: tripstacc-bob-${{ env.MOBILE }}-failures-${{ env.ENVIRONMENT }}-${{ github.run_id }}
           path: test-results/
           retention-days: 30
           if-no-files-found: ignore
@@ -159,13 +174,13 @@ jobs:
           server_port: 587
           username: ankitpatel@qable.io
           password: zjwtgkflbwczqrpb
-          subject: "[${{ steps.stats.outputs.status }}] TripStacc BOB iPhone13 ${{ env.ENVIRONMENT }}${{ env.FEATURE_TAG && format(' @{0}', env.FEATURE_TAG) || '' }} — Playwright Report"
-          to: dharm.vrat@customer-capital.com, urvashi.saraswat@customer-capital.com, 1ee687f3.linearloop.io@in.teams.ms
+          subject: "[${{ steps.stats.outputs.status }}] TripStacc BOB ${{ env.DEVICE }} ${{ env.ENVIRONMENT }}${{ env.FEATURE_TAG && format(' @{0}', env.FEATURE_TAG) || '' }} — Playwright Report"
+          to: dharm.vrat@customer-capital.com, urvashi.saraswat@customer-capital.com, nikunj.trivedi@qable.io, aneri.patel@qable.io, 1ee687f3.linearloop.io@in.teams.ms
           from: ankitpatel@qable.io
           html_body: |
             <div style="font-family:Arial,sans-serif;max-width:600px;margin:auto">
               <h2 style="background:${{ steps.stats.outputs.status == 'FAILED' && '#cc0000' || '#00b300' }};color:#fff;padding:12px 16px;border-radius:4px;margin:0">
-                ${{ steps.stats.outputs.status == 'FAILED' && '🔴' || '🟢' }} TripStacc BOB iPhone13 ${{ env.ENVIRONMENT }}${{ env.FEATURE_TAG && format(' @{0}', env.FEATURE_TAG) || '' }}
+                ${{ steps.stats.outputs.status == 'FAILED' && '🔴' || '🟢' }} TripStacc BOB ${{ env.DEVICE }} ${{ env.ENVIRONMENT }}${{ env.FEATURE_TAG && format(' @{0}', env.FEATURE_TAG) || '' }}
               </h2>
               <table width="100%" cellpadding="8" cellspacing="0" style="border-collapse:collapse;border:1px solid #ddd">
                 <tr><td style="background:#f5f5f5;font-weight:bold;width:140px">Status</td><td>${{ steps.stats.outputs.status == 'FAILED' && '❌ FAILED' || '✅ PASSED' }}</td></tr>
@@ -175,7 +190,7 @@ jobs:
                 <tr style="background:#f5f5f5"><td style="font-weight:bold">Skipped</td><td>⏭️ ${{ steps.stats.outputs.skipped }}</td></tr>
                 <tr><td style="font-weight:bold">Flaky</td><td>⚠️ ${{ steps.stats.outputs.flaky }}</td></tr>
                 <tr style="background:#f5f5f5"><td style="font-weight:bold">Duration</td><td>⏱️ ${{ steps.stats.outputs.duration }}</td></tr>
-                <tr><td style="font-weight:bold">Device</td><td>iPhone13 (Chrome)</td></tr>
+                <tr><td style="font-weight:bold">Device</td><td>${{ env.DEVICE }} (Chrome)</td></tr>
                 <tr style="background:#f5f5f5"><td style="font-weight:bold">Branch</td><td>${{ github.ref_name }}</td></tr>
                 <tr><td style="font-weight:bold">Triggered by</td><td>${{ github.actor }}</td></tr>
               </table>
@@ -191,7 +206,7 @@ jobs:
           STATUS="${{ steps.stats.outputs.status }}"
           EMOJI=$([[ "$STATUS" == "FAILED" ]] && echo "🔴" || echo "🟢")
           FEATURE_LABEL="${FEATURE_TAG:+ @${FEATURE_TAG}}"
-          curl -s -X POST "${{ secrets.MS_TEAMS_WEBHOOK }}" -H "Content-Type: application/json" -d "{\"type\":\"message\",\"attachments\":[{\"contentType\":\"application/vnd.microsoft.card.adaptive\",\"content\":{\"\$schema\":\"http://adaptivecards.io/schemas/adaptive-card.json\",\"type\":\"AdaptiveCard\",\"version\":\"1.4\",\"body\":[{\"type\":\"TextBlock\",\"text\":\"${EMOJI} TripStacc BOB iPhone13 ${ENVIRONMENT}${FEATURE_LABEL} — ${STATUS}\",\"weight\":\"Bolder\",\"size\":\"Medium\",\"wrap\":true},{\"type\":\"FactSet\",\"facts\":[{\"title\":\"Status\",\"value\":\"${STATUS}\"},{\"title\":\"Total\",\"value\":\"${{ steps.stats.outputs.total }}\"},{\"title\":\"Passed\",\"value\":\"✅ ${{ steps.stats.outputs.passed }}\"},{\"title\":\"Failed\",\"value\":\"❌ ${{ steps.stats.outputs.failed }}\"},{\"title\":\"Duration\",\"value\":\"⏱️ ${{ steps.stats.outputs.duration }}\"},{\"title\":\"Device\",\"value\":\"iPhone13 (Chrome)\"}]}],\"actions\":[{\"type\":\"Action.OpenUrl\",\"title\":\"🔗 View Run\",\"url\":\"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}]}}]}"
+          curl -s -X POST "${{ secrets.MS_TEAMS_WEBHOOK }}" -H "Content-Type: application/json" -d "{\"type\":\"message\",\"attachments\":[{\"contentType\":\"application/vnd.microsoft.card.adaptive\",\"content\":{\"\$schema\":\"http://adaptivecards.io/schemas/adaptive-card.json\",\"type\":\"AdaptiveCard\",\"version\":\"1.4\",\"body\":[{\"type\":\"TextBlock\",\"text\":\"${EMOJI} TripStacc BOB ${DEVICE} ${ENVIRONMENT}${FEATURE_LABEL} — ${STATUS}\",\"weight\":\"Bolder\",\"size\":\"Medium\",\"wrap\":true},{\"type\":\"FactSet\",\"facts\":[{\"title\":\"Status\",\"value\":\"${STATUS}\"},{\"title\":\"Total\",\"value\":\"${{ steps.stats.outputs.total }}\"},{\"title\":\"Passed\",\"value\":\"✅ ${{ steps.stats.outputs.passed }}\"},{\"title\":\"Failed\",\"value\":\"❌ ${{ steps.stats.outputs.failed }}\"},{\"title\":\"Duration\",\"value\":\"⏱️ ${{ steps.stats.outputs.duration }}\"},{\"title\":\"Device\",\"value\":\"${DEVICE} (Chrome)\"}]}],\"actions\":[{\"type\":\"Action.OpenUrl\",\"title\":\"🔗 View Run\",\"url\":\"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}]}}]}"
 
       - name: Fail job when tests failed
         if: steps.run-tests.outputs.exit_code != '0'
