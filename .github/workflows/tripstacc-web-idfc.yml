@@ -91,12 +91,12 @@ jobs:
                 for (const test of spec.tests || []) {
                   total++;
                   const result = test.results?.[test.results.length - 1];
-                  const status = result?.status || 'unknown';
                   durationMs += result?.duration || 0;
-                  if (status === 'passed') passed++;
-                  else if (status === 'failed' || status === 'timedOut') { failed++; const msg = (result?.error?.message || 'No error').split('\n')[0].replace(/\x1B\[[0-9;]*m/g, ''); failures.push({ title: spec.title + ' › ' + test.title, msg }); }
-                  else if (status === 'skipped') skipped++;
-                  else if (status === 'flaky') flaky++;
+                  const testStatus = test.status;
+                  if (testStatus === 'skipped') skipped++;
+                  else if (testStatus === 'flaky') flaky++;
+                  else if (testStatus === 'unexpected') { failed++; const msg = (result?.error?.message || 'No error').split('\n')[0].replace(/\x1B\[[0-9;]*m/g, ''); failures.push({ title: spec.title + ' › ' + test.title, msg }); }
+                  else passed++;
                 }
               }
               for (const child of suite.suites || []) collect(child);
