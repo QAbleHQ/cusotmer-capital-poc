@@ -1,8 +1,16 @@
 name: TripStacc Mobile IDFC flow
 
-run-name: "TripStacc IDFC ${{ github.event.inputs.mobile == 'iphone13' && 'iPhone13' || 'GalaxyS21' }} ${{ github.event.inputs.environment || 'UAT' }}${{ github.event.inputs.feature && format(' @{0}', github.event.inputs.feature) || '' }}"
+run-name: "TripStacc IDFC ${{ github.event.inputs.mobile && (github.event.inputs.mobile == 'iphone13' && 'iPhone13' || 'GalaxyS21') || 'UAT (Matrix)' }} ${{ github.event.inputs.environment || '' }}${{ github.event.inputs.feature && format(' @{0}', github.event.inputs.feature) || '' }}"
+
+# Triggers:
+#   1. schedule → daily at 2:00 AM IST, runs a matrix: UAT/GalaxyS21 + UAT/iPhone13
+#   2. workflow_dispatch → manual run with one specific environment / device / feature
 
 on:
+  schedule:
+    # 2:00 AM IST = 20:30 UTC (previous calendar day)
+    - cron: "30 20 * * *"
+
   workflow_dispatch:
     inputs:
       environment:
@@ -23,28 +31,39 @@ on:
         default: ""
 
 jobs:
+  set-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set.outputs.matrix }}
+    steps:
+      - id: set
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            DEVICE=$([ "${{ github.event.inputs.mobile }}" = "iphone13" ] && echo "iPhone13" || echo "GalaxyS21")
+            MATRIX="{\"include\":[{\"environment\":\"${{ github.event.inputs.environment }}\",\"device\":\"$DEVICE\"}]}"
+          else
+            MATRIX='{"include":[{"environment":"UAT","device":"GalaxyS21"},{"environment":"UAT","device":"iPhone13"}]}'
+          fi
+          echo "matrix=$MATRIX" >> "$GITHUB_OUTPUT"
+
   test:
+    needs: set-matrix
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.set-matrix.outputs.matrix) }}
     env:
       CI: true
       CLIENT: IDFC
-      ENVIRONMENT: ${{ github.event.inputs.environment || 'UAT' }}
-      MOBILE: ${{ github.event.inputs.mobile || 'galaxys21' }}
+      ENVIRONMENT: ${{ matrix.environment }}
+      DEVICE: ${{ matrix.device }}
       FEATURE_TAG: ${{ github.event.inputs.feature || '' }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Resolve device label
-        run: |
-          if [ "$MOBILE" = "iphone13" ]; then
-            echo "DEVICE=iPhone13" >> "$GITHUB_ENV"
-          else
-            echo "DEVICE=GalaxyS21" >> "$GITHUB_ENV"
-          fi
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -149,7 +168,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: tripstacc-idfc-${{ env.MOBILE }}-${{ env.ENVIRONMENT }}-${{ github.run_id }}
+          name: tripstacc-idfc-${{ env.DEVICE }}-${{ env.ENVIRONMENT }}-${{ github.run_id }}
           path: |
             playwright-report/
             reports/test-results.json
@@ -160,7 +179,7 @@ jobs:
         if: steps.run-tests.outputs.exit_code != '0'
         uses: actions/upload-artifact@v4
         with:
-          name: tripstacc-idfc-${{ env.MOBILE }}-failures-${{ env.ENVIRONMENT }}-${{ github.run_id }}
+          name: tripstacc-idfc-${{ env.DEVICE }}-failures-${{ env.ENVIRONMENT }}-${{ github.run_id }}
           path: test-results/
           retention-days: 30
           if-no-files-found: ignore
