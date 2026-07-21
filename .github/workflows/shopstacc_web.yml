@@ -1,18 +1,16 @@
 name: Shopstacc Web flow
 
-run-name: "ShopStacc ${{ github.event.inputs.environment || 'UAT' }} [${{ github.event.inputs.browser || 'Chrome' }}/${{ github.event.inputs.viewport || 'Web' }}]${{ github.event.inputs.feature && format(' @{0}', github.event.inputs.feature) || '' }}"
+run-name: "ShopStacc ${{ github.event.inputs.environment || 'UAT (Matrix)' }}${{ github.event.inputs.browser && format(' [{0}/{1}]', github.event.inputs.browser, github.event.inputs.viewport) || '' }}${{ github.event.inputs.feature && format(' @{0}', github.event.inputs.feature) || '' }}"
 
 # Triggers:
-#   1. push     → auto run on every push to main (UAT, all tests)
-#   2. schedule → daily at 2:30 AM IST (UAT, all tests)
-#   3. workflow_dispatch → manual run with environment / feature options
+#   1. schedule → daily at 3:30 PM IST, runs a matrix: UAT/Chrome/Web + UAT/Firefox/Web
+#   2. workflow_dispatch → manual run with one specific environment / browser / viewport / feature
 
 on:
-  push:
-
   schedule:
-    # 2:30 AM IST = 21:00 UTC (previous calendar day)
-    - cron: "0 21 * * *"
+    # 3:30 PM IST = 10:00 UTC
+    # "0 21 * * *" for 2:30 AM IST
+    - cron: "0 10 * * *"  
 
   workflow_dispatch:
     inputs:
@@ -32,7 +30,7 @@ on:
         description: "Viewport (Web = desktop, or mobile device)"
         required: true
         type: choice
-        options: [Web, iPhone13, GalaxyS21]
+        options: [Web]
         default: Web
       feature:
         description: "Optional feature tag without @ (e.g. Login, Homepage, Checkout, PLP)"
@@ -40,16 +38,37 @@ on:
         default: ""
 
 jobs:
+  set-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set.outputs.matrix }}
+    steps:
+      - id: set
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            MATRIX='{"include":[{"environment":"${{ github.event.inputs.environment }}","browser":"${{ github.event.inputs.browser }}","viewport":"${{ github.event.inputs.viewport }}"}]}'
+          else
+            MATRIX='{"include":[{"environment":"UAT","browser":"Chrome","viewport":"Web"},{"environment":"UAT","browser":"Firefox","viewport":"Web"}]}'
+          fi
+          echo "matrix=$MATRIX" >> "$GITHUB_OUTPUT"
+
   test:
+    needs: set-matrix
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    concurrency:
+      group: shopstacc-web-gh-pages
+      cancel-in-progress: false
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.set-matrix.outputs.matrix) }}
     env:
       CI: true
       CLIENT: BOBCARD
-      ENVIRONMENT: ${{ github.event.inputs.environment || 'UAT' }}
-      BROWSER: ${{ github.event.inputs.browser || 'Chrome' }}
-      VIEWPORT: ${{ github.event.inputs.viewport || 'Web' }}
+      ENVIRONMENT: ${{ matrix.environment }}
+      BROWSER: ${{ matrix.browser }}
+      VIEWPORT: ${{ matrix.viewport }}
       FEATURE_TAG: ${{ github.event.inputs.feature || '' }}
 
     steps:
@@ -225,7 +244,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: shopstacc-report-${{ env.ENVIRONMENT }}-${{ github.run_id }}
+          name: shopstacc-report-${{ env.ENVIRONMENT }}-${{ env.BROWSER }}-${{ env.VIEWPORT }}-${{ github.run_id }}
           path: |
             playwright-report/
             reports/test-results.json
@@ -237,7 +256,7 @@ jobs:
         if: steps.run-tests.outputs.exit_code != '0'
         uses: actions/upload-artifact@v4
         with:
-          name: shopstacc-failures-${{ env.ENVIRONMENT }}-${{ github.run_id }}
+          name: shopstacc-failures-${{ env.ENVIRONMENT }}-${{ env.BROWSER }}-${{ env.VIEWPORT }}-${{ github.run_id }}
           path: test-results/
           retention-days: 30
           if-no-files-found: ignore
@@ -256,7 +275,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./playwright-report
-          destination_dir: shopstacc/${{ env.CLIENT }}-${{ env.ENVIRONMENT }}/${{ github.run_id }}
+          destination_dir: shopstacc/${{ env.CLIENT }}-${{ env.ENVIRONMENT }}-${{ env.BROWSER }}-${{ env.VIEWPORT }}/${{ github.run_id }}
           keep_files: true
           user_name: github-actions[bot]
           user_email: github-actions[bot]@users.noreply.github.com
@@ -268,7 +287,7 @@ jobs:
           REPO="${{ github.repository }}"
           ORG=$(echo "$REPO" | cut -d'/' -f1)
           REPO_NAME=$(echo "$REPO" | cut -d'/' -f2)
-          URL="https://${ORG}.github.io/${REPO_NAME}/shopstacc/${{ env.CLIENT }}-${{ env.ENVIRONMENT }}/${{ github.run_id }}/"
+          URL="https://${ORG}.github.io/${REPO_NAME}/shopstacc/${{ env.CLIENT }}-${{ env.ENVIRONMENT }}-${{ env.BROWSER }}-${{ env.VIEWPORT }}/${{ github.run_id }}/"
           echo "url=$URL" >> "$GITHUB_OUTPUT"
           echo "### 📊 [View Playwright Report]($URL)" >> "$GITHUB_STEP_SUMMARY"
 
