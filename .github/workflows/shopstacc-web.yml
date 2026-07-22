@@ -10,7 +10,7 @@ on:
   schedule:
     # 3:30 PM IST = 10:00 UTC
     # "0 21 * * *" for 2:30 AM IST
-    - cron: "0 10 * * *"  
+    - cron: "0 21 * * *"  
 
   workflow_dispatch:
     inputs:
