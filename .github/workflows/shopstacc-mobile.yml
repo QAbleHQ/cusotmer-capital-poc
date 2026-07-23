@@ -87,7 +87,7 @@ jobs:
             echo "DEVICE_LABEL=GalaxyS21 (Chrome)" >> "$GITHUB_ENV"
           fi
           echo "INSTALL_BROWSERS=true" >> "$GITHUB_ENV"
-          echo "WORKERS=4" >> "$GITHUB_ENV"
+          echo "WORKERS=1" >> "$GITHUB_ENV"
           echo "RETRIES=2" >> "$GITHUB_ENV"
 
       - name: Install Playwright browsers
