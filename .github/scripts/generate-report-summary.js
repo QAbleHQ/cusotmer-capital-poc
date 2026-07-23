@@ -21,16 +21,16 @@ function collectTests(suite, failures = []) {
     for (const test of spec.tests || []) {
       stats.total += 1;
       const result = test.results?.[test.results.length - 1];
-      const status = result?.status || 'unknown';
       stats.durationMs += result?.duration || 0;
+      const testStatus = test.status;
 
-      if (status === 'passed') stats.passed += 1;
-      else if (status === 'failed' || status === 'timedOut') {
+      if (testStatus === 'skipped') stats.skipped += 1;
+      else if (testStatus === 'flaky') stats.flaky += 1;
+      else if (testStatus === 'unexpected') {
         stats.failed += 1;
         const message = result?.error?.message || result?.errors?.[0]?.message || 'No error message';
         stats.failures.push(`${spec.title} › ${test.title}: ${message.split('\n')[0]}`);
-      } else if (status === 'skipped') stats.skipped += 1;
-      else if (status === 'flaky') stats.flaky += 1;
+      } else stats.passed += 1;
     }
   }
 
@@ -98,5 +98,19 @@ const summary = [
 
 fs.mkdirSync(path.dirname(outputPath), { recursive: true });
 fs.writeFileSync(outputPath, summary);
+
+const status = stats.failed > 0 ? 'FAILED' : 'PASSED';
+const statsEnvPath = path.join(path.dirname(outputPath), 'stats.env');
+const statsEnv = [
+  `TOTAL=${stats.total}`,
+  `PASSED=${stats.passed}`,
+  `FAILED=${stats.failed}`,
+  `SKIPPED=${stats.skipped}`,
+  `FLAKY=${stats.flaky}`,
+  `DURATION=${formatDuration(stats.durationMs)}`,
+  `STATUS=${status}`,
+  '',
+].join('\n');
+fs.writeFileSync(statsEnvPath, statsEnv);
 
 console.log(summary);
