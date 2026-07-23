@@ -12,9 +12,9 @@
       "checkOutDate": "12"
     },
     "dateSelector": {
-      "fromDate": "8",
+      "fromDate": "11",
       "fromMonth": "Aug 2026",
-      "toDate": "30",
+      "toDate": "12",
       "toMonth": "Aug 2026"
     },
     "hotelBookingDataFill": {
@@ -29,7 +29,7 @@
       "domestic": "ahmedabad",
       "domesticlocation": "Mumbai",
       "international": "qatar",
-      "searcHotelName": "Itc Narmada",
+      "searcHotelName": "Welcomhotel by ITC Hotels, Ashram Road, Ahmedabad",
       "searcHotelNameInternational": "Souq Waqif Boutique Hotels by Tivoli",
       "adults": 2,
       "children": 0,

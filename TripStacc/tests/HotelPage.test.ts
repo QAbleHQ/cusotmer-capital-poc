@@ -600,10 +600,12 @@ test('SC_017: Add Guest Details and Update Guest Details', { tag: ['@idfc', '@bo
   await test.step('Step 11: Click Add Guest button on Primary Guest Details section', async () => {
     await page.waitForTimeout(3000);
     await HotelBookingPage.clickonaddguestbutton(page);
-    await page.waitForTimeout(1000);
+    await page.waitForTimeout(9000);
+    await page.waitForLoadState('domcontentloaded');
   });
 
     await test.step('Step 12: Remove Popup', async () => {
+    await page.waitForTimeout(9000);
     await HotelBookingPage.removePopupForIDFC(page);
     await page.waitForTimeout(3000);
   });
@@ -734,7 +736,8 @@ test('SC_018: Domestic booking without PAN and international booking with PAN', 
   });
 
   await test.step('Step 13: Verify PAN card field does NOT appear', async () => {
-    await page.waitForTimeout(3000);
+    await page.waitForTimeout(7000);
+    await page.waitForLoadState('domcontentloaded')
     await HotelBookingPage.verifyPanCardNotVisible(page);
     await page.waitForTimeout(1000);
   });

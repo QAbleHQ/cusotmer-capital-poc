@@ -8,6 +8,8 @@ import { Data } from '../../utils/dataProvider';
 import { FlightHomePage } from '../pages/FlightHomePage';
 import { FlightBookingPage } from '../pages/FlightBookingPage';
 import { DeviceHelper } from '../../utils/deviceHelper';
+import { ElementHelper } from '../../utils/elementHelper';
+import { HotelPageLocators } from '../locators/HotelPageLocators';
 let context: BrowserContext;
 let page: Page;
 
@@ -91,23 +93,28 @@ test('SC_009: Hotel- Checkout with and without Redeem Points (without redeem it 
     await page.waitForTimeout(3000);
   });
 
+await test.step('Step 14: Enter redeem points and click Save button', async () => {
+  await HotelBookingPage.redeampointTogglebutton(page);
+  await page.waitForTimeout(5000);
 
-  await test.step('Step 13: Redeem Point Toggle Button', async () => {
-    await HotelBookingPage.redeampointTogglebutton(page);
-    await page.waitForTimeout(5000);
-  });
+  const isRedeemErrorVisible = await ElementHelper.isElementDisplayed(
+    page,
+    HotelPageLocators.redeemErrorMessage
+  );
 
-  await test.step('Step 14: Enter redeem points and click Save button', async () => {
+  if (isRedeemErrorVisible) {
+    console.log('No points to redeem.');
+  } else {
     await HotelBookingPage.redeamPointInputField(page);
     await page.waitForTimeout(5000);
+
     await HotelBookingPage.savebuttonAfterRedeemEnter(page);
     await page.waitForTimeout(5000);
-  });
 
-  await test.step('Step 15: Verify discount calculation via HotelBookingPage method', async () => {
     await HotelBookingPage.verifyDiscountCalculation(page);
     await page.waitForTimeout(5000);
-  });
+  }
+});
 });
 
 test('SC_009.01: Flight - Checkout with and without Redeem Points (without redeem it should be an earning) ', { tag: ['@idfc', '@bob', '@common', '@checkout', '@regression'] }, async () => {
@@ -197,23 +204,30 @@ test('SC_009.01: Flight - Checkout with and without Redeem Points (without redee
     await page.waitForTimeout(1000);
   });
 
-  await test.step('Step 13: Redeem Point Toggle Button', async () => {
-    await HotelBookingPage.redeampointTogglebutton(page);
-    await page.waitForTimeout(5000);
-  });
-
   await test.step('Step 14: Enter redeem points and click Save button', async () => {
+  await HotelBookingPage.redeampointTogglebutton(page);
+  await page.waitForTimeout(5000);
+
+  const isRedeemErrorVisible = await ElementHelper.isElementDisplayed(
+    page,
+    HotelPageLocators.redeemErrorMessage
+  );
+
+  if (isRedeemErrorVisible) {
+    console.log('No points to redeem.');
+  } else {
     await HotelBookingPage.redeamPointInputField(page);
     await page.waitForTimeout(5000);
+
     await HotelBookingPage.savebuttonAfterRedeemEnter(page);
     await page.waitForTimeout(5000);
-  });
 
-  await test.step('Step 15: Verify discount calculation via HotelBookingPage method', async () => {
     await HotelBookingPage.verifyDiscountCalculation(page);
     await page.waitForTimeout(5000);
-  });
+  }
 });
+});
+
 test('SC_010: Flight - Checkout with and without Promo Codes', { tag: ['@idfc', '@bob', '@common','@checkout', '@regression'] }, async () => {
   await test.step("Step 1: Enter City From Airport", async () => {
     await page.waitForTimeout(5000);

@@ -310,13 +310,13 @@ static async verifyTravellerOptions(page: Page) {
     await ElementHelper.clickElement(page, FlightPageLocators.searchFlightsButton);
     await page.waitForTimeout(15000);
   }
-  static async VerifyFirstFlightCardVisible(page: any) {
+static async VerifyFirstFlightCardVisible(page: any) {
+    await page.waitForTimeout(18000);
     await FlightHomePage.reloadIfNoRecordFound(page);
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.firstFlightCard);
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators.firstFlightCard);
     await page.waitForTimeout(5000);
-  }
-
+}
   static async printFlightRoutes(page: Page) {
     const cards = page.locator(FlightPageLocators.FlightRoundTripDetailsBox);
     const count = await cards.count();
@@ -1228,7 +1228,7 @@ static async clickOnFirstTraveller(page: any) {
     console.log('BOB: Skipping ');
     break;
     case 'IDFC':
-  await page.click(`//label[@for='pax609']`)
+  await page.click(`(//div[contains(@class,'inputcheckbox')]//label)[1]`)
     break;
   }
 }

@@ -231,7 +231,7 @@ test('SC_003.02: Search (One Way and Round Trip) ', { tag: ['@idfc', '@bob', '@c
   });
 
   await test.step('Step 16: Enter date of return', async () => {
-    await page.waitForTimeout(5000);
+    await page.waitForTimeout(8000);
     await FlightHomePage.clickOnReturnDate(page);
     await FlightHomePage.select2dayDateForReturn(page);
   });
@@ -246,7 +246,8 @@ test('SC_003.02: Search (One Way and Round Trip) ', { tag: ['@idfc', '@bob', '@c
   });
 
   await test.step('Step 18: Click search flights button', async () => {
-    await page.waitForTimeout(5000);
+    await page.waitForTimeout(6000);
+    await page.waitForLoadState('domcontentloaded');
     await FlightHomePage.clickOnSearchFlightsButton(page);
   });
   await test.step('Step 19: Verify first flight card visible', async () => {

@@ -175,6 +175,7 @@ test('SC_012.01: Booking Confirmation for Hotel', { tag: ['@idfc', '@bob', '@com
     await page.waitForTimeout(5000);
     await HotelBookingPage.removePopupForIDFC(page);
     await page.waitForTimeout(5000);
+    await page.waitForLoadState('domcontentloaded')    
     await HotelBookingPage.fillGuestDetailsInsideForm(page);
     await page.waitForTimeout(3000);
   });

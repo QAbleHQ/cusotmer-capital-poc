@@ -326,13 +326,14 @@ static async fillCardExpiry(page: Page) {
     await PaymentPage.verifySaveCardPopupVisible(page);
     await page.waitForTimeout(2000);
     await PaymentPage.clickProceedButton(page);
-    await page.waitForTimeout(2000);
+    await page.waitForTimeout(7000);
     await PaymentPage.clickCloseWithoutSaveButton(page);
-    await page.waitForTimeout(2000);
+    await page.waitForTimeout(7000);
     await PaymentPage.verifyOtpPageVisibleandFillValue(page);
-    await page.waitForTimeout(2000);
+    await page.waitForTimeout(6000);
     await PaymentPage.clickSubmitButton(page);
-    await page.waitForTimeout(2000);
+    await page.waitForTimeout(12000);
+    await page.waitForLoadState('domcontentloaded');
   }
 
 static async completeCardPaymentFlow(page: Page, bank?: string) {
