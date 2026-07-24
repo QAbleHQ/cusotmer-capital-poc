@@ -230,6 +230,10 @@ static async clickOnReturnDate(page: any) {
     await ElementHelper.clickElement(page, FlightPageLocators.travellersAndCabinClass);
  
   }
+   static async clickOntravellersAndCabinClasses(page: any) {
+    await ElementHelper.clickElement(page, FlightPageLocators.travellersAndCabinClass);
+ 
+  }
 
   static async VerifytravellersAndCabinClassDropdownVisible(page: any) {
     if (DeviceHelper.isMobile()) 

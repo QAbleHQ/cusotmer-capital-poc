@@ -106,7 +106,7 @@ test('SC_003.01: Search (1 Passenger and Multiple Passengers) ', { tag: ['@idfc'
 
   await test.step("Step 6: Click and verify travellers and cabin class dropdown", async () => {
     await page.waitForTimeout(5000);
-    await FlightHomePage.clickOntravellersAndCabinClass(page);
+    await FlightHomePage.clickOntravellersAndCabinClasses(page);
     await FlightHomePage.VerifytravellersAndCabinClassDropdownVisible(page);
   });
 
@@ -283,7 +283,7 @@ test('SC_003.03: Search (with multiple classes) - Economy, Premium Economy, Busi
 
   await test.step('Step 6: Click and verify travellers and cabin class dropdown', async () => {
     await page.waitForTimeout(5000);
-    await FlightHomePage.clickOntravellersAndCabinClass(page);
+    await FlightHomePage.clickOntravellersAndCabinClasses(page);
     await FlightHomePage.VerifytravellersAndCabinClassDropdownVisible(page);
   });
 
@@ -355,7 +355,7 @@ test('SC_003.03: Search (with multiple classes) - Economy, Premium Economy, Busi
   });
 
   await test.step('Step 21: Click and verify travellers and cabin class dropdown', async () => {
-    await FlightHomePage.clickOntravellersAndCabinClass(page);
+    await FlightHomePage.clickOntravellersAndCabinClasses(page);
     await FlightHomePage.VerifytravellersAndCabinClassDropdownVisible(page);
   });
 
