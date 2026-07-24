@@ -8,7 +8,8 @@ export const PaymentPageLocators = {
   cardNumberField: "(//input[@id='cardNumber' or @name='card.number'])[1]",
   continuebtn:`//button[@class='flbookbtn extra_service_cont_btn']`,
   cardExpiryField: "(//input[@id='cardExpiry' or @name='card.expiry'])[1]",
-  continuebuttonbobpayment: `//button[@class="btn btn-success make-payment-btn"]`,
+continuebuttonbobpayment:
+  `//button[@class='btn btn-success make-payment-btn'] | (//button[@class='btn btn-primarycontinue'])[2]`,
   cardCvvField: "(//input[@id='cardCvv' or @name='card.cvv'])[1]",
   cardownername: `//input[@id='cardOwnerName']`,
   payotp: `//input[@id='password']`,
@@ -29,7 +30,7 @@ export const PaymentPageLocators = {
   submitButton: `//input[@id='submitBtn']`,
   backIconButtonMobile: `//i[@class='back-btn']`,
   payNowButtonBob: `//a[@id='pay_btn_new'] | //button[@id='mobile_pay']`,
-  termsConditionCheckboxBob: `//label[@for='terms_cond1']`,
+ termsConditionCheckboxBob: `(//label[@for='terms_cond1'] | //input[contains(@class,'termscheck')])[1]`,
   continueTravellerButtonBob: `//button[@id='redeem_pt_new']`,
   continueButtonBob: `(//button[contains(@class,'btn-primary')])[1]`,
   continuebtnbeforepayment: `(//button[@class='btn btn-primarycontinue'])[1]`,

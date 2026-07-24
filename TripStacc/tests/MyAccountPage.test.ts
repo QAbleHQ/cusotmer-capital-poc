@@ -77,6 +77,7 @@ test('SC:013: Booking Status on My Account Section', { tag: ['@idfc', '@bob', '@
   });
 
   await test.step('Step 15: Verify Buttons Based on Status', async () => {
+    await page.waitForTimeout(10000)
     await MyAccountPage.verifyButtonsBasedOnStatus(page);
   });
   await test.step('Step 16: Handle Confirmed Booking Actions', async () => {
