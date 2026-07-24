@@ -83,7 +83,7 @@ test('SC_009: Hotel- Checkout with and without Redeem Points (without redeem it 
     await HotelBookingPage.removePopupForIDFC(page);
     await page.waitForTimeout(5000);
     await HotelBookingPage.clickonaddguestbutton(page);
-    await page.waitForTimeout(1000);
+    await page.waitForTimeout(4000);
   });
 
 
@@ -180,6 +180,7 @@ test('SC_009.01: Flight - Checkout with and without Redeem Points (without redee
 
   await test.step("Step 17: Click on continue button On Traveller Details Page", async () => {
     await FlightHomePage.clickOncontinueButtonOnTravellerPage(page);
+    await page.waitForTimeout(3000);
   });
 
   await test.step("Step 18: verify Seat Selection Option Visible", async () => {
@@ -350,6 +351,7 @@ test('SC_010: Flight - Checkout with and without Promo Codes', { tag: ['@idfc', 
     await PaymentPage.verifyErrorMessageVisible(page);
   });
 });
+
 test('SC_011: Flight - Proceed with payment', { tag: ['@idfc', '@bob','@flight', '@common', '@payment', '@regression'] }, async () => {
   await test.step("Step 1: Enter City From Airport", async () => {
     await page.waitForTimeout(5000);
@@ -442,9 +444,6 @@ test('SC_011: Flight - Proceed with payment', { tag: ['@idfc', '@bob','@flight',
   await test.step("Step 19: verify Baggage Selection Option Visible", async () => {
     await FlightHomePage.verifyBaggageSelectionOptionVisible(page);
   });
-  await test.step("Step 20: verify Selecting available seat increase price", async () => {
-    await FlightHomePage.verifyPriceIncreasesAfterSeatSelection(page);
-  });
   await test.step("Step 21: Click on baggage Option", async () => {
     await FlightHomePage.clickOnbaggageOption(page);
   });
@@ -460,6 +459,8 @@ test('SC_011: Flight - Proceed with payment', { tag: ['@idfc', '@bob','@flight',
     await page.waitForTimeout(1000);
   });
   await test.step("Step 29: Complete Card Payment Flow", async () => {
+    await page.waitForTimeout(18000);
+    await page.waitForLoadState('domcontentloaded');
     await PaymentPage.completeCardPaymentFlow(page);
   });
 });

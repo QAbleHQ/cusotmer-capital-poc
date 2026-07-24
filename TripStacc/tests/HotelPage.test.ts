@@ -603,19 +603,11 @@ test('SC_017: Add Guest Details and Update Guest Details', { tag: ['@idfc', '@bo
     await page.waitForTimeout(9000);
     await page.waitForLoadState('domcontentloaded');
   });
-
-    await test.step('Step 12: Remove Popup', async () => {
-    await page.waitForTimeout(9000);
-    await HotelBookingPage.removePopupForIDFC(page);
-    await page.waitForTimeout(3000);
-  });
-
   await test.step('Step 13: Click Add New Guest Button', async () => {
     await page.waitForTimeout(5000);
     await HotelBookingPage.clickAddNewGuestButtonForIdfc(page);
     await page.waitForTimeout(1000);
   });
-
   await test.step('Step 14: Fill in Guest Details', async () => {
     await page.waitForTimeout(5000);
     await HotelBookingPage.fillGuestDetailsInside(page);
@@ -701,9 +693,9 @@ test('SC_018: Domestic booking without PAN and international booking with PAN', 
   });
 
   await test.step('Step 7: Click the first hotel result', async () => {
-    await page.waitForTimeout(3000);
+    await page.waitForTimeout(6000);
     await HotelHomePage.clickFirstResult(page);
-    await page.waitForTimeout(1000);
+    await page.waitForLoadState('domcontentloaded');
   });
 
   await test.step('Step 8: Click the First Room Selection Button', async () => {
@@ -715,24 +707,25 @@ test('SC_018: Domestic booking without PAN and international booking with PAN', 
   await test.step('Step 9: Click Next button on first tab', async () => {
     await page.waitForTimeout(3000);
     await HotelBookingPage.firstTabNextButton(page);
+    await page.waitForTimeout(3000);
     await page.waitForLoadState('domcontentloaded')
   });
 
   await test.step('Step 10: Remove Popup', async () => {
+    await page.waitForTimeout(3000);
     await HotelBookingPage.removePopupForIDFC(page);
     await page.waitForTimeout(3000);
   });
 
   await test.step('Step 11: Click Add Guest button on Primary Guest Details section', async () => {
-    await page.waitForTimeout(3000);
     await HotelBookingPage.clickAddGuestButtonForIDFC(page);
-    await page.waitForTimeout(1000);
+    await page.waitForTimeout(6000);
   });
 
   await test.step('Step 12: Click Add New Guest Button', async () => {
-    await page.waitForTimeout(5000);
+    await page.waitForTimeout(9000);
+    await page.waitForLoadState('domcontentloaded')
     await HotelBookingPage.clickAddNewGuestButtonForIdfc(page);
-    await page.waitForTimeout(1000);
   });
 
   await test.step('Step 13: Verify PAN card field does NOT appear', async () => {

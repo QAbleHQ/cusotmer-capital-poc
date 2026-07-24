@@ -245,6 +245,7 @@ export class HotelBookingPage {
 
         case 'IDFC':
             await page.locator(HotelPageLocators.addGuestBtn).click();
+            await page.waitForTimeout(4000);
             console.log('Add New Guest button clicked');
             break;
 
@@ -330,7 +331,7 @@ static async clickonaddguestbutton(page: Page) {
  
     case 'IDFC':
       await ElementHelper.clickElement(page, HotelPageLocators.addGuestBtn);
-      await page.waitForTimeout(2000);
+      await page.waitForTimeout(6000);
       await page.locator(HotelPageLocators.radioButtonMr).click();
       await page.waitForTimeout(2000);
       await page.locator(HotelPageLocators.firstNameField).fill(Data.hotelBookingDataFill.firstName);

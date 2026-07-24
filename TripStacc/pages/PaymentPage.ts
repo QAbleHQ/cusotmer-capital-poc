@@ -328,7 +328,8 @@ static async fillCardExpiry(page: Page) {
     await PaymentPage.clickProceedButton(page);
     await page.waitForTimeout(7000);
     await PaymentPage.clickCloseWithoutSaveButton(page);
-    await page.waitForTimeout(7000);
+    await page.waitForTimeout(10000);
+    await page.waitForLoadState('domcontentloaded')
     await PaymentPage.verifyOtpPageVisibleandFillValue(page);
     await page.waitForTimeout(6000);
     await PaymentPage.clickSubmitButton(page);

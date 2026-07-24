@@ -93,7 +93,7 @@ export const FlightPageLocators = {
   lastNameInput: `//input[contains(@class,"last_name_input")] | //input[contains(@id,"passenger-last-name-1")]`,
   FirstTravellerNameOnSummary: `(//div[@class="flduserbox"])[2] | (//td[@class="seat_pax_name"])[1]`,
   addTravellerButton: `//span[text()="Add Traveller"]`,
-  FirstTravellerNameEditButton: `(//button[@class="fld_travel_edit"])[1]`,
+  FirstTravellerNameEditButton: `(//button[@class="fld_travel_edit"])[2]`,
   FirstOptionCheckbox: `//div[@class="inputcheckbox"]//label[@for="pax401"]`,
   firstTravellerNameEditConfirmButton: `//span[text()="Confirm"]`,
   travellerEmail: `//h5[text()="Email"]`,

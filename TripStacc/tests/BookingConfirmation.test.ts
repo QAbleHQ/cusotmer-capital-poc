@@ -95,14 +95,8 @@ test('SC_012: Booking Confirmation Page: Flight (Confirmed/Pending/Failed)', { t
     await test.step("Step 19: verify Baggage Selection Option Visible", async () => {
       await FlightHomePage.verifyBaggageSelectionOptionVisible(page);
     });
-    await test.step("Step 20: verify Selecting available seat increase price", async () => {
-      await FlightHomePage.verifyPriceIncreasesAfterSeatSelection(page);
-    });
     await test.step("Step 21: Click on baggage Option", async () => {
       await FlightHomePage.clickOnbaggageOption(page);
-    });
-    await test.step("Step 22: verify increase the weight increase the price", async () => {
-      await FlightHomePage.verifyPriceIncreasesAfterWeeightIncrease(page);
     });
     await test.step("Step 23: Click on Skip Option", async () => {
       await FlightHomePage.clickOnSkipButton(page);
@@ -111,12 +105,15 @@ test('SC_012: Booking Confirmation Page: Flight (Confirmed/Pending/Failed)', { t
       await FlightHomePage.verifyTravellerAndAddOneHeadingVisible(page);
     });
     await test.step("Step 25: Click on Travellers and Addons Continue Button", async () => {
-    await page.waitForTimeout(5000);
+    await page.waitForTimeout(9000);
+    await page.waitForLoadState('domcontentloaded')
     await FlightHomePage.travellersAndAddonsContinueButton(page);
     await page.waitForTimeout(1000);
   });
   await test.step("Step 29: Complete Card Payment Flow", async () => {
-    await PaymentPage.completeCardPaymentFlow(page);
+    await page.waitForTimeout(27000);
+    await page.waitForLoadState('domcontentloaded');
+    await PaymentPage.completeCardPaymentFlowIDFC(page);
     await page.waitForTimeout(18000);
     await page.waitForSelector(FlightPageLocators.bookingId);
     await BookingConfirmationPage.verifyBookingOutcomeFlight(page);

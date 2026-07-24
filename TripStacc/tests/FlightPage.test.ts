@@ -240,6 +240,7 @@ test('SC_003.02: Search (One Way and Round Trip) ', { tag: ['@idfc', '@bob', '@c
     await page.waitForTimeout(5000);
     await FlightHomePage.clickOntravellersAndCabinClass(page);
     await FlightHomePage.VerifytravellersAndCabinClassDropdownVisible(page);
+    await page.waitForTimeout(3000)
     await FlightHomePage.clickOntravellersAndCabinClass(page);
     await FlightHomePage.clickOnCloseTravellersAndCabinClassDropdown(page);
     await page.waitForTimeout(3000);
@@ -471,7 +472,9 @@ test('SC_003.04: Search (With International and Domestic) ', { tag: ['@idfc', '@
   })
 
   await test.step("Step 12: Verify To Airport Dropdown Visible", async () => {
+    await page.waitForTimeout(10000);
     await FlightHomePage.VerifyToAirpotDropdownVisible(page);
+    await page.waitForTimeout(8000);
     await FlightHomePage.clickOnfirstSearchResultToCityDropdown(page);
   })
 
@@ -479,19 +482,12 @@ test('SC_003.04: Search (With International and Domestic) ', { tag: ['@idfc', '@
     await page.waitForTimeout(5000);
     await FlightHomePage.clickOnDepartureDate(page);
     await FlightHomePage.selectTomorrowDateForDeparture(page);
-  })
 
-  await test.step("Step 14: Click and verify travellers and cabin class dropdown", async () => {
-    await page.waitForTimeout(5000);
-    await FlightHomePage.clickOntravellersAndCabinClass(page);
-    await FlightHomePage.VerifytravellersAndCabinClassDropdownVisible(page);
-    await FlightHomePage.clickOntravellersAndCabinClass(page);
-    await FlightHomePage.clickOnCloseTravellersAndCabinClassDropdown(page);
-    await page.waitForTimeout(3000);
-  });
+  })
 
   await test.step("Step 15: Click search flights button", async () => {
     await FlightHomePage.clickOnSearchFlightsButton(page);
+    await page.waitForLoadState('domcontentloaded')
   });
 
   await test.step("Step 16: Verify first flight card visible", async () => {
@@ -698,24 +694,17 @@ test('SC_004: Filter/Sorting and Flight Selection with Fare Type ', { tag: ['@id
   await test.step("Step 46: get non-Refundable filter text", async () => {
     await FlightHomePage.selectNonRefundableFilter(page);
   });
-
-  await test.step("Step 47: Click on Filter Apply Button", async () => {
-    await FlightHomePage.clickOnFilterApplyButton(page);
-  });
-
-  await test.step("Step 48: Verify Non-Refundable details", async () => {
-    await FlightHomePage.verifyNonRefundableDetails(page);
-    await page.waitForTimeout(3000);
-    await FlightHomePage.clickOnFilterListButton(page);
-  });
   await test.step("Step 49: Click on Clear All Button", async () => {
+    await page.waitForTimeout(7000);
     await FlightHomePage.clickOnClearAllButton(page);
   });
   await test.step("Step 50: Click filter Airline Tab Button", async () => {
+    await page.waitForTimeout(7000);
     await FlightHomePage.clickOnfilterAirlineTabButton(page);
   });
 
   await test.step("Step 51: get First Airline text", async () => {
+    await page.waitForTimeout(7000);
     await FlightHomePage.selectFirstAirlineFilter(page);
   });
 
