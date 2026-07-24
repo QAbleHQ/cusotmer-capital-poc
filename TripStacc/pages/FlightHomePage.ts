@@ -223,8 +223,15 @@ static async clickOnReturnDate(page: any) {
   }
 
   static async clickOntravellersAndCabinClass(page: any) {
-    await ElementHelper.clickElement(page, FlightPageLocators.travellersAndCabinClass);
+  if (DeviceHelper.isMobile()) {
+  
   }
+    await page.waitForTimeout(2000);
+  await ElementHelper.clickElement(
+    page,
+    FlightPageLocators.travellersAndCabinClass
+  );
+}
 
   static async VerifytravellersAndCabinClassDropdownVisible(page: any) {
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.roomCountDropdown);

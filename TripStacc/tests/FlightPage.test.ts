@@ -425,10 +425,13 @@ test('SC_003.04: Search (With International and Domestic) ', { tag: ['@idfc', '@
   })
 
   await test.step("Step 6: Click and verify travellers and cabin class dropdown", async () => {
-    await page.waitForTimeout(5000);
+    await page.waitForTimeout(8000);
     await FlightHomePage.clickOntravellersAndCabinClass(page);
+     await page.waitForTimeout(8000);
     await FlightHomePage.VerifytravellersAndCabinClassDropdownVisible(page);
+     await page.waitForTimeout(8000);
     await FlightHomePage.clickOntravellersAndCabinClass(page);
+     await page.waitForTimeout(8000);
     await FlightHomePage.clickOnCloseTravellersAndCabinClassDropdown(page);
     await page.waitForTimeout(3000);
   });
