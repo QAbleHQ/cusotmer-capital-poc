@@ -111,7 +111,7 @@ if (deviceName) {
             userAgent: selectedDevice.userAgent,
 
             screenshot: 'only-on-failure',
-            video: 'off',
+            video: 'retain-on-failure',
 
             connectOptions: GRID.isGrid
               ? {
@@ -145,7 +145,7 @@ if (deviceName) {
 },
 
       screenshot: 'only-on-failure',
-      video: 'off',
+      video: 'retain-on-failure',
       trace: "only-on-failure",
 
       launchOptions:
