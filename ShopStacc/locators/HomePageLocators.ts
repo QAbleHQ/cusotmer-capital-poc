@@ -23,7 +23,7 @@ export const HomePageLocators = {
     earnPointsBadge: "//a[@class='prodiscounternewdesign3 ']",
     giftCardSectionCards: "//div[@class='col-xl-3 col-sm-4 col-6 mb-4 cstmpd ']",
     pointsAndCashText: "//p[@class='start-point']",
-    productimagegiftcard: "(//a[text()='Barbeque Nation E-Gift Card - Store'])[3]",
+    productimagegiftcard: "(//a[normalize-space()='Barbeque Nation E-Gift Card - Store'])[3]",
     earnMoreExclusiveVisible: `//section[@id="spcl656"]`,
     verifyProductImageDisplayed: `(//section[@id="spcl656"]//div[@class="proimage1"]//img)[6]`,
     verifyAndGetProductTitle: `(//section[@id="spcl656"]//h6//a)[6]`,

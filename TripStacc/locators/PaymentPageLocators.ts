@@ -52,5 +52,5 @@ export const PaymentPageLocators = {
   successButton: `//button[text()="Success"]`,
   okButton: `//a[text()="OK"]`,
   contactmobileno:`//button[@data-testid='contact-sidebar-widget']`,
-  mobileNoInput: `(//span[@class='relative z-[5] ml-auto flex cursor-text items-center'])[1]`
+  mobileNoInput: `(//span[@class='relative z-[5] ml-auto flex cursor-text items-center'])[3]`
 };
