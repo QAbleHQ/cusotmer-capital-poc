@@ -78,7 +78,7 @@ static async verifyMyBookingSectionVisible(page: Page): Promise<void> {
 
   static async verifyButtonsBasedOnStatus(page: Page): Promise<void> {
     
- if ((process.env.PROJECT || '').includes('-mobile-')) {
+  if (DeviceHelper.isMobile()) {
     console.log('Mobile detected - skipping button verification');
     return;
   }
@@ -128,7 +128,7 @@ static async verifyMyBookingSectionVisible(page: Page): Promise<void> {
   }
 
   static async handleConfirmedBookingActions(page: Page): Promise<void> {
-     if ((process.env.PROJECT || '').includes('-mobile-')) {
+     if (DeviceHelper.isMobile()) {
     console.log('Mobile detected - skipping button verification');
     return;
   }
@@ -179,7 +179,7 @@ static async verifyHotelBookings(page: Page): Promise<void> {
 
   const isMobile = page.viewportSize()?.width! < 768;
 
-  if (isMobile) {
+  if (DeviceHelper.isMobile()) {
     await page.locator(MyAccountPageLocators.hoteltabmobile).click();
   } else {
     await page.locator(MyAccountPageLocators.hotelTab).click();
