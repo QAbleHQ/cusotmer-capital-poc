@@ -3,6 +3,7 @@ import { FlightHomePage } from '../pages/FlightHomePage';
 const idfcTestData = require('../testData/tripStacc.json');
 import { BaseHelper } from '../pages/CommonMethods';
 import { Data } from '../../utils/dataProvider';
+import { DeviceHelper } from '../../utils/deviceHelper';
 let context: BrowserContext;
 let page: Page;
 

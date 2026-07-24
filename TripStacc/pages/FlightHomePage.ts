@@ -222,32 +222,38 @@ static async clickOnReturnDate(page: any) {
     }
   }
 
-  static async clickOntravellersAndCabinClass(page: any) {
-  if (DeviceHelper.isMobile()) {
-  
+ static async clickOntravellersAndCabinClass(page: any) {
+   if (DeviceHelper.isMobile()) 
+    {
+      return
+   }
+    await ElementHelper.clickElement(page, FlightPageLocators.travellersAndCabinClass);
+ 
   }
-    await page.waitForTimeout(2000);
-  await ElementHelper.clickElement(
-    page,
-    FlightPageLocators.travellersAndCabinClass
-  );
-}
 
   static async VerifytravellersAndCabinClassDropdownVisible(page: any) {
+    if (DeviceHelper.isMobile()) 
+    {
+      return
+   }
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.roomCountDropdown);
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators.roomCountDropdown);
   }
 
  static async clickOnCloseTravellersAndCabinClassDropdown(page: any) {
-    const CLIENT = process.env.CLIENT?.toUpperCase();
-    if(DeviceHelper.isMobile() && CLIENT === 'IDFC') {
-      await page.waitForTimeout(5000);
-      await ElementHelper.clickElement(page, FlightPageLocators.closeTravellerAndCabinButtonMobile);
-    }
-    if(DeviceHelper.isMobile() && CLIENT === 'BOB') {
-      await page.waitForTimeout(5000);
-      await ElementHelper.clickElement(page, FlightPageLocators.doneTravellerAndCabinButtonMobile);
-    }
+    // const CLIENT = process.env.CLIENT?.toUpperCase();
+    // if(DeviceHelper.isMobile() && CLIENT === 'IDFC') {
+    //   await page.waitForTimeout(5000);
+    //   await ElementHelper.clickElement(page, FlightPageLocators.closeTravellerAndCabinButtonMobile);
+    // }
+    // if(DeviceHelper.isMobile() && CLIENT === 'BOB') {
+    //   await page.waitForTimeout(5000);
+    //   await ElementHelper.clickElement(page, FlightPageLocators.doneTravellerAndCabinButtonMobile);
+    // }
+    if (DeviceHelper.isMobile()) 
+    {
+      return
+   }
   }
  
 static async verifyFlightSearchFields(page: any) {
