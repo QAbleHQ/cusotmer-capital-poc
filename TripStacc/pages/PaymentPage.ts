@@ -231,9 +231,19 @@ static async fillCardExpiry(page: Page) {
   }
   }
  static async completePaymentFlowBOB(page: Page) {
-    await ElementHelper.clickElement(page, PaymentPageLocators.termsConditionCheckboxBob);
+    if (await page.locator("//label[@for='terms_cond1']").isVisible()) {
+        await page.locator("//label[@for='terms_cond1']").click();
+    } else {
+        await page.locator("//input[contains(@class,'termscheck')]").click();
+    }
     await ElementHelper.clickElement(page, PaymentPageLocators.payNowButtonBob);
-    await ElementHelper.clickElement(page, PaymentPageLocators.continuebuttonbobpayment);
+    await page.waitForTimeout(10000)
+   if (await page.locator("//button[@class='btn btn-success make-payment-btn']").count()) {
+    await page.locator("//button[@class='btn btn-success make-payment-btn']").click();
+} else {
+    await page.locator("(//button[@class='btn btn-primarycontinue'])[2]").click();
+}
+    await page.waitForTimeout(10000)
     await ElementHelper.clickElement(page,`(//button[@class="btn btn-primarycontinue"])[1]`);
     //await ElementHelper.clickElement(page, PaymentPageLocators.contactmobileno);
    await page.locator(PaymentPageLocators.mobileNoInput).fill('8140217872');

@@ -533,6 +533,8 @@ test('SC_011.01: Hotel- Proceed with payment', { tag: ['@idfc', '@bob','@flaky' 
      await HotelBookingPage.nextButtonAfterAddingGuest(page);
   });
   await test.step("Step 29: Complete Card Payment Flow", async () => {
+    await page.waitForTimeout(18000);
+    await page.waitForLoadState('domcontentloaded');
     await PaymentPage.completeCardPaymentFlow(page);
   });
 });

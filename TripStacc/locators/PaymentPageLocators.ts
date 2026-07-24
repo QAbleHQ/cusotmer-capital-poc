@@ -8,8 +8,7 @@ export const PaymentPageLocators = {
   cardNumberField: "(//input[@id='cardNumber' or @name='card.number'])[1]",
   continuebtn:`//button[@class='flbookbtn extra_service_cont_btn']`,
   cardExpiryField: "(//input[@id='cardExpiry' or @name='card.expiry'])[1]",
-continuebuttonbobpayment:
-  `//button[@class='btn btn-success make-payment-btn'] | (//button[@class='btn btn-primarycontinue'])[2]`,
+continuebuttonbobpayment:`//button[@class='btn btn-success make-payment-btn'] | (//button[@class='btn btn-primarycontinue'])[2]`,
   cardCvvField: "(//input[@id='cardCvv' or @name='card.cvv'])[1]",
   cardownername: `//input[@id='cardOwnerName']`,
   payotp: `//input[@id='password']`,
