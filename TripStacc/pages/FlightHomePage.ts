@@ -307,8 +307,9 @@ static async verifyTravellerOptions(page: Page) {
   }
   static async clickOnSearchFlightsButton(page: any) {
     await ElementHelper.scrollToElement(page, FlightPageLocators.searchFlightsButton);
+    await ElementHelper.waitForElementVisible(page, FlightPageLocators.searchFlightsButton);
+     await page.waitForTimeout(5000);
     await ElementHelper.clickElement(page, FlightPageLocators.searchFlightsButton);
-    await page.waitForTimeout(15000);
   }
 static async VerifyFirstFlightCardVisible(page: any) {
     await page.waitForTimeout(18000);
@@ -1302,13 +1303,12 @@ static async verifyPriceIncreasesAfterWeeightIncrease(page: any) {
     const beforePrice = Number(beforePriceText?.replace(/[₹,\s]/g, ''));
     console.log(`Price Before Seat Selection: ${beforePrice}`);
     await ElementHelper.clickElement(page, FlightPageLocators.weightIncreasePlusButton);
-    await page.waitForTimeout(2000);
+    await page.waitForTimeout(5000);
     const afterPriceText = await page.locator(FlightPageLocators.seatPrice).textContent();
-
     const afterPrice = Number(afterPriceText?.replace(/[₹,\s]/g, ''));
     console.log(`Price After Seat Selection: ${afterPrice}`);
+    await page.waitForTimeout(5000);
     expect(afterPrice).toBeGreaterThan(beforePrice);
-
     console.log(`Price Increased By ₹${afterPrice - beforePrice}`);
   }
 }

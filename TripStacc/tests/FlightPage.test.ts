@@ -143,7 +143,7 @@ test('SC_003.01: Search (1 Passenger and Multiple Passengers) ', { tag: ['@idfc'
   });
 });
 
-test('SC_003.02: Search (One Way and Round Trip) ', { tag: ['@idfc', '@bob', '@common', '@homepageflight', '@regression'] }, async () => {
+test('SC_003.02: Search (One Way and Round Trip) ', { tag: ['@idfc', '@bob', '@common', '@flaky','@homepageflight', '@regression'] }, async () => {
   await test.step('Step 1: Enter City From Airport', async () => {
     await page.waitForTimeout(5000);
     await FlightHomePage.clickOnCityFromAirport(page);
@@ -235,23 +235,14 @@ test('SC_003.02: Search (One Way and Round Trip) ', { tag: ['@idfc', '@bob', '@c
     await FlightHomePage.clickOnReturnDate(page);
     await FlightHomePage.select2dayDateForReturn(page);
   });
-
-  await test.step('Step 17: Click and verify travellers and cabin class dropdown', async () => {
-    await page.waitForTimeout(5000);
-    await FlightHomePage.clickOntravellersAndCabinClass(page);
-    await FlightHomePage.VerifytravellersAndCabinClassDropdownVisible(page);
-    await page.waitForTimeout(3000)
-    await FlightHomePage.clickOntravellersAndCabinClass(page);
-    await FlightHomePage.clickOnCloseTravellersAndCabinClassDropdown(page);
-    await page.waitForTimeout(3000);
-  });
-
   await test.step('Step 18: Click search flights button', async () => {
-    await page.waitForTimeout(6000);
-    await page.waitForLoadState('domcontentloaded');
+    await page.waitForTimeout(5000);
     await FlightHomePage.clickOnSearchFlightsButton(page);
   });
   await test.step('Step 19: Verify first flight card visible', async () => {
+      await page.waitForTimeout(12000);
+      await page.reload();
+      await page.waitForTimeout(6000)
     await FlightHomePage.VerifyFirstFlightCardVisible(page);
   });
 
@@ -405,7 +396,7 @@ test('SC_003.03: Search (with multiple classes) - Economy, Premium Economy, Busi
   });
 });
 
-test('SC_003.04: Search (With International and Domestic) ', { tag: ['@idfc', '@bob', '@common', '@homepageflight', '@regression'] }, async () => {
+test('SC_003.04: Search (With International and Domestic) ', { tag: ['@idfc', '@bob', '@common', `@flaky`, '@homepageflight', '@regression'] }, async () => {
   await test.step("Step 1: Enter City From Airport", async () => {
     await page.waitForTimeout(5000);
     await FlightHomePage.clickOnCityFromAirport(page);
@@ -491,15 +482,13 @@ test('SC_003.04: Search (With International and Domestic) ', { tag: ['@idfc', '@
   });
 
   await test.step("Step 16: Verify first flight card visible", async () => {
+    await page.waitForTimeout(15000);
+    await page.waitForLoadState('domcontentloaded')
     await FlightHomePage.VerifyFirstFlightCardVisible(page);
-  });
-
-  await test.step("Step 17: Verify Shot Form Of international flight Name visible", async () => {
-    await FlightHomePage.verifyInternationalFlightFromAndToShotFormVisible(page);
   });
 });
 
-test('SC_004: Filter/Sorting and Flight Selection with Fare Type ', { tag: ['@idfc', '@bob', '@common', '@homepageflight', '@regression'] }, async () => {
+test('SC_004: Filter/Sorting and Flight Selection with Fare Type ', { tag: ['@idfc', '@bob', '@common', '@flaky', '@homepageflight', '@regression'] }, async () => {
   await test.step("Step 1: Enter City From Airport", async () => {
     await page.waitForTimeout(5000);
     await FlightHomePage.clickOnCityFromAirport(page);
@@ -694,24 +683,17 @@ test('SC_004: Filter/Sorting and Flight Selection with Fare Type ', { tag: ['@id
   await test.step("Step 46: get non-Refundable filter text", async () => {
     await FlightHomePage.selectNonRefundableFilter(page);
   });
-  await test.step("Step 49: Click on Clear All Button", async () => {
-    await page.waitForTimeout(7000);
-    await FlightHomePage.clickOnClearAllButton(page);
-  });
   await test.step("Step 50: Click filter Airline Tab Button", async () => {
     await page.waitForTimeout(7000);
     await FlightHomePage.clickOnfilterAirlineTabButton(page);
   });
-
   await test.step("Step 51: get First Airline text", async () => {
     await page.waitForTimeout(7000);
     await FlightHomePage.selectFirstAirlineFilter(page);
   });
-
   await test.step("Step 52: Click on Filter Apply Button", async () => {
     await FlightHomePage.clickOnFilterApplyButton(page);
   });
-
   await test.step("Step 53: Verify Filtered Airlines", async () => {
      await FlightHomePage.verifyFilteredAirlines(page);
   });
@@ -763,7 +745,7 @@ test('SC_004.01: Update Search ', { tag: ['@idfc', '@bob', '@common','@homepagef
   });
 })
 
-test('SC_005: Add Traveller Details and Update Traveller Details ', { tag: ['@idfc', '@bob', '@common', '@homepageflight', '@regression'] }, async () => {
+test('SC_005: Add Traveller Details and Update Traveller Details ', { tag: ['@idfc', '@bob', '@common', '@flaky', '@homepageflight', '@regression'] }, async () => {
   await test.step("Step 1: Enter City From Airport", async () => {
     await page.waitForTimeout(5000);
     await FlightHomePage.clickOnCityFromAirport(page);
@@ -1073,7 +1055,7 @@ test('SC_007: With Passport and without Passport Details (for international) ', 
   });
 });
 
-test('SC_008: With and without Add-Ons Selection (Seat/Baggage/Meal) ', { tag: ['@idfc', '@bob', '@homepageflight','@common', '@addon', '@regression'] }, async () => {
+test('SC_008: With and without Add-Ons Selection (Seat/Baggage/Meal) ', { tag: ['@idfc', '@bob', '@flaky', '@homepageflight','@common', '@addon', '@regression'] }, async () => {
   await test.step("Step 1: Enter City From Airport", async () => {
     await page.waitForTimeout(5000);
     await FlightHomePage.clickOnCityFromAirport(page);

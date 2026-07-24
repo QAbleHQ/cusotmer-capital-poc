@@ -531,7 +531,7 @@ test('SC_016.01: Update Search', { tag: ['@idfc', '@bob', '@common', '@homepageh
   });
 });
 
-test('SC_017: Add Guest Details and Update Guest Details', { tag: ['@idfc', '@bob', '@common', '@homepagehotel', '@regression'] }, async () => {
+test('SC_017: Add Guest Details and Update Guest Details', { tag: ['@idfc', '@bob', '@common', '@flaky', '@homepagehotel', '@regression'] }, async () => {
 
   await test.step('Step 1: Open Hotels Section', async () => {
     await page.waitForTimeout(5000);
@@ -650,7 +650,7 @@ test('SC_017: Add Guest Details and Update Guest Details', { tag: ['@idfc', '@bo
   });
 });
 
-test('SC_018: Domestic booking without PAN and international booking with PAN', { tag: ['@idfc', '@bob', '@common', '@homepagehotel','@regression'] }, async () => {
+test('SC_018: Domestic booking without PAN and international booking with PAN', { tag: ['@idfc', '@bob', '@common', '@flaky','@homepagehotel','@regression'] }, async () => {
   await page.waitForTimeout(5000);
   await test.step('Step 1: Open Hotels Section', async () => {
     await page.waitForTimeout(5000);

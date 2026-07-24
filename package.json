@@ -52,6 +52,7 @@
     "test:shopstacc:bobcard:uat:earn": "cross-env CLIENT=BOBCARD PROJECT=shopstacc-chrome-UAT npx playwright test ShopStacc/tests --grep \"@earn\"",
     "test:tripstacc:bob:uat:earn": "cross-env PROJECT=tripstacc-chrome-UAT CLIENT=BOB npx playwright test TripStacc/tests --grep \"@earn\"",
     "test:tripstacc:idfc:uat:earn": "cross-env PROJECT=tripstacc-chrome-UAT CLIENT=IDFC npx playwright test TripStacc/tests --grep \"@earn\"",
+     "test:tripstacc:idfc:uat:flaky": "cross-env PROJECT=tripstacc-chrome-UAT CLIENT=IDFC npx playwright test TripStacc/tests --grep \"@flaky\"",
     "npm run test:tripstacc:idfc:uat:headed -- --grep IDFC": "Executes TripStacc IDFC UAT (headed mode) with IDFC tag",
     "npm run test:tripstacc:idfc:uat:headed -- --last-failed": "Retries only failed TripStacc IDFC UAT (headed mode):",
     "test:tripstacc:bob:uat:loginpage:headed": "cross-env PROJECT=tripstacc-chrome-UAT-loginpage CLIENT=BOB HEADED=true npx playwright test",
