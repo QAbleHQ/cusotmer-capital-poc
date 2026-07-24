@@ -980,8 +980,8 @@ static async enterMobileNo(page: any, data: any) {
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators.firstTravellerNameEditConfirmButton);
     await ElementHelper.clickElement(page, FlightPageLocators.firstTravellerNameEditConfirmButton);
     await page.waitForTimeout(3000);
-    await VerificationHelpers.elementIsVisible(page, FlightPageLocators.reviewtravllerbutton);
-    await ElementHelper.clickElement(page, FlightPageLocators.reviewtravllerbutton);
+    // await VerificationHelpers.elementIsVisible(page, FlightPageLocators.reviewtravllerbutton);
+    // await ElementHelper.clickElement(page, FlightPageLocators.reviewtravllerbutton);
 
     break;
   }
