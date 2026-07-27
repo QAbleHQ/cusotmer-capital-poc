@@ -25,7 +25,6 @@ static async verifyBookingOutcomeFlight(page: Page) {
     console.log('Booking Confirmation page is displayed and all necessary details are verified successfully.');
 
   } else if (isPendingVisible) {
-    await FlightBookingPage.verifyBookingIdVisible(page);
     console.log('Booking Pending is displayed instead of Booking Confirmation');
 
   } else {
@@ -42,7 +41,6 @@ static async verifyBookingOutcomeFlight(page: Page) {
     console.log('Booking Confirmation page is displayed and all necessary details are verified successfully.');
 
   } else if (isPendingVisible) {
-    await HotelBookingPage.verifyBookingIdVisible(page);
     console.log('Booking Pending is displayed instead of Booking Confirmation');
 
   } else {

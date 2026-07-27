@@ -24,6 +24,7 @@ continuebuttonbobpayment:`//button[@class='btn btn-success make-payment-btn'] | 
  bookingConfirmationPage: `//h4[normalize-space()='Booking Confirmed']`,
   bookingconfirmationpagebob: `//h5[text()='Congratulations!']`,
   bookingPendingPage: `//h4[text()='Booking Pending']`,
+  bookingpendingPagebob: `//li[@class='process']//strong`,
   bookingreferenceNumber: `//p[@class='book_ref_no']`,
   invalidOtpError: `//p[@id='OTPStatus']`,
   otpErrorMessage: `//span[contains(@class,'error')]`,
