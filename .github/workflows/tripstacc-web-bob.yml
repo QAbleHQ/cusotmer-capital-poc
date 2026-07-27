@@ -115,12 +115,12 @@ jobs:
           const failures = [];
           if (fs.existsSync(reportPath)) {
             const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
+            durationMs = report.stats?.duration || 0;
             function collect(suite) {
               for (const spec of suite.specs || []) {
                 for (const test of spec.tests || []) {
                   total++;
                   const result = test.results?.[test.results.length - 1];
-                  durationMs += result?.duration || 0;
                   const testStatus = test.status;
                   if (testStatus === 'skipped') skipped++;
                   else if (testStatus === 'flaky') flaky++;
