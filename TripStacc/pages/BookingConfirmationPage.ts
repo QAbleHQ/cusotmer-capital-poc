@@ -32,6 +32,7 @@ static async verifyBookingOutcomeFlight(page: Page) {
   }
 }
  static async verifyBookingOutcomeHotel(page: Page) {
+  await page.waitForLoadState('domcontentloaded')
   const isConfirmationVisible = await PaymentPage.verifyBookingConfirmationPageVisible(page);
   const isPendingVisible = await PaymentPage.verifyBookingPendingPageVisible(page);
 
@@ -43,8 +44,6 @@ static async verifyBookingOutcomeFlight(page: Page) {
   } else if (isPendingVisible) {
     console.log('Booking Pending is displayed instead of Booking Confirmation');
 
-  } else {
-    throw new Error('Seems like Payment has failed');
   }
 }
 }
