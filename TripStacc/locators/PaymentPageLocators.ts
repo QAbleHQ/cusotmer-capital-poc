@@ -21,7 +21,8 @@ continuebuttonbobpayment:`//button[@class='btn btn-success make-payment-btn'] | 
   nocancelbutton: `//button[@data-testid='cancel']`,
   otpInputField: `//input[@id="password"]`,
   paybutton: `//input[@id='submitBtn']`,
-  bookingConfirmationPage: `//h4[text()='Booking Confirmed']`,
+ bookingConfirmationPage: `//h4[normalize-space()='Booking Confirmed']`,
+  bookingconfirmationpagebob: `//h5[text()='Congratulations!']`,
   bookingPendingPage: `//h4[text()='Booking Pending']`,
   bookingreferenceNumber: `//p[@class='book_ref_no']`,
   invalidOtpError: `//p[@id='OTPStatus']`,
@@ -52,5 +53,12 @@ continuebuttonbobpayment:`//button[@class='btn btn-success make-payment-btn'] | 
   successButton: `//button[text()="Success"]`,
   okButton: `//a[text()="OK"]`,
   contactmobileno:`//button[@data-testid='contact-sidebar-widget']`,
-  mobileNoInput: `(//span[@class='relative z-[5] ml-auto flex cursor-text items-center'])[3]`
+  mobileNoInput: `(//span[@class='relative z-[5] ml-auto flex cursor-text items-center'])[3]`,
+ termsAndConditionsCheckbox: `//label[@for='terms_cond1']`,
+alternateTermsCheckbox: `//input[contains(@class,'termscheck')]`,
+makePaymentButton: `//button[@class='btn btn-success make-payment-btn']`,
+paymentContinueButton: `(//button[@class='btn btn-primarycontinue'])[2]`,
+confirmationContinueButton: `(//button[@class='btn btn-primarycontinue'])[1]`,
+razorpayCheckoutFrame: `iframe[src*="api.razorpay.com/v1/checkout"]`,
+razorpayContactNumberInput: `[data-testid="contactNumber"]`,
 };

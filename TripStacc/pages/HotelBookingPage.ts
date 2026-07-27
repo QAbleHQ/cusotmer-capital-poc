@@ -445,19 +445,26 @@ static async clickonaddguestbutton(page: Page) {
     await page.locator(HotelPageLocators.firstNameField).fill(firstName);
     console.log('First name field updated');
   }
- static async verifyBookingIdVisible(page: Page) {
-    const bookingId = HotelPageLocators.bookingId;
-  
-    await ElementHelper.waitForElementVisible(page, bookingId);
-    console.log("Booking ID is visible.");
+static async verifyBookingIdVisible(page: Page) {
+  if (process.env.CLIENT?.toUpperCase() === 'BOB') {
+    await ElementHelper.waitForElementVisible(page, HotelPageLocators.bookingidbob);
+  } else {
+    await ElementHelper.waitForElementVisible(page, HotelPageLocators.bookingId);
   }
+
+  console.log("Booking ID is visible.");
+}
   
-  static async verifyBookingDateVisible(page: Page) {
-    const bookingDate = HotelPageLocators.bookingDate;
-  
-    await ElementHelper.waitForElementVisible(page, bookingDate);
-    console.log("Booking date is visible.");
+ static async verifyBookingDateVisible(page: Page) {
+  if (process.env.CLIENT?.toUpperCase() === 'BOB') {
+    await ElementHelper.waitForElementVisible(page, HotelPageLocators.bookingdatebob);
+  } else {
+    await ElementHelper.waitForElementVisible(page, HotelPageLocators.bookingDate);
   }
+
+  console.log("Booking date is visible.");
+}
+
   static async verifyBookingLinksVisible(page: Page) {
     await ElementHelper.waitForElementVisible(
       page,

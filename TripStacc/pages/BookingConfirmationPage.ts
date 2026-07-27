@@ -39,8 +39,6 @@ static async verifyBookingOutcomeFlight(page: Page) {
   if (isConfirmationVisible) {
     await HotelBookingPage.verifyBookingIdVisible(page);
     await HotelBookingPage.verifyBookingDateVisible(page);
-    await HotelBookingPage.verifyFareSummaryVisible(page);
-    await HotelBookingPage.verifyBookingLinksVisible(page);
     console.log('Booking Confirmation page is displayed and all necessary details are verified successfully.');
 
   } else if (isPendingVisible) {

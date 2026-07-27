@@ -180,10 +180,26 @@ static async fillCardExpiry(page: Page) {
   }
 
   static async verifyBookingConfirmationPageVisible(page: Page): Promise<boolean> {
-    const isVisible = await ElementHelper.isElementDisplayed(page, PaymentPageLocators.bookingConfirmationPage);
-    if (isVisible) console.log('Booking confirmation page is visible.');
-    return isVisible;
+  let isVisible: boolean;
+
+  if (process.env.CLIENT?.toUpperCase() === 'BOB') {
+    isVisible = await ElementHelper.isElementDisplayed(
+      page,
+      PaymentPageLocators.bookingconfirmationpagebob
+    );
+  } else {
+    isVisible = await ElementHelper.isElementDisplayed(
+      page,
+      PaymentPageLocators.bookingConfirmationPage
+    );
   }
+
+  if (isVisible) {
+    console.log('Booking confirmation page is visible.');
+  }
+
+  return isVisible;
+}
 
   static async verifyBookingNotCreated(page: Page) {
     const bookingExists = await page.isVisible(PaymentPageLocators.bookingConfirmationPage);
@@ -230,38 +246,49 @@ static async fillCardExpiry(page: Page) {
     break;
   }
   }
- static async completePaymentFlowBOB(page: Page) {
-    if (await page.locator("//label[@for='terms_cond1']").isVisible()) {
-        await page.locator("//label[@for='terms_cond1']").click();
+  static async completePaymentFlowBOB(page: Page) {
+    if (await page.locator(PaymentPageLocators.termsAndConditionsCheckbox).isVisible()) {
+      await page.locator(PaymentPageLocators.termsAndConditionsCheckbox).click();
     } else {
-        await page.locator("//input[contains(@class,'termscheck')]").click();
+      await page.locator(PaymentPageLocators.alternateTermsCheckbox).click();
     }
-    await ElementHelper.clickElement(page, PaymentPageLocators.payNowButtonBob);
-    await page.waitForTimeout(10000)
-   if (await page.locator("//button[@class='btn btn-success make-payment-btn']").count()) {
-    await page.locator("//button[@class='btn btn-success make-payment-btn']").click();
-} else {
-    await page.locator("(//button[@class='btn btn-primarycontinue'])[2]").click();
-}
-    await page.waitForTimeout(10000)
-    await ElementHelper.clickElement(page,`(//button[@class="btn btn-primarycontinue"])[1]`);
-    //await ElementHelper.clickElement(page, PaymentPageLocators.contactmobileno);
-   // Razorpay's checkout ("Contact details" -> "Pay via Card" -> card form) renders
-   // entirely inside its own iframe, not the merchant page — a plain page.locator()
-   // can never find any of it regardless of selector, which is why this used to hang.
-   const razorpayFrame = page.frameLocator('iframe[src*="api.razorpay.com/v1/checkout"]');
-   await razorpayFrame.locator('[data-testid="contactNumber"]').fill('8140217872');
-   await razorpayFrame.locator(PaymentPageLocators.continuebtnformobile).click();
-   await razorpayFrame.locator(PaymentPageLocators.payviacard).click();
 
+    await ElementHelper.clickElement(page, PaymentPageLocators.payNowButtonBob);
+    await page.waitForTimeout(10000);
+
+    if (await page.locator(PaymentPageLocators.makePaymentButton).count()) {
+      await page.locator(PaymentPageLocators.makePaymentButton).click();
+    } else {
+      await page.locator(PaymentPageLocators.paymentContinueButton).click();
+    }
+
+    await page.waitForTimeout(10000);
+
+   const confirmationContinueBtn = page.locator(PaymentPageLocators.confirmationContinueButton);
+
+if (await confirmationContinueBtn.isVisible()) {
+await page.waitForTimeout(5000)
+  await confirmationContinueBtn.click();
+} else {
+  console.log("Confirmation Continue button is not visible. Proceeding to Razorpay.");
+}
+
+const razorpayFrame = page.frameLocator(
+  PaymentPageLocators.razorpayCheckoutFrame
+);
+await page.waitForTimeout(6000);
+await razorpayFrame.locator('[data-testid="contactNumber"]').fill('8140217872');
+    await razorpayFrame.locator(PaymentPageLocators.continuebtnformobile).click();
+    await razorpayFrame.locator(PaymentPageLocators.payviacard).click();
+    await page.waitForTimeout(6000)
     await razorpayFrame.locator(PaymentPageLocators.cardNumberField).waitFor({ state: 'visible', timeout: 10000 });
+     await page.waitForTimeout(6000)
     await razorpayFrame.locator(PaymentPageLocators.cardNumberField).fill(Data.paymentDataFill.cardNumber);
     await page.waitForTimeout(2000);
     await razorpayFrame.locator(PaymentPageLocators.cardExpiryField).fill(Data.paymentDataFill.cardExpiry);
     await page.waitForTimeout(2000);
     await razorpayFrame.locator(PaymentPageLocators.cardCvvField).fill(Data.paymentDataFill.cardCvv);
     await page.waitForTimeout(2000);
-    // BOB's Razorpay card form has no cardholder-name field, unlike IDFC's.
     await expect(razorpayFrame.locator(PaymentPageLocators.saveCardPopup)).toBeVisible();
     await page.waitForTimeout(2000);
     await razorpayFrame.locator(PaymentPageLocators.continuebtnformobile).click();
@@ -269,16 +296,13 @@ static async fillCardExpiry(page: Page) {
     await PaymentPage.clickMaybeLaterButton(page);
     await page.waitForTimeout(5000);
     await PaymentPage.clickSuccessButton(page);
-    await page.waitForTimeout(2000);
+    await page.waitForTimeout(7000);
     await PaymentPage.clickOKButton(page);
   }
  static async clickMaybeLaterButton(page: Page) {
     const CLIENT = process.env.CLIENT?.toUpperCase();
     switch (CLIENT) {
     case 'BOB':
-      // Must reuse the same iframe identified in completePaymentFlowBOB
-      // (matched by src, not the untested/likely-stale "razorpay-checkout-frame"
-      // class selector that used to be here) — this is the live checkout frame.
       const frame = page.frameLocator('iframe[src*="api.razorpay.com/v1/checkout"]');
     await frame.locator(PaymentPageLocators.maybeLaterButton).click()
     break;
@@ -288,21 +312,22 @@ static async fillCardExpiry(page: Page) {
   }
   }
 
-  static async clickSuccessButton(page: Page) {
+static async clickSuccessButton(page: Page) {
     const CLIENT = process.env.CLIENT?.toUpperCase();
     switch (CLIENT) {
     case 'BOB': {
-      // Razorpay's test-mode bank-auth simulator ("Razorpay Software Private
-      // Ltd Bank" — the Success/Failure choice) opens as a separate popup
-      // window, not an iframe of the checkout page, so it needs its own Page.
-      const context = page.context();
-      let popup = context.pages().find(p => p !== page && !p.isClosed());
-      if (!popup) {
-        popup = await context.waitForEvent('page', { timeout: 60000 });
-      }
-      await popup.waitForLoadState();
-      await popup.locator(PaymentPageLocators.successButton).click();
-      break;
+
+      // const context = page.context();
+      // let popup = context.pages().find(p => p !== page && !p.isClosed());
+      // if (!popup) {
+      //   popup = await context.waitForEvent('page', { timeout: 60000 });
+      // }
+      // await popup.waitForLoadState();
+      //const frame = page.frameLocator('iframe[src*="api.razorpay.com/v1/checkout"]');
+    await page.locator(PaymentPageLocators.successButton).click()
+    break;
+      // await popup.locator(PaymentPageLocators.successButton).click();
+      // break;
     }
   case 'IDFC':
     await ElementHelper.clickElement(page, PaymentPageLocators.proceedButton);
@@ -314,10 +339,8 @@ static async fillCardExpiry(page: Page) {
     const CLIENT = process.env.CLIENT?.toUpperCase();
     switch (CLIENT) {
     case 'BOB':
-      // After clicking Success in the bank popup, Razorpay closes it and the
-      // merchant site navigates straight to the booking voucher/confirmation
-      // page itself — there's no separate "OK" confirmation step to click.
       await page.waitForLoadState('domcontentloaded');
+      await page.click(`//a[text()='OK']`)
     break;
   case 'IDFC':
     await ElementHelper.clickElement(page, PaymentPageLocators.proceedButton);
