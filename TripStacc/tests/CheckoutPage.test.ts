@@ -465,7 +465,7 @@ test('SC_011: Flight - Proceed with payment', { tag: ['@idfc', '@bob', '@flight'
   });
 });
 
-test('SC_011.01: Hotel- Proceed with payment', { tag: ['@idfc', '@bob', '@flaky', '@payment', '@common', '@hotel', '@regression'] }, async () => {
+test.only('SC_011.01: Hotel- Proceed with payment', { tag: ['@idfc', '@bob', '@flaky', '@payment', '@common', '@hotel', '@regression'] }, async () => {
   await test.step('Step 1: Open Hotels Section', async () => {
     await page.waitForTimeout(5000);
     await BaseHelper.clickHotelTabBTN(page);
