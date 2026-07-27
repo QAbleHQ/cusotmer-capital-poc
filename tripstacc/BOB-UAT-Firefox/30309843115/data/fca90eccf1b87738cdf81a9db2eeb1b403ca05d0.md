@@ -1,0 +1,230 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: TripStacc/tests/BookingConfirmation.test.ts >> SC_012.01: Booking Confirmation for Hotel
+- Location: TripStacc/tests/BookingConfirmation.test.ts:141:6
+
+# Error details
+
+```
+Test timeout of 420000ms exceeded.
+```
+
+```
+Error: locator.fill: Target page, context or browser has been closed
+Call log:
+  - waiting for locator('iframe[src*="api.razorpay.com/v1/checkout"]').contentFrame().locator('[data-testid="contactNumber"]')
+
+```
+
+# Test source
+
+```ts
+  187 |       page,
+  188 |       PaymentPageLocators.bookingconfirmationpagebob
+  189 |     );
+  190 | 
+  191 |     if (!isVisible) {
+  192 |       isVisible = await ElementHelper.isElementDisplayed(
+  193 |         page,
+  194 |         `//span[@class='label label-success sts_confirm vouchr_sts']`
+  195 |       );
+  196 |     }
+  197 |   } else {
+  198 |     isVisible = await ElementHelper.isElementDisplayed(
+  199 |       page,
+  200 |       PaymentPageLocators.bookingConfirmationPage
+  201 |     );
+  202 |   }
+  203 | 
+  204 |   if (isVisible) {
+  205 |     console.log('Booking confirmation page is visible.');
+  206 |   }
+  207 | 
+  208 |   return isVisible;
+  209 | }
+  210 | 
+  211 |   static async verifyBookingNotCreated(page: Page) {
+  212 |     const bookingExists = await page.isVisible(PaymentPageLocators.bookingConfirmationPage);
+  213 |     expect(bookingExists).toBeFalsy();
+  214 |     console.log('Booking not created after cancellation.');
+  215 |   }
+  216 | 
+  217 |   static async clickOnPromoCodeAndEnterCode(page: any, data:any) {
+  218 |   const CLIENT = process.env.CLIENT?.toUpperCase();
+  219 |   switch (CLIENT) {
+  220 |     case 'BOB':
+  221 |       await ElementHelper.clickElement(page, PaymentPageLocators.promoCodeInput);
+  222 |       await ElementHelper.clearAndEnterInTextField(page, PaymentPageLocators.promoCodeInput, data)
+  223 |       await page.waitForTimeout(3000); 
+  224 |     break;
+  225 |     case 'IDFC':  
+  226 |     console.log('IDFC: Skipping ');
+  227 |     break;
+  228 |   }
+  229 |   }
+  230 | 
+  231 |   static async clickOnApplyPromoCode(page: any) {
+  232 |   const CLIENT = process.env.CLIENT?.toUpperCase();
+  233 |   switch (CLIENT) {
+  234 |     case 'BOB':
+  235 |       await ElementHelper.clickElement(page, PaymentPageLocators.promoCodeApplyButton);
+  236 |       await page.waitForTimeout(3000); 
+  237 |     break;
+  238 |     case 'IDFC':  
+  239 |     console.log('IDFC: Skipping ');
+  240 |     break;
+  241 |   }
+  242 |   }
+  243 | 
+  244 |   static async verifyErrorMessageVisible(page: any) {
+  245 |   const CLIENT = process.env.CLIENT?.toUpperCase();
+  246 |   switch (CLIENT) {
+  247 |     case 'BOB':
+  248 |       await VerificationHelpers.elementIsVisible(page, PaymentPageLocators.invalidMessage);
+  249 |       await page.waitForTimeout(3000);
+  250 |     break;
+  251 |     case 'IDFC':  
+  252 |     console.log('IDFC: Skipping ');
+  253 |     break;
+  254 |   }
+  255 |   }
+  256 |   static async completePaymentFlowBOB(page: Page) {
+  257 |     if (await page.locator(PaymentPageLocators.termsAndConditionsCheckbox).isVisible()) {
+  258 |       await page.locator(PaymentPageLocators.termsAndConditionsCheckbox).click();
+  259 |     } else {
+  260 |       await page.locator(PaymentPageLocators.alternateTermsCheckbox).click();
+  261 |     }
+  262 | 
+  263 |     await ElementHelper.clickElement(page, PaymentPageLocators.payNowButtonBob);
+  264 |     await page.waitForTimeout(10000);
+  265 | 
+  266 |     if (await page.locator(PaymentPageLocators.makePaymentButton).count()) {
+  267 |       await page.locator(PaymentPageLocators.makePaymentButton).click();
+  268 |     } else {
+  269 |       await page.locator(PaymentPageLocators.paymentContinueButton).click();
+  270 |     }
+  271 | 
+  272 |     await page.waitForTimeout(10000);
+  273 | 
+  274 |    const confirmationContinueBtn = page.locator(PaymentPageLocators.confirmationContinueButton);
+  275 | 
+  276 | if (await confirmationContinueBtn.isVisible()) {
+  277 | await page.waitForTimeout(5000)
+  278 |   await confirmationContinueBtn.click();
+  279 | } else {
+  280 |   console.log("Confirmation Continue button is not visible. Proceeding to Razorpay.");
+  281 | }
+  282 | 
+  283 | const razorpayFrame = page.frameLocator(
+  284 |   PaymentPageLocators.razorpayCheckoutFrame
+  285 | );
+  286 | await page.waitForTimeout(6000);
+> 287 | await razorpayFrame.locator('[data-testid="contactNumber"]').fill('8140217872');
+      |                                                              ^ Error: locator.fill: Target page, context or browser has been closed
+  288 |     await razorpayFrame.locator(PaymentPageLocators.continuebtnformobile).click();
+  289 |     await razorpayFrame.locator(PaymentPageLocators.payviacard).click();
+  290 |     await page.waitForTimeout(6000)
+  291 |     await razorpayFrame.locator(PaymentPageLocators.cardNumberField).waitFor({ state: 'visible', timeout: 10000 });
+  292 |      await page.waitForTimeout(6000)
+  293 |     await razorpayFrame.locator(PaymentPageLocators.cardNumberField).fill(Data.paymentDataFill.cardNumber);
+  294 |     await page.waitForTimeout(6000);
+  295 |     await razorpayFrame.locator(PaymentPageLocators.cardExpiryField).fill(Data.paymentDataFill.cardExpiry);
+  296 |     await page.waitForTimeout(6000);
+  297 |     await razorpayFrame.locator(PaymentPageLocators.cardCvvField).fill(Data.paymentDataFill.cardCvv);
+  298 |     await page.waitForTimeout(6000);
+  299 |     await expect(razorpayFrame.locator(PaymentPageLocators.saveCardPopup)).toBeVisible();
+  300 |     await page.waitForTimeout(6000);
+  301 |     await razorpayFrame.locator(PaymentPageLocators.continuebtnformobile).click();
+  302 |     await page.waitForTimeout(6000);
+  303 |     await page.waitForLoadState('domcontentloaded');
+  304 |     await page.waitForTimeout(2000);
+  305 |     await PaymentPage.clickMaybeLaterButton(page);
+  306 |     await page.waitForTimeout(6000);
+  307 |     await PaymentPage.clickSuccessButton(page);
+  308 |     await page.waitForTimeout(7000);
+  309 |     await PaymentPage.clickOKButton(page);
+  310 |   }
+  311 |  static async clickMaybeLaterButton(page: Page) {
+  312 |     const CLIENT = process.env.CLIENT?.toUpperCase();
+  313 |     switch (CLIENT) {
+  314 |     case 'BOB':
+  315 |       const frame = page.frameLocator('iframe[src*="api.razorpay.com/v1/checkout"]');
+  316 |     await frame.locator(PaymentPageLocators.maybeLaterButton).click()
+  317 |     break;
+  318 |   case 'IDFC':
+  319 |     await ElementHelper.clickElement(page, PaymentPageLocators.proceedButton);
+  320 |     break;
+  321 |   }
+  322 |   }
+  323 | 
+  324 | static async clickSuccessButton(page: Page) {
+  325 |   const CLIENT = process.env.CLIENT?.toUpperCase();
+  326 | 
+  327 |   switch (CLIENT) {
+  328 |     case 'BOB': {
+  329 |       const context = page.context();
+  330 |       const timeoutMs = 90_000;
+  331 |       const pollMs = 500;
+  332 |       const deadline = Date.now() + timeoutMs;
+  333 | 
+  334 |       const successNameRegex = /^\s*success\s*$/i;
+  335 | 
+  336 |       const scopeCandidates = (scope: Page | Frame): Locator[] => [
+  337 |         scope.getByRole('button', { name: successNameRegex }).first(),
+  338 |         scope.locator('input[type="submit"], input[type="button"]')
+  339 |              .and(scope.locator('[value="Success" i], [value="SUCCESS"]')).first(),
+  340 |         scope.locator('//button[normalize-space(.)="Success" or normalize-space(.)="SUCCESS"]').first(),
+  341 |         scope.locator(PaymentPageLocators.successButton).first(),
+  342 |       ];
+  343 | 
+  344 |       const findVisibleSuccessButton = async (): Promise<Locator> => {
+  345 |         let seenFrames: string[] = [];
+  346 |         while (Date.now() < deadline) {
+  347 |           for (const p of context.pages().filter(pg => !pg.isClosed())) {
+  348 |             const scopes: Array<Page | Frame> = [p, ...p.frames()];
+  349 |             seenFrames = scopes.map(s => ('url' in s ? s.url() : ''));
+  350 |             for (const scope of scopes) {
+  351 |               for (const candidate of scopeCandidates(scope)) {
+  352 |                 const visible = await candidate.isVisible().catch(() => false);
+  353 |                 if (visible) return candidate;
+  354 |               }
+  355 |             }
+  356 |           }
+  357 |           await page.waitForTimeout(pollMs);
+  358 |         }
+  359 |         throw new Error(
+  360 |           `Success button not visible on any page or frame within ${timeoutMs}ms. ` +
+  361 |           `Frames inspected on last pass: ${JSON.stringify(seenFrames)}`,
+  362 |         );
+  363 |       };
+  364 | 
+  365 |       const successBtn = await findVisibleSuccessButton();
+  366 |       await successBtn.click();
+  367 |       break;
+  368 |     }
+  369 |   case 'IDFC':
+  370 |     await ElementHelper.clickElement(page, PaymentPageLocators.proceedButton);
+  371 |     break;
+  372 |   }
+  373 |   }
+  374 | 
+  375 | static async clickOKButton(page: Page) {
+  376 |   const CLIENT = process.env.CLIENT?.toUpperCase();
+  377 | 
+  378 |   switch (CLIENT) {
+  379 |     case 'BOB':
+  380 |   await page.waitForLoadState('domcontentloaded');
+  381 | 
+  382 |   try {
+  383 |     const okButton = page.locator(PaymentPageLocators.okButton);
+  384 | 
+  385 |     if (await okButton.count() > 0) {
+  386 |       await okButton.click();
+  387 |     }
+```
