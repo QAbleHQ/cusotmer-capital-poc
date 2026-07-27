@@ -180,10 +180,26 @@ static async fillCardExpiry(page: Page) {
   }
 
   static async verifyBookingConfirmationPageVisible(page: Page): Promise<boolean> {
-    const isVisible = await ElementHelper.isElementDisplayed(page, PaymentPageLocators.bookingConfirmationPage);
-    if (isVisible) console.log('Booking confirmation page is visible.');
-    return isVisible;
+  let isVisible: boolean;
+
+  if (process.env.CLIENT?.toUpperCase() === 'BOB') {
+    isVisible = await ElementHelper.isElementDisplayed(
+      page,
+      PaymentPageLocators.bookingconfirmationpagebob
+    );
+  } else {
+    isVisible = await ElementHelper.isElementDisplayed(
+      page,
+      PaymentPageLocators.bookingConfirmationPage
+    );
   }
+
+  if (isVisible) {
+    console.log('Booking confirmation page is visible.');
+  }
+
+  return isVisible;
+}
 
   static async verifyBookingNotCreated(page: Page) {
     const bookingExists = await page.isVisible(PaymentPageLocators.bookingConfirmationPage);
@@ -230,47 +246,64 @@ static async fillCardExpiry(page: Page) {
     break;
   }
   }
- static async completePaymentFlowBOB(page: Page) {
-    if (await page.locator("//label[@for='terms_cond1']").isVisible()) {
-        await page.locator("//label[@for='terms_cond1']").click();
+  static async completePaymentFlowBOB(page: Page) {
+    if (await page.locator(PaymentPageLocators.termsAndConditionsCheckbox).isVisible()) {
+      await page.locator(PaymentPageLocators.termsAndConditionsCheckbox).click();
     } else {
-        await page.locator("//input[contains(@class,'termscheck')]").click();
+      await page.locator(PaymentPageLocators.alternateTermsCheckbox).click();
     }
+
     await ElementHelper.clickElement(page, PaymentPageLocators.payNowButtonBob);
-    await page.waitForTimeout(10000)
-   if (await page.locator("//button[@class='btn btn-success make-payment-btn']").count()) {
-    await page.locator("//button[@class='btn btn-success make-payment-btn']").click();
+    await page.waitForTimeout(10000);
+
+    if (await page.locator(PaymentPageLocators.makePaymentButton).count()) {
+      await page.locator(PaymentPageLocators.makePaymentButton).click();
+    } else {
+      await page.locator(PaymentPageLocators.paymentContinueButton).click();
+    }
+
+    await page.waitForTimeout(10000);
+
+   const confirmationContinueBtn = page.locator(PaymentPageLocators.confirmationContinueButton);
+
+if (await confirmationContinueBtn.isVisible()) {
+await page.waitForTimeout(5000)
+  await confirmationContinueBtn.click();
 } else {
-    await page.locator("(//button[@class='btn btn-primarycontinue'])[2]").click();
+  console.log("Confirmation Continue button is not visible. Proceeding to Razorpay.");
 }
-    await page.waitForTimeout(10000)
-    await ElementHelper.clickElement(page,`(//button[@class="btn btn-primarycontinue"])[1]`);
-    //await ElementHelper.clickElement(page, PaymentPageLocators.contactmobileno);
-   await page.locator(PaymentPageLocators.mobileNoInput).fill('8140217872');
-   await page.locator(PaymentPageLocators. continuebtnformobile).click();
-   await page.locator(PaymentPageLocators. payviacard).click();
-    await PaymentPage.verifyCardFieldsVisible(page);
+
+const razorpayFrame = page.frameLocator(
+  PaymentPageLocators.razorpayCheckoutFrame
+);
+await page.waitForTimeout(6000);
+await razorpayFrame.locator('[data-testid="contactNumber"]').fill('8140217872');
+    await razorpayFrame.locator(PaymentPageLocators.continuebtnformobile).click();
+    await razorpayFrame.locator(PaymentPageLocators.payviacard).click();
+    await page.waitForTimeout(6000)
+    await razorpayFrame.locator(PaymentPageLocators.cardNumberField).waitFor({ state: 'visible', timeout: 10000 });
+     await page.waitForTimeout(6000)
+    await razorpayFrame.locator(PaymentPageLocators.cardNumberField).fill(Data.paymentDataFill.cardNumber);
     await page.waitForTimeout(2000);
-    await PaymentPage.fillCardNumber(page);
+    await razorpayFrame.locator(PaymentPageLocators.cardExpiryField).fill(Data.paymentDataFill.cardExpiry);
     await page.waitForTimeout(2000);
-    await PaymentPage.fillCardExpiry(page);
+    await razorpayFrame.locator(PaymentPageLocators.cardCvvField).fill(Data.paymentDataFill.cardCvv);
     await page.waitForTimeout(2000);
-    await PaymentPage.fillCardCvv(page);
+    await expect(razorpayFrame.locator(PaymentPageLocators.saveCardPopup)).toBeVisible();
     await page.waitForTimeout(2000);
-    await PaymentPage.verifySaveCardPopupVisible(page);
-    await page.waitForTimeout(2000);
-    await PaymentPage.clickProceedButton(page);
+    await razorpayFrame.locator(PaymentPageLocators.continuebtnformobile).click();
     await page.waitForTimeout(2000);
     await PaymentPage.clickMaybeLaterButton(page);
+    await page.waitForTimeout(5000);
     await PaymentPage.clickSuccessButton(page);
-    await page.waitForTimeout(2000);
+    await page.waitForTimeout(7000);
     await PaymentPage.clickOKButton(page);
   }
  static async clickMaybeLaterButton(page: Page) {
     const CLIENT = process.env.CLIENT?.toUpperCase();
     switch (CLIENT) {
     case 'BOB':
-      const frame = page.frameLocator('//iframe[@class="razorpay-checkout-frame"]');
+      const frame = page.frameLocator('iframe[src*="api.razorpay.com/v1/checkout"]');
     await frame.locator(PaymentPageLocators.maybeLaterButton).click()
     break;
   case 'IDFC':
@@ -278,44 +311,92 @@ static async fillCardExpiry(page: Page) {
     break;
   }
   }
- 
-  static async clickSuccessButton(page: Page) {
-    const CLIENT = process.env.CLIENT?.toUpperCase();
-    switch (CLIENT) {
-    case 'BOB':
-      await ElementHelper.clickElement(page, PaymentPageLocators.successButton);
-    break;
-  case 'IDFC':
-    await ElementHelper.clickElement(page, PaymentPageLocators.proceedButton);
-    break;
-  }
-  }
- 
-  static async clickOKButton(page: Page) {
-    const CLIENT = process.env.CLIENT?.toUpperCase();
-    switch (CLIENT) {
-    case 'BOB':
-      await ElementHelper.clickElement(page, PaymentPageLocators.okButton);
-    break;
-  case 'IDFC':
-    await ElementHelper.clickElement(page, PaymentPageLocators.proceedButton);
-    break;
-  }
-  }
-  
-  static async verifyBookingPendingPageVisible(page: Page) {
-    const CLIENT = process.env.CLIENT?.toUpperCase();
+
+static async clickSuccessButton(page: Page) {
+  const CLIENT = process.env.CLIENT?.toUpperCase();
+
   switch (CLIENT) {
-  case 'BOB':
-    console.log( "Skiping")
-    break;
+    case 'BOB': {
+      let targetPage = page;
+
+      // First check on current page
+      const isButtonVisible = await page
+        .locator(PaymentPageLocators.successButton)
+        .isVisible()
+        .catch(() => false);
+
+      // If not visible, check latest opened page
+      if (!isButtonVisible) {
+        const pages = page.context().pages();
+
+        if (pages.length > 1) {
+          targetPage = pages[pages.length - 1];
+          await targetPage.waitForLoadState('domcontentloaded');
+        }
+      }
+
+      await targetPage.locator(PaymentPageLocators.successButton).click();
+      break;
+    }
   case 'IDFC':
-    const isVisible = await ElementHelper.isElementDisplayed(page, PaymentPageLocators.bookingPendingPage);
-    if (isVisible) console.log('Booking pending page is visible.');
-    return isVisible;
+    await ElementHelper.clickElement(page, PaymentPageLocators.proceedButton);
     break;
   }
   }
+
+static async clickOKButton(page: Page) {
+  const CLIENT = process.env.CLIENT?.toUpperCase();
+
+  switch (CLIENT) {
+    case 'BOB':
+  await page.waitForLoadState('domcontentloaded');
+
+  try {
+    const okButton = page.locator(PaymentPageLocators.okButton);
+
+    if (await okButton.count() > 0) {
+      await okButton.click();
+    }
+  } catch (error) {
+    console.log('OK button not found. Continuing test...');
+  }
+
+  break;
+
+    case 'IDFC':
+      await ElementHelper.clickElement(page, PaymentPageLocators.proceedButton);
+      break;
+  }
+}
+
+ static async verifyBookingPendingPageVisible(page: Page) {
+  const CLIENT = process.env.CLIENT?.toUpperCase();
+
+  let isVisible = false;
+
+  switch (CLIENT) {
+    case 'BOB':
+      isVisible = await ElementHelper.isElementDisplayed(
+        page,
+        PaymentPageLocators.bookingpendingPagebob
+      );
+      break;
+
+    case 'IDFC':
+      isVisible = await ElementHelper.isElementDisplayed(
+        page,
+        PaymentPageLocators.bookingPendingPage
+      );
+      break;
+  }
+
+  if (isVisible) {
+    console.log('Booking pending page is visible.');
+  }
+
+  return isVisible;
+}
+
  
   static async completeCardPaymentFlowIDFC(page: Page) {
     await page.waitForTimeout(2000);

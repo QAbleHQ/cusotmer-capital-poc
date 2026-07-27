@@ -130,7 +130,12 @@ export const HotelPageLocators = {
   Downloadlogobooking: `//div[@class='donld_links']//a[1]`,
   bookflightlogobooking: `//div[@class='donld_links']//a[2]`,
   bookingId: `//span[@id='copy_ref']`,
+  bookingidbob:`//p[@class='fs-16 fw-600 lh-24']`,
+  bookingdatebob: `(//h6[@class='text_color fw-semibold mb-0'])[1]`,
   bookingDate: `//div[@class='travell_info']//p`,
   fareSummaryDropdown: `//ul[@class='text-list']`,
   fareSummarySection: `//div[contains(@class,'expand-box')] | //div[contains(@id,"collapseExample")]`,
+
+
+
 };
