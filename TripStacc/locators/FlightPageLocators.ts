@@ -126,7 +126,9 @@ export const FlightPageLocators = {
   bookingStatus: `//h4[@class='confm_txt']`,
   confirmedVoucher: `//p[@class='earn']//span`,
  bookingId: `//span[@id='copy_ref'] | (//td[@class='bookng_id']//span)[2]`,
+
 bookingDate: `//div[@class='travell_info']//p | (//td[@class='bookng_date bookng_date_flt dt_orde'])[1]`,
+
   flightDropdown: `//div[@class='cnf_flt_top']`,
   flightName: `(//div[@class='fltcod'])[1]`,
   departureCity: `(//p[@class='flt_cityname'])[1]`,
