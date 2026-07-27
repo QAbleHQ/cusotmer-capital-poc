@@ -156,7 +156,7 @@ export class ElementHelper {
       console.warn(`Element '${locator}' not visible on first attempt. Refreshing the page...`);
 
       // await page.reload();
-      await page.waitForTimeout(50000);
+      await page.waitForTimeout(100000);
 
       console.log(`Attempt 2: Waiting for element '${locator}' after refresh...`);
       try {

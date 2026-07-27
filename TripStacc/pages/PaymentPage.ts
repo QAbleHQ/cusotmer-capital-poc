@@ -298,18 +298,9 @@ await razorpayFrame.locator('[data-testid="contactNumber"]').fill('8140217872');
     await page.waitForTimeout(6000);
     await expect(razorpayFrame.locator(PaymentPageLocators.saveCardPopup)).toBeVisible();
     await page.waitForTimeout(6000);
-   await razorpayFrame  .locator(PaymentPageLocators.continuebtnformobile) .first()  .click();
+    await razorpayFrame.locator(PaymentPageLocators.continuebtnformobile).click();
     await page.waitForTimeout(6000);
     await page.waitForLoadState('domcontentloaded');
-    const payAndSaveCta = razorpayFrame.locator(PaymentPageLocators.razorpayPayAndSaveCardCta);
-    const bottomCta = razorpayFrame.locator(PaymentPageLocators.razorpayBottomCta);
-    const addCardCta = razorpayFrame.locator(PaymentPageLocators.razorpayAddCardCta);
-    const submitCta = await Promise.any([
-      payAndSaveCta.waitFor({ state: 'visible', timeout: 15_000 }).then(() => payAndSaveCta),
-      bottomCta.waitFor({ state: 'visible', timeout: 15_000 }).then(() => bottomCta),
-      addCardCta.waitFor({ state: 'visible', timeout: 15_000 }).then(() => addCardCta),
-    ]);
-    await submitCta.click();
     await page.waitForTimeout(2000);
     await PaymentPage.clickMaybeLaterButton(page);
     await page.waitForTimeout(6000);

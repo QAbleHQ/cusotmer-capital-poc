@@ -958,13 +958,17 @@ static async enterMobileNo(page: any, data: any) {
     await page.waitForTimeout(3000);
       break;
 
-    case 'IDFC':
-    await VerificationHelpers.elementIsVisible(page, FlightPageLocators.addTravellerButton);
-    await ElementHelper.clickElement(page, FlightPageLocators.addTravellerButton);
-    await page.waitForTimeout(3000);
-    break;
-    }
+  case 'IDFC':
+  const btn = page.locator(FlightPageLocators.addTravellerButton);
+
+  if (!(await btn.isVisible()) || !(await btn.isEnabled())) {
+    throw new Error('Add Traveller button is not clickable.');
   }
+
+  await btn.click();
+  break;
+  }
+}
 
   static async clickOnFirstNameEditButton(page: any) {
     const CLIENT = process.env.CLIENT?.toUpperCase();
