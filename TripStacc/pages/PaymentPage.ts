@@ -179,7 +179,7 @@ static async fillCardExpiry(page: Page) {
     console.log('OTP error message is visible for expired/invalid OTP.');
   }
 
-  static async verifyBookingConfirmationPageVisible(page: Page): Promise<boolean> {
+static async verifyBookingConfirmationPageVisible(page: Page): Promise<boolean> {
   let isVisible: boolean;
 
   if (process.env.CLIENT?.toUpperCase() === 'BOB') {
@@ -187,6 +187,13 @@ static async fillCardExpiry(page: Page) {
       page,
       PaymentPageLocators.bookingconfirmationpagebob
     );
+
+    if (!isVisible) {
+      isVisible = await ElementHelper.isElementDisplayed(
+        page,
+        `//span[@class='label label-success sts_confirm vouchr_sts']`
+      );
+    }
   } else {
     isVisible = await ElementHelper.isElementDisplayed(
       page,
@@ -284,12 +291,16 @@ await razorpayFrame.locator('[data-testid="contactNumber"]').fill('8140217872');
     await razorpayFrame.locator(PaymentPageLocators.cardNumberField).waitFor({ state: 'visible', timeout: 10000 });
      await page.waitForTimeout(6000)
     await razorpayFrame.locator(PaymentPageLocators.cardNumberField).fill(Data.paymentDataFill.cardNumber);
-    await page.waitForTimeout(2000);
+    await page.waitForTimeout(6000);
     await razorpayFrame.locator(PaymentPageLocators.cardExpiryField).fill(Data.paymentDataFill.cardExpiry);
-    await page.waitForTimeout(2000);
+    await page.waitForTimeout(6000);
     await razorpayFrame.locator(PaymentPageLocators.cardCvvField).fill(Data.paymentDataFill.cardCvv);
-    await page.waitForTimeout(2000);
+    await page.waitForTimeout(6000);
     await expect(razorpayFrame.locator(PaymentPageLocators.saveCardPopup)).toBeVisible();
+    await page.waitForTimeout(6000);
+   await razorpayFrame  .locator(PaymentPageLocators.continuebtnformobile) .first()  .click();
+    await page.waitForTimeout(6000);
+    await page.waitForLoadState('domcontentloaded');
     const payAndSaveCta = razorpayFrame.locator(PaymentPageLocators.razorpayPayAndSaveCardCta);
     const bottomCta = razorpayFrame.locator(PaymentPageLocators.razorpayBottomCta);
     const addCardCta = razorpayFrame.locator(PaymentPageLocators.razorpayAddCardCta);
@@ -301,7 +312,7 @@ await razorpayFrame.locator('[data-testid="contactNumber"]').fill('8140217872');
     await submitCta.click();
     await page.waitForTimeout(2000);
     await PaymentPage.clickMaybeLaterButton(page);
-    await page.waitForTimeout(5000);
+    await page.waitForTimeout(6000);
     await PaymentPage.clickSuccessButton(page);
     await page.waitForTimeout(7000);
     await PaymentPage.clickOKButton(page);
