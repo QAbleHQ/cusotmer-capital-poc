@@ -296,9 +296,18 @@ await razorpayFrame.locator('[data-testid="contactNumber"]').fill('8140217872');
     await page.waitForTimeout(6000);
     await razorpayFrame.locator(PaymentPageLocators.cardCvvField).fill(Data.paymentDataFill.cardCvv);
     await page.waitForTimeout(6000);
+    await page.pause();
     await expect(razorpayFrame.locator(PaymentPageLocators.saveCardPopup)).toBeVisible();
     await page.waitForTimeout(6000);
-   await razorpayFrame  .locator(PaymentPageLocators.continuebtnformobile) .first()  .click();
+ if (DeviceHelper.isMobile()) {
+  await razorpayFrame
+    .locator(PaymentPageLocators.continuebtnformobilebob)
+    .click();
+} else {
+  await razorpayFrame
+    .locator(PaymentPageLocators.continuebtnformobile) // use web locator here
+    .click();
+}
     await page.waitForTimeout(6000);
     await page.waitForLoadState('domcontentloaded');
     await PaymentPage.clickMaybeLaterButton(page);

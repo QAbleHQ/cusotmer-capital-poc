@@ -803,7 +803,6 @@ test('SC_005: Add Traveller Details and Update Traveller Details ', { tag: ['@id
   await test.step("Step 11: Click on Continue Button On Flight Details Page", async () => {
     await FlightHomePage.clickOnContinueButtonOnFlightDetailsPage(page);
   });
-
   await test.step("Step 12: Click on Add New Traveller Button On Traveller Details Page", async () => {
     await FlightHomePage.clickOnAddNewTravellerButton(page);
   });

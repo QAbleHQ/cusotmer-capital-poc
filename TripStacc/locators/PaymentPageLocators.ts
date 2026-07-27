@@ -48,6 +48,7 @@ continuebuttonbobpayment:`//button[@class='btn btn-success make-payment-btn'] | 
   mobileNoField: `(//input[@name="contact"])[2]`,
   mobileinput: `//div[contains(@class,"relative flex flex-col d:grow-0  ")]//input[@name="contact"]`,
   continuebtnformobile: `//button[@name='button']`,
+   continuebtnformobilebob: `//button[@data-testid='bottom-cta-button']`,
   payviacard: `//div[@data-testid='card']`,
   continueButton: `//button[contains(text(),'Continue')]`,
   maybeLaterButton: `//button[text()="Maybe later"]`,

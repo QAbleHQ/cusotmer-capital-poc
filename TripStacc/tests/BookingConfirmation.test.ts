@@ -23,7 +23,7 @@ test.afterEach(async () => {
   await context.close();
 });
 
-test.only('SC_012: Booking Confirmation Page: Flight (Confirmed/Pending/Failed)', { tag: ['@idfc', '@bob', '@common', '@flight', '@flaky', '@bookingconfirmation', '@regression', "@earn"] }, async () => {
+test('SC_012: Booking Confirmation Page: Flight (Confirmed/Pending/Failed)', { tag: ['@idfc', '@bob', '@common', '@flight', '@flaky', '@bookingconfirmation', '@regression', "@earn"] }, async () => {
   await test.step("Step 1: Enter City From Airport", async () => {
     await page.waitForTimeout(5000);
     await FlightHomePage.clickOnCityFromAirport(page);
@@ -138,7 +138,7 @@ test.only('SC_012: Booking Confirmation Page: Flight (Confirmed/Pending/Failed)'
   });
 });
 
-test.only('SC_012.01: Booking Confirmation for Hotel', { tag: ['@idfc', '@bob', '@common', '@flaky', '@payment', '@hotel', '@regression'] }, async () => {
+test('SC_012.01: Booking Confirmation for Hotel', { tag: ['@idfc', '@bob', '@common', '@flaky', '@payment', '@hotel', '@regression'] }, async () => {
   await test.step('Step 1: Open Hotels Section', async () => {
     await page.waitForTimeout(5000);
     await BaseHelper.clickHotelTabBTN(page);
