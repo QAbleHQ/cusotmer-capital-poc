@@ -1,4 +1,4 @@
-import { expect, Page } from '@playwright/test';
+import { expect, Frame, Locator, Page } from '@playwright/test';
 import { PaymentPageLocators } from '../../TripStacc/locators/PaymentPageLocators';
 import { ElementHelper } from '../../utils/elementHelper';
 const idfcTestData = require('../testData/tripStacc.json');
@@ -179,7 +179,7 @@ static async fillCardExpiry(page: Page) {
     console.log('OTP error message is visible for expired/invalid OTP.');
   }
 
-  static async verifyBookingConfirmationPageVisible(page: Page): Promise<boolean> {
+static async verifyBookingConfirmationPageVisible(page: Page): Promise<boolean> {
   let isVisible: boolean;
 
   if (process.env.CLIENT?.toUpperCase() === 'BOB') {
@@ -187,6 +187,13 @@ static async fillCardExpiry(page: Page) {
       page,
       PaymentPageLocators.bookingconfirmationpagebob
     );
+
+    if (!isVisible) {
+      isVisible = await ElementHelper.isElementDisplayed(
+        page,
+        `//span[@class='label label-success sts_confirm vouchr_sts']`
+      );
+    }
   } else {
     isVisible = await ElementHelper.isElementDisplayed(
       page,
@@ -284,17 +291,28 @@ await razorpayFrame.locator('[data-testid="contactNumber"]').fill('8140217872');
     await razorpayFrame.locator(PaymentPageLocators.cardNumberField).waitFor({ state: 'visible', timeout: 10000 });
      await page.waitForTimeout(6000)
     await razorpayFrame.locator(PaymentPageLocators.cardNumberField).fill(Data.paymentDataFill.cardNumber);
-    await page.waitForTimeout(2000);
+    await page.waitForTimeout(6000);
     await razorpayFrame.locator(PaymentPageLocators.cardExpiryField).fill(Data.paymentDataFill.cardExpiry);
-    await page.waitForTimeout(2000);
+    await page.waitForTimeout(6000);
     await razorpayFrame.locator(PaymentPageLocators.cardCvvField).fill(Data.paymentDataFill.cardCvv);
-    await page.waitForTimeout(2000);
+    await page.waitForTimeout(6000);
     await expect(razorpayFrame.locator(PaymentPageLocators.saveCardPopup)).toBeVisible();
-    await page.waitForTimeout(2000);
-    await razorpayFrame.locator(PaymentPageLocators.continuebtnformobile).click();
+    await page.waitForTimeout(6000);
+   await razorpayFrame  .locator(PaymentPageLocators.continuebtnformobile) .first()  .click();
+    await page.waitForTimeout(6000);
+    await page.waitForLoadState('domcontentloaded');
+    const payAndSaveCta = razorpayFrame.locator(PaymentPageLocators.razorpayPayAndSaveCardCta);
+    const bottomCta = razorpayFrame.locator(PaymentPageLocators.razorpayBottomCta);
+    const addCardCta = razorpayFrame.locator(PaymentPageLocators.razorpayAddCardCta);
+    const submitCta = await Promise.any([
+      payAndSaveCta.waitFor({ state: 'visible', timeout: 15_000 }).then(() => payAndSaveCta),
+      bottomCta.waitFor({ state: 'visible', timeout: 15_000 }).then(() => bottomCta),
+      addCardCta.waitFor({ state: 'visible', timeout: 15_000 }).then(() => addCardCta),
+    ]);
+    await submitCta.click();
     await page.waitForTimeout(2000);
     await PaymentPage.clickMaybeLaterButton(page);
-    await page.waitForTimeout(5000);
+    await page.waitForTimeout(6000);
     await PaymentPage.clickSuccessButton(page);
     await page.waitForTimeout(7000);
     await PaymentPage.clickOKButton(page);
@@ -317,25 +335,44 @@ static async clickSuccessButton(page: Page) {
 
   switch (CLIENT) {
     case 'BOB': {
-      let targetPage = page;
+      const context = page.context();
+      const timeoutMs = 90_000;
+      const pollMs = 500;
+      const deadline = Date.now() + timeoutMs;
 
-      // First check on current page
-      const isButtonVisible = await page
-        .locator(PaymentPageLocators.successButton)
-        .isVisible()
-        .catch(() => false);
+      const successNameRegex = /^\s*success\s*$/i;
 
-      // If not visible, check latest opened page
-      if (!isButtonVisible) {
-        const pages = page.context().pages();
+      const scopeCandidates = (scope: Page | Frame): Locator[] => [
+        scope.getByRole('button', { name: successNameRegex }).first(),
+        scope.locator('input[type="submit"], input[type="button"]')
+             .and(scope.locator('[value="Success" i], [value="SUCCESS"]')).first(),
+        scope.locator('//button[normalize-space(.)="Success" or normalize-space(.)="SUCCESS"]').first(),
+        scope.locator(PaymentPageLocators.successButton).first(),
+      ];
 
-        if (pages.length > 1) {
-          targetPage = pages[pages.length - 1];
-          await targetPage.waitForLoadState('domcontentloaded');
+      const findVisibleSuccessButton = async (): Promise<Locator> => {
+        let seenFrames: string[] = [];
+        while (Date.now() < deadline) {
+          for (const p of context.pages().filter(pg => !pg.isClosed())) {
+            const scopes: Array<Page | Frame> = [p, ...p.frames()];
+            seenFrames = scopes.map(s => ('url' in s ? s.url() : ''));
+            for (const scope of scopes) {
+              for (const candidate of scopeCandidates(scope)) {
+                const visible = await candidate.isVisible().catch(() => false);
+                if (visible) return candidate;
+              }
+            }
+          }
+          await page.waitForTimeout(pollMs);
         }
-      }
+        throw new Error(
+          `Success button not visible on any page or frame within ${timeoutMs}ms. ` +
+          `Frames inspected on last pass: ${JSON.stringify(seenFrames)}`,
+        );
+      };
 
-      await targetPage.locator(PaymentPageLocators.successButton).click();
+      const successBtn = await findVisibleSuccessButton();
+      await successBtn.click();
       break;
     }
   case 'IDFC':
