@@ -168,6 +168,19 @@ export class ElementHelper {
       }
     }
   }
+ static async selectDropdown(
+  page: Page,
+  locator: string,
+  option: string | number
+): Promise<void> {
+  await this.waitForElementClickable(page, locator);
+
+  if (typeof option === 'number') {
+    await page.locator(locator).selectOption({ index: option });
+  } else {
+    await page.locator(locator).selectOption(option);
+  }
+}
 
   static async waitForElementVisibleWithoutReload(page: Page, locator: string): Promise<void> {
     const element = page.locator(locator);

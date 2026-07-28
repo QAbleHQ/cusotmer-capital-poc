@@ -16,6 +16,10 @@ export class PaymentPage {
     await VerificationHelpers.elementIsVisible(page, PaymentPageLocators.payButton);
     await ElementHelper.clickElement(page, PaymentPageLocators. payButton);
   }
+   static async clickPayButtonBOB(page: Page) {
+    await VerificationHelpers.elementIsVisible(page, PaymentPageLocators.paybuttonbob);
+    await ElementHelper.clickElement(page, PaymentPageLocators. payButton);
+  }
   static async verifyCheckoutPayButton(page: Page) {
     await page.waitForSelector(PaymentPageLocators.checkoutPayButton, { state: 'visible' });
     const payableText = await page.textContent(PaymentPageLocators.checkoutPayButton);
@@ -455,13 +459,54 @@ static async clickOKButton(page: Page) {
     await page.waitForTimeout(12000);
     await page.waitForLoadState('domcontentloaded');
   }
+ static async completeCardPaymentFlowBOB(page: Page) {
+    if (await page.locator(PaymentPageLocators.termsAndConditionsCheckbox).isVisible()) {
+      await page.locator(PaymentPageLocators.termsAndConditionsCheckbox).click();
+    } else {
+      await page.locator(PaymentPageLocators.alternateTermsCheckbox).click();
+    }
+  await page.waitForTimeout(2000);
+    await ElementHelper.clickElement(page, PaymentPageLocators.payNowButtonBob);
 
+    await page.waitForTimeout(10000);
+     if (await page.locator(PaymentPageLocators.makePaymentButton).count()) {
+      await page.locator(PaymentPageLocators.makePaymentButton).click();
+    } else {
+      await page.locator(PaymentPageLocators.paymentContinueButton).click();
+    }
+    await page.waitForLoadState('domcontentloaded');
+    await PaymentPage.clickCardOptionSelector(page);
+    await page.waitForTimeout(2000);
+    await PaymentPage.verifyCardFieldsVisible(page);
+    await page.waitForTimeout(2000);
+    await PaymentPage.fillCardNumber(page);
+    await page.waitForTimeout(2000);
+    await PaymentPage.fillCardExpiry(page);
+    await page.waitForTimeout(2000);
+    await PaymentPage.fillCardCvv(page);
+    await page.waitForTimeout(2000);
+    await PaymentPage.fillCardName(page);
+    await page.waitForTimeout(2000);
+    await PaymentPage.verifySaveCardPopupVisible(page);
+    await page.waitForTimeout(2000);
+    await PaymentPage.clickProceedButton(page);
+    await page.waitForTimeout(7000);
+    await PaymentPage.clickCloseWithoutSaveButton(page);
+    await page.waitForTimeout(10000);
+    await page.waitForLoadState('domcontentloaded')
+    await PaymentPage.verifyOtpPageVisibleandFillValue(page);
+    await page.waitForTimeout(6000);
+    await PaymentPage.clickSubmitButton(page);
+    await page.waitForTimeout(12000);
+    await page.waitForLoadState('domcontentloaded');
+    await PaymentPage.clickOKButton(page);
+  }
 static async completeCardPaymentFlow(page: Page, bank?: string) {
   const CLIENT = bank?.toUpperCase() || process.env.CLIENT?.toUpperCase();
 
   switch (CLIENT) {
     case 'BOB':
-      await this.completePaymentFlowBOB(page);
+      await this.completeCardPaymentFlowBOB(page);
       break;
 
     case 'IDFC':
