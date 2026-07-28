@@ -177,6 +177,10 @@ bookingDate: `//div[@class='travell_info']//p | (//td[@class='bookng_date bookng
   filterButtonMobileForBOB: `//li[@class="sortli filt_mob filter_tab"]`,
   exprieYear: `//select[@class="ui-datepicker-year"]`,
   reviewtravllerbutton: `//button[text()='Confirm & Save']`,
-  
-
-};
+  passportNumberInput: `//INPUT[@id='passenger_passport_number_1']`,
+  passportIssuingCountryDropdown: `//select[@name='passenger_passport_issuing_country[]']`,
+  dateofbirth: `//input[@id='adult-date-picker-1']`,
+  passportExpiryDayDropdown: `//div[@class='selectedwrap']//select[@name='passenger_passport_expiry_day[]']`,
+  passportExpiryMonthDropdown: `//div[@class='selectedwrap']//select[@name='passenger_passport_expiry_month[]']`,
+  passportExpiryYearDropdown: `//div[@class='selectedwrap']//select[@name='passenger_passport_expiry_year[]']`
+}

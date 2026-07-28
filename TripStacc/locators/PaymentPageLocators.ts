@@ -42,6 +42,7 @@ continuebuttonbobpayment:`//button[@class='btn btn-success make-payment-btn'] | 
   payOfPointPOPUP: `//div[@class="modal-content redemption-limit"]`,
   usePoint: `//input[@id="currentValue"]`,
   payButton: `//button[@id="rzp-payment-button"]`,
+  paybuttonbob: `//button[@id='mobile_pay']`,
   promoCodeInput: `//input[@id="code"]`,
   promoCodeApplyButton: `//input[@id="apply"]`,
   invalidMessage: `//p[text()="Invalid promo code!"]`,

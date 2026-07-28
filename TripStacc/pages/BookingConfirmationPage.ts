@@ -33,7 +33,7 @@ static async verifyBookingOutcomeFlight(page: Page) {
   }
 }
  static async verifyBookingOutcomeHotel(page: Page) {
-  await page.waitForLoadState('domcontentloaded')
+  await page.waitForLoadState('domcontentloaded');
   const isConfirmationVisible = await PaymentPage.verifyBookingConfirmationPageVisible(page);
   const isPendingVisible = await PaymentPage.verifyBookingPendingPageVisible(page);
 

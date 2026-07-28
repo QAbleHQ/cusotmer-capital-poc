@@ -156,7 +156,7 @@ export class ElementHelper {
       console.warn(`Element '${locator}' not visible on first attempt. Refreshing the page...`);
 
       // await page.reload();
-      await page.waitForTimeout(50000);
+      await page.waitForTimeout(100000);
 
       console.log(`Attempt 2: Waiting for element '${locator}' after refresh...`);
       try {
@@ -168,6 +168,19 @@ export class ElementHelper {
       }
     }
   }
+ static async selectDropdown(
+  page: Page,
+  locator: string,
+  option: string | number
+): Promise<void> {
+  await this.waitForElementClickable(page, locator);
+
+  if (typeof option === 'number') {
+    await page.locator(locator).selectOption({ index: option });
+  } else {
+    await page.locator(locator).selectOption(option);
+  }
+}
 
   static async waitForElementVisibleWithoutReload(page: Page, locator: string): Promise<void> {
     const element = page.locator(locator);
