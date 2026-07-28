@@ -257,7 +257,53 @@ static async verifyBookingConfirmationPageVisible(page: Page): Promise<boolean> 
     break;
   }
   }
+
+  static async clickBankVerifyContinue(page: Page) {
+ 
+    if (process.env.CLIENT?.toUpperCase() !== 'BOB') return;
+ 
+ 
+ 
+    const deadline = Date.now() + 30_000;
+ 
+    while (Date.now() < deadline) {
+ 
+      for (const frame of page.frames()) {
+ 
+        const matches = await frame
+ 
+          .locator(PaymentPageLocators.razorpayBankVerifyContinue)
+ 
+          .all()
+ 
+          .catch(() => []);
+ 
+        for (const btn of matches) {
+ 
+          const visible = await btn.isVisible().catch(() => false);
+ 
+          if (!visible) continue;
+ 
+          console.log(`Bank verification "Continue" found in frame: ${frame.url()}`);
+ 
+          await btn.click();
+ 
+          return;
+ 
+        }
+ 
+      }
+ 
+      await page.waitForTimeout(500);
+ 
+    }
+ 
+    console.log('No bank verification "Continue" surfaced within 30s; continuing.');
+ 
+  }
+
   static async completePaymentFlowBOB(page: Page) {
+    await page.waitForTimeout(3000);
     if (await page.locator(PaymentPageLocators.termsAndConditionsCheckbox).isVisible()) {
       await page.locator(PaymentPageLocators.termsAndConditionsCheckbox).click();
     } else {
@@ -275,25 +321,25 @@ static async verifyBookingConfirmationPageVisible(page: Page): Promise<boolean> 
 
     await page.waitForTimeout(10000);
 
-   const confirmationContinueBtn = page.locator(PaymentPageLocators.confirmationContinueButton);
+    const confirmationContinueBtn = page.locator(PaymentPageLocators.confirmationContinueButton);
 
-if (await confirmationContinueBtn.isVisible()) {
-await page.waitForTimeout(5000)
-  await confirmationContinueBtn.click();
-} else {
-  console.log("Confirmation Continue button is not visible. Proceeding to Razorpay.");
-}
+    if (await confirmationContinueBtn.isVisible()) {
+      await page.waitForTimeout(5000)
+      await confirmationContinueBtn.click();
+    } else {
+      console.log("Confirmation Continue button is not visible. Proceeding to Razorpay.");
+    }
 
-const razorpayFrame = page.frameLocator(
-  PaymentPageLocators.razorpayCheckoutFrame
-);
-await page.waitForTimeout(6000);
-await razorpayFrame.locator('[data-testid="contactNumber"]').fill('8140217872');
+    const razorpayFrame = page.frameLocator(
+      PaymentPageLocators.razorpayCheckoutFrame
+    );
+    await page.waitForTimeout(6000);
+    await razorpayFrame.locator('[data-testid="contactNumber"]').fill('8140217872');
     await razorpayFrame.locator(PaymentPageLocators.continuebtnformobile).click();
     await razorpayFrame.locator(PaymentPageLocators.payviacard).click();
     await page.waitForTimeout(6000)
     await razorpayFrame.locator(PaymentPageLocators.cardNumberField).waitFor({ state: 'visible', timeout: 10000 });
-     await page.waitForTimeout(6000)
+    await page.waitForTimeout(6000)
     await razorpayFrame.locator(PaymentPageLocators.cardNumberField).fill(Data.paymentDataFill.cardNumber);
     await page.waitForTimeout(6000);
     await razorpayFrame.locator(PaymentPageLocators.cardExpiryField).fill(Data.paymentDataFill.cardExpiry);
@@ -302,27 +348,43 @@ await razorpayFrame.locator('[data-testid="contactNumber"]').fill('8140217872');
     await page.waitForTimeout(6000);
     await expect(razorpayFrame.locator(PaymentPageLocators.saveCardPopup)).toBeVisible();
     await page.waitForTimeout(6000);
-    await razorpayFrame.locator(PaymentPageLocators.continuebtnformobile).click();
+    if (
+      await razorpayFrame
+        .locator(PaymentPageLocators.continuebtnformobilebob)
+        .isVisible()
+    ) {
+      await razorpayFrame
+        .locator(PaymentPageLocators.continuebtnformobilebob)
+        .click();
+    } else {
+      await razorpayFrame
+        .locator(PaymentPageLocators.continuebtnformobile)
+        .click();
+    }
     await page.waitForTimeout(6000);
     await page.waitForLoadState('domcontentloaded');
-    await page.waitForTimeout(2000);
     await PaymentPage.clickMaybeLaterButton(page);
     await page.waitForTimeout(6000);
+    if (DeviceHelper.isMobile()) {
+      await PaymentPage.clickBankVerifyContinue(page);
+      await page.waitForTimeout(6000);
+    }
     await PaymentPage.clickSuccessButton(page);
     await page.waitForTimeout(7000);
     await PaymentPage.clickOKButton(page);
   }
- static async clickMaybeLaterButton(page: Page) {
+
+  static async clickMaybeLaterButton(page: Page) {
     const CLIENT = process.env.CLIENT?.toUpperCase();
     switch (CLIENT) {
-    case 'BOB':
-      const frame = page.frameLocator('iframe[src*="api.razorpay.com/v1/checkout"]');
-    await frame.locator(PaymentPageLocators.maybeLaterButton).click()
-    break;
-  case 'IDFC':
-    await ElementHelper.clickElement(page, PaymentPageLocators.proceedButton);
-    break;
-  }
+      case 'BOB':
+        const frame = page.frameLocator('iframe[src*="api.razorpay.com/v1/checkout"]');
+        await frame.locator(PaymentPageLocators.maybeLaterButton).click()
+        break;
+      case 'IDFC':
+        await ElementHelper.clickElement(page, PaymentPageLocators.proceedButton);
+        break;
+    }
   }
 
 static async clickSuccessButton(page: Page) {

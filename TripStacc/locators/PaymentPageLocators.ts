@@ -63,4 +63,6 @@ paymentContinueButton: `(//button[@class='btn btn-primarycontinue'])[2]`,
 confirmationContinueButton: `(//button[@class='btn btn-primarycontinue'])[1]`,
 razorpayCheckoutFrame: `iframe[src*="api.razorpay.com/v1/checkout"]`,
 razorpayContactNumberInput: `[data-testid="contactNumber"]`,
+continuebtnformobilebob: `//button[@data-testid='bottom-cta-button']`,
+razorpayBankVerifyContinue: `xpath=//*[contains(normalize-space(.),'Bank verification needed')]/following::button[normalize-space(.)='Continue'][1]`,
 };
