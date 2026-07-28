@@ -19,7 +19,7 @@ test.afterEach(async () => {
   await context.close();
 });
 
-test.only('SC_003: Search ', { tag: ['@idfc', '@bob','@common','@issue', '@homepageflight', '@smoke', '@sanity', '@regression'] }, async () => {
+test('SC_003: Search ', { tag: ['@idfc', '@bob','@common','@issue', '@homepageflight', '@smoke', '@sanity', '@regression'] }, async () => {
   await test.step("Step 1: Enter City From Airport", async () => {
     await FlightHomePage.clickOnCityFromAirport(page);
     await FlightHomePage.EnterCityFromAirport(page, Data.flightPage.enterCityFrom);

@@ -117,7 +117,7 @@ test('SC_009: Hotel- Checkout with and without Redeem Points (without redeem it 
   });
 });
 
-test.only('SC_009.01: Flight - Checkout with and without Redeem Points (without redeem it should be an earning) ', { tag: ['@idfc', '@bob', '@common', '@checkout', '@regression'] }, async () => {
+test('SC_009.01: Flight - Checkout with and without Redeem Points (without redeem it should be an earning) ', { tag: ['@idfc', '@bob', '@common', '@checkout', '@regression'] }, async () => {
   await test.step("Step 1: Enter City From Airport", async () => {
     await page.waitForTimeout(5000);
     await FlightHomePage.clickOnCityFromAirport(page);
@@ -229,7 +229,7 @@ test.only('SC_009.01: Flight - Checkout with and without Redeem Points (without 
   });
 });
 
-test.only('SC_010: Flight - Checkout with and without Promo Codes', { tag: ['@idfc', '@bob', '@baggage', '@common', '@flaky', '@checkout', '@regression'] }, async () => {
+test('SC_010: Flight - Checkout with and without Promo Codes', { tag: ['@idfc', '@bob', '@baggage', '@common', '@flaky', '@checkout', '@regression'] }, async () => {
   await test.step("Step 1: Enter City From Airport", async () => {
     await page.waitForTimeout(5000);
     await FlightHomePage.clickOnCityFromAirport(page);
@@ -353,7 +353,7 @@ test.only('SC_010: Flight - Checkout with and without Promo Codes', { tag: ['@id
   });
 });
 
-test.only('SC_011: Flight - Proceed with payment', { tag: ['@idfc', '@bob', '@flight', '@testmode', '@common', '@payment', '@regression'] }, async () => {
+test('SC_011: Flight - Proceed with payment', { tag: ['@idfc', '@bob', '@flight', '@testmode', '@common', '@payment', '@regression'] }, async () => {
   await test.step("Step 1: Enter City From Airport", async () => {
     await page.waitForTimeout(5000);
     await FlightHomePage.clickOnCityFromAirport(page);
