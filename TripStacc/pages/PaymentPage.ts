@@ -508,7 +508,7 @@ static async completeCardPaymentFlow(page: Page, bank?: string) {
 
   switch (CLIENT) {
     case 'BOB':
-      await this.completeCardPaymentFlowBOB(page);
+      await this.completePaymentFlowBOB(page);
       break;
 
     case 'IDFC':

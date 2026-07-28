@@ -989,39 +989,39 @@ static async enterMobileNo(page: any, data: any) {
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators.FirstOptionCheckbox);
     await ElementHelper.clickElement(page, FlightPageLocators.FirstOptionCheckbox);
   }
-  // static async selectPassportDetails(page: any) {
-  //   await ElementHelper.clearAndEnterInTextField(page, FlightPageLocators.passportNumberInput, 'A12345678');
-  //   //await ElementHelper.clearAndEnterInTextField(page, FlightPageLocators.dateofbirth, '11/03/1997');
-  // await page.locator(FlightPageLocators.dateofbirth)
-  //   .evaluate((el: any) => el.removeAttribute('readonly'));
+  static async selectPassportDetails(page: any) {
+    await ElementHelper.clearAndEnterInTextField(page, FlightPageLocators.passportNumberInput, 'A12345678');
+    //await ElementHelper.clearAndEnterInTextField(page, FlightPageLocators.dateofbirth, '11/03/1997');
+  await page.locator(FlightPageLocators.dateofbirth)
+    .evaluate((el: any) => el.removeAttribute('readonly'));
 
-  // await page.locator(FlightPageLocators.dateofbirth)
-  //   .fill('11/01/2003');
+  await page.locator(FlightPageLocators.dateofbirth)
+    .fill('11/01/2003');
     
-  //   await ElementHelper.selectDropdown(
-  //     page,
-  //     FlightPageLocators.passportIssuingCountryDropdown,
-  //     5
-  //   );
+    await ElementHelper.selectDropdown(
+      page,
+      FlightPageLocators.passportIssuingCountryDropdown,
+      5
+    );
 
-  //   await ElementHelper.selectDropdown(
-  //     page,
-  //     FlightPageLocators.passportExpiryDayDropdown,
-  //     6
-  //   );
+    await ElementHelper.selectDropdown(
+      page,
+      FlightPageLocators.passportExpiryDayDropdown,
+      6
+    );
 
-  //   await ElementHelper.selectDropdown(
-  //     page,
-  //     FlightPageLocators.passportExpiryMonthDropdown,
-  //     7
-  //   );
+    await ElementHelper.selectDropdown(
+      page,
+      FlightPageLocators.passportExpiryMonthDropdown,
+      7
+    );
 
-  //   await ElementHelper.selectDropdown(
-  //     page,
-  //     FlightPageLocators.passportExpiryYearDropdown,
-  //     6
-  //   );
-  // }
+    await ElementHelper.selectDropdown(
+      page,
+      FlightPageLocators.passportExpiryYearDropdown,
+      6
+    );
+  }
 
  static async clickOnEditConfirmButtonPage(page: any) {
       const CLIENT = process.env.CLIENT?.toUpperCase();

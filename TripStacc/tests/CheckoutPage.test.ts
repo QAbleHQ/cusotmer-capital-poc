@@ -352,7 +352,7 @@ test('SC_010: Flight - Checkout with and without Promo Codes', { tag: ['@idfc', 
   });
 });
 
-test('SC_011: Flight - Proceed with payment', { tag: ['@idfc', '@bob', '@flight', '@flaky', '@common', '@payment', '@regression'] }, async () => {
+test('SC_011: Flight - Proceed with payment', { tag: ['@idfc', '@bob', '@flight', '@testmode', '@common', '@payment', '@regression'] }, async () => {
   await test.step("Step 1: Enter City From Airport", async () => {
     await page.waitForTimeout(5000);
     await FlightHomePage.clickOnCityFromAirport(page);
@@ -413,6 +413,7 @@ test('SC_011: Flight - Proceed with payment', { tag: ['@idfc', '@bob', '@flight'
   });
   await test.step("Step 13: Enter First Name of Traveller", async () => {
     await FlightHomePage.EnterRandomFirstName(page);
+    await FlightHomePage.selectPassportDetails(page);
   });
 
   await test.step("Step 14: Enter Last Name of Traveller", async () => {

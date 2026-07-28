@@ -23,7 +23,7 @@ test.afterEach(async () => {
   await context.close();
 });
 
-test('SC_012: Booking Confirmation Page: Flight (Confirmed/Pending/Failed)', { tag: ['@idfc', '@bob', '@common', '@flight', '@flaky', '@bookingconfirmation', '@regression', "@earn"] }, async () => {
+test('SC_012: Booking Confirmation Page: Flight (Confirmed/Pending/Failed)', { tag: ['@idfc', '@bob', '@common', '@flight', '@testmode', '@bookingconfirmation', '@regression', "@earn"] }, async () => {
   await test.step("Step 1: Enter City From Airport", async () => {
     await page.waitForTimeout(5000);
     await FlightHomePage.clickOnCityFromAirport(page);
@@ -84,7 +84,7 @@ test('SC_012: Booking Confirmation Page: Flight (Confirmed/Pending/Failed)', { t
   });
   await test.step("Step 13: Enter First Name of Traveller", async () => {
     await FlightHomePage.EnterRandomFirstName(page);
-    //await FlightHomePage.selectPassportDetails(page);
+    await FlightHomePage.selectPassportDetails(page);
   });
 
   await test.step("Step 14: Enter Last Name of Traveller", async () => {
@@ -133,7 +133,7 @@ test('SC_012: Booking Confirmation Page: Flight (Confirmed/Pending/Failed)', { t
   await test.step("Step 29: Complete Card Payment Flow", async () => {
     await page.waitForTimeout(18000);
     await page.waitForLoadState('domcontentloaded');
-        await PaymentPage.completeCardPaymentFlow(page);
+    await PaymentPage.completeCardPaymentFlow(page);
     await page.waitForTimeout(18000);
     await BookingConfirmationPage.verifyBookingOutcomeFlight(page);
   });
