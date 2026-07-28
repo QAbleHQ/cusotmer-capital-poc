@@ -465,7 +465,7 @@ static async clickOKButton(page: Page) {
     } else {
       await page.locator(PaymentPageLocators.alternateTermsCheckbox).click();
     }
-  await page.waitForTimeout(2000);
+  await page.waitForTimeout(12000);
     await ElementHelper.clickElement(page, PaymentPageLocators.payNowButtonBob);
 
     await page.waitForTimeout(10000);
@@ -475,6 +475,8 @@ static async clickOKButton(page: Page) {
       await page.locator(PaymentPageLocators.paymentContinueButton).click();
     }
     await page.waitForLoadState('domcontentloaded');
+    await page.waitForTimeout(10000);
+
     await PaymentPage.clickCardOptionSelector(page);
     await page.waitForTimeout(2000);
     await PaymentPage.verifyCardFieldsVisible(page);

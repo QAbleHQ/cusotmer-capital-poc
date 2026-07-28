@@ -207,7 +207,9 @@ test('SC_012.01: Booking Confirmation for Hotel', { tag: ['@idfc', '@bob', '@com
     await HotelBookingPage.nextButtonAfterAddingGuest(page);
   });
   await test.step("Step 29: Complete Card Payment Flow", async () => {
-     PaymentPage.completeCardPaymentFlow(page);
+    await page.waitForTimeout(18000);
+    await page.waitForLoadState('domcontentloaded');
+    await PaymentPage.completeCardPaymentFlow(page);
     await page.waitForTimeout(18000);
     await BookingConfirmationPage.verifyBookingOutcomeHotel(page);
   });
