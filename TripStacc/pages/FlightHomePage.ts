@@ -329,8 +329,10 @@ static async verifyTravellerOptions(page: Page) {
     await ElementHelper.clickElement(page, FlightPageLocators.searchFlightsButton);
   }
 static async VerifyFirstFlightCardVisible(page: any) {
-    await page.waitForTimeout(18000);
+    await page.waitForTimeout(40000);
+    await page.waitForLoadState('domcontentloaded');
     await FlightHomePage.reloadIfNoRecordFound(page);
+    await page.waitForLoadState('domcontentloaded');
     await ElementHelper.waitForElementVisible(page, FlightPageLocators.firstFlightCard);
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators.firstFlightCard);
     await page.waitForTimeout(5000);
