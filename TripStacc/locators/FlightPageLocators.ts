@@ -182,5 +182,9 @@ bookingDate: `//div[@class='travell_info']//p | (//td[@class='bookng_date bookng
   dateofbirth: `//input[@id='adult-date-picker-1']`,
   passportExpiryDayDropdown: `//div[@class='selectedwrap']//select[@name='passenger_passport_expiry_day[]']`,
   passportExpiryMonthDropdown: `//div[@class='selectedwrap']//select[@name='passenger_passport_expiry_month[]']`,
-  passportExpiryYearDropdown: `//div[@class='selectedwrap']//select[@name='passenger_passport_expiry_year[]']`
+  passportExpiryYearDropdown: `//div[@class='selectedwrap']//select[@name='passenger_passport_expiry_year[]']`,
+  passportnumbertravellerpage:`//input[@name='passport_number']`,
+passportcountrytravllerpage:`//select[@name='passport_issuing_country']`,
+passportexpirytravellerpage:`//input[@name='passport_expiry_date']`,
+dateofbirthtravellerpage:`//input[@name='date_of_birth']`,
 }

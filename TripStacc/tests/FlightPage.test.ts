@@ -834,6 +834,7 @@ test('SC_005: Add Traveller Details and Update Traveller Details ', { tag: ['@id
   });
 
   await test.step("Step 18: Click on Add Traveller Button On Traveller Details Page", async () => {
+    await FlightHomePage.selectPassportDetailstravellerpage(page)
     await FlightHomePage.clickOnAddTravellerButton(page);
   });
 

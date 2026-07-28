@@ -1043,6 +1043,58 @@ static async selectPassportDetails(page: any) {
   }
 }
 
+static async selectPassportDetailstravellerpage(page: any) {
+  const CLIENT = process.env.CLIENT?.toUpperCase();
+
+  switch (CLIENT) {
+    case 'IDFC': {
+      const passportField = page.locator(
+        FlightPageLocators.passportnumbertravellerpage
+      );
+
+      // Handle passport details only if passport field is visible
+      if (await passportField.isVisible()) {
+        await ElementHelper.clearAndEnterInTextField(
+          page,
+          FlightPageLocators.passportnumbertravellerpage,
+          'A12345678'
+        );
+
+        await page
+          .locator(FlightPageLocators.dateofbirthtravellerpage)
+          .click();
+        await page.locator("(//a[@class='ui-state-default'])[3]").click();
+
+        await ElementHelper.selectDropdown(
+          page,
+          FlightPageLocators.passportcountrytravllerpage,
+          5
+        );
+
+        await page
+          .locator(FlightPageLocators.passportexpirytravellerpage)
+          .click();
+
+        await page
+          .locator("//select[@class='ui-datepicker-year']")
+          .selectOption({ index: 4 });
+
+        await page.locator("(//a[@class='ui-state-default'])[4]").click();
+      }
+
+      break;
+    }
+
+    case 'BOB':
+      break;
+
+    default:
+      console.log(
+        `No passport handling configured for CLIENT: ${CLIENT}`
+      );
+      break;
+  }
+}
  static async clickOnEditConfirmButtonPage(page: any) {
       const CLIENT = process.env.CLIENT?.toUpperCase();
   switch (CLIENT) {
