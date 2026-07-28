@@ -1085,14 +1085,9 @@ static async selectPassportDetailstravellerpage(page: any) {
       break;
     }
 
-    case 'BOB':
+    case 'BOB':{
       break;
-
-    default:
-      console.log(
-        `No passport handling configured for CLIENT: ${CLIENT}`
-      );
-      break;
+    }
   }
 }
  static async clickOnEditConfirmButtonPage(page: any) {
@@ -1428,6 +1423,7 @@ static async verifyPriceIncreasesAfterWeeightIncrease(page: any) {
     const beforePriceText = await page.locator(FlightPageLocators.seatPrice).textContent();
     const beforePrice = Number(beforePriceText?.replace(/[₹,\s]/g, ''));
     console.log(`Price Before Seat Selection: ${beforePrice}`);
+    
     await ElementHelper.clickElement(page, FlightPageLocators.weightIncreasePlusButton);
     await page.waitForTimeout(5000);
     const afterPriceText = await page.locator(FlightPageLocators.seatPrice).textContent();

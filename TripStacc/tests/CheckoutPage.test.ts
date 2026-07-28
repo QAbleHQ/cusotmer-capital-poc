@@ -229,7 +229,7 @@ test('SC_009.01: Flight - Checkout with and without Redeem Points (without redee
   });
 });
 
-test('SC_010: Flight - Checkout with and without Promo Codes', { tag: ['@idfc', '@bob', '@common', '@flaky', '@checkout', '@regression'] }, async () => {
+test('SC_010: Flight - Checkout with and without Promo Codes', { tag: ['@idfc', '@bob', '@baggage', '@common', '@flaky', '@checkout', '@regression'] }, async () => {
   await test.step("Step 1: Enter City From Airport", async () => {
     await page.waitForTimeout(5000);
     await FlightHomePage.clickOnCityFromAirport(page);
@@ -295,6 +295,7 @@ test('SC_010: Flight - Checkout with and without Promo Codes', { tag: ['@idfc', 
   await test.step("Step 14: Enter Last Name of Traveller", async () => {
     await FlightHomePage.EnterLastName(page, Data.travellername.lastName);
     await FlightHomePage.enterMobileNo(page, Data.travellername.mobileNo);
+    await FlightHomePage.selectPassportDetails(page);
   });
 
   await test.step("Step 15: Click on Add Traveller Button On Traveller Details Page", async () => {

@@ -1060,7 +1060,7 @@ test('SC_007: With Passport and without Passport Details (for international) ', 
   });
 });
 
-test('SC_008: With and without Add-Ons Selection (Seat/Baggage/Meal) ', { tag: ['@idfc', '@bob', '@flaky', '@homepageflight','@common', '@addon', '@regression'] }, async () => {
+test('SC_008: With and without Add-Ons Selection (Seat/Baggage/Meal) ', { tag: ['@idfc', '@bob','@baggage', '@flaky', '@homepageflight','@common', '@addon', '@regression'] }, async () => {
   await test.step("Step 1: Enter City From Airport", async () => {
     await page.waitForTimeout(5000);
     await FlightHomePage.clickOnCityFromAirport(page);

@@ -153,7 +153,7 @@ bookingDate: `//div[@class='travell_info']//p | (//td[@class='bookng_date bookng
   UnavailableSeat: '(//div[@class="columninnebox Unavailable"])[1]',
   unvailableSeatErrorMessage: `(//p[text()="Sorry! This seat is taken"])[1]`,
   seatPrice: `(//h4[contains(@class,'fl_det_footer') and contains(text(),'₹')])[3]`,
-  weightIncreasePlusButton: `(//span[@class='coplus'])[10]`,
+  weightIncreasePlusButton: `(//span[@class='coplus'])[3]`,
   skipAndPayButton: '//a[@class="skipbtn skipToCheckout"]',
   travellerAndAddoneHeading: `//h4[text()="Travellers & Add-ons"]`,
   travellersAndAddonsContinueButton: `//button[@class="bookcont continue_redm_button poptimemsg"] | //button[@class="flbookbtn extra_service_cont_btn"]`,
