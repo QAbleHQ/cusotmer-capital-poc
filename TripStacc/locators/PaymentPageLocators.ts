@@ -53,6 +53,7 @@ continuebuttonbobpayment:`//button[@class='btn btn-success make-payment-btn'] | 
   payviacard: `//div[@data-testid='card']`,
   continueButton: `//button[contains(text(),'Continue')]`,
   maybeLaterButton: `//button[text()="Maybe later"]`,
+  razorpayBankVerifyContinue: `xpath=//*[contains(normalize-space(.),'Bank verification needed')]/following::button[normalize-space(.)='Continue'][1]`,
   successButton: `//button[text()="Success"]`,
   okButton: `//a[text()="OK"]`,
   contactmobileno:`//button[@data-testid='contact-sidebar-widget']`,
