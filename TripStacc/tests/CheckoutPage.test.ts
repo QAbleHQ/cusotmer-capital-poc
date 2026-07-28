@@ -117,7 +117,7 @@ test('SC_009: Hotel- Checkout with and without Redeem Points (without redeem it 
   });
 });
 
-test('SC_009.01: Flight - Checkout with and without Redeem Points (without redeem it should be an earning) ', { tag: ['@idfc', '@bob', '@common', '@checkout', '@regression'] }, async () => {
+test.only('SC_009.01: Flight - Checkout with and without Redeem Points (without redeem it should be an earning) ', { tag: ['@idfc', '@bob', '@common', '@checkout', '@regression'] }, async () => {
   await test.step("Step 1: Enter City From Airport", async () => {
     await page.waitForTimeout(5000);
     await FlightHomePage.clickOnCityFromAirport(page);
