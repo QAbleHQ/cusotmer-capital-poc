@@ -989,39 +989,59 @@ static async enterMobileNo(page: any, data: any) {
     await VerificationHelpers.elementIsVisible(page, FlightPageLocators.FirstOptionCheckbox);
     await ElementHelper.clickElement(page, FlightPageLocators.FirstOptionCheckbox);
   }
-  static async selectPassportDetails(page: any) {
-    await ElementHelper.clearAndEnterInTextField(page, FlightPageLocators.passportNumberInput, 'A12345678');
-    //await ElementHelper.clearAndEnterInTextField(page, FlightPageLocators.dateofbirth, '11/03/1997');
-  await page.locator(FlightPageLocators.dateofbirth)
-    .evaluate((el: any) => el.removeAttribute('readonly'));
+static async selectPassportDetails(page: any) {
+  const CLIENT = process.env.CLIENT?.toUpperCase();
 
-  await page.locator(FlightPageLocators.dateofbirth)
-    .fill('11/01/2003');
-    
-    await ElementHelper.selectDropdown(
-      page,
-      FlightPageLocators.passportIssuingCountryDropdown,
-      5
-    );
+  switch (CLIENT) {
+    case 'BOB':
+      await ElementHelper.clearAndEnterInTextField(
+        page,
+        FlightPageLocators.passportNumberInput,
+        'A12345678'
+      );
 
-    await ElementHelper.selectDropdown(
-      page,
-      FlightPageLocators.passportExpiryDayDropdown,
-      6
-    );
+      await page
+        .locator(FlightPageLocators.dateofbirth)
+        .evaluate((el: any) => el.removeAttribute('readonly'));
 
-    await ElementHelper.selectDropdown(
-      page,
-      FlightPageLocators.passportExpiryMonthDropdown,
-      7
-    );
+      await page
+        .locator(FlightPageLocators.dateofbirth)
+        .fill('11/01/2003');
 
-    await ElementHelper.selectDropdown(
-      page,
-      FlightPageLocators.passportExpiryYearDropdown,
-      6
-    );
+      await ElementHelper.selectDropdown(
+        page,
+        FlightPageLocators.passportIssuingCountryDropdown,
+        5
+      );
+
+      await ElementHelper.selectDropdown(
+        page,
+        FlightPageLocators.passportExpiryDayDropdown,
+        6
+      );
+
+      await ElementHelper.selectDropdown(
+        page,
+        FlightPageLocators.passportExpiryMonthDropdown,
+        7
+      );
+
+      await ElementHelper.selectDropdown(
+        page,
+        FlightPageLocators.passportExpiryYearDropdown,
+        6
+      );
+      break;
+
+    case 'IDFC':
+      // No passport handling required
+      break;
+
+    default:
+      console.log(`No passport handling configured for CLIENT: ${CLIENT}`);
+      break;
   }
+}
 
  static async clickOnEditConfirmButtonPage(page: any) {
       const CLIENT = process.env.CLIENT?.toUpperCase();
