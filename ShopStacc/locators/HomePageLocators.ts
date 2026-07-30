@@ -16,6 +16,7 @@ export const HomePageLocators = {
     enterLoginBTN: `//button[@onclick="login()"]`,
     //DialogBox: `//dialog[@aria-describedby="tour_step_0-description"]`,
     //skipButtonInsideDialogBox: `//button[text()="Skip"]`,
+    productsoption: "(//a[text()='Products'])[1]",
     giftcardoption: "(//a[text()='Gift Cards'])[1]",
     exploreGiftCardTitle: "//div[@class='col-xl-12 col-sm-12 col-12 mt-3']",
     giftCardVisibleIndicator: "//span[@class='showing mb-2 showingblock']",

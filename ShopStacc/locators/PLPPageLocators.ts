@@ -3,5 +3,8 @@ export const PLPPageLocators = {
     quantityIncreaseButton: "//a[@class='plus qty-btn']",
     buyNowButton: "//a[@class='buy-detail m-0']",
     productDescriptionSection: "//a[@class='de-how']",
-    giftCardImage: "//div[@class='img-cart text-center mb-4']"
+    giftCardImage: "//div[@class='img-cart text-center mb-4']",
+    filterOpenButton: "#openFilterModalBtn",
+    filterSidebar: ".filter-sidebar",
+    priceFilterItem: ".filter-sidebar-item:has-text('Price')"
 }

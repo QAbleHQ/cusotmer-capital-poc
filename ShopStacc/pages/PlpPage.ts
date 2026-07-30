@@ -50,4 +50,20 @@ export class PLPPage {
         console.log("Clicked on Buy Now button.");
     }
 
+    static async openFilterPanel(page: Page) {
+        const filterOpenButton = PLPPageLocators.filterOpenButton;
+        await page.locator(filterOpenButton).click();
+        await page.waitForTimeout(1000);
+        console.log("Clicked filter open button to expand the Filters panel.");
+    }
+
+    static async verifyPriceFilterVisible(page: Page) {
+        const filterSidebar = PLPPageLocators.filterSidebar;
+        const priceFilterItem = PLPPageLocators.priceFilterItem;
+        await expect(page.locator(filterSidebar)).toBeVisible();
+        console.log("Filters panel is visible.");
+        await expect(page.locator(priceFilterItem)).toBeVisible();
+        console.log("Price filter is visible within the Filters panel.");
+    }
+
 }
