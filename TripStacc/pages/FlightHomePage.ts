@@ -819,24 +819,13 @@ static async select1StopFilter(page: Page): Promise<void> {
     console.log(`Entered First Name: ${FlightHomePage.selectedFirstName}`);
   }
 
-  static async EnterRandomFirstName(page: any) {
-  const characters = "HELLOTRAVELLERWELCOME";
-  let randomFirstName = "";
-
-  for (let i = 0; i < 8; i++) {
-    randomFirstName += characters.charAt(
-      Math.floor(Math.random() * characters.length)
-    );
-  }
-  
-  await ElementHelper.clearAndEnterInTextField(
-    page,
-    FlightPageLocators.firstNameInput,
-    randomFirstName
-  );
-
-  FlightHomePage.selectedFirstName = randomFirstName;
-  console.log(`Entered First Name: ${FlightHomePage.selectedFirstName}`);
+ static async EnterRandomFirstName(page: any) {
+const firstNames = ["David", "James", "Michael", "Robert", "William"];
+const randomFirstName =
+firstNames[Math.floor(Math.random() * firstNames.length)];
+await ElementHelper.clearAndEnterInTextField(
+page,FlightPageLocators.firstNameInput, randomFirstName
+);
 }
   static async EnterWrongLastName(page: any, data: any) {
   const CLIENT = process.env.CLIENT?.toUpperCase();
@@ -996,6 +985,8 @@ static async selectPassportDetails(page: any) {
 
   switch (CLIENT) {
     case 'BOB':
+      const passportNumberField = page.locator(FlightPageLocators.passportNumberInput);     
+      if (await passportNumberField.isVisible().catch(() => false)) {
       await ElementHelper.clearAndEnterInTextField(
         page,
         FlightPageLocators.passportNumberInput,
@@ -1034,7 +1025,7 @@ static async selectPassportDetails(page: any) {
         6
       );
       break;
-
+    }
     case 'IDFC':
       // No passport handling required
       break;

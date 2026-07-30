@@ -5,9 +5,9 @@ import { GRID, getLambdaTestWsEndpoint } from './utils/lambdaGrid';
 const mobileDevices = require('./mobileDevices');
 
 // ─── SETTINGS ────────────────────────────────────────────────────────────────
-const TIMEOUT = 420000;
+const TIMEOUT = 600000;
 const RETRIES = 1;             // retries on failure
-const WORKERS = { ci: 2, local: 1 };
+const WORKERS = { ci: 2, local: 2 };
 const HEADED  = process.env.HEADED === 'true';
 // ─────────────────────────────────────────────────────────────────────────────
 

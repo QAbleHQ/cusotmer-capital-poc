@@ -304,17 +304,19 @@ static async verifyBookingConfirmationPageVisible(page: Page): Promise<boolean> 
 
   static async completePaymentFlowBOB(page: Page) {
     await page.waitForTimeout(3000);
-    if (await page.locator(PaymentPageLocators.termsAndConditionsCheckbox).isVisible()) {
-      await page.locator(PaymentPageLocators.termsAndConditionsCheckbox).click();
-    } else {
-      await page.locator(PaymentPageLocators.alternateTermsCheckbox).click();
-    }
 
+if (await page.locator(PaymentPageLocators.termsAndConditionsCheckbox).count()) {
+  await page.locator(PaymentPageLocators.termsAndConditionsCheckbox).click();
+} else {
+  await page.locator(PaymentPageLocators.alternateTermsCheckbox).click();
+}
+console.log('Clicking Pay Now button...');
     await ElementHelper.clickElement(page, PaymentPageLocators.payNowButtonBob);
     await page.waitForTimeout(10000);
 
     if (await page.locator(PaymentPageLocators.makePaymentButton).count()) {
       await page.locator(PaymentPageLocators.makePaymentButton).click();
+      console.log('Terms & Conditions checkbox found. Clicking...');
     } else {
       await page.locator(PaymentPageLocators.paymentContinueButton).click();
     }
@@ -329,6 +331,7 @@ static async verifyBookingConfirmationPageVisible(page: Page): Promise<boolean> 
     } else {
       console.log("Confirmation Continue button is not visible. Proceeding to Razorpay.");
     }
+      console.log('Razorpay iframe loaded. Starting card payment flow...');
 
     const razorpayFrame = page.frameLocator(
       PaymentPageLocators.razorpayCheckoutFrame
@@ -361,6 +364,7 @@ static async verifyBookingConfirmationPageVisible(page: Page): Promise<boolean> 
         .locator(PaymentPageLocators.continuebtnformobile)
         .click();
     }
+     console.log('Completed payment flow necessary cards details updated');
     await page.waitForTimeout(6000);
     await page.waitForLoadState('domcontentloaded');
     await PaymentPage.clickMaybeLaterButton(page);

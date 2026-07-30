@@ -49,7 +49,7 @@
     },
     "travellername": {
       "firstName": "John",
-      "lastName": "Test",
+      "lastName": "Doe",
       "WrongfirstName": "J",
       "WronglastName": "D",
       "editedFirstName": "Test",
