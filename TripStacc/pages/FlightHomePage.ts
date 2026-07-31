@@ -1421,9 +1421,17 @@ static async clickOnbaggageOption(page: any) {
   );
 
   try {
-    const weightBtn = (await desktopBtn.isVisible())
-      ? desktopBtn
-      : mobileBtn;
+    const isDesktopVisible = await desktopBtn.isVisible();
+const isMobileVisible = await mobileBtn.isVisible();
+
+if (!isDesktopVisible && !isMobileVisible) {
+  console.log('Weight increase button not visible');
+  return;
+}
+
+const weightBtn = isDesktopVisible
+  ? desktopBtn
+  : mobileBtn;
 
     const beforePrice = Number(
       (await page.locator(FlightPageLocators.seatPrice).textContent())
