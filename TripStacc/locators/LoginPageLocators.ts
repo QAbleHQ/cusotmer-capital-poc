@@ -9,4 +9,8 @@ export const LoginPageLocators = {
   otpText: `//div[@class='bodytext ']`,
   otpInputField: `//div[@class='otp-warpper']//input`,
   validateAndLoginButton: `//button[@class='login-button logindown userorlogin ']`,
+  usernameField: "input[placeholder='Access Username']",
+  passwordField: "input[placeholder='Access Password']",
+  verifyButton: "button:has-text('Verify & Continue')",
+  restrictionpagetitle: "//h2[text()='Restricted Access']"
 };

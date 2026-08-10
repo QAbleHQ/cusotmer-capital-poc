@@ -4,6 +4,7 @@ import { ElementHelper } from '../../utils/elementHelper';
 import idfcTestData from '../testData/tripStacc.json';
 import { Data } from '../../utils/dataProvider';
 
+
 export class LoginPage {
 
   static async enterMobileNumber(page: Page, mobileNumber: string): Promise<void> {
@@ -82,5 +83,32 @@ static async verifyOtpFieldAcceptsInput(page: Page): Promise<void> {
     await ElementHelper.waitForElementVisible(page, LoginPageLocators.registerMobileIdText);
     await ElementHelper.waitForElementVisible(page, LoginPageLocators.privacyTermsAndConditions);
   }
+   static async enterUserID(page: Page) {
+    const UserIDEnter = LoginPageLocators.usernameField;
+    await ElementHelper.clearAndEnterInTextField(page, UserIDEnter, Data.loginDataFill.userId);
+    console.log('User ID entered');
+  }
 
+ static async enterUserPassword(page: Page) {
+    const userPasswordField = LoginPageLocators.passwordField;
+    await ElementHelper.clearAndEnterInTextField(page, userPasswordField, Data.loginDataFill.userPassword);
+    console.log('User Password entered');
+  }
+
+ static async clickEnterLoginButton(page: Page) {
+    const enterLoginButton = LoginPageLocators.verifyButton;
+    await ElementHelper.clickElement(page, enterLoginButton);
+    console.log('Enter Login button clicked');
+  }
+static async RestrictionPageBeforeEach(page: Page) {
+  if (await page.locator(LoginPageLocators.restrictionpagetitle).isVisible()) {
+    console.log('Restriction page visible - performing login action');
+
+    await this.enterUserID(page);
+    await this.enterUserPassword(page);
+    await this.clickEnterLoginButton(page);
+  } else {
+    console.log('Restriction page not visible - skipping login action');
+  }
+}
 }

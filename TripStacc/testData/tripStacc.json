@@ -9,13 +9,15 @@
       "restrictedAccessPassword": "Tp@123#1",
       "city": "Dubai",
       "checkInDate": "10",
-      "checkOutDate": "12"
+      "checkOutDate": "12",
+      "userId": "temp",
+      "userPassword": "Tp@123#1"
     },
     "dateSelector": {
       "fromDate": "11",
-      "fromMonth": "Aug 2026",
+      "fromMonth": "Oct 2026",
       "toDate": "12",
-      "toMonth": "Aug 2026"
+      "toMonth": "Oct 2026"
     },
     "hotelBookingDataFill": {
       "firstName": "John",

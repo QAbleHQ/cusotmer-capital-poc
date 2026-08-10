@@ -13,6 +13,7 @@ export class BaseHelper {
       const projectName = test.info().project.name.toLowerCase();
       console.log(`Running setup for: ${projectName}`);
       await CommonHelper.navigateToHomePage(page);
+      await LoginPage.RestrictionPageBeforeEach(page);
       await LoginPage.verifyMobileNumberFieldAcceptsInput(page);
       await LoginPage.clickGetOtpButton(page);
       await LoginPage.verifyOtpPageVisible(page);
