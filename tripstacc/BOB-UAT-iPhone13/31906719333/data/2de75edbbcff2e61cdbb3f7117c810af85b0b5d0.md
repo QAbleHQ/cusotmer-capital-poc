@@ -1,0 +1,227 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: TripStacc/tests/BookingConfirmation.test.ts >> SC_012: Booking Confirmation Page: Flight (Confirmed/Pending/Failed)
+- Location: TripStacc/tests/BookingConfirmation.test.ts:26:5
+
+# Error details
+
+```
+Test timeout of 300000ms exceeded.
+```
+
+```
+Error: page.waitForTimeout: Target page, context or browser has been closed
+```
+
+# Test source
+
+```ts
+  274 |  
+  275 |           .locator(PaymentPageLocators.razorpayBankVerifyContinue)
+  276 |  
+  277 |           .all()
+  278 |  
+  279 |           .catch(() => []);
+  280 |  
+  281 |         for (const btn of matches) {
+  282 |  
+  283 |           const visible = await btn.isVisible().catch(() => false);
+  284 |  
+  285 |           if (!visible) continue;
+  286 |  
+  287 |           console.log(`Bank verification "Continue" found in frame: ${frame.url()}`);
+  288 |  
+  289 |           await btn.click();
+  290 |  
+  291 |           return;
+  292 |  
+  293 |         }
+  294 |  
+  295 |       }
+  296 |  
+  297 |       await page.waitForTimeout(500);
+  298 |  
+  299 |     }
+  300 |  
+  301 |     console.log('No bank verification "Continue" surfaced within 30s; continuing.');
+  302 |  
+  303 |   }
+  304 | 
+  305 |   static async completePaymentFlowBOB(page: Page) {
+  306 |     await page.waitForTimeout(3000);
+  307 | 
+  308 | if (await page.locator(PaymentPageLocators.termsAndConditionsCheckbox).count()) {
+  309 |   await page.locator(PaymentPageLocators.termsAndConditionsCheckbox).click();
+  310 | } else {
+  311 |   await page.locator(PaymentPageLocators.alternateTermsCheckbox).click();
+  312 | }
+  313 | console.log('Clicking Pay Now button...');
+  314 |     await ElementHelper.clickElement(page, PaymentPageLocators.payNowButtonBob);
+  315 |     await page.waitForTimeout(10000);
+  316 | 
+  317 |     if (await page.locator(PaymentPageLocators.makePaymentButton).count()) {
+  318 |       await page.locator(PaymentPageLocators.makePaymentButton).click();
+  319 |       console.log('Terms & Conditions checkbox found. Clicking...');
+  320 |     } else {
+  321 |       await page.locator(PaymentPageLocators.paymentContinueButton).click();
+  322 |     }
+  323 | 
+  324 |     await page.waitForTimeout(10000);
+  325 | 
+  326 |     const confirmationContinueBtn = page.locator(PaymentPageLocators.confirmationContinueButton);
+  327 | 
+  328 |     if (await confirmationContinueBtn.isVisible()) {
+  329 |       await page.waitForTimeout(5000)
+  330 |       await confirmationContinueBtn.click();
+  331 |     } else {
+  332 |       console.log("Confirmation Continue button is not visible. Proceeding to Razorpay.");
+  333 |     }
+  334 |       console.log('Razorpay iframe loaded. Starting card payment flow...');
+  335 | 
+  336 |     const razorpayFrame = page.frameLocator(
+  337 |       PaymentPageLocators.razorpayCheckoutFrame
+  338 |     );
+  339 |     await page.waitForTimeout(6000);
+  340 |     await razorpayFrame.locator('[data-testid="contactNumber"]').fill('8140217872');
+  341 |     await razorpayFrame.locator(PaymentPageLocators.continuebtnformobile).click();
+  342 |     await razorpayFrame.locator(PaymentPageLocators.payviacard).click();
+  343 |     await page.waitForTimeout(6000)
+  344 |     await razorpayFrame.locator(PaymentPageLocators.cardNumberField).waitFor({ state: 'visible', timeout: 10000 });
+  345 |     await page.waitForTimeout(6000)
+  346 |     await razorpayFrame.locator(PaymentPageLocators.cardNumberField).fill(Data.paymentDataFill.cardNumber);
+  347 |     await page.waitForTimeout(6000);
+  348 |     await razorpayFrame.locator(PaymentPageLocators.cardExpiryField).fill(Data.paymentDataFill.cardExpiry);
+  349 |     await page.waitForTimeout(6000);
+  350 |     await razorpayFrame.locator(PaymentPageLocators.cardCvvField).fill(Data.paymentDataFill.cardCvv);
+  351 |     await page.waitForTimeout(6000);
+  352 |     await expect(razorpayFrame.locator(PaymentPageLocators.saveCardPopup)).toBeVisible();
+  353 |     await page.waitForTimeout(6000);
+  354 |     if (
+  355 |       await razorpayFrame
+  356 |         .locator(PaymentPageLocators.continuebtnformobilebob)
+  357 |         .isVisible()
+  358 |     ) {
+  359 |       await razorpayFrame
+  360 |         .locator(PaymentPageLocators.continuebtnformobilebob)
+  361 |         .click();
+  362 |     } else {
+  363 |       await razorpayFrame
+  364 |         .locator(PaymentPageLocators.continuebtnformobile)
+  365 |         .click();
+  366 |     }
+  367 |      console.log('Completed payment flow necessary cards details updated');
+  368 |     await page.waitForTimeout(6000);
+  369 |     await page.waitForLoadState('domcontentloaded');
+  370 |     await PaymentPage.clickMaybeLaterButton(page);
+  371 |     await page.waitForTimeout(6000);
+  372 |     if (DeviceHelper.isMobile()) {
+  373 |       await PaymentPage.clickBankVerifyContinue(page);
+> 374 |       await page.waitForTimeout(6000);
+      |                  ^ Error: page.waitForTimeout: Target page, context or browser has been closed
+  375 |     }
+  376 |     await PaymentPage.clickSuccessButton(page);
+  377 |     await page.waitForTimeout(7000);
+  378 |     await PaymentPage.clickOKButton(page);
+  379 |   }
+  380 | 
+  381 |   static async clickMaybeLaterButton(page: Page) {
+  382 |     const CLIENT = process.env.CLIENT?.toUpperCase();
+  383 |     switch (CLIENT) {
+  384 |       case 'BOB':
+  385 |         const frame = page.frameLocator('iframe[src*="api.razorpay.com/v1/checkout"]');
+  386 |         await frame.locator(PaymentPageLocators.maybeLaterButton).click()
+  387 |         break;
+  388 |       case 'IDFC':
+  389 |         await ElementHelper.clickElement(page, PaymentPageLocators.proceedButton);
+  390 |         break;
+  391 |     }
+  392 |   }
+  393 | 
+  394 | static async clickSuccessButton(page: Page) {
+  395 |   const CLIENT = process.env.CLIENT?.toUpperCase();
+  396 | 
+  397 |   switch (CLIENT) {
+  398 |     case 'BOB': {
+  399 |       const context = page.context();
+  400 |       const timeoutMs = 90_000;
+  401 |       const pollMs = 500;
+  402 |       const deadline = Date.now() + timeoutMs;
+  403 | 
+  404 |       const successNameRegex = /^\s*success\s*$/i;
+  405 | 
+  406 |       const scopeCandidates = (scope: Page | Frame): Locator[] => [
+  407 |         scope.getByRole('button', { name: successNameRegex }).first(),
+  408 |         scope.locator('input[type="submit"], input[type="button"]')
+  409 |              .and(scope.locator('[value="Success" i], [value="SUCCESS"]')).first(),
+  410 |         scope.locator('//button[normalize-space(.)="Success" or normalize-space(.)="SUCCESS"]').first(),
+  411 |         scope.locator(PaymentPageLocators.successButton).first(),
+  412 |       ];
+  413 | 
+  414 |       const findVisibleSuccessButton = async (): Promise<Locator> => {
+  415 |         let seenFrames: string[] = [];
+  416 |         while (Date.now() < deadline) {
+  417 |           for (const p of context.pages().filter(pg => !pg.isClosed())) {
+  418 |             const scopes: Array<Page | Frame> = [p, ...p.frames()];
+  419 |             seenFrames = scopes.map(s => ('url' in s ? s.url() : ''));
+  420 |             for (const scope of scopes) {
+  421 |               for (const candidate of scopeCandidates(scope)) {
+  422 |                 const visible = await candidate.isVisible().catch(() => false);
+  423 |                 if (visible) return candidate;
+  424 |               }
+  425 |             }
+  426 |           }
+  427 |           await page.waitForTimeout(pollMs);
+  428 |         }
+  429 |         throw new Error(
+  430 |           `Success button not visible on any page or frame within ${timeoutMs}ms. ` +
+  431 |           `Frames inspected on last pass: ${JSON.stringify(seenFrames)}`,
+  432 |         );
+  433 |       };
+  434 | 
+  435 |       const successBtn = await findVisibleSuccessButton();
+  436 |       await successBtn.click();
+  437 |       break;
+  438 |     }
+  439 |   case 'IDFC':
+  440 |     await ElementHelper.clickElement(page, PaymentPageLocators.proceedButton);
+  441 |     break;
+  442 |   }
+  443 |   }
+  444 | 
+  445 | static async clickOKButton(page: Page) {
+  446 |   const CLIENT = process.env.CLIENT?.toUpperCase();
+  447 | 
+  448 |   switch (CLIENT) {
+  449 |     case 'BOB':
+  450 |   await page.waitForLoadState('domcontentloaded');
+  451 | 
+  452 |   try {
+  453 |     const okButton = page.locator(PaymentPageLocators.okButton);
+  454 | 
+  455 |     if (await okButton.count() > 0) {
+  456 |       await okButton.click();
+  457 |     }
+  458 |   } catch (error) {
+  459 |     console.log('OK button not found. Continuing test...');
+  460 |   }
+  461 | 
+  462 |   break;
+  463 | 
+  464 |     case 'IDFC':
+  465 |       await ElementHelper.clickElement(page, PaymentPageLocators.proceedButton);
+  466 |       break;
+  467 |   }
+  468 | }
+  469 | 
+  470 |  static async verifyBookingPendingPageVisible(page: Page) {
+  471 |   const CLIENT = process.env.CLIENT?.toUpperCase();
+  472 | 
+  473 |   let isVisible = false;
+  474 | 
+```
