@@ -13,5 +13,7 @@ export const LoginPageLocators = {
   enterUserPass: `//input[@id="password"]`,
   enterLoginBTN: `//button[@onclick="login()"]`,
   DialogBox: `//dialog[@aria-describedby="tour_step_0-description"]`,
-  skipButtonInsideDialogBox: `//button[text()="Skip"]`
+  skipButtonInsideDialogBox: `//button[text()="Skip"]`,
+  Agree_checkbox: `//input[@id='teamsDisclaimer']`,
+  proceedButton: `//button[@id='proceedBtn']`,
 };

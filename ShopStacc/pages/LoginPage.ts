@@ -84,11 +84,28 @@ export class LoginPage {
     await LoginPage.clickLoginButton(page);
   }
   static async RestrictionPageBeforeEach(page: Page) {
-    await LoginPage.enterUserID(page);
-    await LoginPage.enterUserPassword(page);
-    await LoginPage.clickEnterLoginButton(page);
-    await LoginPage.waitUntilDialogBoxDisplayed(page);
-    await LoginPage.clickSkipButtonInsideDialogBox(page);
+  const agreeCheckbox = page.locator(LoginPageLocators.Agree_checkbox);
+  const proceedButton = page.locator(LoginPageLocators.proceedButton);
+  if (
+    await agreeCheckbox.isVisible().catch(() => false) &&
+    await proceedButton.isVisible().catch(() => false)
+  ) {
+    console.log('Popup opened');
+
+    await agreeCheckbox.check();
+    console.log('Clicked Agree checkbox');
+    await page.waitForTimeout(1000); // Wait for 1 second before clicking the proceed button
+    await proceedButton.click();
+    console.log('Clicked Proceed button');
+  } else {
+    console.log('ℹ️ Popup not displayed. Skipping...');
+  }
+
+  await LoginPage.enterUserID(page);
+  await LoginPage.enterUserPassword(page);
+  await LoginPage.clickEnterLoginButton(page);
+  await LoginPage.waitUntilDialogBoxDisplayed(page);
+  await LoginPage.clickSkipButtonInsideDialogBox(page);
   }
   static async verifyLoginSuccess(page: Page) {
     await expect(page).toHaveURL(/shopstacc\.com/);
