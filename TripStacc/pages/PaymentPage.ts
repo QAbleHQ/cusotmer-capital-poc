@@ -373,7 +373,27 @@ console.log('Clicking Pay Now button...');
       await PaymentPage.clickBankVerifyContinue(page);
       await page.waitForTimeout(6000);
     }
-    await PaymentPage.clickSuccessButton(page);
+try {
+  const razorpayFrame = page.frameLocator('iframe.razorpay-checkout-frame');
+
+  const otpInput = razorpayFrame.locator('input[name="otp"]');
+
+  if (await otpInput.isVisible()) {
+    await otpInput.fill('1234');
+
+    const continueButton = razorpayFrame.locator(
+      '(//button[contains(text(),"Continue")])[2]'
+    );
+
+    if (await continueButton.isVisible()) {
+      await continueButton.click({ force: true });
+    }
+  }
+} catch {
+  console.log('Razorpay OTP screen not found. Skipping.');
+}
+//await PaymentPage.clickSuccessButton(page);
+
     await page.waitForTimeout(7000);
     await PaymentPage.clickOKButton(page);
   }
