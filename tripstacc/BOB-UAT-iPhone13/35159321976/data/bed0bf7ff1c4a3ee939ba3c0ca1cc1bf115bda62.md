@@ -1,0 +1,161 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: TripStacc/tests/MyAccountPage.test.ts >> SC:013: Booking Status on My Account Section
+- Location: TripStacc/tests/MyAccountPage.test.ts:18:5
+
+# Error details
+
+```
+Error: expect(locator).toBeVisible() failed
+
+Locator: locator('//div[@class=\'menu_content\']//div//p[text()=\'My Bookings\'] | //a[contains(@href,\'/report/flights/upcoming\')]').locator(':visible').first()
+Expected: visible
+Timeout: 5000ms
+Error: element(s) not found
+
+Call log:
+  - Expect "toBeVisible" with timeout 5000ms
+  - waiting for locator('//div[@class=\'menu_content\']//div//p[text()=\'My Bookings\'] | //a[contains(@href,\'/report/flights/upcoming\')]').locator(':visible').first()
+
+```
+
+```yaml
+- main:
+  - paragraph: "500"
+  - heading "Internal Server Error" [level=1]
+  - paragraph: Something went wrong. Please try again later.
+  - paragraph: "Reference: ERR-20260917-051704-F0E8162C"
+  - link "Back To Homepage":
+    - /url: /
+```
+
+# Test source
+
+```ts
+  1   | import { expect, Page } from '@playwright/test';
+  2   | import { ElementHelper } from '../../utils/elementHelper';
+  3   | import { MyAccountPageLocators } from '../../TripStacc/locators/MyAccountPageLocators';
+  4   | import { DeviceHelper } from '../../utils/deviceHelper';
+  5   | 
+  6   | export class MyAccountPage {
+  7   |   static async clickMyAccount(page: Page): Promise<void> {
+  8   |     await ElementHelper.clickElement(page, MyAccountPageLocators.myAccountProfile);
+  9   |   }
+  10  | 
+  11  |   static async clickMyAccountSection(page: Page): Promise<void> {
+  12  |     await ElementHelper.clickElement(page, MyAccountPageLocators.myAccountSection);
+  13  |   }
+  14  | 
+  15  |   
+  16  | static async verifyMyBookingSectionVisible(page: Page): Promise<void> {
+  17  |   await expect(
+  18  |     page.locator(MyAccountPageLocators.myBookingSection).locator(':visible').first()
+> 19  |   ).toBeVisible();
+      |     ^ Error: expect(locator).toBeVisible() failed
+  20  | }
+  21  | 
+  22  | 
+  23  |   static async clickMyBookingSection(page: Page): Promise<void> {
+  24  |    await page.locator(MyAccountPageLocators.myBookingSection).locator(':visible').first().click();
+  25  |     await page.waitForTimeout(6000);
+  26  |   }
+  27  |   static async clickFlightsUpcomingTab(page: Page): Promise<void> {
+  28  |     await page.waitForTimeout(6000);
+  29  |     if (DeviceHelper.isMobile()) {
+  30  |       await ElementHelper.clickElement(page, MyAccountPageLocators.flightsUpcomingTabMobile);
+  31  |     } else {
+  32  |       await ElementHelper.clickElement(page, MyAccountPageLocators.flightsUpcomingTab);
+  33  |     }    
+  34  |   }
+  35  | 
+  36  |   static async clickFlightsCancelledTab(page: Page): Promise<void> {
+  37  |     if(DeviceHelper.isMobile()) {
+  38  |       await ElementHelper.clickElement(page, MyAccountPageLocators.flightsCancelledTabMobile);
+  39  |     } else {
+  40  |       await ElementHelper.clickElement(page, MyAccountPageLocators.flightsCancelledTab);
+  41  |     }
+  42  |   }
+  43  |   static async verifyFlightsCompletedTabVisible(page: Page): Promise<void> {
+  44  |     if(DeviceHelper.isMobile()) {
+  45  |       await expect(page.locator(MyAccountPageLocators.flightsCompletedTabMobile)).toBeVisible();
+  46  |     } else {
+  47  |       await expect(page.locator(MyAccountPageLocators.flightsCompletedTab)).toBeVisible();
+  48  |     }
+  49  |   }
+  50  | 
+  51  |   static async printFromToText(page: Page): Promise<void> {
+  52  |     console.log('From/To:', await page.textContent(MyAccountPageLocators.fromToText));
+  53  |   }
+  54  | 
+  55  |   static async printBookingId(page: Page): Promise<void> {
+  56  |     console.log('Booking ID:', await page.textContent(MyAccountPageLocators.bookingIdText));
+  57  |   }
+  58  | 
+  59  |   static async printJourneyDate(page: Page): Promise<void> {
+  60  |     console.log('Journey Date:', await page.textContent(MyAccountPageLocators.journeyDateText));
+  61  |   }
+  62  | 
+  63  |   static async printTripType(page: Page): Promise<void> {
+  64  |     console.log('Trip Type:', await page.textContent(MyAccountPageLocators.tripTypeText));
+  65  |   }
+  66  | 
+  67  |   static async printPassengerName(page: Page): Promise<void> {
+  68  |     console.log('Passenger:', await page.textContent(MyAccountPageLocators.passengerNameText));
+  69  |   }
+  70  | 
+  71  |   static async printBookingDate(page: Page): Promise<void> {
+  72  |     console.log('Booking Date:', await page.textContent(MyAccountPageLocators.bookingDateText));
+  73  |   }
+  74  | 
+  75  |   static async printAmount(page: Page): Promise<void> {
+  76  |     console.log('Amount:', await page.textContent(MyAccountPageLocators.amountText));
+  77  |   }
+  78  | 
+  79  |   static async verifyButtonsBasedOnStatus(page: Page): Promise<void> {
+  80  |     
+  81  |   if (DeviceHelper.isMobile()) {
+  82  |     console.log('Mobile detected - skipping button verification');
+  83  |     return;
+  84  |   }
+  85  | 
+  86  |   const status = (await page.textContent(MyAccountPageLocators.statusText))?.trim() ?? '';
+  87  |   console.log(`Booking Status: ${status}`);
+  88  |   await page.waitForTimeout(3000);
+  89  |   if (status.includes('Confirmed')) {
+  90  |     console.log('Status is Confirmed - Verifying View, Cancel, and Modify buttons');
+  91  | 
+  92  |     await expect(page.locator(MyAccountPageLocators.viewButton)).toBeVisible();
+  93  |     console.log('View button is visible');
+  94  | 
+  95  |     await expect(page.locator(MyAccountPageLocators.cancelButton)).toBeVisible();
+  96  |     console.log('Cancel button is visible');
+  97  | 
+  98  |     await expect(page.locator(MyAccountPageLocators.modifyButton)).toBeVisible();
+  99  |     console.log('Modify button is visible');
+  100 | 
+  101 |   } else if (status.includes('Pending')) {
+  102 |     console.log('Status is Pending - Verifying Pending View button');
+  103 | 
+  104 |     await expect(
+  105 |       page.locator(MyAccountPageLocators.bookingpendingviewButton).first()
+  106 |     ).toBeVisible();
+  107 | 
+  108 |     console.log('Pending View button is visible');
+  109 | 
+  110 |   } else if (status.includes('Cancelled') || status.includes('Canceled')) {
+  111 |     console.log(' Status is Cancelled - No action buttons should be visible');
+  112 | 
+  113 |     console.log('✔ Cancelled booking verified (no action buttons)');
+  114 | 
+  115 |   } else {
+  116 |     console.log(`⚠ Unknown status: ${status}`);
+  117 |   }
+  118 | 
+  119 |   console.log('Button verification completed successfully');
+```
