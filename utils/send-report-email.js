@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 const SMTP_USER = 'ankitpatel@qable.io';
-const SMTP_PASS = 'zjwtgkflbwczqrpb';
+const SMTP_PASS = 'zjwtgkflbwczqrpb------';
 
 const TO = [
   'dharm.vrat@customer-capital.com',
