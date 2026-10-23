@@ -6,11 +6,11 @@ const SMTP_USER = 'ankitpatel@qable.io';
 const SMTP_PASS = 'zjwtgkflbwczqrpb------';
 
 const TO = [
-  'dharm.vrat@customer-capital.com',
-  'urvashi.saraswat@customer-capital.com',
-  'nikunj.trivedi@qable.io',
-  'aneri.patel@qable.io',
-  '1ee687f3.linearloop.io@in.teams.ms',
+  '-dharm.vrat@customer-capital.com',
+  '-urvashi.saraswat@customer-capital.com',
+  '-nikunj.trivedi@qable.io',
+  '-aneri.patel@qable.io',
+  '-1ee687f3.linearloop.io@in.teams.ms',
 ];
 
 const reportPath = path.resolve(__dirname, '../reports/test-results.json');
